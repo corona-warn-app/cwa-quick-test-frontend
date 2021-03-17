@@ -3,7 +3,6 @@ on:
   push:
     branches:
     - master
-    - feat/ci
 jobs:
   build:
     runs-on: ubuntu-latest
