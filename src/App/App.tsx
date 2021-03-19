@@ -15,7 +15,7 @@ const App =() => {
     <BrowserRouter>
        <div>
          <ul>
-           <li><Link to="/">Public component</Link></li>
+           <li><Link to="/">landing Page</Link></li>
            <li><Link to="/secured">Secured component</Link></li>
          </ul>
          {/* <Route exact path="/" render={() => <div>not Secured</div>} /> */}
