@@ -5,6 +5,7 @@ import App from './App/App';
 import reportWebVitals from './reportWebVitals';
 import './custom.scss';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import Root from './root.component';
 // Put any other imports below so that CSS from your
 // components takes precedence over default styles.
 
@@ -33,7 +34,8 @@ axios.interceptors.response.use((config: AxiosResponse) => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    {/* <App /> */}
+    <Root/>
   </React.StrictMode>,
   document.getElementById('root')
 );

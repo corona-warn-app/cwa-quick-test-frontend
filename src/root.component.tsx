@@ -4,6 +4,7 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import Footer from './components/footer.component';
 import Header from './components/header.component';
 import LandingPage from './components/landing-page.component';
+import Secured from './components/Secured';
 import useRoutes from './misc/routes';
 
 const Root = (props: any) => {
@@ -12,7 +13,7 @@ const Root = (props: any) => {
 
     return (
         <BrowserRouter>
-
+            {/* <Secured></Secured> eine Komponente drumherum*/} 
             {/* every time shown */}
             <Route path={routes.root}>
                 <Header />
