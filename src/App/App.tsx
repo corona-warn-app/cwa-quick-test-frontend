@@ -1,8 +1,9 @@
-import React from 'react';
-import logo from '../assets/images/logo.svg';
+import { BrowserRouter, Route, Link } from 'react-router-dom';
 import './App.scss';
 import '../i18n';
 import { useTranslation } from 'react-i18next';
+import Secured from '../components/Secured';
+import Welcome from '../components/Welcome';
 
 const App =() => {
 
@@ -11,22 +12,18 @@ const App =() => {
   document.title = t('translation:title');
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+       <div>
+         <ul>
+           <li><Link to="/">Public component</Link></li>
+           <li><Link to="/secured">Secured component</Link></li>
+         </ul>
+         {/* <Route exact path="/" render={() => <div>not Secured</div>} /> */}
+         <Route path="/" component={ Welcome} />
+         <Route path="/secured" component={ Secured }/>
+       </div>
+     </BrowserRouter>  
+    // <div>hallo</div>
   );
 }
 
