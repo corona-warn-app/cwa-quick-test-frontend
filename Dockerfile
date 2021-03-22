@@ -4,7 +4,7 @@ COPY public ./public
 COPY src ./src
 COPY package.json .
 COPY tsconfig.json .
-COPY yarn.lock .
+COPY yarn.lock* .
 
 RUN yarn && yarn build
 
