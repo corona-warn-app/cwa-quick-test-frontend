@@ -1,22 +1,20 @@
 import React from 'react';
-import { Button, Card } from 'react-bootstrap'
-import { BrowserRouter, Link, Route, useHistory } from 'react-router-dom'
+import { Button, Container } from 'react-bootstrap'
+import '../i18n';
+import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
 
 const LandingPage = (props: any) => {
     const navigation = useNavigation();
+    const { t } = useTranslation();
 
     return (
-        <Card className='h-100 p-3 border-0'>
-            <Card.Body className='d-flex flex-column'>
-                <Button className='m-2' variant='secondary' onClick={navigation.toLanding}>toLanding</Button>
-                <Button className='m-2' variant='secondary' onClick={navigation.toRecordPatient}>toRecordPatient</Button>
-                <Button className='m-2' variant='secondary' onClick={navigation.toShowRecordPatient}>toShowRecordPatient</Button>
-                <Button className='m-2' variant='secondary' onClick={navigation.toRecordTestResult}>toRecordTestResult</Button>
-                <Button className='m-2' variant='secondary' onClick={navigation.toQRScan}>toQRScan</Button>
-                <Button className='m-2' variant='secondary' onClick={navigation.toQRDataShow}>toQRDataShow</Button>
-            </Card.Body>
-        </Card>
+        <Container className='center-content'>
+            <h1 className='mx-auto mb-5'>{t('translation:welcome')}</h1>
+            <Button block className='landing-btn' onClick={navigation.toRecordPatient}>{t('translation:record-patient-data')}</Button>
+            <Button block className='landing-btn' onClick={navigation.toRecordTestResult}>{t('translation:record-result')}</Button>
+            <Button block className='landing-btn' onClick={navigation.toQRScan}>{t('translation:record-qr-scan')}</Button>
+        </Container>
     )
 }
 

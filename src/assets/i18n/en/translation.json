@@ -1,5 +1,17 @@
 {
   "title": "Quick Test Portal",
   "imprint": "Imprint",
-  "data-privacy": "Dataprivacy"
+  "data-privacy": "Dataprivacy",
+  "record-patient-data": "Record Patient Data",
+  "record-result": "Record Test Result",
+  "record-qr-scan": "Record QR Scan",
+  "welcome": "Welcome",
+  "process": "Process",
+  "record-data": "Data Recording",
+  "query-id-card": "Please query with ID Card!",
+  "clear": "Clear",
+  "next": "Next",
+  "prename": "Prename",
+  "name": "Name",
+  "date-of-birth": "Date of Birth"
 }

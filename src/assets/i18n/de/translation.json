@@ -1,5 +1,17 @@
 {
   "title": "Schnelltest Portal",
   "imprint": "Impressum",
-  "data-privacy": "Datenschutz"
+  "data-privacy": "Datenschutz",
+  "record-patient-data": "Patientendaten erfassen",
+  "record-result": "Testergebnis erfassen",
+  "record-qr-scan": "QR Scan erfassen",
+  "welcome": "Willkommen",
+  "process": "Vorgang",
+  "record-data": "Daten Erfassung",
+  "query-id-card": "Bitte mit Personalausweis abgleichen!",
+  "clear": "Löschen",
+  "next": "Weiter",
+  "prename": "Vorname",
+  "name": "Name",
+  "date-of-birth": "Geburtsdatum"
 }

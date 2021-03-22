@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import Footer from './components/footer.component';
 import Header from './components/header.component';
 import LandingPage from './components/landing-page.component';
-import Secured from './components/Secured';
 import useRoutes from './misc/routes';
+import RecordPatientData from './components/record-patient-data';
 
 const Root = (props: any) => {
 
@@ -18,7 +18,7 @@ const Root = (props: any) => {
 
     return (
         <BrowserRouter>
-            {/* <Secured></Secured> eine Komponente drumherum*/}
+
             {/* every time shown */}
             <Route path={routes.root}>
                 <Header />
@@ -33,8 +33,7 @@ const Root = (props: any) => {
 
                 {/* Record Patient Data */}
                 <Route exact path={routes.recordPatient}>
-                    {/* <RecordPatient /> */}
-                    <LandingPage />
+                    <RecordPatientData />
                 </Route>
 
                 {/* Show Patient Data */}
