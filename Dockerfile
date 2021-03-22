@@ -2,9 +2,7 @@ FROM node:lts as build
 
 COPY public ./public
 COPY src ./src
-COPY package.json .
-COPY tsconfig.json .
-COPY yarn.lock* .
+COPY package.json tsconfig.json yarn.lock* ./
 
 RUN yarn && yarn build
 
