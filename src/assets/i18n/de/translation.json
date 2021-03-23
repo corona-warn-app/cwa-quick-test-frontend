@@ -11,7 +11,7 @@
   "query-id-card": "Bitte mit Personalausweis abgleichen!",
   "clear": "Löschen",
   "next": "Weiter",
-  "prename": "Vorname",
+  "first-name": "Vorname",
   "name": "Name",
   "date-of-birth": "Geburtsdatum"
 }

@@ -11,7 +11,7 @@
   "query-id-card": "Please query with ID Card!",
   "clear": "Clear",
   "next": "Next",
-  "prename": "Prename",
+  "first-name": "First name",
   "name": "Name",
   "date-of-birth": "Date of Birth"
 }

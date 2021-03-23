@@ -18,6 +18,9 @@ const RecordPatientData = (props: any) => {
 
             <Card className='border-0 h-100 pb-3'>
 
+                {/*
+    header with title and id card query
+    */}
                 <Card.Header id='data-header'>
                     <Row>
                         <Col sm='auto'>
@@ -29,34 +32,44 @@ const RecordPatientData = (props: any) => {
                     </Row>
                 </Card.Header>
 
+                {/*
+    content area with patient inputs and check box
+    */}
                 <Card.Body id='data-body'>
                     <Form>
+                        {/* first name input */}
                         <Form.Group as={Row} controlId="formNameInput">
-                            <Form.Label column sm="4">{t('translation:prename')}</Form.Label>
+                            <Form.Label className='input-label' column sm="4">{t('translation:first-name')}</Form.Label>
 
                             <Col sm="8">
-                                <Form.Control placeholder={t('translation:prename')} />
+                                <Form.Control placeholder={t('translation:first-name')} />
                             </Col>
                         </Form.Group>
 
+                        {/* name input */}
                         <Form.Group as={Row} controlId="formNameInput">
-                            <Form.Label column sm="4">{t('translation:name')}</Form.Label>
+                            <Form.Label className='input-label' column sm="4">{t('translation:name')}</Form.Label>
 
                             <Col sm="8">
                                 <Form.Control placeholder={t('translation:name')} />
                             </Col>
                         </Form.Group>
 
+                        {/* date of birth input */}
                         <Form.Group as={Row} controlId="formDateInput">
-                            <Form.Label column sm="4">{t('translation:date-of-birth')}</Form.Label>
+                            <Form.Label className='input-label' column sm="4">{t('translation:date-of-birth')}</Form.Label>
 
                             <Col sm="8">
                                 <Form.Control placeholder={t('translation:date-of-birth')} />
                             </Col>
                         </Form.Group>
-                    </Form>
 
+                    </Form>
                 </Card.Body>
+
+                {/*
+    footer with clear and nex button
+    */}
                 <Card.Footer id='data-footer'>
                     <Row className=''>
                         <Button className='mr-4 p-0'>{t('translation:clear')}</Button>
