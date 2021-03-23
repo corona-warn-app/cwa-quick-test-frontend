@@ -1,9 +1,11 @@
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import React from 'react';
 import './App.scss';
 import '../i18n';
 import { useTranslation } from 'react-i18next';
-import Secured from '../components/Secured';
-import Welcome from '../components/Welcome';
+import keycloak from '../keycloak';
+import { ReactKeycloakProvider  } from '@react-keycloak/web';
+import Root from '../root.component';
+import Keycloak from 'keycloak-js';
 
 const App =() => {
 
@@ -11,19 +13,24 @@ const App =() => {
 
   document.title = t('translation:title');
 
+  const keycloak = Keycloak('/keycloak.json');
+    keycloak.init({
+          onLoad: 'login-required',
+          checkLoginIframe: false}).then(authenticated => {
+        if(!keycloak.authenticated) {
+            return <h3>Loading ... !!!</h3>;  
+        } else {
+          keycloak.logout();
+        }
+    }).catch( (error) =>  {
+      alert(error);
+  });
+
   return (
-    <BrowserRouter>
-       <div>
-         <ul>
-           <li><Link to="/">landing Page</Link></li>
-           <li><Link to="/secured">Secured component</Link></li>
-         </ul>
-         {/* <Route exact path="/" render={() => <div>not Secured</div>} /> */}
-         <Route path="/" component={ Welcome} />
-         <Route path="/secured" component={ Secured }/>
-       </div>
-     </BrowserRouter>  
-    // <div>hallo</div>
+    // <ReactKeycloakProvider authClient={ keycloak }>
+    //    <Root/>
+    // </ReactKeycloakProvider> 
+    <div>Hallo!!!</div>
   );
 }
 
