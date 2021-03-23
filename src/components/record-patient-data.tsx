@@ -4,10 +4,96 @@ import { BrowserRouter, Link, Route, useHistory } from 'react-router-dom'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
+import Patient from '../misc/patient';
 
 const RecordPatientData = (props: any) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
+
+    const [firstName, setFirstName] = React.useState('');
+    const [name, setName] = React.useState('');
+    const [day, setDay] = React.useState<number>(0);
+    const [month, setMonth] = React.useState<number>(0);
+    const [year, setYear] = React.useState<number>(0);
+    const [consent, setConsent] = React.useState(false);
+
+    const [canGoNext, setCanGoNext] = React.useState(false)
+    const [patient, setPatient] = React.useState<Patient>();
+
+    React.useEffect(() => {
+        if (props.patient) {
+            const p = props.patient;
+            setFirstName(p.firstName);
+            setName(p.name);
+            setDay(1);
+            setMonth(1);
+            setYear(1);
+            setConsent(p.processingConsens);
+        }
+    },[])
+
+    React.useEffect(() => {
+        if(firstName.trim() !== ''
+            && name.trim() !== ''
+            && day !== NaN && day > 0
+            && month !== NaN && month > 0
+            && year !== NaN && year > 0
+            && consent){
+                setCanGoNext(true);
+                setPatient({
+                    firstName:firstName,
+                    name:name,
+                    dateOfBirth:new Date(),
+                    processingConsens:consent
+                });
+            }
+            else{
+                setCanGoNext(false);
+                setPatient(undefined);
+            }
+    }, [firstName, name, day, month, year, consent])
+
+    React.useEffect(()=>{
+        props.setPatient(patient);
+    },[patient])
+
+    const handleFirstNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setFirstName(evt.currentTarget.value);
+    }
+    const handleNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setName(evt.currentTarget.value);
+    }
+    const handleDayChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setDay(getNumber(evt.currentTarget.value));
+    }
+    const handleMonthChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setMonth(getNumber(evt.currentTarget.value));
+    }
+    const handleYearChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setYear(getNumber(evt.currentTarget.value));
+    }
+    const handleConsentChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setConsent(evt.currentTarget.checked);
+    }
+
+    const getNumber = (value: string) => {
+        let i: number | typeof NaN = Number.parseInt(value);
+
+        if (isNaN(i)) {
+            i = 0;
+        }
+
+        return i;
+    }
+
+    const handleClear = () => {
+        setFirstName('');
+        setName('');
+        setDay(0);
+        setMonth(0);
+        setYear(0);
+        setConsent(false);
+    }
 
     return (
         <>
@@ -23,10 +109,10 @@ const RecordPatientData = (props: any) => {
     */}
                 <Card.Header id='data-header'>
                     <Row>
-                        <Col sm='auto'>
-                            <Card.Title as={'h2'} >{t('translation:record-data')}</Card.Title>
+                        <Col sm='4'>
+                            <Card.Title className='m-0' as={'h2'} >{t('translation:record-data')}</Card.Title>
                         </Col>
-                        <Col >
+                        <Col sm='8' className='d-flex justify-content-sm-center'>
                             <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
                         </Col>
                     </Row>
@@ -38,32 +124,46 @@ const RecordPatientData = (props: any) => {
                 <Card.Body id='data-body'>
                     <Form>
                         {/* first name input */}
-                        <Form.Group as={Row} controlId="formNameInput">
-                            <Form.Label className='input-label' column sm="4">{t('translation:first-name')}</Form.Label>
+                        <Form.Group as={Row} controlId='formNameInput'>
+                            <Form.Label className='input-label' column sm='4'>{t('translation:first-name')}</Form.Label>
 
-                            <Col sm="8">
-                                <Form.Control placeholder={t('translation:first-name')} />
+                            <Col sm='8'>
+                                <Form.Control value={firstName} onChange={handleFirstNameChange} placeholder={t('translation:first-name')} />
                             </Col>
                         </Form.Group>
 
                         {/* name input */}
-                        <Form.Group as={Row} controlId="formNameInput">
-                            <Form.Label className='input-label' column sm="4">{t('translation:name')}</Form.Label>
+                        <Form.Group as={Row} controlId='formNameInput'>
+                            <Form.Label className='input-label' column sm='4'>{t('translation:name')}</Form.Label>
 
-                            <Col sm="8">
-                                <Form.Control placeholder={t('translation:name')} />
+                            <Col sm='8'>
+                                <Form.Control value={name} onChange={handleNameChange} placeholder={t('translation:name')} />
                             </Col>
                         </Form.Group>
 
                         {/* date of birth input */}
-                        <Form.Group as={Row} controlId="formDateInput">
-                            <Form.Label className='input-label' column sm="4">{t('translation:date-of-birth')}</Form.Label>
+                        <Form.Group as={Row} controlId='formDateInput'>
+                            <Form.Label className='input-label' column sm='4'>{t('translation:date-of-birth')}</Form.Label>
 
-                            <Col sm="8">
-                                <Form.Control placeholder={t('translation:date-of-birth')} />
+                            <Col sm='4'>
+                                <Row >
+                                    <Col className='first-col-item pr-1' sm='3'><Form.Control type='number' value={day} onChange={handleDayChange} placeholder={t('translation:day')} /></Col>
+                                    <Col className='px-1' sm='3'><Form.Control type='number' value={month} onChange={handleMonthChange} placeholder={t('translation:month')} /></Col>
+                                    <Col className='px-1' sm='6'><Form.Control type='number' value={year} onChange={handleYearChange} placeholder={t('translation:year')} /></Col>
+                                </Row>
                             </Col>
                         </Form.Group>
 
+                        {/* processing consent check box */}
+                        <Form.Group as={Row} controlId='formConsentCheckbox'>
+                            <Form.Label className='input-label' column sm='4'>{t('translation:processing-consent')}</Form.Label>
+
+                            <Col sm='8'>
+                                <Form.Check >
+                                    <Form.Check.Input onChange={handleConsentChange} type='checkbox' checked={consent} />
+                                </Form.Check>
+                            </Col>
+                        </Form.Group>
                     </Form>
                 </Card.Body>
 
@@ -72,8 +172,8 @@ const RecordPatientData = (props: any) => {
     */}
                 <Card.Footer id='data-footer'>
                     <Row className=''>
-                        <Button className='mr-4 p-0'>{t('translation:clear')}</Button>
-                        <Button className=' p-0'>{t('translation:next')}</Button>
+                        <Button onClick={handleClear} className='mr-4 p-0'>{t('translation:clear')}</Button>
+                        <Button onClick={navigation.toShowRecordPatient} disabled={!canGoNext} className=' p-0'>{t('translation:next')}</Button>
                     </Row>
                 </Card.Footer>
             </Card>

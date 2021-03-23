@@ -64,6 +64,7 @@ $data-card-border-radius: 10px;
     @include media-breakpoint-up(sm) {
         position: absolute;
         right: 0;
+        top:0;
         padding: 1rem;
     }
 }
@@ -108,10 +109,13 @@ $data-card-border-radius: 10px;
 #id-query-text {
     font-family: 'Telegrotesk Next Bold';
     font-size: 20px;
+    align-self: center;
 
-    @include media-breakpoint-up(sm) {
-        text-align: center;
-    }
+}
+
+#qr-code-container{
+    background-color: $body-bg;
+    padding-top: 100%;
 }
 
 .footer-font {
@@ -150,5 +154,11 @@ $data-card-border-radius: 10px;
 }
 
 .input-label{
-    font-size: 18px;;
+    font-size: 20px;;
+}
+.first-col-item{
+    padding-left: 0.25rem;
+    @include media-breakpoint-up(sm) {
+        padding-left: 15px;
+    }
 }

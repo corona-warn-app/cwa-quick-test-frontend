@@ -10,11 +10,19 @@ import PrivateRoute from './components/private-route.component';
 import { useKeycloak } from '@react-keycloak/web';
 import useRoutes from './misc/routes';
 import RecordPatientData from './components/record-patient-data';
+import ShowPatientData from './components/show-patient-data';
+import Patient from './misc/patient';
 
 const Root = (props: any) => {
 
     const routes = useRoutes();
     const { t } = useTranslation();
+    const [patient, setPatient] = React.useState<Patient>();
+
+    React.useEffect(()=>{
+        console.log(JSON.stringify(patient));
+        
+    },[patient])
 
     document.title = t('translation:title');
 
@@ -34,15 +42,14 @@ const Root = (props: any) => {
                 </Route>
 
                 {/* Record Patient Data */}
-                {/* <Route exact path={routes.recordPatient}>
-                    <LandingPage />
-                </Route> */}
-                <PrivateRoute roles={['test111']} path={routes.recordPatient} component={ RecordPatientData } />
+                <Route exact path={routes.recordPatient}>
+                    <RecordPatientData setPatient={setPatient} patient={patient} />
+                </Route>
+                {/* <PrivateRoute roles={['test111']} path={routes.recordPatient} component={ RecordPatientData } /> */}
 
                 {/* Show Patient Data */}
                 <Route path={routes.showPatientRecord}>
-                    {/* <ShowPatientRecord /> */}
-                    <LandingPage />
+                    <ShowPatientData patient={patient} />
                 </Route>
 
                 {/* Record Test Result */}

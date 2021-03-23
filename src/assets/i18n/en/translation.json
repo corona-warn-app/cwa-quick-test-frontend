@@ -13,5 +13,13 @@
   "next": "Next",
   "first-name": "First name",
   "name": "Name",
-  "date-of-birth": "Date of Birth"
+  "date-of-birth": "Date of Birth",
+  "day": "Day",
+  "month": "Month",
+  "year": "Year",
+  "processing-consent": "Consent to processing in CWA",
+  "patient-data-correction": "Correct patient data",
+  "process-finish": "Process finish",
+  "qr-code": "QR Code",
+  "patient-data":"Patient data"
 }
