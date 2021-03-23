@@ -2,35 +2,48 @@ import React from 'react';
 import './App.scss';
 import '../i18n';
 import { useTranslation } from 'react-i18next';
-import keycloak from '../keycloak';
-import { ReactKeycloakProvider  } from '@react-keycloak/web';
-import Root from '../root.component';
-import Keycloak from 'keycloak-js';
+import { useKeycloak } from '@react-keycloak/web';
 
-const App =() => {
+const App = (props: any) => {
 
   const { t } = useTranslation();
+  const { keycloak, initialized } = useKeycloak();
 
   document.title = t('translation:title');
 
-  const keycloak = Keycloak('/keycloak.json');
-    keycloak.init({
-          onLoad: 'login-required',
-          checkLoginIframe: false}).then(authenticated => {
-        if(!keycloak.authenticated) {
-            return <h3>Loading ... !!!</h3>;  
-        } else {
-          keycloak.logout();
-        }
-    }).catch( (error) =>  {
-      alert(error);
-  });
+
+  // on mount
+  React.useEffect(() => {
+
+    // if (!initialized) {
+
+    //   keycloak.init(initConfig)
+    //     .then(
+    //       authenticated => {
+
+    //         if (authenticated) {
+    //           console.log('Im in');
+    //         }
+    //         else {
+    //           console.log('logout!');
+
+    //           keycloak.logout();
+    //         }
+    //       })
+    //     .catch((error) => {
+    //       console.log('error: ' + JSON.stringify(error));
+    //     });
+    //}
+
+  }, [initialized]);
 
   return (
     // <ReactKeycloakProvider authClient={ keycloak }>
     //    <Root/>
     // </ReactKeycloakProvider> 
-    <div>Hallo!!!</div>
+    <>
+      {initialized? props.children: 'LOADING'}
+    </>
   );
 }
 

@@ -3,10 +3,18 @@ import { Button, Container } from 'react-bootstrap'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
+import { useKeycloak } from '@react-keycloak/web';
 
 const LandingPage = (props: any) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
+    const {keycloak, initialized} = useKeycloak();
+
+    // React.useEffect(()=>{
+    //     if (!initialized) {
+    //         keycloak.i
+    //     }
+    // },[])
 
     return (
         <Container className='center-content'>
