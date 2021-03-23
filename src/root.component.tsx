@@ -1,6 +1,8 @@
 import React from 'react';
 import { Container } from 'react-bootstrap'
 import { BrowserRouter, Route } from 'react-router-dom'
+import './i18n';
+import { useTranslation } from 'react-i18next';
 import Footer from './components/footer.component';
 import Header from './components/header.component';
 import LandingPage from './components/landing-page.component';
@@ -11,13 +13,13 @@ import useRoutes from './misc/routes';
 const Root = (props: any) => {
 
     const routes = useRoutes();
-    //const { initialized } = useKeycloak();
-    
-    
+    const { t } = useTranslation();
+
+    document.title = t('translation:title');
 
     return (
         <BrowserRouter>
-            {/* <Secured></Secured> eine Komponente drumherum*/} 
+            {/* <Secured></Secured> eine Komponente drumherum*/}
             {/* every time shown */}
             <Route path={routes.root}>
                 <Header />

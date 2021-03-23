@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
+import './assets/SCSS/index.scss';
 import App from './App/App';
 import reportWebVitals from './reportWebVitals';
-import './custom.scss';
+import './assets/SCSS/custom.scss';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import Root from './root.component';
 // Put any other imports below so that CSS from your
