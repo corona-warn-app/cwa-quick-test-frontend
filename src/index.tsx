@@ -34,8 +34,8 @@ axios.interceptors.response.use((config: AxiosResponse) => {
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <Root/>
+    <App />
+    {/* <Root/> */}
   </React.StrictMode>,
   document.getElementById('root')
 );

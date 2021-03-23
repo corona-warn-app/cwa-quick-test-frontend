@@ -4,12 +4,16 @@ import { BrowserRouter, Route } from 'react-router-dom'
 import Footer from './components/footer.component';
 import Header from './components/header.component';
 import LandingPage from './components/landing-page.component';
-import Secured from './components/Secured';
+import PrivateRoute from './components/private-route.component';
+import { useKeycloak } from '@react-keycloak/web';
 import useRoutes from './misc/routes';
 
 const Root = (props: any) => {
 
     const routes = useRoutes();
+    //const { initialized } = useKeycloak();
+    
+    
 
     return (
         <BrowserRouter>
@@ -27,10 +31,10 @@ const Root = (props: any) => {
                 </Route>
 
                 {/* Record Patient Data */}
-                <Route exact path={routes.recordPatient}>
-                    {/* <RecordPatient /> */}
+                {/* <Route exact path={routes.recordPatient}>
                     <LandingPage />
-                </Route>
+                </Route> */}
+                <PrivateRoute roles={['test111']} path={routes.recordPatient} component={ LandingPage } />
 
                 {/* Show Patient Data */}
                 <Route path={routes.showPatientRecord}>
