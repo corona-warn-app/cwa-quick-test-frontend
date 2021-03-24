@@ -6,6 +6,8 @@ import reportWebVitals from './reportWebVitals';
 import './assets/SCSS/custom.scss';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import Root from './root.component';
+import { ReactKeycloakProvider } from '@react-keycloak/web';
+import keycloak from './keycloak';
 // Put any other imports below so that CSS from your
 // components takes precedence over default styles.
 
@@ -20,22 +22,39 @@ import Root from './root.component';
 
 axios.interceptors.request.use((config: AxiosRequestConfig) => {
   console.log('Interceptor');
-  console.log( config );
+  console.log(config);
   alert(config);
   return config;
 })
 
 axios.interceptors.response.use((config: AxiosResponse) => {
   console.log('Interceptor');
-  console.log( config );
+  console.log(config);
   alert(config);
   return config;
 })
 
+const eventLogger = (event: unknown, error: unknown) => {
+  console.log('onKeycloakEvent', event, error)
+}
+
+const tokenLogger = (tokens: unknown) => {
+  console.log('onKeycloakTokens', tokens)
+}
+
 ReactDOM.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <Root/>
+    <ReactKeycloakProvider
+      authClient={keycloak}
+      onEvent={eventLogger}
+      onTokens={tokenLogger}
+    >
+      <App>
+        <Root />
+      </App>
+    </ReactKeycloakProvider>
+    {/* <App>
+    </App> */}
   </React.StrictMode>,
   document.getElementById('root')
 );
