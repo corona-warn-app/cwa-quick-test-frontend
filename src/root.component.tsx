@@ -37,7 +37,10 @@ const Root = (props: any) => {
                 {/* <Route exact path={routes.recordPatient}>
                     <LandingPage />
                 </Route> */}
-                <PrivateRoute roles={['test111']} path={routes.recordPatient} component={ RecordPatientData } />
+                <PrivateRoute roles={['c19_quick_test_lab', 'c19_quick_test_counter']} 
+                              path={routes.recordPatient} 
+                              component={ RecordPatientData } 
+                />
 
                 {/* Show Patient Data */}
                 <Route path={routes.showPatientRecord}>
