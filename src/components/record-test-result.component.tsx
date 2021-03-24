@@ -9,7 +9,7 @@ import useNavigation from '../misc/navigation';
 import Patient from '../misc/patient';
 
 
-enum TestResult{
+enum TestResult {
     POSITIVE,
     NEGATIVE,
     FAILED
@@ -42,7 +42,7 @@ const RecordTestResult = (props: any) => {
     */}
                 <Card.Body id='data-body'>
                     <Form>
-                        {/* name input */}
+                        {/* process number input */}
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column sm='4'>{t('translation:process-number')}</Form.Label>
 
@@ -51,7 +51,7 @@ const RecordTestResult = (props: any) => {
                             </Col>
                         </Form.Group>
 
-                        {/* first name input */}
+                        {/* test result radio */}
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column sm='4'>{t('translation:result-positive')}</Form.Label>
 
@@ -60,13 +60,13 @@ const RecordTestResult = (props: any) => {
                                     type='radio'
                                     name="result-radios"
                                     id="result-radio1"
-                                    checked={testResult===TestResult.POSITIVE}
-                                    onChange={()=>setTestResult(TestResult.POSITIVE)}
+                                    checked={testResult === TestResult.POSITIVE}
+                                    onChange={() => setTestResult(TestResult.POSITIVE)}
                                 />
                             </Col>
                         </Form.Group>
 
-                        {/* name input */}
+                        {/* test result radio */}
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column sm='4'>{t('translation:result-negative')}</Form.Label>
 
@@ -75,13 +75,13 @@ const RecordTestResult = (props: any) => {
                                     type='radio'
                                     name="result-radios"
                                     id="result-radio2"
-                                    checked={testResult===TestResult.NEGATIVE}
-                                    onChange={()=>setTestResult(TestResult.NEGATIVE)}
+                                    checked={testResult === TestResult.NEGATIVE}
+                                    onChange={() => setTestResult(TestResult.NEGATIVE)}
                                 />
                             </Col>
                         </Form.Group>
 
-                        {/* name input */}
+                        {/* test result radio */}
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column sm='4'>{t('translation:result-failed')}</Form.Label>
 
@@ -90,8 +90,8 @@ const RecordTestResult = (props: any) => {
                                     type='radio'
                                     name="result-radios"
                                     id="result-radio3"
-                                    checked={testResult===TestResult.FAILED}
-                                    onChange={()=>setTestResult(TestResult.FAILED)}
+                                    checked={testResult === TestResult.FAILED}
+                                    onChange={() => setTestResult(TestResult.FAILED)}
                                 />
                             </Col>
                         </Form.Group>
