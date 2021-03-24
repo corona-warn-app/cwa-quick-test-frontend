@@ -1,13 +1,12 @@
 import React from 'react';
 import { Container } from 'react-bootstrap'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import './i18n';
 import { useTranslation } from 'react-i18next';
 import Footer from './components/footer.component';
 import Header from './components/header.component';
 import LandingPage from './components/landing-page.component';
 import PrivateRoute from './components/private-route.component';
-import { useKeycloak } from '@react-keycloak/web';
 import useRoutes from './misc/routes';
 import RecordPatientData from './components/record-patient-data';
 import ShowPatientData from './components/show-patient-data';
