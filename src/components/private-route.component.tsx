@@ -19,7 +19,6 @@ interface PrivateRouteParams extends RouteProps {
     const isAutherized = () => {
         console.log("initialized: " + initialized);
         if (keycloak && roles) {
-            console.log("isAutherized:" );
             return roles.some(role  => {
                 // In keycloak there are two ways of assiging roles to the user 
                 // You can assign roles to realm & client 

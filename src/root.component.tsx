@@ -1,13 +1,11 @@
-import React from 'react';
 import { Container } from 'react-bootstrap'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import './i18n';
 import { useTranslation } from 'react-i18next';
 import Footer from './components/footer.component';
 import Header from './components/header.component';
 import LandingPage from './components/landing-page.component';
 import PrivateRoute from './components/private-route.component';
-import { useKeycloak } from '@react-keycloak/web';
 import useRoutes from './misc/routes';
 import RecordPatientData from './components/record-patient-data';
 
@@ -27,45 +25,45 @@ const Root = (props: any) => {
             </Route>
 
             <Container id='qt-body'>
+                <Switch>
+                    {/* Landing */}
+                    <Route exact path={routes.landing}>
+                        <LandingPage />
+                    </Route>
 
-                {/* Landing */}
-                <Route exact path={routes.landing}>
-                    <LandingPage />
-                </Route>
+                    {/* Record Patient Data */}
+                    {/* <Route exact path={routes.recordPatient}>
+                        <LandingPage />
+                    </Route> */}
+                    <PrivateRoute roles={['c19_quick_test_lab', 'c19_quick_test_counter']} 
+                                path={routes.recordPatient} 
+                                component={ RecordPatientData } 
+                    />
 
-                {/* Record Patient Data */}
-                {/* <Route exact path={routes.recordPatient}>
-                    <LandingPage />
-                </Route> */}
-                <PrivateRoute roles={['c19_quick_test_lab', 'c19_quick_test_counter']} 
-                              path={routes.recordPatient} 
-                              component={ RecordPatientData } 
-                />
+                    {/* Show Patient Data */}
+                    <Route path={routes.showPatientRecord}>
+                        {/* <ShowPatientRecord /> */}
+                        <LandingPage />
+                    </Route>
 
-                {/* Show Patient Data */}
-                <Route path={routes.showPatientRecord}>
-                    {/* <ShowPatientRecord /> */}
-                    <LandingPage />
-                </Route>
+                    {/* Record Test Result */}
+                    <Route path={routes.recordTestResult}>
+                        {/* <RecordResult /> */}
+                        <LandingPage />
+                    </Route>
 
-                {/* Record Test Result */}
-                <Route path={routes.recordTestResult}>
-                    {/* <RecordResult /> */}
-                    <LandingPage />
-                </Route>
+                    {/* QR Scan */}
+                    <Route exact path={routes.qrScan}>
+                        {/* <QRScan /> */}
+                        <LandingPage />
+                    </Route>
 
-                {/* QR Scan */}
-                <Route exact path={routes.qrScan}>
-                    {/* <QRScan /> */}
-                    <LandingPage />
-                </Route>
-
-                {/* Show QR Scan Data */}
-                <Route path={routes.qrDataShow}>
-                    {/* <ShowQRScan /> */}
-                    <LandingPage />
-                </Route>
-
+                    {/* Show QR Scan Data */}
+                    <Route path={routes.qrDataShow}>
+                        {/* <ShowQRScan /> */}
+                        <LandingPage />
+                    </Route>
+                </Switch>
             </Container>
 
             {/* every time shown */}
