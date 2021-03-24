@@ -109,10 +109,10 @@ const RecordPatientData = (props: any) => {
     */}
                 <Card.Header id='data-header'>
                     <Row>
-                        <Col sm='4'>
-                            <Card.Title className='m-0' as={'h2'} >{t('translation:record-data')}</Card.Title>
+                        <Col md='4'>
+                            <Card.Title className='m-md-0 d-flex justify-content-center justify-content-md-start' as={'h2'} >{t('translation:record-data')}</Card.Title>
                         </Col>
-                        <Col sm='8' className='d-flex justify-content-sm-center'>
+                        <Col md='8' className='d-flex justify-content-center'>
                             <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
                         </Col>
                     </Row>
@@ -127,8 +127,8 @@ const RecordPatientData = (props: any) => {
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column sm='4'>{t('translation:first-name')}</Form.Label>
 
-                            <Col sm='8'>
-                                <Form.Control value={firstName} onChange={handleFirstNameChange} placeholder={t('translation:first-name')} />
+                            <Col sm='8' className='d-flex'>
+                                <Form.Control className='align-self-center' value={firstName} onChange={handleFirstNameChange} placeholder={t('translation:first-name')} />
                             </Col>
                         </Form.Group>
 
@@ -136,8 +136,8 @@ const RecordPatientData = (props: any) => {
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column sm='4'>{t('translation:name')}</Form.Label>
 
-                            <Col sm='8'>
-                                <Form.Control value={name} onChange={handleNameChange} placeholder={t('translation:name')} />
+                            <Col sm='8' className='d-flex'>
+                                <Form.Control className='align-self-center' value={name} onChange={handleNameChange} placeholder={t('translation:name')} />
                             </Col>
                         </Form.Group>
 
@@ -145,22 +145,22 @@ const RecordPatientData = (props: any) => {
                         <Form.Group as={Row} controlId='formDateInput'>
                             <Form.Label className='input-label' column sm='4'>{t('translation:date-of-birth')}</Form.Label>
 
-                            <Col sm='4'>
-                                <Row >
-                                    <Col className='first-col-item pr-1' sm='3'><Form.Control type='number' value={day} onChange={handleDayChange} placeholder={t('translation:day')} /></Col>
-                                    <Col className='px-1' sm='3'><Form.Control type='number' value={month} onChange={handleMonthChange} placeholder={t('translation:month')} /></Col>
-                                    <Col className='px-1' sm='6'><Form.Control type='number' value={year} onChange={handleYearChange} placeholder={t('translation:year')} /></Col>
+                            <Col md='4' sm='8' className='d-flex'>
+                                <Row className='align-self-center'>
+                                    <Col className='first-col-item pr-sm-1' sm='3'><Form.Control type='number' value={day} onChange={handleDayChange} placeholder={t('translation:day')} /></Col>
+                                    <Col className='px-sm-1' sm='3'><Form.Control type='number' value={month} onChange={handleMonthChange} placeholder={t('translation:month')} /></Col>
+                                    <Col className='pl-sm-1' sm='6'><Form.Control type='number' value={year} onChange={handleYearChange} placeholder={t('translation:year')} /></Col>
                                 </Row>
                             </Col>
                         </Form.Group>
 
                         {/* processing consent check box */}
                         <Form.Group as={Row} controlId='formConsentCheckbox'>
-                            <Form.Label className='input-label' column sm='4'>{t('translation:processing-consent')}</Form.Label>
+                            <Form.Label className='input-label' column sm='9' md='4'>{t('translation:processing-consent')}</Form.Label>
 
-                            <Col sm='8'>
-                                <Form.Check >
-                                    <Form.Check.Input onChange={handleConsentChange} type='checkbox' checked={consent} />
+                            <Col xs='2' className='d-flex justify-content-center justify-content-md-start'>
+                                <Form.Check className='align-self-center'>
+                                    <Form.Check.Input className='position-unset' onChange={handleConsentChange} type='checkbox' checked={consent} />
                                 </Form.Check>
                             </Col>
                         </Form.Group>
@@ -171,9 +171,13 @@ const RecordPatientData = (props: any) => {
     footer with clear and nex button
     */}
                 <Card.Footer id='data-footer'>
-                    <Row className=''>
-                        <Button onClick={handleClear} className='mr-4 p-0'>{t('translation:clear')}</Button>
-                        <Button onClick={navigation.toShowRecordPatient} disabled={!canGoNext} className=' p-0'>{t('translation:next')}</Button>
+                    <Row>
+                        <Col xs='6' md='3'>
+                        <Button block onClick={handleClear} className='my-1 my-md-0 p-0'>{t('translation:clear')}</Button>
+                        </Col>
+                        <Col xs='6' md='3' className='pr-md-0'>
+                        <Button block onClick={navigation.toShowRecordPatient} disabled={!canGoNext} className='my-1 my-md-0 p-0'>{t('translation:next')}</Button>
+                        </Col>
                     </Row>
                 </Card.Footer>
             </Card>

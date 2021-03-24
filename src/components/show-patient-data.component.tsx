@@ -48,13 +48,13 @@ const ShowPatientData = (props: any) => {
     */}
                 <Card.Body id='data-header'>
                 <Row>
-                        <Col sm='6'>
-                            <Card.Title className='m-0' as={'h2'} >{t('translation:qr-code')}</Card.Title>
-                            <Card.Text className='input-label font-weight-bold mt-4' >{t('translation:patient-data')}</Card.Text>
-                            <Card.Text className='input-label' >{firstName + ' ' + name}</Card.Text>
-                            <Card.Text className='input-label' >{day + ' ' + month+ ' ' + year}</Card.Text>
+                        <Col sm='5'>
+                            <Card.Title className='m-sm-0 d-flex justify-content-center justify-content-sm-start' as={'h2'} >{t('translation:qr-code')}</Card.Title>
+                            <Card.Text className='input-label font-weight-bold mt-4 d-flex justify-content-center justify-content-sm-start' >{t('translation:patient-data')}</Card.Text>
+                            <Card.Text className='input-label d-flex justify-content-center justify-content-sm-start' >{firstName + ' ' + name}</Card.Text>
+                            <Card.Text className='input-label mb-4  d-flex justify-content-center justify-content-sm-start' >{day + ' ' + month+ ' ' + year}</Card.Text>
                         </Col>
-                        <Col className='px-4'>
+                        <Col sm='7' className='px-4'>
                         <Container id='qr-code-container'>
                             <QRCode id='qr-code' size={256} renderAs='svg' value={qrCodeValue}/>
                             <Card.Text className='input-label' >{qrCodeValue}</Card.Text>
@@ -68,11 +68,11 @@ const ShowPatientData = (props: any) => {
     */}
                 <Card.Footer id='data-footer'>
                     <Row>
-                        <Col xs='6' sm='3'>
-                            <Button block onClick={navigation.toRecordPatient} className='my-1 my-sm-0 p-0'>{t('translation:patient-data-correction')}</Button>
+                        <Col sm='6' md='4'>
+                            <Button block onClick={navigation.toRecordPatient} className='my-1 my-md-0 p-0'>{t('translation:patient-data-correction')}</Button>
                         </Col>
-                        <Col xs='6' sm='3' className='pr-sm-0'>
-                            <Button block onClick={navigation.toLanding} className='my-1 my-sm-0 p-0'>{t('translation:process-finish')}</Button>
+                        <Col sm='6' md='3' className='pr-md-0'>
+                            <Button block onClick={navigation.toLanding} className='my-1 my-md-0 p-0'>{t('translation:process-finish')}</Button>
                         </Col>
                     </Row>
                 </Card.Footer>

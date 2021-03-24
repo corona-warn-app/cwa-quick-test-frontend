@@ -31,8 +31,8 @@ const RecordTestResult = (props: any) => {
             <Card className='border-0 h-100 pb-3'>
                 <Card.Header id='data-header'>
                     <Row>
-                        <Col sm='6'>
-                            <Card.Title className='m-0' as={'h2'} >{t('translation:record-result')}</Card.Title>
+                        <Col md='6'>
+                            <Card.Title className='m-0 d-flex justify-content-center justify-content-md-start' as={'h2'} >{t('translation:record-result')}</Card.Title>
                         </Col>
                     </Row>
                 </Card.Header>
@@ -46,16 +46,16 @@ const RecordTestResult = (props: any) => {
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column sm='4'>{t('translation:process-number')}</Form.Label>
 
-                            <Col sm='4'>
+                            <Col sm='6' md='4'>
                                 <Form.Control value={processNo} onChange={handleProcessNoChange} placeholder={t('translation:process-number')} />
                             </Col>
                         </Form.Group>
 
                         {/* test result radio */}
                         <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column sm='4'>{t('translation:result-positive')}</Form.Label>
+                            <Form.Label className='input-label' column xs='4'>{t('translation:result-positive')}</Form.Label>
 
-                            <Col sm='8'>
+                            <Col xs='8'>
                                 <Form.Check
                                     type='radio'
                                     name="result-radios"
@@ -68,9 +68,9 @@ const RecordTestResult = (props: any) => {
 
                         {/* test result radio */}
                         <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column sm='4'>{t('translation:result-negative')}</Form.Label>
+                            <Form.Label className='input-label' column xs='4'>{t('translation:result-negative')}</Form.Label>
 
-                            <Col sm='8'>
+                            <Col xs='8'>
                                 <Form.Check
                                     type='radio'
                                     name="result-radios"
@@ -83,9 +83,9 @@ const RecordTestResult = (props: any) => {
 
                         {/* test result radio */}
                         <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column sm='4'>{t('translation:result-failed')}</Form.Label>
+                            <Form.Label className='input-label' column xs='4'>{t('translation:result-failed')}</Form.Label>
 
-                            <Col sm='8'>
+                            <Col xs='8'>
                                 <Form.Check
                                     type='radio'
                                     name="result-radios"
@@ -103,11 +103,11 @@ const RecordTestResult = (props: any) => {
     */}
                 <Card.Footer id='data-footer'>
                     <Row>
-                        <Col xs='6' sm='3'>
-                            <Button block onClick={navigation.toLanding} className='my-1 my-sm-0 p-0'>{t('translation:cancel')}</Button>
+                        <Col sm='6' md='3'>
+                            <Button block onClick={navigation.toLanding} className='my-1 my-md-0 p-0'>{t('translation:cancel')}</Button>
                         </Col>
-                        <Col xs='6' sm='3' className='pr-sm-0'>
-                            <Button block onClick={navigation.toLanding} className='my-1 my-sm-0 p-0'>{t('translation:data-submit')}</Button>
+                        <Col sm='6' md='3' className='pr-md-0'>
+                            <Button block onClick={navigation.toLanding} className='my-1 my-md-0 p-0'>{t('translation:data-submit')}</Button>
                         </Col>
                     </Row>
                 </Card.Footer>
