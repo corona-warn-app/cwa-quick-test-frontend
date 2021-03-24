@@ -116,6 +116,15 @@ $data-card-border-radius: 10px;
 #qr-code-container{
     background-color: $body-bg;
     padding-top: 100%;
+    position: relative;
+}
+
+#qr-code{
+    position: absolute;
+    left:10%;
+    top:10%;
+    width:80%;
+    height:80%;
 }
 
 .footer-font {

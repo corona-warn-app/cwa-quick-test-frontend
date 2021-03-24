@@ -1,6 +1,8 @@
 import React from 'react';
 import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 import { BrowserRouter, Link, Route, useHistory } from 'react-router-dom'
+import QRCode from 'qrcode.react'
+import { v4 as uuid } from 'uuid';
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
@@ -16,6 +18,7 @@ const ShowPatientData = (props: any) => {
     const [month, setMonth] = React.useState<number>(0);
     const [year, setYear] = React.useState<number>(0);
     const [consent, setConsent] = React.useState(false);
+    const [qrCodeValue, setQrCodeValue] = React.useState('');
 
     React.useEffect(() => {
         if (props.patient) {
@@ -26,6 +29,8 @@ const ShowPatientData = (props: any) => {
             setMonth(1);
             setYear(1);
             setConsent(p.processingConsens);
+
+            setQrCodeValue(uuid());
         }
     }, [])
 
@@ -51,7 +56,8 @@ const ShowPatientData = (props: any) => {
                         </Col>
                         <Col className='px-4'>
                         <Container id='qr-code-container'>
-
+                            <QRCode id='qr-code' size={256} renderAs='svg' value={qrCodeValue}/>
+                            <Card.Text className='input-label' >{qrCodeValue}</Card.Text>
                         </Container>
                         </Col>
                     </Row>

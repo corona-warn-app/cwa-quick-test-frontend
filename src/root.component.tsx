@@ -8,9 +8,10 @@ import Header from './components/header.component';
 import LandingPage from './components/landing-page.component';
 import PrivateRoute from './components/private-route.component';
 import useRoutes from './misc/routes';
-import RecordPatientData from './components/record-patient-data';
-import ShowPatientData from './components/show-patient-data';
+import RecordPatientData from './components/record-patient-data.component';
+import ShowPatientData from './components/show-patient-data.component';
 import Patient from './misc/patient';
+import RecordTestResult from './components/record-test-result.component';
 
 const Root = (props: any) => {
 
@@ -53,8 +54,7 @@ const Root = (props: any) => {
 
                 {/* Record Test Result */}
                 <Route path={routes.recordTestResult}>
-                    {/* <RecordResult /> */}
-                    <LandingPage />
+                    <RecordTestResult />
                 </Route>
 
                 {/* QR Scan */}

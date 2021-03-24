@@ -21,5 +21,11 @@
   "patient-data-correction": "Patientendaten korrigieren",
   "process-finish": "Vorgang abschließen",
   "qr-code": "QR Code",
-  "patient-data": "Patientendaten"
+  "patient-data": "Patientendaten",
+  "cancel": "Abbrechen",
+  "data-submit": "Daten übermitteln",
+  "result-positive": "Positiv",
+  "result-negative": "Negativ",
+  "result-failed": "Failed",
+  "process-number":"Vorgangsnummer"
 }
