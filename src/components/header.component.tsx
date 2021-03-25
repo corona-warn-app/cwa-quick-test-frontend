@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Image, Container } from 'react-bootstrap'
+import { Row, Image, Container, Navbar, NavItem, Nav, NavDropdown } from 'react-bootstrap'
 import { useLocation } from 'react-router-dom'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -24,6 +24,10 @@ const Header = (props: any) => {
 
     }, [keycloak])
 
+    const handleLogout = () => {
+        keycloak.logout({ redirectUri: window.location.origin + navigation.routes.landing });
+    }
+
     return (
         <Container className='position-relative'>
             {/* simple header with logo */}
@@ -33,12 +37,21 @@ const Header = (props: any) => {
             </Row>
 
             {/* user icon and user name */}
-            <Row id='user-container'>
-                <Image className='mx-1' src={UserLogo} />
-                <span className='my-auto mx-1'>{userName}</span>
+            <Navbar id='user-container' >
+                <NavDropdown
+                    className="mr-3"
+                    title=''
+                    id="responsive-navbar-nav"
+                >
+                    <Navbar.Brand onClick={handleLogout} className='mx-0 dropdown-item'>Logout</Navbar.Brand>
+                </NavDropdown>
 
-            </Row>
-        </Container>
+                <Navbar.Brand className='my-auto mx-0'>{userName}</Navbar.Brand>
+
+            </Navbar>
+
+
+        </Container >
     )
 }
 
