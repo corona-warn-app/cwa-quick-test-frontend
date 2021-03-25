@@ -22,6 +22,8 @@ $light: #eeeeee;
 @import '~bootstrap/scss/bootstrap.scss';
 
 $header-height: 120px;
+$menu-width: 120px;
+$menu-padding: 1rem;
 $data-card-border-radius: 10px;
 
 #qt-header {
@@ -58,14 +60,14 @@ $data-card-border-radius: 10px;
 
 #user-container {
     justify-content: center;
-    margin: 0;
-
+    
     // all greater than md
     @include media-breakpoint-up(md) {
         position: absolute;
         right: 0;
         top: 0;
         padding: 1rem;
+        justify-content: flex-end;
     }
 }
 
@@ -192,6 +194,52 @@ $data-card-border-radius: 10px;
     }
 }
 
-.position-inherit{
-    position:inherit;
+.position-inherit {
+    position: inherit;
+}
+
+.dropdown-toggle::after {
+    width: 39px;
+    height: 39px;
+    background-image: url('../images/user.png') !important;
+    border: 0;
+    align-self: center;
+}
+.nav-link{
+    padding: 0;
+    display: flex;
+}
+.navbar-toggler {
+    border: 0 !important;
+    padding: 0;
+    &:active,
+    &:focus {
+        outline: 0;
+    }
+}
+.dropdown-menu{
+    min-width: $menu-width;
+    padding-left: $menu-padding;
+    padding-right: $menu-padding;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.25);
+    border: 0;
+    justify-content: center;
+}
+
+.menu-panel {
+    width: $menu-width;
+    max-width: $menu-width;
+    padding-left: $menu-padding;
+    padding-right: $menu-padding;
+    background: #fcfcfc;
+    box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.25);
+    z-index: 2;
+    margin: 0;
+    justify-content: center;
+    display: flex;;
+}
+.dropdown-item{
+    text-align: center;
 }
