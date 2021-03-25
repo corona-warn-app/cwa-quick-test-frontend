@@ -35,6 +35,11 @@ const Root = (props: any) => {
             </Route>
 
             <Container id='qt-body'>
+                <Switch>
+                    {/* Landing */}
+                    <Route exact path={routes.landing}>
+                        <LandingPage />
+                    </Route>
 
                 {/* Landing */}
                 <Route exact path={routes.landing}>
@@ -57,18 +62,24 @@ const Root = (props: any) => {
                     <RecordTestResult />
                 </Route>
 
-                {/* QR Scan */}
-                <Route exact path={routes.qrScan}>
-                    {/* <QRScan /> */}
-                    <LandingPage />
-                </Route>
+                    {/* Record Test Result */}
+                    <Route path={routes.recordTestResult}>
+                        {/* <RecordResult /> */}
+                        <LandingPage />
+                    </Route>
 
-                {/* Show QR Scan Data */}
-                <Route path={routes.qrDataShow}>
-                    {/* <ShowQRScan /> */}
-                    <LandingPage />
-                </Route>
+                    {/* QR Scan */}
+                    <Route exact path={routes.qrScan}>
+                        {/* <QRScan /> */}
+                        <LandingPage />
+                    </Route>
 
+                    {/* Show QR Scan Data */}
+                    <Route path={routes.qrDataShow}>
+                        {/* <ShowQRScan /> */}
+                        <LandingPage />
+                    </Route>
+                </Switch>
             </Container>
 
             {/* every time shown */}
