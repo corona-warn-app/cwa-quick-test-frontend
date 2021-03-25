@@ -12,28 +12,17 @@ const App = (props: any) => {
   document.title = t('translation:title');
 
 
-  // on mount
+  // on init change
   React.useEffect(() => {
 
-    // if (!initialized) {
+    if (keycloak && initialized && !keycloak.authenticated) {
+      keycloak.login();
+    }
 
-    //   keycloak.init(initConfig)
-    //     .then(
-    //       authenticated => {
+    // if(keycloak && initialized){
+    //   keycloak.logout();
+    // }
 
-    //         if (authenticated) {
-    //           console.log('Im in');
-    //         }
-    //         else {
-    //           console.log('logout!');
-
-    //           keycloak.logout();
-    //         }
-    //       })
-    //     .catch((error) => {
-    //       console.log('error: ' + JSON.stringify(error));
-    //     });
-    //}
 
   }, [initialized]);
 
