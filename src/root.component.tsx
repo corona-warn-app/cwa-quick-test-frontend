@@ -1,3 +1,4 @@
+import React from 'react';
 import { Container } from 'react-bootstrap'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import './i18n';
