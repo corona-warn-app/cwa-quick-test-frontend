@@ -110,7 +110,7 @@ const RecordPatientData = (props: any) => {
                 <Card.Header id='data-header'>
                     <Row>
                         <Col md='4'>
-                            <Card.Title className='m-md-0 d-flex justify-content-center justify-content-md-start' as={'h2'} >{t('translation:record-data')}</Card.Title>
+                            <Card.Title className='m-md-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-data')}</Card.Title>
                         </Col>
                         <Col md='8' className='d-flex justify-content-center'>
                             <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
@@ -158,9 +158,9 @@ const RecordPatientData = (props: any) => {
                         <Form.Group as={Row} controlId='formConsentCheckbox'>
                             <Form.Label className='input-label' column sm='9' md='4'>{t('translation:processing-consent')}</Form.Label>
 
-                            <Col xs='2' className='d-flex justify-content-center justify-content-md-start'>
+                            <Col xs='2' className='jcc-xs-jcfs-md'>
                                 <Form.Check className='align-self-center'>
-                                    <Form.Check.Input className='position-unset' onChange={handleConsentChange} type='checkbox' checked={consent} />
+                                    <Form.Check.Input className='position-inherit' onChange={handleConsentChange} type='checkbox' checked={consent} />
                                 </Form.Check>
                             </Col>
                         </Form.Group>

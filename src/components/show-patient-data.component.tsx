@@ -49,10 +49,10 @@ const ShowPatientData = (props: any) => {
                 <Card.Body id='data-header'>
                 <Row>
                         <Col sm='5'>
-                            <Card.Title className='m-sm-0 d-flex justify-content-center justify-content-sm-start' as={'h2'} >{t('translation:qr-code')}</Card.Title>
-                            <Card.Text className='input-label font-weight-bold mt-4 d-flex justify-content-center justify-content-sm-start' >{t('translation:patient-data')}</Card.Text>
-                            <Card.Text className='input-label d-flex justify-content-center justify-content-sm-start' >{firstName + ' ' + name}</Card.Text>
-                            <Card.Text className='input-label mb-4  d-flex justify-content-center justify-content-sm-start' >{day + ' ' + month+ ' ' + year}</Card.Text>
+                            <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'} >{t('translation:qr-code')}</Card.Title>
+                            <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
+                            <Card.Text className='input-label jcc-xs-jcfs-sm' >{firstName + ' ' + name}</Card.Text>
+                            <Card.Text className='input-label mb-4 jcc-xs-jcfs-sm' >{day + ' ' + month+ ' ' + year}</Card.Text>
                         </Col>
                         <Col sm='7' className='px-4'>
                         <Container id='qr-code-container'>

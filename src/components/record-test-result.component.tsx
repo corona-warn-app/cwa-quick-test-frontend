@@ -32,7 +32,7 @@ const RecordTestResult = (props: any) => {
                 <Card.Header id='data-header'>
                     <Row>
                         <Col md='6'>
-                            <Card.Title className='m-0 d-flex justify-content-center justify-content-md-start' as={'h2'} >{t('translation:record-result')}</Card.Title>
+                            <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-result')}</Card.Title>
                         </Col>
                     </Row>
                 </Card.Header>
@@ -46,8 +46,9 @@ const RecordTestResult = (props: any) => {
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column sm='4'>{t('translation:process-number')}</Form.Label>
 
-                            <Col sm='6' md='4'>
-                                <Form.Control value={processNo} onChange={handleProcessNoChange} placeholder={t('translation:process-number')} />
+                            <Col sm='6' md='4' className='d-flex'>
+                                <Form.Control 
+                                    className='align-self-center' value={processNo} onChange={handleProcessNoChange} placeholder={t('translation:process-number')} />
                             </Col>
                         </Form.Group>
 
@@ -55,8 +56,9 @@ const RecordTestResult = (props: any) => {
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column xs='4'>{t('translation:result-positive')}</Form.Label>
 
-                            <Col xs='8'>
+                            <Col xs='8' className='d-flex'>
                                 <Form.Check
+                                    className='align-self-center'
                                     type='radio'
                                     name="result-radios"
                                     id="result-radio1"
@@ -70,8 +72,9 @@ const RecordTestResult = (props: any) => {
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column xs='4'>{t('translation:result-negative')}</Form.Label>
 
-                            <Col xs='8'>
+                            <Col xs='8' className='d-flex'>
                                 <Form.Check
+                                    className='align-self-center'
                                     type='radio'
                                     name="result-radios"
                                     id="result-radio2"
@@ -85,8 +88,9 @@ const RecordTestResult = (props: any) => {
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label' column xs='4'>{t('translation:result-failed')}</Form.Label>
 
-                            <Col xs='8'>
+                            <Col xs='8' className='d-flex'>
                                 <Form.Check
+                                    className='align-self-center'
                                     type='radio'
                                     name="result-radios"
                                     id="result-radio3"
