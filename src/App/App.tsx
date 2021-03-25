@@ -3,6 +3,8 @@ import './App.scss';
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 import { useKeycloak } from '@react-keycloak/web';
+import CwaSpinner from '../components/spinner/spinner.component';
+
 
 const App = (props: any) => {
 
@@ -19,19 +21,11 @@ const App = (props: any) => {
       keycloak.login();
     }
 
-    // if(keycloak && initialized){
-    //   keycloak.logout();
-    // }
-
-
   }, [initialized]);
 
   return (
-    // <ReactKeycloakProvider authClient={ keycloak }>
-    //    <Root/>
-    // </ReactKeycloakProvider> 
     <>
-      {initialized? props.children: 'LOADING'}
+      {initialized && keycloak.authenticated? props.children: <CwaSpinner/>}
     </>
   );
 }
