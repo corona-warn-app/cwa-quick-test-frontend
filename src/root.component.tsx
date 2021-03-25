@@ -7,12 +7,21 @@ import Header from './components/header.component';
 import LandingPage from './components/landing-page.component';
 import PrivateRoute from './components/private-route.component';
 import useRoutes from './misc/routes';
-import RecordPatientData from './components/record-patient-data';
+import RecordPatientData from './components/record-patient-data.component';
+import ShowPatientData from './components/show-patient-data.component';
+import Patient from './misc/patient';
+import RecordTestResult from './components/record-test-result.component';
 
 const Root = (props: any) => {
 
     const routes = useRoutes();
     const { t } = useTranslation();
+    const [patient, setPatient] = React.useState<Patient>();
+
+    React.useEffect(()=>{
+        console.log(JSON.stringify(patient));
+        
+    },[patient])
 
     document.title = t('translation:title');
 
@@ -31,20 +40,26 @@ const Root = (props: any) => {
                         <LandingPage />
                     </Route>
 
-                    {/* Record Patient Data */}
-                    {/* <Route exact path={routes.recordPatient}>
-                        <LandingPage />
-                    </Route> */}
-                    <PrivateRoute roles={['c19_quick_test_lab', 'c19_quick_test_counter']} 
-                                path={routes.recordPatient} 
-                                component={ RecordPatientData } 
-                    />
+                {/* Landing */}
+                <Route exact path={routes.landing}>
+                    <LandingPage />
+                </Route>
 
-                    {/* Show Patient Data */}
-                    <Route path={routes.showPatientRecord}>
-                        {/* <ShowPatientRecord /> */}
-                        <LandingPage />
-                    </Route>
+                {/* Record Patient Data */}
+                <Route exact path={routes.recordPatient}>
+                    <RecordPatientData setPatient={setPatient} patient={patient} />
+                </Route>
+                {/* <PrivateRoute roles={['test111']} path={routes.recordPatient} component={ RecordPatientData } /> */}
+
+                {/* Show Patient Data */}
+                <Route path={routes.showPatientRecord}>
+                    <ShowPatientData patient={patient} />
+                </Route>
+
+                {/* Record Test Result */}
+                <Route path={routes.recordTestResult}>
+                    <RecordTestResult />
+                </Route>
 
                     {/* Record Test Result */}
                     <Route path={routes.recordTestResult}>

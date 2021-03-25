@@ -60,20 +60,25 @@ $data-card-border-radius: 10px;
     justify-content: center;
     margin: 0;
 
-    // all greater than sm (576px)
-    @include media-breakpoint-up(sm) {
+    // all greater than md
+    @include media-breakpoint-up(md) {
         position: absolute;
         right: 0;
+        top: 0;
         padding: 1rem;
     }
 }
 
-#process-row{
-    justify-content: flex-end;
+#process-row {
+    justify-content: center;
     font-size: 20px;
     padding-bottom: 0;
     margin: 0;
     padding-right: 1rem;
+
+    @include media-breakpoint-up(sm) {
+        justify-content: flex-end;
+    }
 }
 
 #data-body {
@@ -81,25 +86,25 @@ $data-card-border-radius: 10px;
 }
 
 #data-header {
-    background-color: $light;    
+    background-color: $light;
     border-top-left-radius: $data-card-border-radius;
     border-top-right-radius: $data-card-border-radius;
-    border:0;
+    border: 0;
 }
 
 #data-footer {
     background-color: $light;
     border: 0;
     text-align: right;
-    padding:1rem;
+    padding: 1rem;
     border-bottom-left-radius: $data-card-border-radius;
     border-bottom-right-radius: $data-card-border-radius;
 
-    .row{
+    .row {
         margin: 0;
         justify-content: center;
 
-        @include media-breakpoint-up(sm) {
+        @include media-breakpoint-up(md) {
             justify-content: flex-end;
         }
     }
@@ -108,10 +113,22 @@ $data-card-border-radius: 10px;
 #id-query-text {
     font-family: 'Telegrotesk Next Bold';
     font-size: 20px;
+    align-self: center;
+    text-align: center;
+}
 
-    @include media-breakpoint-up(sm) {
-        text-align: center;
-    }
+#qr-code-container {
+    background-color: $body-bg;
+    padding-top: 100%;
+    position: relative;
+}
+
+#qr-code {
+    position: absolute;
+    left: 10%;
+    top: 10%;
+    width: 80%;
+    height: 80%;
 }
 
 .footer-font {
@@ -125,9 +142,8 @@ $data-card-border-radius: 10px;
     color: black;
 }
 
-.btn{
+.btn {
     font-size: 18px;
-    min-width: 110px;
 }
 
 .landing-btn {
@@ -144,11 +160,38 @@ $data-card-border-radius: 10px;
     flex: 1;
     padding: 1rem;
 
-    @include media-breakpoint-up(sm) {
+    @include media-breakpoint-up(md) {
         margin-top: 10vh;
     }
 }
 
-.input-label{
-    font-size: 18px;;
+.input-label {
+    font-size: 20px;
+}
+.first-col-item {
+    @include media-breakpoint-up(sm) {
+        padding-left: 15px;
+    }
+}
+
+.jcc-xs-jcfs-sm {
+    display: flex;
+    justify-content: center;
+
+    @include media-breakpoint-up(sm) {
+        justify-content: flex-start;
+    }
+}
+
+.jcc-xs-jcfs-md {
+    display: flex;
+    justify-content: center;
+
+    @include media-breakpoint-up(md) {
+        justify-content: flex-start;
+    }
+}
+
+.position-inherit{
+    position:inherit;
 }

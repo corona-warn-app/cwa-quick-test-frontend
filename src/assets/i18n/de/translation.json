@@ -13,5 +13,19 @@
   "next": "Weiter",
   "first-name": "Vorname",
   "name": "Name",
-  "date-of-birth": "Geburtsdatum"
+  "date-of-birth": "Geburtsdatum",
+  "day": "Tag",
+  "month": "Monat",
+  "year": "Jahr",
+  "processing-consent": "Einwilligung zur Verarbeitung in der CWA",
+  "patient-data-correction": "Patientendaten korrigieren",
+  "process-finish": "Vorgang abschließen",
+  "qr-code": "QR Code",
+  "patient-data": "Patientendaten",
+  "cancel": "Abbrechen",
+  "data-submit": "Daten übermitteln",
+  "result-positive": "Positiv",
+  "result-negative": "Negativ",
+  "result-failed": "Failed",
+  "process-number":"Vorgangsnr."
 }
