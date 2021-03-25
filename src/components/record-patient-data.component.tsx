@@ -3,6 +3,7 @@ import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
 import { BrowserRouter, Link, Route, useHistory } from 'react-router-dom'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
+import DatePicker from 'react-date-picker';
 import useNavigation from '../misc/navigation';
 import Patient from '../misc/patient';
 
@@ -19,6 +20,7 @@ const RecordPatientData = (props: any) => {
 
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
+    const [dateOfBirth, setDateOfBirth] = React.useState<Date|Date[]>();
 
     React.useEffect(() => {
         if (props.patient) {
@@ -30,32 +32,32 @@ const RecordPatientData = (props: any) => {
             setYear(1);
             setConsent(p.processingConsens);
         }
-    },[])
+    }, [])
 
     React.useEffect(() => {
-        if(firstName.trim() !== ''
+        if (firstName.trim() !== ''
             && name.trim() !== ''
             && day !== NaN && day > 0
             && month !== NaN && month > 0
             && year !== NaN && year > 0
-            && consent){
-                setCanGoNext(true);
-                setPatient({
-                    firstName:firstName,
-                    name:name,
-                    dateOfBirth:new Date(),
-                    processingConsens:consent
-                });
-            }
-            else{
-                setCanGoNext(false);
-                setPatient(undefined);
-            }
+            && consent) {
+            setCanGoNext(true);
+            setPatient({
+                firstName: firstName,
+                name: name,
+                dateOfBirth: new Date(),
+                processingConsens: consent
+            });
+        }
+        else {
+            setCanGoNext(false);
+            setPatient(undefined);
+        }
     }, [firstName, name, day, month, year, consent])
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         props.setPatient(patient);
-    },[patient])
+    }, [patient])
 
     const handleFirstNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setFirstName(evt.currentTarget.value);
@@ -63,35 +65,14 @@ const RecordPatientData = (props: any) => {
     const handleNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setName(evt.currentTarget.value);
     }
-    const handleDayChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setDay(getNumber(evt.currentTarget.value));
-    }
-    const handleMonthChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setMonth(getNumber(evt.currentTarget.value));
-    }
-    const handleYearChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setYear(getNumber(evt.currentTarget.value));
-    }
     const handleConsentChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setConsent(evt.currentTarget.checked);
-    }
-
-    const getNumber = (value: string) => {
-        let i: number | typeof NaN = Number.parseInt(value);
-
-        if (isNaN(i)) {
-            i = 0;
-        }
-
-        return i;
     }
 
     const handleClear = () => {
         setFirstName('');
         setName('');
-        setDay(0);
-        setMonth(0);
-        setYear(0);
+        setDateOfBirth(undefined);
         setConsent(false);
     }
 
@@ -143,14 +124,25 @@ const RecordPatientData = (props: any) => {
 
                         {/* date of birth input */}
                         <Form.Group as={Row} controlId='formDateInput'>
-                            <Form.Label className='input-label' column sm='4'>{t('translation:date-of-birth')}</Form.Label>
+                            <Form.Label className='input-label' column xs='7' sm='4'>{t('translation:date-of-birth')}</Form.Label>
 
-                            <Col md='4' sm='8' className='d-flex'>
-                                <Row className='align-self-center'>
+                            <Col xs='5' sm='8' className='d-flex'>
+                                <DatePicker
+                                    onChange={setDateOfBirth}
+                                    value={dateOfBirth}
+                                    locale='de-DE'
+                                    format='dd.MM.yyyy'
+                                    calendarIcon={null}
+                                    clearIcon={null}
+                                    maxDate={new Date()}
+                                    minDate={new Date(1900,0,1)}
+                                    closeCalendar={false}
+                                />
+                                {/* <Row className='align-self-center'>
                                     <Col className='first-col-item pr-sm-1' sm='3'><Form.Control type='number' value={day} onChange={handleDayChange} placeholder={t('translation:day')} /></Col>
                                     <Col className='px-sm-1' sm='3'><Form.Control type='number' value={month} onChange={handleMonthChange} placeholder={t('translation:month')} /></Col>
                                     <Col className='pl-sm-1' sm='6'><Form.Control type='number' value={year} onChange={handleYearChange} placeholder={t('translation:year')} /></Col>
-                                </Row>
+                                </Row> */}
                             </Col>
                         </Form.Group>
 
@@ -173,10 +165,10 @@ const RecordPatientData = (props: any) => {
                 <Card.Footer id='data-footer'>
                     <Row>
                         <Col xs='6' md='3'>
-                        <Button block onClick={handleClear} className='my-1 my-md-0 p-0'>{t('translation:clear')}</Button>
+                            <Button block onClick={handleClear} className='my-1 my-md-0 p-0'>{t('translation:clear')}</Button>
                         </Col>
                         <Col xs='6' md='3' className='pr-md-0'>
-                        <Button block onClick={navigation.toShowRecordPatient} disabled={!canGoNext} className='my-1 my-md-0 p-0'>{t('translation:next')}</Button>
+                            <Button block onClick={navigation.toShowRecordPatient} disabled={!canGoNext} className='my-1 my-md-0 p-0'>{t('translation:next')}</Button>
                         </Col>
                     </Row>
                 </Card.Footer>
