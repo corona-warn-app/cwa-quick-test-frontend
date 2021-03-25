@@ -31,7 +31,7 @@ const ShowPatientData = (props: any) => {
             setConsent(p.processingConsens);
 
             setQrCodeValue(uuid());
-        }
+                }
     }, [])
 
     return (
