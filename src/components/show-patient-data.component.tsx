@@ -32,6 +32,7 @@ const ShowPatientData = (props: any) => {
 
             setUuIdHash(sha256(props.patient.uuId).toString());
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // set process id from hash

@@ -43,6 +43,7 @@ const RecordPatientData = (props: any) => {
         else {
             newUuId();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // set hash from uuid
@@ -84,11 +85,12 @@ const RecordPatientData = (props: any) => {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, dateOfBirth, consent, uuId])
+    }, [firstName, name, dateOfBirth, consent, uuId])
 
     // emit patient object to parent
     React.useEffect(() => {
         props.setPatient(patient);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [patient])
 
     // on input chnage
