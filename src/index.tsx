@@ -1,56 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import './assets/SCSS/index.scss';
-import App from './App/App';
-import reportWebVitals from './reportWebVitals';
 import './assets/SCSS/custom.scss';
-// import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import Root from './root.component';
+
+import reportWebVitals from './reportWebVitals';
+
 import keycloak from './keycloak';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-// Put any other imports below so that CSS from your
-// components takes precedence over default styles.
 
-// axios.interceptors.request.use(config => {
-//   config.headers = {
-//   ‘Content-Type’: ‘application/json’,
-//   Accept: ‘application/json’,
-//   Authorization: ‘Bearer ‘ + kc.token
-//   };
-//   return config;
-//   });
+import LoginInterceptor from './login-interceptor.component';
+import Routing from './routing.component';
 
-// axios.interceptors.request.use((config: AxiosRequestConfig) => {
-//   console.log('Interceptor');
-//   console.log(config);
-//   alert(config);
-//   return config;
-// })
-
-// axios.interceptors.response.use((config: AxiosResponse) => {
-//   console.log('Interceptor');
-//   console.log(config);
-//   alert(config);
-//   return config;
-// })
-const eventLogger = (event: unknown, error: unknown) => {
-  console.log('onKeycloakEvent', event, error)
-}
-const tokenLogger = (tokens: unknown) => {
-  console.log('onKeycloakTokens', tokens)
-}
 
 ReactDOM.render(
   <React.StrictMode>
     <ReactKeycloakProvider
       authClient={keycloak}
-      onEvent={eventLogger}
-      onTokens={tokenLogger}
     >
-      <App>
-        <Root />
-      </App>
-      </ReactKeycloakProvider>
+      <LoginInterceptor>
+        <Routing />
+      </LoginInterceptor>
+    </ReactKeycloakProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
