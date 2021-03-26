@@ -1,18 +1,38 @@
 import Keycloak from 'keycloak-js'
+import React from 'react';
 import API from './api'
 // Initialize keycloak
 
-const InitKeycloak = () => {
+const useInitKeycloak = () => {
 
-    let json;
+    const [json, setJson] = React.useState('');
+    const [keycloak, setKeycloak] = React.useState<Keycloak.KeycloakInstance>();
 
-    const uri = '/api/config/keycloak.json';
+    React.useEffect(() => {
 
-    API.get(uri)
-        .then((value) => json = value.data)
-        .catch(/*error*/);
+        const uri = '/api/config/keycloak.json';
 
-    return Keycloak(json);
+        API.get(uri)
+            .then((value) =>{ 
+                console.log('get keycloak.json success');
+                
+                setJson(value.data);
+            })
+            .catch(()=>{
+                console.log('get keycloak.json failed');
+                console.log('redirect to local file');
+
+                setJson('/keycloak.json');
+            });
+    }, []);
+
+    React.useEffect(() => {
+        if (json) {
+            setKeycloak(Keycloak(json));
+        }
+    }, [json])
+
+    return keycloak;
 }
 
-export default InitKeycloak
+export default useInitKeycloak

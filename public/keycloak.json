@@ -1,0 +1,9 @@
+  
+{
+    "realm": "c19quicktest",
+    "auth-server-url": "https://verification-iam-dc61532f.coronawarn.app/auth",
+    "ssl-required": "external",
+    "resource": "quick-test-portal",
+    "public-client": true,
+    "onLoad":"login-required"
+}

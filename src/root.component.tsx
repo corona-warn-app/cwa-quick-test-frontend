@@ -19,10 +19,10 @@ const Root = (props: any) => {
     const { t } = useTranslation();
     const [patient, setPatient] = React.useState<Patient>();
 
-    React.useEffect(()=>{
-        console.log(JSON.stringify(patient));
+    // React.useEffect(()=>{
+    //     console.log(JSON.stringify(patient));
         
-    },[patient])
+    // },[patient])
 
     document.title = t('translation:title');
 

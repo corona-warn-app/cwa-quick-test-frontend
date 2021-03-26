@@ -42,7 +42,6 @@ const RecordPatientData = (props: any) => {
 
     React.useEffect(() => {
         if (uuId) {
-
             setUuIdHash(sha256(uuId).toString());
         }
     }, [uuId]);
