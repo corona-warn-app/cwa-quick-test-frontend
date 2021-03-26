@@ -1,8 +1,8 @@
-import React from 'react';
 import { Image, Row } from 'react-bootstrap'
+
 import '../i18n';
 import { useTranslation } from 'react-i18next';
-import useNavigation from '../misc/navigation';
+
 import DataProtectLogo from '../assets/images/data_protect.png'
 
 const Footer = (props: any) => {

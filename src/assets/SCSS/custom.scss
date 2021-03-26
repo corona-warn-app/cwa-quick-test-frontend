@@ -229,18 +229,6 @@ $data-card-border-radius: 10px;
     justify-content: center;
 }
 
-.menu-panel {
-    width: $menu-width;
-    max-width: $menu-width;
-    padding-left: $menu-padding;
-    padding-right: $menu-padding;
-    background: #fcfcfc;
-    box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.25);
-    z-index: 2;
-    margin: 0;
-    justify-content: center;
-    display: flex;;
-}
 .dropdown-item{
     text-align: center;
 }

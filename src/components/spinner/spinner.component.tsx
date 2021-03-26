@@ -1,4 +1,3 @@
-import React from 'react';
 import './spinner.component.scss';
 
 const CwaSpinner = (props: any) => {

@@ -1,15 +1,19 @@
 import React from 'react';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+
 import '../i18n';
 import { useTranslation } from 'react-i18next';
+
 import DatePicker from 'react-date-picker';
 import { v4 as uuid } from 'uuid';
 import sha256 from 'crypto-js/sha256';
+
 import useNavigation from '../misc/navigation';
 import Patient from '../misc/patient';
 import CwaSpinner from './spinner/spinner.component';
 
 const RecordPatientData = (props: any) => {
+
     const navigation = useNavigation();
     const { t } = useTranslation();
 
@@ -26,6 +30,7 @@ const RecordPatientData = (props: any) => {
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
 
+    // set values from props or new uuid on mount
     React.useEffect(() => {
         if (props.patient) {
             const p = props.patient;
@@ -38,24 +43,29 @@ const RecordPatientData = (props: any) => {
         else {
             newUuId();
         }
-    }, [])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
+    // set hash from uuid
     React.useEffect(() => {
         if (uuId) {
             setUuIdHash(sha256(uuId).toString());
         }
     }, [uuId]);
 
+    // set process id from hash
     React.useEffect(() => {
         setProcessId(uuIdHash.substring(0, 6));
     }, [uuIdHash]);
 
+    // set ready state for spinner
     React.useEffect(() => {
         if (processId) {
             setTimeout(setIsInit, 200, true);
         }
     }, [processId]);
 
+    // check completness on value change
     React.useEffect(() => {
         if (firstName.trim() !== ''
             && name.trim() !== ''
@@ -75,12 +85,15 @@ const RecordPatientData = (props: any) => {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, dateOfBirth, consent, uuId])
+    }, [firstName, name, dateOfBirth, consent, uuId])
 
+    // emit patient object to parent
     React.useEffect(() => {
         props.setPatient(patient);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [patient])
 
+    // on input chnage
     const handleFirstNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setFirstName(evt.currentTarget.value);
     }
@@ -95,12 +108,13 @@ const RecordPatientData = (props: any) => {
         else
             date = evt as Date;
 
-            setDateOfBirth(date);
+        setDateOfBirth(date);
     }
     const handleConsentChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setConsent(evt.currentTarget.checked);
     }
 
+    // clear patient data
     const handleClear = () => {
         setFirstName('');
         setName('');
@@ -110,6 +124,7 @@ const RecordPatientData = (props: any) => {
         newUuId();
     }
 
+    // generate and set new uuid
     const newUuId = () => {
         setUuId(uuid());
     }
@@ -148,7 +163,12 @@ const RecordPatientData = (props: any) => {
                                 <Form.Label className='input-label' column xs='5' sm='4'>{t('translation:first-name')}</Form.Label>
 
                                 <Col xs='7' sm='8' className='d-flex'>
-                                    <Form.Control className='align-self-center' value={firstName} onChange={handleFirstNameChange} placeholder={t('translation:first-name')} />
+                                    <Form.Control
+                                        className='align-self-center'
+                                        value={firstName}
+                                        onChange={handleFirstNameChange}
+                                        placeholder={t('translation:first-name')}
+                                    />
                                 </Col>
                             </Form.Group>
 
@@ -157,7 +177,12 @@ const RecordPatientData = (props: any) => {
                                 <Form.Label className='input-label' column xs='5' sm='4'>{t('translation:name')}</Form.Label>
 
                                 <Col xs='7' sm='8' className='d-flex'>
-                                    <Form.Control className='align-self-center' value={name} onChange={handleNameChange} placeholder={t('translation:name')} />
+                                    <Form.Control
+                                        className='align-self-center'
+                                        value={name}
+                                        onChange={handleNameChange}
+                                        placeholder={t('translation:name')}
+                                    />
                                 </Col>
                             </Form.Group>
 
@@ -178,11 +203,6 @@ const RecordPatientData = (props: any) => {
                                         closeCalendar={false}
                                         returnValue='end'
                                     />
-                                    {/* <Row className='align-self-center'>
-                                    <Col className='first-col-item pr-sm-1' sm='3'><Form.Control type='number' value={day} onChange={handleDayChange} placeholder={t('translation:day')} /></Col>
-                                    <Col className='px-sm-1' sm='3'><Form.Control type='number' value={month} onChange={handleMonthChange} placeholder={t('translation:month')} /></Col>
-                                    <Col className='pl-sm-1' sm='6'><Form.Control type='number' value={year} onChange={handleYearChange} placeholder={t('translation:year')} /></Col>
-                                </Row> */}
                                 </Col>
                             </Form.Group>
 
@@ -192,7 +212,12 @@ const RecordPatientData = (props: any) => {
 
                                 <Col xs='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
-                                        <Form.Check.Input className='position-inherit' onChange={handleConsentChange} type='checkbox' checked={consent} />
+                                        <Form.Check.Input
+                                            className='position-inherit'
+                                            onChange={handleConsentChange}
+                                            type='checkbox'
+                                            checked={consent}
+                                        />
                                     </Form.Check>
                                 </Col>
                             </Form.Group>
@@ -205,10 +230,23 @@ const RecordPatientData = (props: any) => {
                     <Card.Footer id='data-footer'>
                         <Row>
                             <Col xs='6' md='3'>
-                                <Button block onClick={handleClear} className='my-1 my-md-0 p-0'>{t('translation:clear')}</Button>
+                                <Button
+                                    className='my-1 my-md-0 p-0'
+                                    block
+                                    onClick={handleClear}
+                                >
+                                    {t('translation:clear')}
+                                </Button>
                             </Col>
                             <Col xs='6' md='3' className='pr-md-0'>
-                                <Button block onClick={navigation.toShowRecordPatient} disabled={!canGoNext} className='my-1 my-md-0 p-0'>{t('translation:next')}</Button>
+                                <Button
+                                    className='my-1 my-md-0 p-0'
+                                    block
+                                    onClick={navigation.toShowRecordPatient}
+                                    disabled={!canGoNext}
+                                >
+                                    {t('translation:next')}
+                                </Button>
                             </Col>
                         </Row>
                     </Card.Footer>
