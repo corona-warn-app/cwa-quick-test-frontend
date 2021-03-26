@@ -1,8 +1,7 @@
 export default interface Patient {
     firstName: string;
     name: string;
-    dateOfBirth: Date | Date[];
+    dateOfBirth: Date;
     processingConsens: boolean;
-    uuId: string;
-    uuIdHash: string;
+    uuId: string
 }

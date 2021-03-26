@@ -7,7 +7,7 @@ import './assets/SCSS/custom.scss';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import Root from './root.component';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import keycloak from './keycloak';
+import InitKeycloak from './keycloak';
 // Put any other imports below so that CSS from your
 // components takes precedence over default styles.
 
@@ -42,10 +42,11 @@ const tokenLogger = (tokens: unknown) => {
   console.log('onKeycloakTokens', tokens)
 }
 
+
 ReactDOM.render(
   <React.StrictMode>
     <ReactKeycloakProvider
-      authClient={keycloak}
+      authClient={InitKeycloak()}
       onEvent={eventLogger}
       onTokens={tokenLogger}
     >

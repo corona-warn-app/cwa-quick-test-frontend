@@ -20,7 +20,7 @@ const RecordPatientData = (props: any) => {
 
     const [firstName, setFirstName] = React.useState('');
     const [name, setName] = React.useState('');
-    const [dateOfBirth, setDateOfBirth] = React.useState<Date | Date[]>();
+    const [dateOfBirth, setDateOfBirth] = React.useState<Date>();
     const [consent, setConsent] = React.useState(false);
 
     const [canGoNext, setCanGoNext] = React.useState(false)
@@ -36,14 +36,12 @@ const RecordPatientData = (props: any) => {
             setUuId(p.uuId);
         }
         else {
-            console.log('set uuid');
             newUuId();
         }
     }, [])
 
     React.useEffect(() => {
         if (uuId) {
-            console.log(uuId);
 
             setUuIdHash(sha256(uuId).toString());
         }
@@ -64,23 +62,21 @@ const RecordPatientData = (props: any) => {
             && name.trim() !== ''
             && dateOfBirth !== undefined
             && consent
-            && uuId
-            && uuIdHash) {
+            && uuId) {
             setCanGoNext(true);
             setPatient({
                 firstName: firstName,
                 name: name,
                 dateOfBirth: dateOfBirth,
                 processingConsens: consent,
-                uuId: uuId,
-                uuIdHash: uuIdHash
+                uuId: uuId
             });
         }
         else {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, dateOfBirth, consent, uuId, uuIdHash])
+    }, [firstName, dateOfBirth, consent, uuId])
 
     React.useEffect(() => {
         props.setPatient(patient);
@@ -91,6 +87,16 @@ const RecordPatientData = (props: any) => {
     }
     const handleNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setName(evt.currentTarget.value);
+    }
+    const handleDateChange = (evt: Date | Date[]) => {
+        let date: Date;
+
+        if (Array.isArray(evt))
+            date = evt[0];
+        else
+            date = evt as Date;
+
+            setDateOfBirth(date);
     }
     const handleConsentChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setConsent(evt.currentTarget.checked);
@@ -162,7 +168,7 @@ const RecordPatientData = (props: any) => {
 
                                 <Col xs='5' sm='8' className='d-flex'>
                                     <DatePicker
-                                        onChange={setDateOfBirth}
+                                        onChange={handleDateChange}
                                         value={dateOfBirth}
                                         locale='de-DE'
                                         format='dd. MM. yyyy'
@@ -192,7 +198,6 @@ const RecordPatientData = (props: any) => {
                                 </Col>
                             </Form.Group>
                         </Form>
-                        <Card.Text>{JSON.stringify(props.patient)}</Card.Text>
                     </Card.Body>
 
                     {/*
