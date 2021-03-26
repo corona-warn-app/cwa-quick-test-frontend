@@ -36,11 +36,17 @@ import { ReactKeycloakProvider } from '@react-keycloak/web';
 const eventLogger = (event: unknown, error: unknown) => {
   console.log('onKeycloakEvent', event, error)
 }
-
+const tokenLogger = (tokens: unknown) => {
+  console.log('onKeycloakTokens', tokens)
+}
 
 ReactDOM.render(
   <React.StrictMode>
-    <KeycloakWrapper>
+    <ReactKeycloakProvider
+      authClient={keycloak}
+      onEvent={eventLogger}
+      onTokens={tokenLogger}
+    >
       <App>
         <Root />
       </App>
