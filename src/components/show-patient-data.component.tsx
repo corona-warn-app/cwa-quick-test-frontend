@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
 import Patient from '../misc/patient';
 import Moment from 'react-moment';
+import sha256 from 'crypto-js/sha256';
 import 'moment/locale/de';
 import CwaSpinner from './spinner/spinner.component';
 
@@ -16,6 +17,7 @@ const ShowPatientData = (props: any) => {
     const [isInit, setIsInit] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
     const [qrCodeValue, setQrCodeValue] = React.useState('');
+    const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
 
     React.useEffect(() => {
@@ -23,9 +25,15 @@ const ShowPatientData = (props: any) => {
             setPatient(props.patient)
             setQrCodeValue(JSON.stringify(props.patient));
 
-            setProcessId(props.patient.uuIdHash.substring(0, 6));
+            setUuIdHash(sha256(props.patient.uuId).toString());
         }
     }, [])
+
+    React.useEffect(() => {
+        if (uuIdHash) {
+            setProcessId(uuIdHash.substring(0, 6));
+        }
+    }, [uuIdHash]);
 
     React.useEffect(() => {
         if (processId) {
@@ -49,10 +57,13 @@ const ShowPatientData = (props: any) => {
                     <Card.Body id='data-header'>
                         <Row>
                             <Col sm='5'>
-                                <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'} >{t('translation:qr-code')}</Card.Title>
+                                <Card.Title as={'h2'}
+                                className='m-sm-0 jcc-xs-jcfs-sm'>{t('translation:qr-code')}</Card.Title>
                                 <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.firstName + ' ' + patient?.name}</Card.Text>
                                 <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD. MM. yyyy' >{patient?.dateOfBirth as Date}</Moment>
+
+                        {/* <Card.Text className=''>{qrCodeValue.replaceAll(',',', ')}</Card.Text> */}
                             </Col>
                             <Col sm='7' className='px-4'>
                                 <Container id='qr-code-container'>
