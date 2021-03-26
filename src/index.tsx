@@ -23,6 +23,7 @@ ReactDOM.render(
       </LoginInterceptor>
     </ReactKeycloakProvider>
   </React.StrictMode>,
+
   document.getElementById('root')
 );
 
