@@ -28,9 +28,12 @@ const ShowPatientData = (props: any) => {
     React.useEffect(() => {
         if (props.patient) {
             setPatient(props.patient)
-            setQrCodeValue(JSON.stringify(props.patient));
-
             setUuIdHash(sha256(props.patient.uuId).toString());
+            if (props.patient.includePersData) {
+                setQrCodeValue(JSON.stringify(props.patient));    
+            } else {
+                setQrCodeValue(JSON.stringify(props.patient.uuId).toString())           
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])

@@ -26,7 +26,7 @@ const RecordPatientData = (props: any) => {
     const [name, setName] = React.useState('');
     const [dateOfBirth, setDateOfBirth] = React.useState<Date>();
     const [consent, setConsent] = React.useState(false);
-
+    const [persDataInQR, setIncludePersData] = React.useState(false)
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
 
@@ -39,6 +39,7 @@ const RecordPatientData = (props: any) => {
             setDateOfBirth(p.dateOfBirth);
             setConsent(p.processingConsens);
             setUuId(p.uuId);
+            setIncludePersData(p.includePersData);
         }
         else {
             newUuId();
@@ -78,14 +79,16 @@ const RecordPatientData = (props: any) => {
                 name: name,
                 dateOfBirth: dateOfBirth,
                 processingConsens: consent,
-                uuId: uuId
+                uuId: uuId,
+                includePersData: persDataInQR
             });
         }
         else {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, name, dateOfBirth, consent, uuId])
+    }, [firstName, name, dateOfBirth, consent, uuId, persDataInQR])
+
 
     // emit patient object to parent
     React.useEffect(() => {
@@ -112,6 +115,9 @@ const RecordPatientData = (props: any) => {
     }
     const handleConsentChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setConsent(evt.currentTarget.checked);
+    }
+    const handlePersDataInQRChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setIncludePersData(evt.currentTarget.checked);
     }
 
     // clear patient data
@@ -218,6 +224,15 @@ const RecordPatientData = (props: any) => {
                                             type='checkbox'
                                             checked={consent}
                                         />
+                                    </Form.Check>
+                                </Col>
+                            </Form.Group>
+                            <Form.Group as={Row} controlId='formKeepPrivateCheckbox'>
+                                <Form.Label className='input-label' column sm='9' md='4'>{t('translation:patientdata-exclude')}</Form.Label>
+
+                                <Col xs='2' className='jcc-xs-jcfs-md'>
+                                    <Form.Check className='align-self-center'>
+                                        <Form.Check.Input className='position-inherit' onChange={handlePersDataInQRChange} type='checkbox' checked={persDataInQR} />
                                     </Form.Check>
                                 </Col>
                             </Form.Group>

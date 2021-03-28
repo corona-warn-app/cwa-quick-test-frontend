@@ -3,5 +3,6 @@ export default interface Patient {
     name: string;
     dateOfBirth: Date;
     processingConsens: boolean;
-    uuId: string
+    uuId: string;
+    includePersData: boolean;
 }

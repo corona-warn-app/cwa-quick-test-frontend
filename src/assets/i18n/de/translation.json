@@ -18,6 +18,7 @@
   "month": "Monat",
   "year": "Jahr",
   "processing-consent": "Einwilligung zur Verarbeitung in der CWA",
+  "patientdata-exclude": "Patientendaten im QR-Code",
   "patient-data-correction": "Patientendaten korrigieren",
   "process-finish": "Vorgang abschließen",
   "qr-code": "QR Code",
