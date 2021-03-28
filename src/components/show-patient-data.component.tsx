@@ -30,9 +30,9 @@ const ShowPatientData = (props: any) => {
             setPatient(props.patient)
             setUuIdHash(sha256(props.patient.uuId).toString());
             if (props.patient.includePersData) {
-                setQrCodeValue(JSON.stringify(props.patient));    
+            setQrCodeValue(JSON.stringify(props.patient, ['firstName','name','dateOfBirth','uuId']))
             } else {
-                setQrCodeValue(JSON.stringify(props.patient.uuId).toString())           
+                setQrCodeValue(JSON.stringify(props.patient, ['uuId']))
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
