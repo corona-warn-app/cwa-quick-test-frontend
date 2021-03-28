@@ -18,6 +18,7 @@
   "month": "Month",
   "year": "Year",
   "processing-consent": "Consent to processing in CWA",
+  "patientdata-exclude": "Include patient data in QR-Code",
   "patient-data-correction": "Correct patient data",
   "process-finish": "Process finish",
   "qr-code": "QR Code",
