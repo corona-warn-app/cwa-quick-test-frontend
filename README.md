@@ -27,7 +27,7 @@ parties from accessing or controlling the data. This repository contains the **l
 
 ## Status
 
-![ci](https://github.com/corona-warn-app/cwa-quick-test-frontend/workflows/ci-master.yml/badge.svg)
+![ci](https://github.com/corona-warn-app/cwa-quick-test-frontend/actions/workflows/ci-master.yml/badge.svg)
 
 ### Prerequisites
 
