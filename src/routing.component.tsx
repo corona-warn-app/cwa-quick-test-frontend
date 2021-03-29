@@ -1,3 +1,24 @@
+/*
+ * Corona-Warn-App / cwa-log-upload
+ *
+ * (C) 2021, T-Systems International GmbH
+ *
+ * Deutsche Telekom AG and all other contributors /
+ * copyright owners license this file to you under the Apache
+ * License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 import React from 'react';
 import { BrowserRouter, Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
@@ -14,6 +35,7 @@ import LandingPage from './components/landing-page.component';
 import RecordPatientData from './components/record-patient-data.component';
 import ShowPatientData from './components/show-patient-data.component';
 import RecordTestResult from './components/record-test-result.component';
+import PrivateRoute from './components/private-route.component';
 
 const Routing = (props: any) => {
 
@@ -39,9 +61,11 @@ const Routing = (props: any) => {
             <Container id='qt-body'>
 
                 {/* Landing */}
-                <Route exact path={routes.landing}>
+                {/* <Route exact path={routes.landing}>
                     <LandingPage />
-                </Route>
+                </Route> */}
+
+                <PrivateRoute exact roles={['c19_quick_test_lab', 'c19_quick_test_counter']} path={routes.landing} component={LandingPage}/>
 
                 {/* Record Patient Data */}
                 <Route exact path={routes.recordPatient}>
@@ -52,7 +76,7 @@ const Routing = (props: any) => {
                 <Route path={routes.showPatientRecord}>
                     <ShowPatientData patient={patient} />
                 </Route>
-
+                    
                 {/* Record Test Result */}
                 <Route path={routes.recordTestResult}>
                     <RecordTestResult />
