@@ -31,8 +31,8 @@ parties from accessing or controlling the data. This repository contains the **l
 
 ### Prerequisites
 
-[Open JDK 11](https://openjdk.java.net)  
-[Maven](https://maven.apache.org)
+[Node.js](https://nodejs.org)  
+[yarn](https://yarnpkg.com/)
 *(optional)*: [Docker](https://www.docker.com)
 
 ### Build
@@ -43,9 +43,12 @@ or get a zip file with the source code, which you can expand to a folder of your
 In either case open a terminal pointing to the directory you put the sources in. The local build process is described
 afterwards depending on the way you choose.
 
-#### XXX based build
+#### yarn based build  
+Using the package dependency mananger yarn with:  
+````yarn install ```` will install all modules necessary for running the client on your local desktop.
+````yarn start```` will start the development server on port 3000 and open up your standard browser pointing to the application.
 
-tbd...
+The webapplication relies on an Identity and Access Management (IAM) Component used to manage the user accounts and to authorize the login. This has currently not been configured to run on local environment.
 
 #### Docker based build
 
