@@ -1,5 +1,5 @@
 /*
- * Corona-Warn-App / cwa-log-upload
+ * Corona-Warn-App / cwa-quick-test-frontend
  *
  * (C) 2021, T-Systems International GmbH
  *
