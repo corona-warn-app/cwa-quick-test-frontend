@@ -1,6 +1,4 @@
-import React from 'react';
-import { Container } from 'react-bootstrap'
-import { BrowserRouter, Route, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import useRoutes from './routes';
 
 const useNavigation = () => {

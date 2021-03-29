@@ -1,13 +1,10 @@
 import React from 'react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap'
-import { BrowserRouter, Link, Route, useHistory } from 'react-router-dom'
-import QRCode from 'qrcode.react'
-import sha256 from 'crypto-js/sha256'
+import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+
 import '../i18n';
 import { useTranslation } from 'react-i18next';
-import useNavigation from '../misc/navigation';
-import Patient from '../misc/patient';
 
+import useNavigation from '../misc/navigation';
 
 enum TestResult {
     POSITIVE,
@@ -16,6 +13,7 @@ enum TestResult {
 }
 
 const RecordTestResult = (props: any) => {
+
     const navigation = useNavigation();
     const { t } = useTranslation();
 
@@ -47,8 +45,12 @@ const RecordTestResult = (props: any) => {
                             <Form.Label className='input-label' column sm='4'>{t('translation:process-number')}</Form.Label>
 
                             <Col sm='6' md='4' className='d-flex'>
-                                <Form.Control 
-                                    className='align-self-center' value={processNo} onChange={handleProcessNoChange} placeholder={t('translation:process-number')} />
+                                <Form.Control
+                                    className='align-self-center'
+                                    value={processNo}
+                                    onChange={handleProcessNoChange}
+                                    placeholder={t('translation:process-number')}
+                                />
                             </Col>
                         </Form.Group>
 
@@ -108,10 +110,22 @@ const RecordTestResult = (props: any) => {
                 <Card.Footer id='data-footer'>
                     <Row>
                         <Col sm='6' md='3'>
-                            <Button block onClick={navigation.toLanding} className='my-1 my-md-0 p-0'>{t('translation:cancel')}</Button>
+                            <Button
+                                className='my-1 my-md-0 p-0'
+                                block
+                                onClick={navigation.toLanding}
+                            >
+                                {t('translation:cancel')}
+                            </Button>
                         </Col>
                         <Col sm='6' md='3' className='pr-md-0'>
-                            <Button block onClick={navigation.toLanding} className='my-1 my-md-0 p-0'>{t('translation:data-submit')}</Button>
+                            <Button
+                                className='my-1 my-md-0 p-0'
+                                block
+                                onClick={navigation.toLanding}
+                            >
+                                {t('translation:data-submit')}
+                            </Button>
                         </Col>
                     </Row>
                 </Card.Footer>

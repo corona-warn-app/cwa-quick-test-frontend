@@ -27,5 +27,6 @@
   "result-positive": "Positiv",
   "result-negative": "Negativ",
   "result-failed": "Failed",
-  "process-number":"Vorgangsnr."
+  "process-number":"Vorgangsnr.",
+  "logout":"Logout"
 }

@@ -1,16 +1,20 @@
 import React from 'react';
 import { Button, Card, Col, Container, Row } from 'react-bootstrap'
-import QRCode from 'qrcode.react'
+
 import '../i18n';
 import { useTranslation } from 'react-i18next';
+
 import useNavigation from '../misc/navigation';
 import Patient from '../misc/patient';
+
 import Moment from 'react-moment';
 import sha256 from 'crypto-js/sha256';
-import 'moment/locale/de';
+import QRCode from 'qrcode.react'
+
 import CwaSpinner from './spinner/spinner.component';
 
 const ShowPatientData = (props: any) => {
+
     const navigation = useNavigation();
     const { t } = useTranslation();
 
@@ -20,6 +24,7 @@ const ShowPatientData = (props: any) => {
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
 
+    // set patient data on mount and set hash from uuid
     React.useEffect(() => {
         if (props.patient) {
             setPatient(props.patient)
@@ -27,14 +32,17 @@ const ShowPatientData = (props: any) => {
 
             setUuIdHash(sha256(props.patient.uuId).toString());
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    // set process id from hash
     React.useEffect(() => {
         if (uuIdHash) {
             setProcessId(uuIdHash.substring(0, 6));
         }
     }, [uuIdHash]);
 
+    // set ready state for spinner
     React.useEffect(() => {
         if (processId) {
             setTimeout(setIsInit, 200, true);
@@ -57,13 +65,10 @@ const ShowPatientData = (props: any) => {
                     <Card.Body id='data-header'>
                         <Row>
                             <Col sm='5'>
-                                <Card.Title as={'h2'}
-                                className='m-sm-0 jcc-xs-jcfs-sm'>{t('translation:qr-code')}</Card.Title>
+                                <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>{t('translation:qr-code')}</Card.Title>
                                 <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.firstName + ' ' + patient?.name}</Card.Text>
                                 <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD. MM. yyyy' >{patient?.dateOfBirth as Date}</Moment>
-
-                        {/* <Card.Text className=''>{qrCodeValue.replaceAll(',',', ')}</Card.Text> */}
                             </Col>
                             <Col sm='7' className='px-4'>
                                 <Container id='qr-code-container'>
@@ -81,10 +86,22 @@ const ShowPatientData = (props: any) => {
                     <Card.Footer id='data-footer'>
                         <Row>
                             <Col sm='6' md='4'>
-                                <Button block onClick={navigation.toRecordPatient} className='my-1 my-md-0 p-0'>{t('translation:patient-data-correction')}</Button>
+                                <Button
+                                    className='my-1 my-md-0 p-0'
+                                    block
+                                    onClick={navigation.toRecordPatient}
+                                >
+                                    {t('translation:patient-data-correction')}
+                                </Button>
                             </Col>
                             <Col sm='6' md='3' className='pr-md-0'>
-                                <Button block onClick={navigation.toLanding} className='my-1 my-md-0 p-0'>{t('translation:process-finish')}</Button>
+                                <Button
+                                    className='my-1 my-md-0 p-0'
+                                    block
+                                    onClick={navigation.toLanding}
+                                >
+                                    {t('translation:process-finish')}
+                                </Button>
                             </Col>
                         </Row>
                     </Card.Footer>
