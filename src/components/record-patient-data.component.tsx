@@ -24,20 +24,24 @@ import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
+import { useKeycloak } from '@react-keycloak/web';
 
 import DatePicker from 'react-date-picker';
-import { v4 as uuid } from 'uuid';
+import { stringify, v4 as uuid } from 'uuid';
 import sha256 from 'crypto-js/sha256';
 
 import useNavigation from '../misc/navigation';
 import Patient from '../misc/patient';
 import CwaSpinner from './spinner/spinner.component';
 
+const shortHashLen = 8;
+
 const RecordPatientData = (props: any) => {
 
     const navigation = useNavigation();
     const { t } = useTranslation();
 
+    const { keycloak, initialized } = useKeycloak();
     const [isInit, setIsInit] = React.useState(false)
     const [uuId, setUuId] = React.useState('');
     const [uuIdHash, setUuIdHash] = React.useState('');
@@ -50,6 +54,7 @@ const RecordPatientData = (props: any) => {
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
+    const [message, setMessage] = React.useState('');
 
     // set values from props or new uuid on mount
     React.useEffect(() => {
@@ -77,7 +82,7 @@ const RecordPatientData = (props: any) => {
 
     // set process id from hash
     React.useEffect(() => {
-        setProcessId(uuIdHash.substring(0, 6));
+        setProcessId(uuIdHash.substring(0, shortHashLen));
     }, [uuIdHash]);
 
     // set ready state for spinner
@@ -154,6 +159,35 @@ const RecordPatientData = (props: any) => {
     // generate and set new uuid
     const newUuId = () => {
         setUuId(uuid());
+    }
+
+    const sendUuid = () => {
+        // TODO i18n
+        setMessage("Daten werden übermittelt");
+        fetch("/api/quicktest", {
+            method: 'post',
+            body: JSON.stringify({hashedGuid : uuIdHash}),
+            headers: new Headers({
+                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+                'Content-Type': 'application/json'
+            }),
+        }).then(res => {
+            if (!res.ok) {
+                console.log("server error status: ",res.status);
+                setMessage("Fehler bei Datenübermittlung "+res.status);
+            } else {
+                navigation.toShowRecordPatient();
+            }
+        }, error => {
+            if (error instanceof TypeError) {
+                console.log("server not reachable");
+                setMessage("server not reachable");
+            } else {
+                console.log("error during sending uuid "+error.message)
+                setMessage("error during sending uuid "+error.message);
+            }
+        });
+        
     }
 
     return (
@@ -265,6 +299,11 @@ const RecordPatientData = (props: any) => {
     */}
                     <Card.Footer id='data-footer'>
                         <Row>
+                            <Col sm='6' md='6'>
+                                {message}
+                            </Col>
+                        </Row>
+                        <Row>
                             <Col xs='6' md='3'>
                                 <Button
                                     className='my-1 my-md-0 p-0'
@@ -278,7 +317,7 @@ const RecordPatientData = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={navigation.toShowRecordPatient}
+                                    onClick={sendUuid}
                                     disabled={!canGoNext}
                                 >
                                     {t('translation:next')}

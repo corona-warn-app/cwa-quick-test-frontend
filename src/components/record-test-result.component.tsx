@@ -22,15 +22,16 @@
 import React from 'react';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 
+import { useKeycloak } from '@react-keycloak/web';
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
 
 enum TestResult {
-    POSITIVE,
-    NEGATIVE,
-    FAILED
+    NEGATIVE = 6,
+    POSITIVE = 7,
+    INVALID = 8,
 }
 
 const RecordTestResult = (props: any) => {
@@ -40,9 +41,39 @@ const RecordTestResult = (props: any) => {
 
     const [processNo, setProcessNo] = React.useState('');
     const [testResult, setTestResult] = React.useState<TestResult>();
+    const [message, setMessage] = React.useState('');
+    const { keycloak, initialized } = useKeycloak();
 
     const handleProcessNoChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setProcessNo(evt.currentTarget.value);
+    }
+
+    const sendTestResult = () => {
+        // TODO i18n
+        setMessage("Daten werden übermittelt");
+        fetch("/api/quicktest", {
+            method: 'put',
+            body: JSON.stringify({shortHash : processNo, result: testResult }),
+            headers: new Headers({
+                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+                'Content-Type': 'application/json'
+            }),
+        }).then(res => {
+            if (!res.ok) {
+                setMessage("Fehler bei Datenübermittlung "+res.status);
+                console.log("server error status: ",res.status);
+            } else {
+                navigation.toLanding();
+            }
+        }, error => {
+            if (error instanceof TypeError) {
+                console.log("server not reachable");
+                setMessage("server not reachable");
+            } else {
+                console.log("error during sending uuid "+error.message)
+                setMessage("error during sending uuid "+error.message);
+            }
+        });        
     }
 
     return (
@@ -117,8 +148,8 @@ const RecordTestResult = (props: any) => {
                                     type='radio'
                                     name="result-radios"
                                     id="result-radio3"
-                                    checked={testResult === TestResult.FAILED}
-                                    onChange={() => setTestResult(TestResult.FAILED)}
+                                    checked={testResult === TestResult.INVALID}
+                                    onChange={() => setTestResult(TestResult.INVALID)}
                                 />
                             </Col>
                         </Form.Group>
@@ -129,6 +160,11 @@ const RecordTestResult = (props: any) => {
     footer with cancel and submit button
     */}
                 <Card.Footer id='data-footer'>
+                    <Row>
+                        <Col sm='6' md='6'>
+                            {message}
+                        </Col>
+                    </Row>
                     <Row>
                         <Col sm='6' md='3'>
                             <Button
@@ -143,7 +179,7 @@ const RecordTestResult = (props: any) => {
                             <Button
                                 className='my-1 my-md-0 p-0'
                                 block
-                                onClick={navigation.toLanding}
+                                onClick={sendTestResult}
                             >
                                 {t('translation:data-submit')}
                             </Button>
