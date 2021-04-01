@@ -43,6 +43,7 @@ const RecordPatientData = (props: any) => {
 
     const { keycloak, initialized } = useKeycloak();
     const [isInit, setIsInit] = React.useState(false)
+    const [isDataTransfer, setIsDataTransfer] = React.useState(false)
     const [uuId, setUuId] = React.useState('');
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
@@ -146,14 +147,9 @@ const RecordPatientData = (props: any) => {
         setIncludePersData(evt.currentTarget.checked);
     }
 
-    // clear patient data
-    const handleClear = () => {
-        setFirstName('');
-        setName('');
-        setDateOfBirth(undefined);
-        setConsent(false);
-        setPatient(undefined);
-        newUuId();
+    const handleCancel = () => {
+        props.setPatient(undefined);
+        navigation.toLanding();
     }
 
     // generate and set new uuid
@@ -163,6 +159,7 @@ const RecordPatientData = (props: any) => {
 
     const sendUuid = () => {
         // TODO i18n
+        setIsDataTransfer(true);
         setMessage("Daten werden übermittelt");
         fetch("/api/quicktest", {
             method: 'post',
@@ -172,32 +169,36 @@ const RecordPatientData = (props: any) => {
                 'Content-Type': 'application/json'
             }),
         }).then(res => {
+            setIsDataTransfer(false);
             if (!res.ok) {
                 console.log("server error status: ",res.status);
-                setMessage("Fehler bei Datenübermittlung "+res.status);
+                setMessage(t('translation:server-error',{status: res.status}));
             } else {
                 navigation.toShowRecordPatient();
             }
         }, error => {
+            setIsDataTransfer(false);
             if (error instanceof TypeError) {
                 console.log("server not reachable");
-                setMessage("server not reachable");
+                setMessage(t("translation:server-not-reachable"));
             } else {
-                console.log("error during sending uuid "+error.message)
-                setMessage("error during sending uuid "+error.message);
+                console.log("connection error"+error.message)
+                setMessage(t("translation:connection-error",{message: error.message}));
             }
         });
         
     }
 
+    var messageHtml = undefined;
+    if (message.length>0) {
+        messageHtml = <div className="alert alert-warning">
+            {message}
+        </div>;
+    }
+
     return (
         !isInit ? <CwaSpinner /> :
             <>
-                <Row id='process-row'>
-                    <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
-                    <span>{processId}</span>
-                </Row>
-
                 <Card className='border-0 h-100 pb-3'>
 
                     {/*
@@ -292,6 +293,7 @@ const RecordPatientData = (props: any) => {
                                 </Col>
                             </Form.Group>
                         </Form>
+                        {messageHtml}
                     </Card.Body>
 
                     {/*
@@ -299,18 +301,14 @@ const RecordPatientData = (props: any) => {
     */}
                     <Card.Footer id='data-footer'>
                         <Row>
-                            <Col sm='6' md='6'>
-                                {message}
-                            </Col>
-                        </Row>
-                        <Row>
                             <Col xs='6' md='3'>
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={handleClear}
+                                    onClick={handleCancel}
+                                    disabled={isDataTransfer}
                                 >
-                                    {t('translation:clear')}
+                                    {t('translation:cancel')}
                                 </Button>
                             </Col>
                             <Col xs='6' md='3' className='pr-md-0'>
@@ -318,7 +316,7 @@ const RecordPatientData = (props: any) => {
                                     className='my-1 my-md-0 p-0'
                                     block
                                     onClick={sendUuid}
-                                    disabled={!canGoNext}
+                                    disabled={!canGoNext || isDataTransfer}
                                 >
                                     {t('translation:next')}
                                 </Button>
