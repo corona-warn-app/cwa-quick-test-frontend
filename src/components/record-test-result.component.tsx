@@ -22,15 +22,17 @@
 import React from 'react';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 
+import { useKeycloak } from '@react-keycloak/web';
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
+import utils from '../misc/utils';
 
 enum TestResult {
-    POSITIVE,
-    NEGATIVE,
-    FAILED
+    NEGATIVE = 6,
+    POSITIVE = 7,
+    INVALID = 8,
 }
 
 const RecordTestResult = (props: any) => {
@@ -40,10 +42,70 @@ const RecordTestResult = (props: any) => {
 
     const [processNo, setProcessNo] = React.useState('');
     const [testResult, setTestResult] = React.useState<TestResult>();
+    const [message, setMessage] = React.useState('');
+    const [isDataTransfer, setIsDataTransfer] = React.useState(false)
+    const [isInputValid, setIsInputValid] = React.useState(false);
+    const { keycloak, initialized } = useKeycloak();
+
+    React.useEffect(() => {
+        const procValid = utils.isProcessNoValid(processNo);
+        if (processNo.length>0) {
+            if (!procValid) {
+                setMessage(t('translation:wrong-process-number'));
+            } else {
+                if (message.length>0) {
+                    setMessage("");
+                }
+            }
+        }
+        setIsInputValid(testResult != null && processNo.length>0 && procValid);
+    }, [processNo, testResult]);
 
     const handleProcessNoChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setProcessNo(evt.currentTarget.value);
     }
+
+    const sendTestResult = () => {
+        // TODO i18n
+        setIsDataTransfer(true);
+        setMessage("Daten werden übermittelt");
+        fetch("/api/quicktest", {
+            method: 'put',
+            body: JSON.stringify({shortHash : processNo, result: testResult }),
+            headers: new Headers({
+                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+                'Content-Type': 'application/json'
+            }),
+        }).then(res => {
+            setIsDataTransfer(false);
+            if (!res.ok) {
+                if (res.status==404) {
+                    setMessage(t('translation:unknown-process-number',{processNo: processNo}))
+                } else {
+                    setMessage(t('translation:server-error',{status: res.status}));
+                    console.log("server error status: ",res.status);
+                }
+            } else {
+                navigation.toLanding();
+            }
+        }, error => {
+            setIsDataTransfer(false);
+            if (error instanceof TypeError) {
+                console.log("server not reachable");
+                setMessage(t("translation:server-not-reachable"));
+            } else {
+                console.log("connection error"+error.message)
+                setMessage(t("translation:connection-error",{message: error.message}));
+            }
+        });        
+    }
+
+    var messageHtml = undefined;
+    if (message.length>0) {
+        messageHtml = <div className="alert alert-warning">
+            {message}
+        </div>;
+    }   
 
     return (
         <>
@@ -117,12 +179,13 @@ const RecordTestResult = (props: any) => {
                                     type='radio'
                                     name="result-radios"
                                     id="result-radio3"
-                                    checked={testResult === TestResult.FAILED}
-                                    onChange={() => setTestResult(TestResult.FAILED)}
+                                    checked={testResult === TestResult.INVALID}
+                                    onChange={() => setTestResult(TestResult.INVALID)}
                                 />
                             </Col>
                         </Form.Group>
                     </Form>
+                    {messageHtml}
                 </Card.Body>
 
                 {/*
@@ -134,6 +197,7 @@ const RecordTestResult = (props: any) => {
                             <Button
                                 className='my-1 my-md-0 p-0'
                                 block
+                                disabled={isDataTransfer}
                                 onClick={navigation.toLanding}
                             >
                                 {t('translation:cancel')}
@@ -143,7 +207,8 @@ const RecordTestResult = (props: any) => {
                             <Button
                                 className='my-1 my-md-0 p-0'
                                 block
-                                onClick={navigation.toLanding}
+                                disabled={isDataTransfer || !isInputValid}
+                                onClick={sendTestResult}
                             >
                                 {t('translation:data-submit')}
                             </Button>

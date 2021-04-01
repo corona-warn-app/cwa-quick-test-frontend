@@ -29,5 +29,11 @@
   "result-negative": "Negativ",
   "result-failed": "Failed",
   "process-number":"Vorgangsnr.",
-  "logout":"Logout"
+  "logout":"Logout",
+  "wrong-process-number":"Falsche Vorgangsnummer",
+  "unknown-process-number":"Unbekannte Vorgangsnummer: {{processNo}}",
+  "server-error":"Datenübermittlungsfehler: {{status}}",
+  "server-not-reachable": "Server unerreichbar",
+  "connection-error": "Verbindungsfehler: {{message}}"
+
 }

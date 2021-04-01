@@ -30,7 +30,8 @@ import Patient from '../misc/patient';
 
 import Moment from 'react-moment';
 import sha256 from 'crypto-js/sha256';
-import QRCode from 'qrcode.react'
+import QRCode from 'qrcode.react';
+import utils from '../misc/utils';
 
 import CwaSpinner from './spinner/spinner.component';
 
@@ -62,7 +63,7 @@ const ShowPatientData = (props: any) => {
     // set process id from hash
     React.useEffect(() => {
         if (uuIdHash) {
-            setProcessId(uuIdHash.substring(0, 6));
+            setProcessId(utils.shortHash(uuIdHash));
         }
     }, [uuIdHash]);
 
@@ -73,14 +74,14 @@ const ShowPatientData = (props: any) => {
         }
     }, [processId]);
 
+    const finishProcess = () => {
+        props.setPatient(undefined);
+        navigation.toLanding();
+    }
+
     return (
         !isInit ? <CwaSpinner /> :
             <>
-                <Row id='process-row'>
-                    <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
-                    <span>{processId}</span>
-                </Row>
-
                 <Card className='border-0 h-100 pb-3'>
 
                     {/*
@@ -90,6 +91,8 @@ const ShowPatientData = (props: any) => {
                         <Row>
                             <Col sm='5'>
                                 <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>{t('translation:qr-code')}</Card.Title>
+                                <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:process')}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{processId}</Card.Text>
                                 <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.firstName + ' ' + patient?.name}</Card.Text>
                                 <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD. MM. yyyy' >{patient?.dateOfBirth as Date}</Moment>
@@ -122,7 +125,7 @@ const ShowPatientData = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={navigation.toLanding}
+                                    onClick={finishProcess}
                                 >
                                     {t('translation:process-finish')}
                                 </Button>

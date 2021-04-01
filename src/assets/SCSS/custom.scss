@@ -31,7 +31,7 @@ $data-card-border-radius: 10px;
     padding: 1rem;
     height: 84px;
     width: 100%;
-    justify-content: center;
+    text-align: center;
 }
 
 #qt-body {
@@ -62,6 +62,7 @@ $data-card-border-radius: 10px;
     justify-content: center;
     
     // all greater than md
+    /*
     @include media-breakpoint-up(md) {
         position: absolute;
         right: 0;
@@ -69,6 +70,7 @@ $data-card-border-radius: 10px;
         padding: 1rem;
         justify-content: flex-end;
     }
+    */
 }
 
 #process-row {
@@ -143,6 +145,15 @@ $data-card-border-radius: 10px;
     font-family: 'Telegrotesk Next Bold';
     font-size: 26px;
     color: black;
+}
+
+@media screen and (max-device-width: 480px) {
+    .header-font {
+        font-family: 'Telegrotesk Next Bold';
+        font-size: 14px;
+        color: black;
+        white-space: nowrap;
+    }
 }
 
 .btn {

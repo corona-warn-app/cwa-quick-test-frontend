@@ -24,21 +24,26 @@ import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
+import { useKeycloak } from '@react-keycloak/web';
 
 import DatePicker from 'react-date-picker';
-import { v4 as uuid } from 'uuid';
+import { stringify, v4 as uuid } from 'uuid';
 import sha256 from 'crypto-js/sha256';
 
 import useNavigation from '../misc/navigation';
 import Patient from '../misc/patient';
 import CwaSpinner from './spinner/spinner.component';
 
+const shortHashLen = 8;
+
 const RecordPatientData = (props: any) => {
 
     const navigation = useNavigation();
     const { t } = useTranslation();
 
+    const { keycloak, initialized } = useKeycloak();
     const [isInit, setIsInit] = React.useState(false)
+    const [isDataTransfer, setIsDataTransfer] = React.useState(false)
     const [uuId, setUuId] = React.useState('');
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
@@ -50,6 +55,7 @@ const RecordPatientData = (props: any) => {
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
+    const [message, setMessage] = React.useState('');
 
     // set values from props or new uuid on mount
     React.useEffect(() => {
@@ -77,7 +83,7 @@ const RecordPatientData = (props: any) => {
 
     // set process id from hash
     React.useEffect(() => {
-        setProcessId(uuIdHash.substring(0, 6));
+        setProcessId(uuIdHash.substring(0, shortHashLen));
     }, [uuIdHash]);
 
     // set ready state for spinner
@@ -141,14 +147,9 @@ const RecordPatientData = (props: any) => {
         setIncludePersData(evt.currentTarget.checked);
     }
 
-    // clear patient data
-    const handleClear = () => {
-        setFirstName('');
-        setName('');
-        setDateOfBirth(undefined);
-        setConsent(false);
-        setPatient(undefined);
-        newUuId();
+    const handleCancel = () => {
+        props.setPatient(undefined);
+        navigation.toLanding();
     }
 
     // generate and set new uuid
@@ -156,14 +157,48 @@ const RecordPatientData = (props: any) => {
         setUuId(uuid());
     }
 
+    const sendUuid = () => {
+        // TODO i18n
+        setIsDataTransfer(true);
+        setMessage("Daten werden übermittelt");
+        fetch("/api/quicktest", {
+            method: 'post',
+            body: JSON.stringify({hashedGuid : uuIdHash}),
+            headers: new Headers({
+                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+                'Content-Type': 'application/json'
+            }),
+        }).then(res => {
+            setIsDataTransfer(false);
+            if (!res.ok) {
+                console.log("server error status: ",res.status);
+                setMessage(t('translation:server-error',{status: res.status}));
+            } else {
+                navigation.toShowRecordPatient();
+            }
+        }, error => {
+            setIsDataTransfer(false);
+            if (error instanceof TypeError) {
+                console.log("server not reachable");
+                setMessage(t("translation:server-not-reachable"));
+            } else {
+                console.log("connection error"+error.message)
+                setMessage(t("translation:connection-error",{message: error.message}));
+            }
+        });
+        
+    }
+
+    var messageHtml = undefined;
+    if (message.length>0) {
+        messageHtml = <div className="alert alert-warning">
+            {message}
+        </div>;
+    }
+
     return (
         !isInit ? <CwaSpinner /> :
             <>
-                <Row id='process-row'>
-                    <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
-                    <span>{processId}</span>
-                </Row>
-
                 <Card className='border-0 h-100 pb-3'>
 
                     {/*
@@ -258,6 +293,7 @@ const RecordPatientData = (props: any) => {
                                 </Col>
                             </Form.Group>
                         </Form>
+                        {messageHtml}
                     </Card.Body>
 
                     {/*
@@ -269,17 +305,18 @@ const RecordPatientData = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={handleClear}
+                                    onClick={handleCancel}
+                                    disabled={isDataTransfer}
                                 >
-                                    {t('translation:clear')}
+                                    {t('translation:cancel')}
                                 </Button>
                             </Col>
                             <Col xs='6' md='3' className='pr-md-0'>
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={navigation.toShowRecordPatient}
-                                    disabled={!canGoNext}
+                                    onClick={sendUuid}
+                                    disabled={!canGoNext || isDataTransfer}
                                 >
                                     {t('translation:next')}
                                 </Button>

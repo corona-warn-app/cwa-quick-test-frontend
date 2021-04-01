@@ -74,7 +74,7 @@ const Routing = (props: any) => {
 
                 {/* Show Patient Data */}
                 <Route path={routes.showPatientRecord}>
-                    <ShowPatientData patient={patient} />
+                    <ShowPatientData setPatient={setPatient} patient={patient} />
                 </Route>
                     
                 {/* Record Test Result */}

@@ -29,5 +29,10 @@
   "result-negative": "Negative",
   "result-failed": "Failed",
   "process-number":"Process number",
-  "logout":"Logout"
+  "logout":"Logout",
+  "wrong-process-number":"Wrong process number",
+  "unknown-process-number":"Unknown process number: {{processNo}}",
+  "server-error":"server error: {{status}}",
+  "server-not-reachable": "server not reachable",
+  "connection-error": "connection error: {{message}}"
 }
