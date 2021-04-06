@@ -11,10 +11,23 @@
     font-family: 'Telegrotesk Next Thin';
     src: url(./fonts/telegrotesknext-thin.woff) format('woff');
 }
+@font-face {
+    font-family: 'TeleNeo';
+    src: url(./fonts/TeleNeoWeb-Regular.eot) format('eot'),
+      url(./fonts/TeleNeoWeb-Regular.woff) format('woff'),
+      url(./fonts/TeleNeoWeb-Regular.woff2) format('woff2');
+  }
+  @font-face {
+    font-family: 'TeleNeo';
+    src: url(./fonts/TeleNeoWeb-Bold.eot) format('eot'),
+      url(./fonts/TeleNeoWeb-Bold.woff) format('woff'),
+      url(./fonts/TeleNeoWeb-Bold.woff2) format('woff2');
+    font-weight: bold;
+  }
 
 // Override default variables before the import
 $body-bg: white;
-$font-family-base: Telegrotesk Next Regular;
+$font-family-base: TeleNeo;
 $primary: #7e7e7e;
 $light: #eeeeee;
 
@@ -116,7 +129,8 @@ $data-card-border-radius: 10px;
 }
 
 #id-query-text {
-    font-family: 'Telegrotesk Next Bold';
+    font-family: 'TeleNeo';
+    font-weight: bold;
     font-size: 20px;
     align-self: center;
     text-align: center;
@@ -142,14 +156,16 @@ $data-card-border-radius: 10px;
 }
 
 .header-font {
-    font-family: 'Telegrotesk Next Bold';
+    font-family: 'TeleNeo';
+    font-weight: bold;
     font-size: 26px;
     color: black;
 }
 
 @media screen and (max-device-width: 480px) {
     .header-font {
-        font-family: 'Telegrotesk Next Bold';
+        font-family: 'TeleNeo';
+        font-weight: bold;
         font-size: 14px;
         color: black;
         white-space: nowrap;
@@ -161,7 +177,8 @@ $data-card-border-radius: 10px;
 }
 
 .landing-btn {
-    font-family: 'Telegrotesk Next Bold';
+    font-family: 'TeleNeo';
+    font-weight: bold;
     color: white;
     max-width: 500px;
     margin-bottom: 0.5rem;
