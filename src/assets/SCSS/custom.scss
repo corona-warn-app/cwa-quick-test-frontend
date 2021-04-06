@@ -13,17 +13,15 @@
 }
 @font-face {
     font-family: 'TeleNeo';
-    src: url(./fonts/TeleNeoWeb-Regular.eot) format('eot'),
-      url(./fonts/TeleNeoWeb-Regular.woff) format('woff'),
-      url(./fonts/TeleNeoWeb-Regular.woff2) format('woff2');
-  }
-  @font-face {
+    src: url(./fonts/TeleNeoWeb-Regular.eot) format('eot'), url(./fonts/TeleNeoWeb-Regular.woff) format('woff'),
+        url(./fonts/TeleNeoWeb-Regular.woff2) format('woff2');
+}
+@font-face {
     font-family: 'TeleNeo';
-    src: url(./fonts/TeleNeoWeb-Bold.eot) format('eot'),
-      url(./fonts/TeleNeoWeb-Bold.woff) format('woff'),
-      url(./fonts/TeleNeoWeb-Bold.woff2) format('woff2');
+    src: url(./fonts/TeleNeoWeb-Bold.eot) format('eot'), url(./fonts/TeleNeoWeb-Bold.woff) format('woff'),
+        url(./fonts/TeleNeoWeb-Bold.woff2) format('woff2');
     font-weight: bold;
-  }
+}
 
 // Override default variables before the import
 $body-bg: white;
@@ -38,6 +36,8 @@ $header-height: 120px;
 $menu-width: 120px;
 $menu-padding: 1rem;
 $data-card-border-radius: 10px;
+$user-image-width:39px;
+
 
 #qt-header {
     margin: 0;
@@ -45,13 +45,14 @@ $data-card-border-radius: 10px;
     height: 84px;
     width: 100%;
     text-align: center;
+    justify-content: center;
 }
 
 #qt-body {
     display: flex;
     flex-flow: column;
     flex: 1;
-    padding: 1rem;
+    padding: 1rem 1rem 2rem 1rem;
 }
 
 #qt-footer {
@@ -73,9 +74,9 @@ $data-card-border-radius: 10px;
 
 #user-container {
     justify-content: center;
-    
+
     // all greater than md
-    /*
+    
     @include media-breakpoint-up(md) {
         position: absolute;
         right: 0;
@@ -83,7 +84,7 @@ $data-card-border-radius: 10px;
         padding: 1rem;
         justify-content: flex-end;
     }
-    */
+    
 }
 
 #process-row {
@@ -98,8 +99,11 @@ $data-card-border-radius: 10px;
     }
 }
 
-#data-body {
+#data-card{
+    height: 100%;
     background-color: $light;
+    border-radius: $data-card-border-radius;
+    box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 #data-header {
@@ -149,7 +153,10 @@ $data-card-border-radius: 10px;
     width: 80%;
     height: 80%;
 }
-
+.qt-input{
+    align-self: center;
+    border-color:$primary;
+}
 .footer-font {
     font-size: 14px;
     color: #757575;
@@ -162,15 +169,15 @@ $data-card-border-radius: 10px;
     color: black;
 }
 
-@media screen and (max-device-width: 480px) {
-    .header-font {
-        font-family: 'TeleNeo';
-        font-weight: bold;
-        font-size: 14px;
-        color: black;
-        white-space: nowrap;
-    }
-}
+// @media screen and (max-device-width: 480px) {
+//     .header-font {
+//         font-family: 'TeleNeo';
+//         font-weight: bold;
+//         font-size: 14px;
+//         color: black;
+//         white-space: nowrap;
+//     }
+// }
 
 .btn {
     font-size: 18px;
@@ -228,15 +235,19 @@ $data-card-border-radius: 10px;
 }
 
 .dropdown-toggle::after {
-    width: 39px;
-    height: 39px;
+    width: $user-image-width;
+    height: $user-image-width;
     background-image: url('../images/user.png') !important;
     border: 0;
     align-self: center;
 }
-.nav-link{
+.nav-link {
     padding: 0;
     display: flex;
+    height: $user-image-width;
+    line-height: $user-image-width;
+    font-size: 20px;
+
 }
 .navbar-toggler {
     border: 0 !important;
@@ -246,7 +257,7 @@ $data-card-border-radius: 10px;
         outline: 0;
     }
 }
-.dropdown-menu{
+.dropdown-menu {
     min-width: $menu-width;
     padding-left: $menu-padding;
     padding-right: $menu-padding;
@@ -257,9 +268,21 @@ $data-card-border-radius: 10px;
     justify-content: center;
 }
 
-.dropdown-item{
+.dropdown-item {
     text-align: center;
 }
-.react-date-picker__wrapper{
+.react-date-picker__wrapper {
     border: 0 !important;
+}
+
+.ckb-input{
+    position: inherit;
+    width: 20px;
+    height:20px;
+    border-radius: $data-card-border-radius;
+}
+.rdb-input{ 
+    position: inherit;
+    width: 20px;
+    height:20px;
 }

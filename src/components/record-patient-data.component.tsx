@@ -33,8 +33,7 @@ import sha256 from 'crypto-js/sha256';
 import useNavigation from '../misc/navigation';
 import Patient from '../misc/patient';
 import CwaSpinner from './spinner/spinner.component';
-
-const shortHashLen = 8;
+import utils from '../misc/utils';
 
 const RecordPatientData = (props: any) => {
 
@@ -83,7 +82,7 @@ const RecordPatientData = (props: any) => {
 
     // set process id from hash
     React.useEffect(() => {
-        setProcessId(uuIdHash.substring(0, shortHashLen));
+        setProcessId(utils.shortHash(uuIdHash));
     }, [uuIdHash]);
 
     // set ready state for spinner
@@ -199,12 +198,16 @@ const RecordPatientData = (props: any) => {
     return (
         !isInit ? <CwaSpinner /> :
             <>
-                <Card className='border-0 h-100 pb-3'>
+            <Row id='process-row'>
+                    <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
+                    <span>{processId}</span>
+                </Row>
+                <Card id='data-card'>
 
                     {/*
     header with title and id card query
     */}
-                    <Card.Header id='data-header'>
+                    <Card.Header id='data-header' className='pb-0'>
                         <Row>
                             <Col md='4'>
                                 <Card.Title className='m-md-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-data')}</Card.Title>
@@ -213,20 +216,22 @@ const RecordPatientData = (props: any) => {
                                 <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
                             </Col>
                         </Row>
+                        <hr/>
                     </Card.Header>
 
                     {/*
     content area with patient inputs and check box
     */}
-                    <Card.Body id='data-body'>
+                    <Card.Body id='data-body' className='pt-0'>
                         <Form>
+
                             {/* first name input */}
                             <Form.Group as={Row} controlId='formNameInput'>
                                 <Form.Label className='input-label' column xs='5' sm='4'>{t('translation:first-name')}</Form.Label>
 
                                 <Col xs='7' sm='8' className='d-flex'>
                                     <Form.Control
-                                        className='align-self-center'
+                                        className='qt-input'
                                         value={firstName}
                                         onChange={handleFirstNameChange}
                                         placeholder={t('translation:first-name')}
@@ -240,7 +245,7 @@ const RecordPatientData = (props: any) => {
 
                                 <Col xs='7' sm='8' className='d-flex'>
                                     <Form.Control
-                                        className='align-self-center'
+                                        className='qt-input'
                                         value={name}
                                         onChange={handleNameChange}
                                         placeholder={t('translation:name')}
@@ -268,6 +273,7 @@ const RecordPatientData = (props: any) => {
                                 </Col>
                             </Form.Group>
 
+                            <hr/>
                             {/* processing consent check box */}
                             <Form.Group as={Row} controlId='formConsentCheckbox'>
                                 <Form.Label className='input-label' column sm='9' md='4'>{t('translation:processing-consent')}</Form.Label>
@@ -275,7 +281,7 @@ const RecordPatientData = (props: any) => {
                                 <Col xs='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
                                         <Form.Check.Input
-                                            className='position-inherit'
+                                            className='ckb-input'
                                             onChange={handleConsentChange}
                                             type='checkbox'
                                             checked={consent}
@@ -288,7 +294,7 @@ const RecordPatientData = (props: any) => {
 
                                 <Col xs='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
-                                        <Form.Check.Input className='position-inherit' onChange={handlePersDataInQRChange} type='checkbox' checked={persDataInQR} />
+                                        <Form.Check.Input className='ckb-input' onChange={handlePersDataInQRChange} type='checkbox' checked={persDataInQR} />
                                     </Form.Check>
                                 </Col>
                             </Form.Group>
