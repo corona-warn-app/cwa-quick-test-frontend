@@ -36,6 +36,7 @@ $header-height: 120px;
 $menu-width: 120px;
 $menu-padding: 1rem;
 $data-card-border-radius: 10px;
+$input-border-radius: 4px;
 $user-image-width:39px;
 
 
@@ -155,7 +156,8 @@ $user-image-width:39px;
 }
 .qt-input{
     align-self: center;
-    border-color:$primary;
+    border-radius: $input-border-radius;
+    border: 1px solid $primary;
 }
 .footer-font {
     font-size: 14px;
@@ -205,6 +207,13 @@ $user-image-width:39px;
 
 .input-label {
     font-size: 20px;
+}
+
+.txt-no-wrap{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
 }
 .first-col-item {
     @include media-breakpoint-up(sm) {
@@ -285,4 +294,9 @@ $user-image-width:39px;
     position: inherit;
     width: 20px;
     height:20px;
+}
+.rdb-label{
+    height: 20px;
+    align-self: center;
+    padding-left: 0.5rem;
 }

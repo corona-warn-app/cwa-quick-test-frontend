@@ -34,6 +34,7 @@ import QRCode from 'qrcode.react';
 import utils from '../misc/utils';
 
 import CwaSpinner from './spinner/spinner.component';
+import { Sex } from '../misc/enum';
 
 const ShowPatientData = (props: any) => {
 
@@ -52,6 +53,8 @@ const ShowPatientData = (props: any) => {
             setPatient(props.patient)
             setUuIdHash(sha256(props.patient.uuId).toString());
             if (props.patient.includePersData) {
+                console.log(JSON.stringify(props.patient));
+                
             setQrCodeValue(JSON.stringify(props.patient, ['firstName','name','dateOfBirth','uuId']))
             } else {
                 setQrCodeValue(JSON.stringify(props.patient, ['uuId']))
@@ -101,6 +104,12 @@ const ShowPatientData = (props: any) => {
                                 <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.firstName + ' ' + patient?.name}</Card.Text>
                                 <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD. MM. yyyy' >{patient?.dateOfBirth as Date}</Moment>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.sex===Sex.MALE?t('translation:male'):patient?.sex===Sex.FEMALE?t('translation:female'):t('translation:diverse')}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.street + ' ' + patient?.houseNumber}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.zip + ' ' + patient?.city}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.phoneNumber}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.emailAddress}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.testId}</Card.Text>
                             </Col>
                             <Col sm='7' className='px-4'>
                                 <Container id='qr-code-container'>

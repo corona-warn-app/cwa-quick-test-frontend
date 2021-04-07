@@ -26,7 +26,7 @@ import '../i18n';
 import { useTranslation } from 'react-i18next';
 import { useKeycloak } from '@react-keycloak/web';
 
-import DatePicker from 'react-date-picker';
+// import DatePicker from 'react-date-picker';
 import { stringify, v4 as uuid } from 'uuid';
 import sha256 from 'crypto-js/sha256';
 
@@ -34,6 +34,13 @@ import useNavigation from '../misc/navigation';
 import Patient from '../misc/patient';
 import CwaSpinner from './spinner/spinner.component';
 import utils from '../misc/utils';
+import { Sex } from '../misc/enum'
+import DatePicker from "react-datepicker";
+import { registerLocale } from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+import de from 'date-fns/locale/de';
+registerLocale('de', de)
 
 const RecordPatientData = (props: any) => {
 
@@ -49,7 +56,15 @@ const RecordPatientData = (props: any) => {
 
     const [firstName, setFirstName] = React.useState('');
     const [name, setName] = React.useState('');
+    const [zip, setZip] = React.useState('');
+    const [city, setCity] = React.useState('');
+    const [street, setStreet] = React.useState('');
+    const [houseNumber, setHouseNumber] = React.useState('');
+    const [phoneNumber, setPhoneNumber] = React.useState('');
+    const [emailAddress, setEmailAddress] = React.useState('');
+    const [testId, setTestId] = React.useState('');
     const [dateOfBirth, setDateOfBirth] = React.useState<Date>();
+    const [sex, setSex] = React.useState<Sex>();
     const [consent, setConsent] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [canGoNext, setCanGoNext] = React.useState(false)
@@ -66,6 +81,14 @@ const RecordPatientData = (props: any) => {
             setConsent(p.processingConsens);
             setUuId(p.uuId);
             setIncludePersData(p.includePersData);
+            setZip(p.zip);
+            setCity(p.city);
+            setStreet(p.street);
+            setHouseNumber(p.houseNumber);
+            setPhoneNumber(p.phoneNumber);
+            setEmailAddress(p.emailAddress);
+            setTestId(p.testId);
+            setSex(p.sex);
         }
         else {
             newUuId();
@@ -97,6 +120,14 @@ const RecordPatientData = (props: any) => {
         if (firstName.trim() !== ''
             && name.trim() !== ''
             && dateOfBirth !== undefined
+            && sex !== undefined
+            && zip !== ''
+            && city !== ''
+            && street !== ''
+            && houseNumber !== ''
+            && phoneNumber !== ''
+            && emailAddress !== ''
+            && testId !== ''
             && consent
             && uuId) {
             setCanGoNext(true);
@@ -106,14 +137,22 @@ const RecordPatientData = (props: any) => {
                 dateOfBirth: dateOfBirth,
                 processingConsens: consent,
                 uuId: uuId,
-                includePersData: persDataInQR
+                includePersData: persDataInQR,
+                sex: sex,
+                zip: zip,
+                city: city,
+                street: street,
+                houseNumber: houseNumber,
+                phoneNumber: phoneNumber,
+                emailAddress: emailAddress,
+                testId: testId
             });
         }
         else {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, name, dateOfBirth, consent, uuId, persDataInQR])
+    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, consent, uuId, persDataInQR])
 
 
     // emit patient object to parent
@@ -129,7 +168,38 @@ const RecordPatientData = (props: any) => {
     const handleNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setName(evt.currentTarget.value);
     }
-    const handleDateChange = (evt: Date | Date[]) => {
+    const handleZipChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setZip(evt.currentTarget.value);
+    }
+    const handleCityChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setCity(evt.currentTarget.value);
+    }
+    const handleStreetChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setStreet(evt.currentTarget.value);
+    }
+    const handleHouseNumberChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setHouseNumber(evt.currentTarget.value);
+    }
+    const handlePhoneNumberChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setPhoneNumber(evt.currentTarget.value);
+    }
+    const handleEmailAddressChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setEmailAddress(evt.currentTarget.value);
+    }
+    const handleTestIdChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setTestId(evt.currentTarget.value);
+    }
+    // const handleDateChange = (evt: Date | Date[]) => {
+    //     let date: Date;
+
+    //     if (Array.isArray(evt))
+    //         date = evt[0];
+    //     else
+    //         date = evt as Date;
+
+    //     setDateOfBirth(date);
+    // }
+    const handleDateChange = (evt: Date | [Date, Date] | null) => {
         let date: Date;
 
         if (Array.isArray(evt))
@@ -162,7 +232,7 @@ const RecordPatientData = (props: any) => {
         setMessage("Daten werden übermittelt");
         fetch("/api/quicktest", {
             method: 'post',
-            body: JSON.stringify({hashedGuid : uuIdHash}),
+            body: JSON.stringify({ hashedGuid: uuIdHash }),
             headers: new Headers({
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
                 'Content-Type': 'application/json'
@@ -170,8 +240,8 @@ const RecordPatientData = (props: any) => {
         }).then(res => {
             setIsDataTransfer(false);
             if (!res.ok) {
-                console.log("server error status: ",res.status);
-                setMessage(t('translation:server-error',{status: res.status}));
+                console.log("server error status: ", res.status);
+                setMessage(t('translation:server-error', { status: res.status }));
             } else {
                 navigation.toShowRecordPatient();
             }
@@ -181,15 +251,15 @@ const RecordPatientData = (props: any) => {
                 console.log("server not reachable");
                 setMessage(t("translation:server-not-reachable"));
             } else {
-                console.log("connection error"+error.message)
-                setMessage(t("translation:connection-error",{message: error.message}));
+                console.log("connection error" + error.message)
+                setMessage(t("translation:connection-error", { message: error.message }));
             }
         });
-        
+
     }
 
     var messageHtml = undefined;
-    if (message.length>0) {
+    if (message.length > 0) {
         messageHtml = <div className="alert alert-warning">
             {message}
         </div>;
@@ -198,7 +268,7 @@ const RecordPatientData = (props: any) => {
     return (
         !isInit ? <CwaSpinner /> :
             <>
-            <Row id='process-row'>
+                <Row id='process-row'>
                     <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
                     <span>{processId}</span>
                 </Row>
@@ -216,7 +286,7 @@ const RecordPatientData = (props: any) => {
                                 <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
                             </Col>
                         </Row>
-                        <hr/>
+                        <hr />
                     </Card.Header>
 
                     {/*
@@ -226,39 +296,41 @@ const RecordPatientData = (props: any) => {
                         <Form>
 
                             {/* first name input */}
-                            <Form.Group as={Row} controlId='formNameInput'>
-                                <Form.Label className='input-label' column xs='5' sm='4'>{t('translation:first-name')}</Form.Label>
+                            <Form.Group as={Row} controlId='formNameInput' className='mb-1'>
+                                <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:first-name')}</Form.Label>
 
-                                <Col xs='7' sm='8' className='d-flex'>
+                                <Col xs='7' sm='9' className='d-flex'>
                                     <Form.Control
                                         className='qt-input'
                                         value={firstName}
                                         onChange={handleFirstNameChange}
                                         placeholder={t('translation:first-name')}
+                                        type='text'
                                     />
                                 </Col>
                             </Form.Group>
 
                             {/* name input */}
-                            <Form.Group as={Row} controlId='formNameInput'>
-                                <Form.Label className='input-label' column xs='5' sm='4'>{t('translation:name')}</Form.Label>
+                            <Form.Group as={Row} controlId='formNameInput' className='mb-1'>
+                                <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:name')}</Form.Label>
 
-                                <Col xs='7' sm='8' className='d-flex'>
+                                <Col xs='7' sm='9' className='d-flex'>
                                     <Form.Control
                                         className='qt-input'
                                         value={name}
                                         onChange={handleNameChange}
                                         placeholder={t('translation:name')}
+                                        type='text'
                                     />
                                 </Col>
                             </Form.Group>
 
                             {/* date of birth input */}
-                            <Form.Group as={Row} controlId='formDateInput'>
-                                <Form.Label className='input-label' column xs='7' sm='4'>{t('translation:date-of-birth')}</Form.Label>
+                            <Form.Group as={Row} controlId='formDateInput' className='mb-1'>
+                                <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:date-of-birth')}</Form.Label>
 
-                                <Col xs='5' sm='8' className='d-flex'>
-                                    <DatePicker
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    {/* <DatePicker
                                         onChange={handleDateChange}
                                         value={dateOfBirth}
                                         locale='de-DE'
@@ -269,16 +341,180 @@ const RecordPatientData = (props: any) => {
                                         minDate={new Date(1900, 0, 1)}
                                         closeCalendar={false}
                                         returnValue='end'
+                                    /> */}
+                                    <DatePicker
+                                        selected={dateOfBirth}
+                                        onChange={handleDateChange}
+                                        locale='de'
+                                        dateFormat='dd. MM. yyyy'
+                                        isClearable
+                                        placeholderText={t('translation:date-of-birth')}
+                                        className='qt-input form-control'
+                                        wrapperClassName='align-self-center'
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        maxDate={new Date()}
+                                        minDate={new Date(1900, 0, 1)}
+                                        openToDate={new Date(1990, 0, 1)}
                                     />
                                 </Col>
                             </Form.Group>
 
-                            <hr/>
+                            {/* sex input */}
+                            <Row>
+                                <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:sex')}</Form.Label>
+
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Row>
+                                        <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio1'>
+                                            <Form.Check className='d-flex align-self-center'>
+                                                <Form.Check.Input
+                                                    className='rdb-input'
+                                                    type='radio'
+                                                    name="sex-radios"
+                                                    id="sex-radio1"
+                                                    checked={sex === Sex.MALE}
+                                                    onChange={() => setSex(Sex.MALE)}
+                                                />
+                                                <Form.Label className='rdb-label mb-0'>{t('translation:male')}</Form.Label>
+                                            </Form.Check>
+                                        </Form.Group>
+                                        <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio2'>
+                                            <Form.Check className='d-flex align-self-center'>
+                                                <Form.Check.Input
+                                                    className='rdb-input'
+                                                    type='radio'
+                                                    name="sex-radios"
+                                                    id="sex-radio2"
+                                                    checked={sex === Sex.FEMALE}
+                                                    onChange={() => setSex(Sex.FEMALE)}
+                                                />
+                                                <Form.Label className='rdb-label mb-0'>{t('translation:female')}</Form.Label>
+                                            </Form.Check>
+                                        </Form.Group>
+                                        <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio3'>
+                                            <Form.Check className='d-flex align-self-center'>
+                                                <Form.Check.Input
+                                                    className='rdb-input'
+                                                    type='radio'
+                                                    name="sex-radios"
+                                                    id="sex-radio3"
+                                                    checked={sex === Sex.DIVERSE}
+                                                    onChange={() => setSex(Sex.DIVERSE)}
+                                                />
+                                                <Form.Label className='rdb-label mb-0'>{t('translation:diverse')}</Form.Label>
+                                            </Form.Check>
+                                        </Form.Group>
+                                    </Row>
+                                </Col>
+                            </Row>
+
+                            <hr />
+
+                            {/* address input */}
+                            <Row>
+                                <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:address')}</Form.Label>
+
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Row>
+
+                                        <Form.Group as={Col} sm='4' className='mb-1' controlId='zipInput'>
+                                            <Form.Control
+                                                className='qt-input'
+                                                value={zip}
+                                                onChange={handleZipChange}
+                                                placeholder={t('translation:zip')}
+                                                type='text'
+                                            />
+                                        </Form.Group>
+                                        <Form.Group as={Col} sm='8' className='my-1 mt-sm-0' controlId='cityInput'>
+                                            <Form.Control
+                                                className='qt-input'
+                                                value={city}
+                                                onChange={handleCityChange}
+                                                placeholder={t('translation:city')}
+                                                type='text'
+                                            />
+                                        </Form.Group>
+                                        <Form.Group as={Col} sm='8' className='my-1 mb-sm-0' controlId='streetInput'>
+                                            <Form.Control
+                                                className='qt-input'
+                                                value={street}
+                                                onChange={handleStreetChange}
+                                                placeholder={t('translation:street')}
+                                                type='text'
+                                            />
+                                        </Form.Group>
+                                        <Form.Group as={Col} sm='4' className='mt-1 mb-sm-0' controlId='houseNumberInput'>
+                                            <Form.Control
+                                                className='qt-input'
+                                                value={houseNumber}
+                                                onChange={handleHouseNumberChange}
+                                                placeholder={t('translation:house-number')}
+                                                type='text'
+                                            />
+                                        </Form.Group>
+                                    </Row>
+                                </Col>
+                            </Row>
+
+                            <hr />
+
+                            {/* phone number input */}
+                            <Form.Group as={Row} controlId='formPhoneInput' className='mb-1'>
+                                <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:phone-number')}</Form.Label>
+
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Form.Control
+                                        className='qt-input'
+                                        value={phoneNumber}
+                                        onChange={handlePhoneNumberChange}
+                                        placeholder={t('translation:phone-number')}
+                                        type='tel'
+                                    />
+                                </Col>
+                            </Form.Group>
+
+                            {/* email input */}
+                            <Form.Group as={Row} controlId='formEmailInput' className='mb-1'>
+                                <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:email-address')}</Form.Label>
+
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Form.Control
+                                        className='qt-input'
+                                        value={emailAddress}
+                                        onChange={handleEmailAddressChange}
+                                        placeholder={t('translation:email-address')}
+                                        type='email'
+                                    />
+                                </Col>
+                            </Form.Group>
+
+                            <hr />
+
+                            {/* test-ID input */}
+                            <Form.Group as={Row} controlId='formTestIdInput'>
+                                <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:test-id')}</Form.Label>
+
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Form.Control
+                                        className='qt-input'
+                                        value={testId}
+                                        onChange={handleTestIdChange}
+                                        placeholder={t('translation:test-id')}
+                                        type='text'
+                                    />
+                                </Col>
+                            </Form.Group>
+
+                            <hr />
+
                             {/* processing consent check box */}
                             <Form.Group as={Row} controlId='formConsentCheckbox'>
-                                <Form.Label className='input-label' column sm='9' md='4'>{t('translation:processing-consent')}</Form.Label>
+                                <Form.Label className='input-label' column sm='10' >{t('translation:processing-consent')}</Form.Label>
 
-                                <Col xs='2' className='jcc-xs-jcfs-md'>
+                                <Col sm='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
                                         <Form.Check.Input
                                             className='ckb-input'
@@ -289,10 +525,11 @@ const RecordPatientData = (props: any) => {
                                     </Form.Check>
                                 </Col>
                             </Form.Group>
+                            
                             <Form.Group as={Row} controlId='formKeepPrivateCheckbox'>
-                                <Form.Label className='input-label' column sm='9' md='4'>{t('translation:patientdata-exclude')}</Form.Label>
+                                <Form.Label className='input-label' column sm='10' >{t('translation:patientdata-exclude')}</Form.Label>
 
-                                <Col xs='2' className='jcc-xs-jcfs-md'>
+                                <Col sm='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
                                         <Form.Check.Input className='ckb-input' onChange={handlePersDataInQRChange} type='checkbox' checked={persDataInQR} />
                                     </Form.Check>

@@ -19,6 +19,8 @@
  * under the License.
  */
 
+import {Sex} from './enum';
+
 export default interface Patient {
     firstName: string;
     name: string;
@@ -26,4 +28,12 @@ export default interface Patient {
     processingConsens: boolean;
     uuId: string;
     includePersData: boolean;
+    sex:Sex;
+    zip:string;
+    city:string;
+    street:string;
+    houseNumber:string;
+    phoneNumber:string;
+    emailAddress:string;
+    testId:string;
 }

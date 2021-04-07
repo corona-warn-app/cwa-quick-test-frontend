@@ -28,12 +28,7 @@ import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
 import utils from '../misc/utils';
-
-enum TestResult {
-    NEGATIVE = 6,
-    POSITIVE = 7,
-    INVALID = 8,
-}
+import { TestResult } from '../misc/enum';
 
 const RecordTestResult = (props: any) => {
 
@@ -126,11 +121,11 @@ const RecordTestResult = (props: any) => {
                     <Form>
                         {/* process number input */}
                         <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column sm='4'>{t('translation:process-number')}</Form.Label>
+                            <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:process-number')}</Form.Label>
 
-                            <Col sm='6' md='4' className='d-flex'>
+                            <Col xs='7' sm='9' className='d-flex'>
                                 <Form.Control
-                                    className='align-self-center'
+                                    className='qt-input'
                                     value={processNo}
                                     onChange={handleProcessNoChange}
                                     placeholder={t('translation:process-number')}
@@ -140,10 +135,10 @@ const RecordTestResult = (props: any) => {
 
                         <hr />
                         {/* test result radio */}
-                        <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column xs='4'>{t('translation:result-positive')}</Form.Label>
+                        <Form.Group as={Row} controlId='result-radio1'>
+                            <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:result-positive')}</Form.Label>
 
-                            <Col xs='8' className='d-flex'>
+                            <Col xs='7' sm='9' className='d-flex'>
                                 <Form.Check className='align-self-center'>
                                     <Form.Check.Input
                                         className='rdb-input'
@@ -159,10 +154,10 @@ const RecordTestResult = (props: any) => {
 
                         <hr />
                         {/* test result radio */}
-                        <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column xs='4'>{t('translation:result-negative')}</Form.Label>
+                        <Form.Group as={Row} controlId='result-radio2'>
+                            <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:result-negative')}</Form.Label>
 
-                            <Col xs='8' className='d-flex'>
+                            <Col xs='7' sm='9' className='d-flex'>
                                 <Form.Check className='align-self-center'>
                                     <Form.Check.Input
                                         className='rdb-input'
@@ -178,10 +173,10 @@ const RecordTestResult = (props: any) => {
 
                         <hr />
                         {/* test result radio */}
-                        <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column xs='4'>{t('translation:result-failed')}</Form.Label>
+                        <Form.Group as={Row} controlId='result-radio3'>
+                            <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:result-failed')}</Form.Label>
 
-                            <Col xs='8' className='d-flex'>
+                            <Col xs='7' sm='9' className='d-flex'>
                                 <Form.Check className='align-self-center'>
                                     <Form.Check.Input
                                         className='rdb-input'
