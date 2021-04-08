@@ -55,7 +55,8 @@ const ShowPatientData = (props: any) => {
             if (props.patient.includePersData) {
                 console.log(JSON.stringify(props.patient));
                 
-            setQrCodeValue(JSON.stringify(props.patient, ['firstName','name','dateOfBirth','uuId']))
+            // setQrCodeValue(JSON.stringify(props.patient, ['firstName','name','dateOfBirth','uuId']))
+            setQrCodeValue(JSON.stringify(props.patient))
             } else {
                 setQrCodeValue(JSON.stringify(props.patient, ['uuId']))
             }
