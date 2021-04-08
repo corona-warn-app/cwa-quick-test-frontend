@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+import { Button, Card, Col, Row } from 'react-bootstrap'
 import QrReader from 'react-qr-reader'
 import { v4 as uuid } from 'uuid';
 
@@ -29,7 +29,7 @@ import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
 
-const RecordTestResult = (props: any) => {
+const QrScan = (props: any) => {
 
     const navigation = useNavigation();
     const { t } = useTranslation();
@@ -128,4 +128,4 @@ const RecordTestResult = (props: any) => {
     )
 }
 
-export default RecordTestResult;
+export default QrScan;
