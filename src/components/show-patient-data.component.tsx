@@ -34,6 +34,7 @@ import QRCode from 'qrcode.react';
 import utils from '../misc/utils';
 
 import CwaSpinner from './spinner/spinner.component';
+import { Sex } from '../misc/enum';
 
 const ShowPatientData = (props: any) => {
 
@@ -52,6 +53,8 @@ const ShowPatientData = (props: any) => {
             setPatient(props.patient)
             setUuIdHash(sha256(props.patient.uuId).toString());
             if (props.patient.includePersData) {
+                console.log(JSON.stringify(props.patient));
+                
             setQrCodeValue(JSON.stringify(props.patient, ['firstName','name','dateOfBirth','uuId']))
             } else {
                 setQrCodeValue(JSON.stringify(props.patient, ['uuId']))
@@ -82,7 +85,11 @@ const ShowPatientData = (props: any) => {
     return (
         !isInit ? <CwaSpinner /> :
             <>
-                <Card className='border-0 h-100 pb-3'>
+            <Row id='process-row'>
+                    <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
+                    <span>{processId}</span>
+                </Row>
+                <Card id='data-card'>
 
                     {/*
     content area with patient inputs and check box
@@ -91,11 +98,18 @@ const ShowPatientData = (props: any) => {
                         <Row>
                             <Col sm='5'>
                                 <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>{t('translation:qr-code')}</Card.Title>
-                                <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:process')}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{processId}</Card.Text>
+                                <hr/>
+                                {/* <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:process')}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{processId}</Card.Text> */}
                                 <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.firstName + ' ' + patient?.name}</Card.Text>
                                 <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD. MM. yyyy' >{patient?.dateOfBirth as Date}</Moment>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.sex===Sex.MALE?t('translation:male'):patient?.sex===Sex.FEMALE?t('translation:female'):t('translation:diverse')}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.street + ' ' + patient?.houseNumber}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.zip + ' ' + patient?.city}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.phoneNumber}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.emailAddress}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.testId}</Card.Text>
                             </Col>
                             <Col sm='7' className='px-4'>
                                 <Container id='qr-code-container'>

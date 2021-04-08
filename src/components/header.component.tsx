@@ -52,18 +52,18 @@ const Header = (props: any) => {
     }
 
     return (
-        <Container>
-            <Navbar id='user-container' >
+        <Container className='position-relative'>
             {/* simple header with logo */}
 
             {/* user icon and user name */}
-                <div id='qt-header'>
+                <Row id='qt-header'>
                     <Image src={C19Logo} onClick={navigation.toLanding} />
                     <span className='header-font my-auto mx-1'>{t('translation:title')}</span>
-                </div>
+                </Row>
+            <Navbar id='user-container' >
                     <NavDropdown
-                        className="mr-3"
-                        title=''
+                        className="nav-dropdown-title"
+                        title={userName}
                         id="responsive-navbar-nav"
                     >
                         <Navbar.Brand
@@ -73,7 +73,6 @@ const Header = (props: any) => {
                             {t('translation:logout')}
                         </Navbar.Brand>
                     </NavDropdown>
-                    <Navbar.Brand className='my-auto mx-0 '>{userName}</Navbar.Brand>
             </Navbar>
         </Container>
     )

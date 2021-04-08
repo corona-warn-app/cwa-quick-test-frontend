@@ -28,12 +28,7 @@ import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
 import utils from '../misc/utils';
-
-enum TestResult {
-    NEGATIVE = 6,
-    POSITIVE = 7,
-    INVALID = 8,
-}
+import { TestResult } from '../misc/enum';
 
 const RecordTestResult = (props: any) => {
 
@@ -49,16 +44,16 @@ const RecordTestResult = (props: any) => {
 
     React.useEffect(() => {
         const procValid = utils.isProcessNoValid(processNo);
-        if (processNo.length>0) {
+        if (processNo.length > 0) {
             if (!procValid) {
                 setMessage(t('translation:wrong-process-number'));
             } else {
-                if (message.length>0) {
+                if (message.length > 0) {
                     setMessage("");
                 }
             }
         }
-        setIsInputValid(testResult != null && processNo.length>0 && procValid);
+        setIsInputValid(testResult != null && processNo.length > 0 && procValid);
     }, [processNo, testResult]);
 
     const handleProcessNoChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +66,7 @@ const RecordTestResult = (props: any) => {
         setMessage("Daten werden übermittelt");
         fetch("/api/quicktest", {
             method: 'put',
-            body: JSON.stringify({shortHash : processNo, result: testResult }),
+            body: JSON.stringify({ shortHash: processNo, result: testResult }),
             headers: new Headers({
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
                 'Content-Type': 'application/json'
@@ -79,11 +74,11 @@ const RecordTestResult = (props: any) => {
         }).then(res => {
             setIsDataTransfer(false);
             if (!res.ok) {
-                if (res.status==404) {
-                    setMessage(t('translation:unknown-process-number',{processNo: processNo}))
+                if (res.status == 404) {
+                    setMessage(t('translation:unknown-process-number', { processNo: processNo }))
                 } else {
-                    setMessage(t('translation:server-error',{status: res.status}));
-                    console.log("server error status: ",res.status);
+                    setMessage(t('translation:server-error', { status: res.status }));
+                    console.log("server error status: ", res.status);
                 }
             } else {
                 navigation.toLanding();
@@ -94,42 +89,43 @@ const RecordTestResult = (props: any) => {
                 console.log("server not reachable");
                 setMessage(t("translation:server-not-reachable"));
             } else {
-                console.log("connection error"+error.message)
-                setMessage(t("translation:connection-error",{message: error.message}));
+                console.log("connection error" + error.message)
+                setMessage(t("translation:connection-error", { message: error.message }));
             }
-        });        
+        });
     }
 
     var messageHtml = undefined;
-    if (message.length>0) {
+    if (message.length > 0) {
         messageHtml = <div className="alert alert-warning">
             {message}
         </div>;
-    }   
+    }
 
     return (
         <>
-            <Card className='border-0 h-100 pb-3'>
-                <Card.Header id='data-header'>
+            <Card id='data-card'>
+                <Card.Header id='data-header' className='pb-0'>
                     <Row>
                         <Col md='6'>
-                            <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-result')}</Card.Title>
+                            <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-result2')}</Card.Title>
                         </Col>
                     </Row>
+                    <hr />
                 </Card.Header>
 
                 {/*
     content area with process number input and radios
     */}
-                <Card.Body id='data-body'>
+                <Card.Body id='data-body' className='pt-0'>
                     <Form>
                         {/* process number input */}
                         <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column sm='4'>{t('translation:process-number')}</Form.Label>
+                            <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:process-number')}</Form.Label>
 
-                            <Col sm='6' md='4' className='d-flex'>
+                            <Col xs='7' sm='9' className='d-flex'>
                                 <Form.Control
-                                    className='align-self-center'
+                                    className='qt-input'
                                     value={processNo}
                                     onChange={handleProcessNoChange}
                                     placeholder={t('translation:process-number')}
@@ -137,51 +133,59 @@ const RecordTestResult = (props: any) => {
                             </Col>
                         </Form.Group>
 
+                        <hr />
                         {/* test result radio */}
-                        <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column xs='4'>{t('translation:result-positive')}</Form.Label>
+                        <Form.Group as={Row} controlId='result-radio1'>
+                            <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:result-positive')}</Form.Label>
 
-                            <Col xs='8' className='d-flex'>
-                                <Form.Check
-                                    className='align-self-center'
-                                    type='radio'
-                                    name="result-radios"
-                                    id="result-radio1"
-                                    checked={testResult === TestResult.POSITIVE}
-                                    onChange={() => setTestResult(TestResult.POSITIVE)}
-                                />
+                            <Col xs='7' sm='9' className='d-flex'>
+                                <Form.Check className='align-self-center'>
+                                    <Form.Check.Input
+                                        className='rdb-input'
+                                        type='radio'
+                                        name="result-radios"
+                                        id="result-radio1"
+                                        checked={testResult === TestResult.POSITIVE}
+                                        onChange={() => setTestResult(TestResult.POSITIVE)}
+                                    />
+                                </Form.Check>
                             </Col>
                         </Form.Group>
 
+                        <hr />
                         {/* test result radio */}
-                        <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column xs='4'>{t('translation:result-negative')}</Form.Label>
+                        <Form.Group as={Row} controlId='result-radio2'>
+                            <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:result-negative')}</Form.Label>
 
-                            <Col xs='8' className='d-flex'>
-                                <Form.Check
-                                    className='align-self-center'
-                                    type='radio'
-                                    name="result-radios"
-                                    id="result-radio2"
-                                    checked={testResult === TestResult.NEGATIVE}
-                                    onChange={() => setTestResult(TestResult.NEGATIVE)}
-                                />
+                            <Col xs='7' sm='9' className='d-flex'>
+                                <Form.Check className='align-self-center'>
+                                    <Form.Check.Input
+                                        className='rdb-input'
+                                        type='radio'
+                                        name="result-radios"
+                                        id="result-radio2"
+                                        checked={testResult === TestResult.NEGATIVE}
+                                        onChange={() => setTestResult(TestResult.NEGATIVE)}
+                                    />
+                                </Form.Check>
                             </Col>
                         </Form.Group>
 
+                        <hr />
                         {/* test result radio */}
-                        <Form.Group as={Row} controlId='formNameInput'>
-                            <Form.Label className='input-label' column xs='4'>{t('translation:result-failed')}</Form.Label>
+                        <Form.Group as={Row} controlId='result-radio3'>
+                            <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:result-failed')}</Form.Label>
 
-                            <Col xs='8' className='d-flex'>
-                                <Form.Check
-                                    className='align-self-center'
-                                    type='radio'
-                                    name="result-radios"
-                                    id="result-radio3"
-                                    checked={testResult === TestResult.INVALID}
-                                    onChange={() => setTestResult(TestResult.INVALID)}
-                                />
+                            <Col xs='7' sm='9' className='d-flex'>
+                                <Form.Check className='align-self-center'>
+                                    <Form.Check.Input
+                                        className='rdb-input'
+                                        type='radio'
+                                        name="result-radios"
+                                        id="result-radio3"
+                                        checked={testResult === TestResult.INVALID}
+                                        onChange={() => setTestResult(TestResult.INVALID)} />
+                                </Form.Check>
                             </Col>
                         </Form.Group>
                     </Form>
