@@ -253,13 +253,15 @@ const RecordPatientData = (props: any) => {
 
     const handleSubmit = (event:React.FormEvent<HTMLFormElement>) => {
         const form = event.currentTarget;
-        console.log('SUBMIT');
         
         event.preventDefault();
         event.stopPropagation();
 
-        console.log(form.checkValidity());
-        setValidated(!validated);
+        setValidated(true);
+
+        if(form.checkValidity() && canGoNext){
+            setTimeout(navigation.toShowRecordPatient,200);
+        }
     
     }
 
@@ -487,8 +489,8 @@ const RecordPatientData = (props: any) => {
                                         onChange={handlePhoneNumberChange}
                                         placeholder={t('translation:phone-number')}
                                         type='tel'
-                                        isValid={utils.isTelValid(phoneNumber)}
                                         required
+                                        pattern={utils.pattern.tel}
                                     />
                                 </Col>
                             </Form.Group>
@@ -504,8 +506,8 @@ const RecordPatientData = (props: any) => {
                                         onChange={handleEmailAddressChange}
                                         placeholder={t('translation:email-address')}
                                         type='email'
-                                        isValid={utils.isEMailValid(emailAddress)}
                                         required
+                                        pattern={utils.pattern.eMail}
                                     />
                                 </Col>
                             </Form.Group>

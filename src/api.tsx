@@ -24,6 +24,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: () => void, onError?
         if (currentUuid) {
             setIsNew(false);
             setUuid(currentUuid);
+            setResult(currentUuid);
         }
         else {
             setUuid(newUuid());
@@ -57,16 +58,13 @@ export const useGetUuid = (currentUuid: string, onSuccess?: () => void, onError?
                 }
             })
             .catch(error => {
-                console.log(JSON.stringify(error.response))
-
                 // if new uuid exists, retry
                 if (error && error.response && error.response.status === 409 && trys < TRYS) {
                     setTrys(trys + 1)
                     setUuid(newUuid());
                 }
                 else if (onError) {
-                    console.log('onError();');
-
+                    onError();
                 }
             });
 
