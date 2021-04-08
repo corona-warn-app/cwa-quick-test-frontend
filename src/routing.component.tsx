@@ -35,6 +35,7 @@ import LandingPage from './components/landing-page.component';
 import RecordPatientData from './components/record-patient-data.component';
 import ShowPatientData from './components/show-patient-data.component';
 import RecordTestResult from './components/record-test-result.component';
+import QrScan from './components/qr-scan.component';
 import PrivateRoute from './components/private-route.component';
 
 const Routing = (props: any) => {
@@ -85,7 +86,7 @@ const Routing = (props: any) => {
                 {/* QR Scan */}
                 <Route exact path={routes.qrScan}>
                     {/* <QRScan /> */}
-                    <LandingPage />
+                    <QrScan setPatient={setPatient}/>
                 </Route>
 
                 {/* Show QR Scan Data */}

@@ -46,5 +46,8 @@
   "unknown-process-number":"Unknown process number: {{processNo}}",
   "server-error":"server error: {{status}}",
   "server-not-reachable": "server not reachable",
-  "connection-error": "connection error: {{message}}"
+  "connection-error": "connection error: {{message}}",
+  "qr-scan": "QR-Code scan",
+  "qr-scan-https-only" : "QR-Scan will work only with https",
+  "qr-code-no-patient-data": "QR-code does not contain patient data"
 }
