@@ -62,38 +62,52 @@ const Routing = (props: any) => {
             <Container id='qt-body'>
 
                 {/* Landing */}
-                {/* <Route exact path={routes.landing}>
-                    <LandingPage />
-                </Route> */}
-
-                <PrivateRoute exact roles={['c19_quick_test_lab', 'c19_quick_test_counter']} path={routes.landing} component={LandingPage}/>
+                <PrivateRoute 
+                    exact 
+                    roles={['c19_quick_test_counter', 'c19_quick_test_counter']} 
+                    path={routes.landing} 
+                    component={LandingPage}
+                /> 
 
                 {/* Record Patient Data */}
-                <Route exact path={routes.recordPatient}>
-                    <RecordPatientData setPatient={setPatient} patient={patient} />
-                </Route>
+                <PrivateRoute 
+                    exact 
+                    roles={['c19_quick_test_counter']} 
+                    path={routes.recordPatient}
+                    component={ RecordPatientData }
+                    render={ (props) => <RecordPatientData {...props} setPatient={setPatient} patient={patient} /> }
+                />
 
                 {/* Show Patient Data */}
-                <Route path={routes.showPatientRecord}>
-                    <ShowPatientData setPatient={setPatient} patient={patient} />
-                </Route>
+                <PrivateRoute 
+                    roles={['c19_quick_test_lab', 'c19_quick_test_counter']}
+                    path={routes.showPatientRecord}
+                    component={ ShowPatientData }
+                    render={ (props) => <ShowPatientData {...props} setPatient={setPatient} patient={patient} /> }
+                />
                     
                 {/* Record Test Result */}
-                <Route path={routes.recordTestResult}>
-                    <RecordTestResult />
-                </Route>
-
+                <PrivateRoute 
+                    roles={['c19_quick_test_lab']}
+                    path={routes.recordTestResult}
+                    component={ RecordTestResult }
+                />
+                    
                 {/* QR Scan */}
-                <Route exact path={routes.qrScan}>
-                    {/* <QRScan /> */}
-                    <QrScan setPatient={setPatient}/>
-                </Route>
+                <PrivateRoute 
+                    exact 
+                    path={routes.qrScan}
+                    roles={['c19_quick_test_lab']}
+                    component={ QrScan }
+                    render={ (props) => <QrScan {...props} setPatient={setPatient}/> }
+                />
 
                 {/* Show QR Scan Data */}
-                <Route path={routes.qrDataShow}>
-                    {/* <ShowQRScan /> */}
-                    <LandingPage />
-                </Route>
+                <PrivateRoute 
+                    roles={['c19_quick_test_lab']}
+                    path={routes.qrDataShow}
+                    component={ LandingPage }
+                />
 
             </Container>
 
