@@ -27,12 +27,14 @@ interface PrivateRouteParams extends RouteProps {
     component:
       | React.ComponentType<RouteComponentProps<any>>
       | React.ComponentType<any>,
-      roles?: string[]
+      roles?: string[],
+      render?: (props: RouteComponentProps<any>) => React.ReactNode
   }
 
   export function PrivateRoute({
     component: Component,
     roles,
+    render,
     ...rest}: PrivateRouteParams) {
 
     const { keycloak, initialized } = useKeycloak();
@@ -46,9 +48,6 @@ interface PrivateRouteParams extends RouteProps {
                 // In that case you have to use both scenarios with hasRealmRole & hasResourceRole
                 const realm =  keycloak.hasRealmRole(role);
                 const resource = keycloak.hasResourceRole(role);
-
-                console.log("realmaccess: " + realm);
-                console.log("resourceaccess: " + resource);
                 
                 return realm || resource;
             });
@@ -61,7 +60,8 @@ interface PrivateRouteParams extends RouteProps {
           {...rest}
           render={(props) =>
             isAutherized() ? (
-              <Component {...props} />
+              render ? (render(props)
+              ) : <Component {...props} />
             ) : (
               <Redirect
                 to={{
