@@ -26,8 +26,6 @@ import '../i18n';
 import { useTranslation } from 'react-i18next';
 import { useKeycloak } from '@react-keycloak/web';
 
-// import DatePicker from 'react-date-picker';
-import { stringify, v4 as uuid } from 'uuid';
 import sha256 from 'crypto-js/sha256';
 
 import useNavigation from '../misc/navigation';
@@ -40,7 +38,9 @@ import { registerLocale } from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import de from 'date-fns/locale/de';
+import { useGetUuid } from '../api';
 registerLocale('de', de)
+
 
 const RecordPatientData = (props: any) => {
 
@@ -50,7 +50,6 @@ const RecordPatientData = (props: any) => {
     const { keycloak, initialized } = useKeycloak();
     const [isInit, setIsInit] = React.useState(false)
     const [isDataTransfer, setIsDataTransfer] = React.useState(false)
-    const [uuId, setUuId] = React.useState('');
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
 
@@ -70,6 +69,9 @@ const RecordPatientData = (props: any) => {
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
     const [message, setMessage] = React.useState('');
+    const [validated, setValidated] = React.useState(false);
+
+    const uuid = useGetUuid(props?.patient?.uuId);
 
     // set values from props or new uuid on mount
     React.useEffect(() => {
@@ -79,7 +81,6 @@ const RecordPatientData = (props: any) => {
             setName(p.name);
             setDateOfBirth(p.dateOfBirth);
             setConsent(p.processingConsens);
-            setUuId(p.uuId);
             setIncludePersData(p.includePersData);
             setZip(p.zip);
             setCity(p.city);
@@ -90,18 +91,15 @@ const RecordPatientData = (props: any) => {
             setTestId(p.testId);
             setSex(p.sex);
         }
-        else {
-            newUuId();
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // set hash from uuid
     React.useEffect(() => {
-        if (uuId) {
-            setUuIdHash(sha256(uuId).toString());
+        if (uuid) {
+            setUuIdHash(sha256(uuid).toString());
         }
-    }, [uuId]);
+    }, [uuid]);
 
     // set process id from hash
     React.useEffect(() => {
@@ -129,14 +127,14 @@ const RecordPatientData = (props: any) => {
             && emailAddress !== ''
             && testId !== ''
             && consent
-            && uuId) {
+            && uuid) {
             setCanGoNext(true);
             setPatient({
                 firstName: firstName,
                 name: name,
                 dateOfBirth: dateOfBirth,
                 processingConsens: consent,
-                uuId: uuId,
+                uuId: uuid,
                 includePersData: persDataInQR,
                 sex: sex,
                 zip: zip,
@@ -152,7 +150,7 @@ const RecordPatientData = (props: any) => {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, consent, uuId, persDataInQR])
+    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, consent, uuid, persDataInQR])
 
 
     // emit patient object to parent
@@ -221,41 +219,50 @@ const RecordPatientData = (props: any) => {
         navigation.toLanding();
     }
 
-    // generate and set new uuid
-    const newUuId = () => {
-        setUuId(uuid());
-    }
+    // const sendUuid = () => {
+    //     // TODO i18n
+    //     setIsDataTransfer(true);
+    //     setMessage("Daten werden übermittelt");
+    //     fetch("/api/quicktest", {
+    //         method: 'post',
+    //         body: JSON.stringify({ hashedGuid: uuIdHash }),
+    //         headers: new Headers({
+    //             "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+    //             'Content-Type': 'application/json'
+    //         }),
+    //     }).then(res => {
+    //         setIsDataTransfer(false);
+    //         if (!res.ok) {
+    //             console.log("server error status: ", res.status);
+    //             setMessage(t('translation:server-error', { status: res.status }));
+    //         } else {
+    //             navigation.toShowRecordPatient();
+    //         }
+    //     }, error => {
+    //         setIsDataTransfer(false);
+    //         if (error instanceof TypeError) {
+    //             console.log("server not reachable");
+    //             setMessage(t("translation:server-not-reachable"));
+    //         } else {
+    //             console.log("connection error" + error.message)
+    //             setMessage(t("translation:connection-error", { message: error.message }));
+    //         }
+    //     });
 
-    const sendUuid = () => {
-        // TODO i18n
-        setIsDataTransfer(true);
-        setMessage("Daten werden übermittelt");
-        fetch("/api/quicktest", {
-            method: 'post',
-            body: JSON.stringify({ hashedGuid: uuIdHash }),
-            headers: new Headers({
-                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
-                'Content-Type': 'application/json'
-            }),
-        }).then(res => {
-            setIsDataTransfer(false);
-            if (!res.ok) {
-                console.log("server error status: ", res.status);
-                setMessage(t('translation:server-error', { status: res.status }));
-            } else {
-                navigation.toShowRecordPatient();
-            }
-        }, error => {
-            setIsDataTransfer(false);
-            if (error instanceof TypeError) {
-                console.log("server not reachable");
-                setMessage(t("translation:server-not-reachable"));
-            } else {
-                console.log("connection error" + error.message)
-                setMessage(t("translation:connection-error", { message: error.message }));
-            }
-        });
+    //}
 
+    const handleSubmit = (event:React.FormEvent<HTMLFormElement>) => {
+        const form = event.currentTarget;
+        
+        event.preventDefault();
+        event.stopPropagation();
+
+        setValidated(true);
+
+        if(form.checkValidity() && canGoNext){
+            setTimeout(navigation.toShowRecordPatient,200);
+        }
+    
     }
 
     var messageHtml = undefined;
@@ -273,6 +280,8 @@ const RecordPatientData = (props: any) => {
                     <span>{processId}</span>
                 </Row>
                 <Card id='data-card'>
+
+                <Form onSubmit={handleSubmit} validated={validated} noValidate>
 
                     {/*
     header with title and id card query
@@ -293,7 +302,6 @@ const RecordPatientData = (props: any) => {
     content area with patient inputs and check box
     */}
                     <Card.Body id='data-body' className='pt-0'>
-                        <Form>
 
                             {/* first name input */}
                             <Form.Group as={Row} controlId='formNameInput' className='mb-1'>
@@ -306,6 +314,7 @@ const RecordPatientData = (props: any) => {
                                         onChange={handleFirstNameChange}
                                         placeholder={t('translation:first-name')}
                                         type='text'
+                                        required
                                     />
                                 </Col>
                             </Form.Group>
@@ -321,12 +330,13 @@ const RecordPatientData = (props: any) => {
                                         onChange={handleNameChange}
                                         placeholder={t('translation:name')}
                                         type='text'
+                                        required
                                     />
                                 </Col>
                             </Form.Group>
 
                             {/* date of birth input */}
-                            <Form.Group as={Row} controlId='formDateInput' className='mb-1'>
+                            <Form.Group as={Row}  className='mb-1'>
                                 <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:date-of-birth')}</Form.Label>
 
                                 <Col xs='7' sm='9' className='d-flex'>
@@ -357,6 +367,7 @@ const RecordPatientData = (props: any) => {
                                         maxDate={new Date()}
                                         minDate={new Date(1900, 0, 1)}
                                         openToDate={new Date(1990, 0, 1)}
+                                        required
                                     />
                                 </Col>
                             </Form.Group>
@@ -369,7 +380,7 @@ const RecordPatientData = (props: any) => {
                                     <Row>
                                         <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio1'>
                                             <Form.Check className='d-flex align-self-center'>
-                                                <Form.Check.Input
+                                                <Form.Check.Input 
                                                     className='rdb-input'
                                                     type='radio'
                                                     name="sex-radios"
@@ -382,7 +393,7 @@ const RecordPatientData = (props: any) => {
                                         </Form.Group>
                                         <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio2'>
                                             <Form.Check className='d-flex align-self-center'>
-                                                <Form.Check.Input
+                                                <Form.Check.Input required
                                                     className='rdb-input'
                                                     type='radio'
                                                     name="sex-radios"
@@ -426,7 +437,10 @@ const RecordPatientData = (props: any) => {
                                                 onChange={handleZipChange}
                                                 placeholder={t('translation:zip')}
                                                 type='text'
+                                                required
+                                                pattern={utils.pattern.zip}
                                             />
+
                                         </Form.Group>
                                         <Form.Group as={Col} sm='8' className='my-1 mt-sm-0' controlId='cityInput'>
                                             <Form.Control
@@ -435,6 +449,7 @@ const RecordPatientData = (props: any) => {
                                                 onChange={handleCityChange}
                                                 placeholder={t('translation:city')}
                                                 type='text'
+                                                required
                                             />
                                         </Form.Group>
                                         <Form.Group as={Col} sm='8' className='my-1 mb-sm-0' controlId='streetInput'>
@@ -444,6 +459,7 @@ const RecordPatientData = (props: any) => {
                                                 onChange={handleStreetChange}
                                                 placeholder={t('translation:street')}
                                                 type='text'
+                                                required
                                             />
                                         </Form.Group>
                                         <Form.Group as={Col} sm='4' className='mt-1 mb-sm-0' controlId='houseNumberInput'>
@@ -453,6 +469,7 @@ const RecordPatientData = (props: any) => {
                                                 onChange={handleHouseNumberChange}
                                                 placeholder={t('translation:house-number')}
                                                 type='text'
+                                                required
                                             />
                                         </Form.Group>
                                     </Row>
@@ -472,6 +489,8 @@ const RecordPatientData = (props: any) => {
                                         onChange={handlePhoneNumberChange}
                                         placeholder={t('translation:phone-number')}
                                         type='tel'
+                                        required
+                                        pattern={utils.pattern.tel}
                                     />
                                 </Col>
                             </Form.Group>
@@ -487,6 +506,8 @@ const RecordPatientData = (props: any) => {
                                         onChange={handleEmailAddressChange}
                                         placeholder={t('translation:email-address')}
                                         type='email'
+                                        required
+                                        pattern={utils.pattern.eMail}
                                     />
                                 </Col>
                             </Form.Group>
@@ -504,6 +525,7 @@ const RecordPatientData = (props: any) => {
                                         onChange={handleTestIdChange}
                                         placeholder={t('translation:test-id')}
                                         type='text'
+                                        required
                                     />
                                 </Col>
                             </Form.Group>
@@ -521,11 +543,12 @@ const RecordPatientData = (props: any) => {
                                             onChange={handleConsentChange}
                                             type='checkbox'
                                             checked={consent}
+                                            required
                                         />
                                     </Form.Check>
                                 </Col>
                             </Form.Group>
-                            
+
                             <Form.Group as={Row} controlId='formKeepPrivateCheckbox'>
                                 <Form.Label className='input-label' column sm='10' >{t('translation:patientdata-exclude')}</Form.Label>
 
@@ -535,7 +558,6 @@ const RecordPatientData = (props: any) => {
                                     </Form.Check>
                                 </Col>
                             </Form.Group>
-                        </Form>
                         {messageHtml}
                     </Card.Body>
 
@@ -558,14 +580,17 @@ const RecordPatientData = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={sendUuid}
-                                    disabled={!canGoNext || isDataTransfer}
+                                    type='submit'
+                                    // onClick={navigation.toShowRecordPatient}
+                                    // disabled={!canGoNext}
                                 >
                                     {t('translation:next')}
                                 </Button>
                             </Col>
                         </Row>
                     </Card.Footer>
+
+                    </Form>
                 </Card>
             </>
     )
