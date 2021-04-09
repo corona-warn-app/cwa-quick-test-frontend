@@ -64,10 +64,6 @@ const QrScan = (props: any) => {
         }
     }
 
-    const fakeScan = () => {
-        handleScan(JSON.stringify({"firstName":"FTest","name":"Test","dateOfBirth":"1990-03-22T23:00:00.000Z","processingConsens":true,"uuId":"3d0212e4-be45-40cb-a8d3-252cb10546ca","includePersData":true,"sex":0,"zip":"42897","city":"Remscheid","street":"Emil-Nohl-Str.","houseNumber":"Emil-Nohl-Str.","phoneNumber":"015753509708","emailAddress":"test@rere","testId":"32323/232"}));
-    }
-
     const handleError = (error: any) => {
         if (window.location.protocol == 'http:') {
             setMessage(t('translation:qr-scan-https-only'));
@@ -119,15 +115,6 @@ const QrScan = (props: any) => {
                                 onClick={navigation.toLanding}
                            >
                                 {t('translation:cancel')}
-                            </Button>
-                        </Col>
-                        <Col sm='6' md='3'>
-                            <Button
-                                className='my-1 my-md-0 p-0'
-                                block
-                                onClick={fakeScan}
-                           >
-                                Fake
                             </Button>
                         </Col>
                     </Row>
