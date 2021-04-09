@@ -243,7 +243,7 @@ const RecordPatientData = (props: any) => {
                 </Row>
                 <Card id='data-card'>
 
-                <Form onSubmit={handleSubmit} validated={validated} noValidate>
+                <Form onSubmit={handleSubmit} validated={validated}>
 
                     {/*
     header with title and id card query
