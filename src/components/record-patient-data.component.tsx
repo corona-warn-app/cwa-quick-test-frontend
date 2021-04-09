@@ -187,16 +187,6 @@ const RecordPatientData = (props: any) => {
     const handleTestIdChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setTestId(evt.currentTarget.value);
     }
-    // const handleDateChange = (evt: Date | Date[]) => {
-    //     let date: Date;
-
-    //     if (Array.isArray(evt))
-    //         date = evt[0];
-    //     else
-    //         date = evt as Date;
-
-    //     setDateOfBirth(date);
-    // }
     const handleDateChange = (evt: Date | [Date, Date] | null) => {
         let date: Date;
 
@@ -204,6 +194,10 @@ const RecordPatientData = (props: any) => {
             date = evt[0];
         else
             date = evt as Date;
+
+            if (date) {
+                date.setHours(12);
+            }
 
         setDateOfBirth(date);
     }
@@ -218,38 +212,6 @@ const RecordPatientData = (props: any) => {
         props.setPatient(undefined);
         navigation.toLanding();
     }
-
-    // const sendUuid = () => {
-    //     // TODO i18n
-    //     setIsDataTransfer(true);
-    //     setMessage("Daten werden übermittelt");
-    //     fetch("/api/quicktest", {
-    //         method: 'post',
-    //         body: JSON.stringify({ hashedGuid: uuIdHash }),
-    //         headers: new Headers({
-    //             "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
-    //             'Content-Type': 'application/json'
-    //         }),
-    //     }).then(res => {
-    //         setIsDataTransfer(false);
-    //         if (!res.ok) {
-    //             console.log("server error status: ", res.status);
-    //             setMessage(t('translation:server-error', { status: res.status }));
-    //         } else {
-    //             navigation.toShowRecordPatient();
-    //         }
-    //     }, error => {
-    //         setIsDataTransfer(false);
-    //         if (error instanceof TypeError) {
-    //             console.log("server not reachable");
-    //             setMessage(t("translation:server-not-reachable"));
-    //         } else {
-    //             console.log("connection error" + error.message)
-    //             setMessage(t("translation:connection-error", { message: error.message }));
-    //         }
-    //     });
-
-    //}
 
     const handleSubmit = (event:React.FormEvent<HTMLFormElement>) => {
         const form = event.currentTarget;
@@ -340,18 +302,6 @@ const RecordPatientData = (props: any) => {
                                 <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:date-of-birth')}</Form.Label>
 
                                 <Col xs='7' sm='9' className='d-flex'>
-                                    {/* <DatePicker
-                                        onChange={handleDateChange}
-                                        value={dateOfBirth}
-                                        locale='de-DE'
-                                        format='dd. MM. yyyy'
-                                        calendarIcon={null}
-                                        clearIcon={null}
-                                        maxDate={new Date()}
-                                        minDate={new Date(1900, 0, 1)}
-                                        closeCalendar={false}
-                                        returnValue='end'
-                                    /> */}
                                     <DatePicker
                                         selected={dateOfBirth}
                                         onChange={handleDateChange}
@@ -365,7 +315,7 @@ const RecordPatientData = (props: any) => {
                                         showYearDropdown
                                         dropdownMode="select"
                                         maxDate={new Date()}
-                                        minDate={new Date(1900, 0, 1)}
+                                        minDate={new Date(1900, 0, 1,12)}
                                         openToDate={new Date(1990, 0, 1)}
                                         required
                                     />

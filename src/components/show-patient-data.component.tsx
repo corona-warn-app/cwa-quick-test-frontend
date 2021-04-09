@@ -35,6 +35,7 @@ import utils from '../misc/utils';
 
 import CwaSpinner from './spinner/spinner.component';
 import { Sex } from '../misc/enum';
+import { getQrCodeValue, getQrCodeValueString } from '../misc/qr-code-value';
 
 const ShowPatientData = (props: any) => {
 
@@ -51,19 +52,31 @@ const ShowPatientData = (props: any) => {
     React.useEffect(() => {
         if (props.patient) {
             setPatient(props.patient)
-            setUuIdHash(sha256(props.patient.uuId).toString());
-            if (props.patient.includePersData) {
-                console.log(JSON.stringify(props.patient));
-                
-            // setQrCodeValue(JSON.stringify(props.patient, ['firstName','name','dateOfBirth','uuId']))
-            setQrCodeValue(JSON.stringify(props.patient))
-            } else {
-                setQrCodeValue(JSON.stringify(props.patient, ['uuId']))
-            }
+
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    React.useEffect(() => {
+        if (patient && patient.uuId) {
+            setUuIdHash(sha256(patient.uuId).toString());
+
+            if (patient.includePersData) {
+                
+                setQrCodeValue(getQrCodeValueString(patient.uuId, patient.firstName, patient.name, patient.dateOfBirth));
+            } else {
+                setQrCodeValue(getQrCodeValueString(patient.uuId));
+            }
+        }
+    }, [patient])
+    
+    React.useEffect(() => {
+        if (qrCodeValue) {
+            console.log(qrCodeValue);
+
+            console.log(JSON.stringify(getQrCodeValue(qrCodeValue)));
+        }
+    }, [qrCodeValue]);
     // set process id from hash
     React.useEffect(() => {
         if (uuIdHash) {
@@ -86,7 +99,7 @@ const ShowPatientData = (props: any) => {
     return (
         !isInit ? <CwaSpinner /> :
             <>
-            <Row id='process-row'>
+                <Row id='process-row'>
                     <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
                     <span>{processId}</span>
                 </Row>
@@ -99,13 +112,13 @@ const ShowPatientData = (props: any) => {
                         <Row>
                             <Col sm='5'>
                                 <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>{t('translation:qr-code')}</Card.Title>
-                                <hr/>
+                                <hr />
                                 {/* <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:process')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{processId}</Card.Text> */}
                                 <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.firstName + ' ' + patient?.name}</Card.Text>
                                 <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD. MM. yyyy' >{patient?.dateOfBirth as Date}</Moment>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.sex===Sex.MALE?t('translation:male'):patient?.sex===Sex.FEMALE?t('translation:female'):t('translation:diverse')}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.sex === Sex.MALE ? t('translation:male') : patient?.sex === Sex.FEMALE ? t('translation:female') : t('translation:diverse')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.street + ' ' + patient?.houseNumber}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.zip + ' ' + patient?.city}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.phoneNumber}</Card.Text>
