@@ -22,7 +22,7 @@
 import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap'
 import QrReader from 'react-qr-reader'
-import { v4 as uuid } from 'uuid';
+import Patient from '../misc/patient'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -43,11 +43,10 @@ const QrScan = (props: any) => {
                 if (!scanData.name) {
                     setMessage(t('translation:qr-code-no-patient-data'));
                 } else {
-                    const patientData = {
+                    const patientData : Patient = {
                         name: scanData.name ? scanData.name : '',
                         firstName: scanData.firstName ? scanData.firstName : '',
-                        // need to be real date object to work
-                        dateOfBirth: scanData.dateOfBirth ? Date.parse(scanData.dateOfBirth) : null,
+                        dateOfBirth: scanData.dateOfBirth ? new Date(scanData.dateOfBirth) : undefined,
                         sex: scanData.sex,
                         zip: scanData.zip,
                         city: scanData.city,
@@ -55,17 +54,18 @@ const QrScan = (props: any) => {
                         houseNumber: scanData.houseNumber,
                         phoneNumber: scanData.phoneNumber,
                         emailAddress: scanData.emailAddress,
-                        // TODO patient record component need uuId to run
-                        uuId: uuid()
                     }
                     props.setPatient(patientData);
-                    setMessage(JSON.stringify(patientData));
                     navigation.toRecordPatient();
                 }
             } catch (e) {
                 setMessage(t('translation:qr-code-no-patient-data'));
             }
         }
+    }
+
+    const fakeScan = () => {
+        handleScan(JSON.stringify({"firstName":"FTest","name":"Test","dateOfBirth":"1990-03-22T23:00:00.000Z","processingConsens":true,"uuId":"3d0212e4-be45-40cb-a8d3-252cb10546ca","includePersData":true,"sex":0,"zip":"42897","city":"Remscheid","street":"Emil-Nohl-Str.","houseNumber":"Emil-Nohl-Str.","phoneNumber":"015753509708","emailAddress":"test@rere","testId":"32323/232"}));
     }
 
     const handleError = (error: any) => {
@@ -119,6 +119,15 @@ const QrScan = (props: any) => {
                                 onClick={navigation.toLanding}
                            >
                                 {t('translation:cancel')}
+                            </Button>
+                        </Col>
+                        <Col sm='6' md='3'>
+                            <Button
+                                className='my-1 my-md-0 p-0'
+                                block
+                                onClick={fakeScan}
+                           >
+                                Fake
                             </Button>
                         </Col>
                     </Row>
