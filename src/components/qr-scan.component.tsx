@@ -22,7 +22,7 @@
 import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap'
 import QrReader from 'react-qr-reader'
-import { v4 as uuid } from 'uuid';
+import Patient from '../misc/patient'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -43,11 +43,10 @@ const QrScan = (props: any) => {
                 if (!scanData.name) {
                     setMessage(t('translation:qr-code-no-patient-data'));
                 } else {
-                    const patientData = {
+                    const patientData : Patient = {
                         name: scanData.name ? scanData.name : '',
                         firstName: scanData.firstName ? scanData.firstName : '',
-                        // need to be real date object to work
-                        dateOfBirth: scanData.dateOfBirth ? Date.parse(scanData.dateOfBirth) : null,
+                        dateOfBirth: scanData.dateOfBirth ? new Date(scanData.dateOfBirth) : undefined,
                         sex: scanData.sex,
                         zip: scanData.zip,
                         city: scanData.city,
@@ -55,11 +54,8 @@ const QrScan = (props: any) => {
                         houseNumber: scanData.houseNumber,
                         phoneNumber: scanData.phoneNumber,
                         emailAddress: scanData.emailAddress,
-                        // TODO patient record component need uuId to run
-                        uuId: uuid()
                     }
                     props.setPatient(patientData);
-                    setMessage(JSON.stringify(patientData));
                     navigation.toRecordPatient();
                 }
             } catch (e) {
