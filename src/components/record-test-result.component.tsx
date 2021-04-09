@@ -129,6 +129,9 @@ const RecordTestResult = (props: any) => {
                                     value={processNo}
                                     onChange={handleProcessNoChange}
                                     placeholder={t('translation:process-number')}
+                                    required
+                                    type='text'
+                                    min={utils.shortHashLen}
                                 />
                             </Col>
                         </Form.Group>
@@ -147,6 +150,7 @@ const RecordTestResult = (props: any) => {
                                         id="result-radio1"
                                         checked={testResult === TestResult.POSITIVE}
                                         onChange={() => setTestResult(TestResult.POSITIVE)}
+                                        required
                                     />
                                 </Form.Check>
                             </Col>

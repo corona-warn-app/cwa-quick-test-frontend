@@ -28,6 +28,9 @@ import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
+import { getPatientFromScan } from '../misc/qr-code-value';
+
+//const testFull = 'https://s.coronwarn.app?v=1#eyJmbiI6IkdvcmRvbiIsImxuIjoiR3J1bmQiLCJkb2IiOiIxOTkwLTAxLTAzIiwiZ3VpZCI6ImQ3ZWM2MDU4LWUyMzEtNGU4Yy1hNDFmLTViZjg1ZDdmZTI3MiIsInRpbWVzdGFtcCI6MTYxNzk3ODg4NDY4NX0=';
 
 const QrScan = (props: any) => {
 
@@ -35,29 +38,16 @@ const QrScan = (props: any) => {
     const { t } = useTranslation();
 
     const [message, setMessage] = React.useState('');
-   
+
     const handleScan = (data: string | null) => {
         if (props.setPatient && data) {
             try {
-                const scanData = JSON.parse(data);
-                if (!scanData.name) {
-                    setMessage(t('translation:qr-code-no-patient-data'));
-                } else {
-                    const patientData : Patient = {
-                        name: scanData.name ? scanData.name : '',
-                        firstName: scanData.firstName ? scanData.firstName : '',
-                        dateOfBirth: scanData.dateOfBirth ? new Date(scanData.dateOfBirth) : undefined,
-                        sex: scanData.sex,
-                        zip: scanData.zip,
-                        city: scanData.city,
-                        street: scanData.street,
-                        houseNumber: scanData.houseNumber,
-                        phoneNumber: scanData.phoneNumber,
-                        emailAddress: scanData.emailAddress,
-                    }
-                    props.setPatient(patientData);
-                    navigation.toRecordPatient();
-                }
+                console.log(data);
+                
+                const scannedPatient = getPatientFromScan(data);
+                props.setPatient(scannedPatient);
+                navigation.toRecordPatient();
+
             } catch (e) {
                 setMessage(t('translation:qr-code-no-patient-data'));
             }
@@ -68,7 +58,7 @@ const QrScan = (props: any) => {
         if (window.location.protocol == 'http:') {
             setMessage(t('translation:qr-scan-https-only'));
         } else {
-            setMessage("Scan Error: "+error);
+            setMessage("Scan Error: " + error);
         }
     }
 
@@ -113,7 +103,7 @@ const QrScan = (props: any) => {
                                 className='my-1 my-md-0 p-0'
                                 block
                                 onClick={navigation.toLanding}
-                           >
+                            >
                                 {t('translation:cancel')}
                             </Button>
                         </Col>
