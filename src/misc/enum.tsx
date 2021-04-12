@@ -6,7 +6,7 @@ export enum TestResult {
 }
 
 export enum Sex {
-    MALE = 0,
-    FEMALE = 1,
-    DIVERSE = 2,
+    MALE = 'MALE',
+    FEMALE = 'FEMALE',
+    DIVERSE = 'DIVERSE',
 }

@@ -36,6 +36,7 @@ import utils from '../misc/utils';
 import CwaSpinner from './spinner/spinner.component';
 import { Sex } from '../misc/enum';
 import { getQrCodeValue, getQrCodeValueString } from '../misc/qr-code-value';
+import { usePostPatient } from '../api';
 
 const ShowPatientData = (props: any) => {
 
@@ -44,9 +45,11 @@ const ShowPatientData = (props: any) => {
 
     const [isInit, setIsInit] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
+    const [patientToPost, setPatientToPost] = React.useState<Patient>();
     const [qrCodeValue, setQrCodeValue] = React.useState('');
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
+
 
     // set patient data on mount and set hash from uuid
     React.useEffect(() => {
@@ -95,6 +98,8 @@ const ShowPatientData = (props: any) => {
         props.setPatient(undefined);
         navigation.toLanding();
     }
+
+    const postPatient = usePostPatient(patientToPost, processId, finishProcess);
 
     return (
         !isInit ? <CwaSpinner /> :
@@ -153,7 +158,7 @@ const ShowPatientData = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={finishProcess}
+                                    onClick={()=>setPatientToPost(patient)}
                                 >
                                     {t('translation:process-finish')}
                                 </Button>

@@ -1,7 +1,7 @@
 const shortHashLen = 8;
 
 const pattern = {
-    processNo: '^[A-Fa-f0-9]{" + shortHashLen + "}$',
+    processNo: '^[A-Fa-f0-9]{' + shortHashLen + '}$',
     zip: '^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$',
     tel: '^([+]{1}[1-9]{1,2}|[0]{1}[1-9]{1})[0-9]{5,}$',
     eMail: '^[\\w\\d\\.-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,4}$'

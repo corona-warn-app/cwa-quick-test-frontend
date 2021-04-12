@@ -29,6 +29,7 @@ import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
 import utils from '../misc/utils';
 import { TestResult } from '../misc/enum';
+import { usePostTestResult } from '../api';
 
 const RecordTestResult = (props: any) => {
 
@@ -37,6 +38,7 @@ const RecordTestResult = (props: any) => {
 
     const [processNo, setProcessNo] = React.useState('');
     const [testResult, setTestResult] = React.useState<TestResult>();
+    const [testResultToPost, setTestResultToPost] = React.useState<TestResult>();
     const [message, setMessage] = React.useState('');
     const [isDataTransfer, setIsDataTransfer] = React.useState(false)
     const [isInputValid, setIsInputValid] = React.useState(false);
@@ -94,6 +96,17 @@ const RecordTestResult = (props: any) => {
             }
         });
     }
+
+    const finishProcess = () => {
+        navigation.toLanding();
+    }
+
+    React.useEffect(()=>{
+        console.log(testResultToPost);
+        
+    }, [testResultToPost])
+
+    const postTestResult = usePostTestResult(testResultToPost, processNo, finishProcess);
 
     var messageHtml = undefined;
     if (message.length > 0) {
@@ -216,7 +229,7 @@ const RecordTestResult = (props: any) => {
                                 className='my-1 my-md-0 p-0'
                                 block
                                 disabled={isDataTransfer || !isInputValid}
-                                onClick={sendTestResult}
+                                onClick={()=>setTestResultToPost(testResult)}
                             >
                                 {t('translation:data-submit')}
                             </Button>
