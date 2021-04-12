@@ -80,6 +80,11 @@
     }
   },
   "devDependencies": {
-    "@types/react-qr-reader": "^2.1.3"
+    "@types/http-proxy-agent": "^2.0.2",
+    "@types/http-proxy-middleware": "^1.0.0",
+    "@types/react-qr-reader": "^2.1.3",
+    "http-proxy-agent": "^4.0.1",
+    "http-proxy-middleware": "^1.1.1",
+    "https-proxy-agent": "^5.0.0"
   }
 }
