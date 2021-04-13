@@ -50,5 +50,7 @@
   "connection-error": "Verbindungsfehler: {{message}}",
   "qr-scan": "QR-Code scan",
   "qr-scan-https-only" : "QR-Scan braucht eine HTTPS Verbindung",
-  "qr-code-no-patient-data": "QR-code enthält keine Patientendaten"
+  "qr-code-no-patient-data": "QR-code enthält keine Patientendaten",
+  "error-message": "Fehlermeldung",
+  "serverError": "Ein Fehler ist auf dem Server aufgetreten. Server Antwort-code war: {{status}}"
 }
