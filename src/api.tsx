@@ -10,7 +10,7 @@ export const api = axios.create({
 
 const TRYS = 2;
 
-export const useGetUuid = (currentUuid: string, onSuccess?: () => void, onError?: () => void) => {
+export const useGetUuid = (currentUuid: string, onSuccess?: () => void, onError?: (status: string) => void) => {
 
     const { keycloak, initialized } = useKeycloak();
     const [uuid, setUuid] = React.useState('');
@@ -64,7 +64,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: () => void, onError?
                     setUuid(newUuid());
                 }
                 else if (onError) {
-                    onError();
+                    onError(error?.response?.status);
                 }
             });
 
