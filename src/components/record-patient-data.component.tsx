@@ -39,6 +39,8 @@ import { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import de from 'date-fns/locale/de';
 import { useGetUuid } from '../api';
+import ErrorPage from './error-page.component';
+
 registerLocale('de', de)
 
 
@@ -70,8 +72,11 @@ const RecordPatientData = (props: any) => {
     const [patient, setPatient] = React.useState<Patient>();
     const [message, setMessage] = React.useState('');
     const [validated, setValidated] = React.useState(false);
+    const [serverError, setServerError] = React.useState();
 
-    const uuid = useGetUuid(props?.patient?.uuId);
+    const uuid = useGetUuid(props?.patient?.uuId, undefined, (serverStatus: string) => {
+        setServerError(t('translation:serverError',{status: serverStatus}));
+    });
 
     // set values from props or new uuid on mount
     React.useEffect(() => {
@@ -235,6 +240,7 @@ const RecordPatientData = (props: any) => {
     }
 
     return (
+        serverError ? <ErrorPage message={serverError} cancel={navigation.toLanding}/> : 
         !isInit ? <CwaSpinner /> :
             <>
                 <Row id='process-row'>
