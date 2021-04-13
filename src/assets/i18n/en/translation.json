@@ -51,5 +51,6 @@
   "qr-scan-https-only" : "QR-Scan will work only with https",
   "qr-code-no-patient-data": "QR-code does not contain patient data",
   "error-message": "Error Message",
-  "serverError": "An error occured on sever side. Server response code was: {{status}}"
+  "serverError": "An error occured: ",
+  "error-patient-data-load": "Patient data failed to load."
 }

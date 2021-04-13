@@ -39,6 +39,10 @@ $data-card-border-radius: 10px;
 $input-border-radius: 4px;
 $user-image-width:39px;
 
+hr {
+    margin-left: 0;
+    margin-right: 0;
+  }
 
 #qt-header {
     margin: 0;
@@ -102,6 +106,11 @@ $user-image-width:39px;
 
 #data-card{
     height: 100%;
+    background-color: $light;
+    border-radius: $data-card-border-radius;
+    box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.15);
+}
+.data-modal{
     background-color: $light;
     border-radius: $data-card-border-radius;
     box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.15);

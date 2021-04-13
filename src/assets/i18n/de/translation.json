@@ -52,5 +52,6 @@
   "qr-scan-https-only" : "QR-Scan braucht eine HTTPS Verbindung",
   "qr-code-no-patient-data": "QR-code enthält keine Patientendaten",
   "error-message": "Fehlermeldung",
-  "serverError": "Ein Fehler ist auf dem Server aufgetreten. Server Antwort-code war: {{status}}"
+  "serverError": "Es ist ein Fehler aufgetreten: ",
+  "error-patient-data-load": "Patientendaten konnten nicht geladen werden."
 }

@@ -12,7 +12,7 @@ export const api = axios.create({
 
 const TRYS = 2;
 
-export const usePostTestResult = (testResult: TestResult|undefined, processId: string, onSuccess?: () => void, onError?: () => void) => {
+export const usePostTestResult = (testResult: TestResult|undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
 
     React.useEffect(() => {
@@ -39,14 +39,14 @@ export const usePostTestResult = (testResult: TestResult|undefined, processId: s
                 })
                 .catch(error => {
                     if (onError) {
-                        onError();
+                        onError(error);
                     }
                 });
         }
     }, [testResult])
 }
 
-export const usePostPatient = (patient: Patient|undefined, processId: string, onSuccess?: () => void, onError?: () => void) => {
+export const usePostPatient = (patient: Patient|undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
 
     React.useEffect(() => {
@@ -84,14 +84,14 @@ export const usePostPatient = (patient: Patient|undefined, processId: string, on
                 })
                 .catch(error => {
                     if (onError) {
-                        onError();
+                        onError(error);
                     }
                 });
         }
     }, [patient])
 }
 
-export const useGetUuid = (currentUuid: string, onSuccess?: () => void, onError?: (status: string) => void) => {
+export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
 
     const { keycloak, initialized } = useKeycloak();
     const [uuid, setUuid] = React.useState('');
@@ -135,7 +135,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: () => void, onError?
             .then(response => {
                 setResult(uuid);
                 if (onSuccess) {
-                    onSuccess();
+                    onSuccess(response?.status);
                 }
             })
             .catch(error => {
@@ -145,7 +145,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: () => void, onError?
                     setUuid(newUuid());
                 }
                 else if (onError) {
-                    onError(error?.response?.status);
+                    onError(error);
                 }
             });
 

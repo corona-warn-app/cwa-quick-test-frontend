@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap'
+import { Button, Card, Col, Modal, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -33,46 +33,54 @@ const ErrorPage = (props: any) => {
 
     const navigation = useNavigation();
     const { t } = useTranslation();
+    const [show, setShow] = React.useState(true);
+
+    const handleClose = () => setShow(false);
 
 
     return (
         <>
-            <Card id='data-card'>
-                <Card.Header id='data-header' className='pb-0'>
+            <Modal
+            contentClassName='data-modal'
+                show={props.message}
+                onHide={handleClose}
+                backdrop="static"
+                keyboard={false}
+                centered
+                >
+                <Modal.Header id='data-header' className='pb-0' >
                     <Row>
-                        <Col md='6'>
+                        <Col >
                             <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:error-message')}</Card.Title>
                         </Col>
                     </Row>
-                    <hr />
-                </Card.Header>
+                </Modal.Header>
 
                 {/*
     content area with process number input and radios
     */}
-                <Card.Body id='data-body' className='pt-0'>
-                    <div className="alert alert-error">
-                     {props.message}
-                    </div>
-                </Card.Body>
+                <Modal.Body className='py-0 bg-light'>
+                    <hr/>
+                    <p className='text-center'>
+                        <span className='font-weight-bold'>{t('translation:serverError')}</span>
+                        <span>{props.message}</span>
+                    </p>
+
+                    <hr/>
+                </Modal.Body>
 
                 {/*
     footer with cancel and submit button
     */}
-                <Card.Footer id='data-footer'>
-                    <Row>
-                        <Col sm='6' md='3'>
+                <Modal.Footer id='data-footer'>
                             <Button
-                                className='my-1 my-md-0 p-0'
-                                block
+                                className='py-0'
                                 onClick={props.cancel}
                             >
                                 {t('translation:cancel')}
                             </Button>
-                        </Col>
-                    </Row>
-                </Card.Footer>
-            </Card>
+                </Modal.Footer>
+            </Modal>
         </>
     )
 }
