@@ -37,14 +37,32 @@ import ShowPatientData from './components/show-patient-data.component';
 import RecordTestResult from './components/record-test-result.component';
 import QrScan from './components/qr-scan.component';
 import PrivateRoute from './components/private-route.component';
+import IError from './misc/error';
+import ErrorPage from './components/error-page.component';
+import useNavigation from './misc/navigation';
 
 const Routing = (props: any) => {
 
+    const navigation = useNavigation();
     const routes = useRoutes();
     const { t } = useTranslation();
     const [patient, setPatient] = React.useState<Patient>();
+    const [error, setError] = React.useState<IError>();
+    const [errorShow, setErrorShow] = React.useState(false);
 
     document.title = t('translation:title');
+
+    React.useEffect(()=>{
+        if (error) {
+            setErrorShow(true);
+        }
+    },[error])
+
+    React.useEffect(()=>{
+        if (!errorShow) {
+            setError(undefined);
+        }
+    },[errorShow])
 
     return (
         <BrowserRouter>
@@ -54,6 +72,7 @@ const Routing = (props: any) => {
     */}
             <Route path={routes.root}>
                 <Header />
+                <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={()=>setErrorShow(false)} />
             </Route>
 
             {/*
@@ -75,7 +94,7 @@ const Routing = (props: any) => {
                     roles={['c19_quick_test_counter']} 
                     path={routes.recordPatient}
                     component={ RecordPatientData }
-                    render={ (props) => <RecordPatientData {...props} setPatient={setPatient} patient={patient} /> }
+                    render={ (props) => <RecordPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} /> }
                 />
 
                 {/* Show Patient Data */}
@@ -83,7 +102,7 @@ const Routing = (props: any) => {
                     roles={['c19_quick_test_lab', 'c19_quick_test_counter']}
                     path={routes.showPatientRecord}
                     component={ ShowPatientData }
-                    render={ (props) => <ShowPatientData {...props} setPatient={setPatient} patient={patient} /> }
+                    render={ (props) => <ShowPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} /> }
                 />
                     
                 {/* Record Test Result */}
@@ -91,6 +110,7 @@ const Routing = (props: any) => {
                     roles={['c19_quick_test_lab']}
                     path={routes.recordTestResult}
                     component={ RecordTestResult }
+                    render={ (props) => <RecordTestResult {...props} setError={setError} /> }
                 />
                     
                 {/* QR Scan */}

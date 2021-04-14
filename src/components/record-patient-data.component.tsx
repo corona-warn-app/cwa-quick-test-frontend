@@ -39,7 +39,6 @@ import { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import de from 'date-fns/locale/de';
 import { useGetUuid } from '../api';
-import ErrorPage from './error-page.component';
 
 registerLocale('de', de)
 
@@ -49,9 +48,7 @@ const RecordPatientData = (props: any) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
 
-    const { keycloak, initialized } = useKeycloak();
     const [isInit, setIsInit] = React.useState(false)
-    const [isDataTransfer, setIsDataTransfer] = React.useState(false)
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
 
@@ -70,19 +67,17 @@ const RecordPatientData = (props: any) => {
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
-    const [message, setMessage] = React.useState('');
     const [validated, setValidated] = React.useState(false);
-    const [errorMessage, setErrorMessage] = React.useState<string>();
 
+    
     const handleError = (error: any) => {
         let msg = '';
 
         if (error) {
-            
+
             msg = error.message
         }
-
-        setErrorMessage(msg);
+        props.setError({ error: error, message: msg, onCancel:navigation.toLanding });
     }
 
 
@@ -242,15 +237,7 @@ const RecordPatientData = (props: any) => {
 
     }
 
-    var messageHtml = undefined;
-    if (message.length > 0) {
-        messageHtml = <div className="alert alert-warning">
-            {message}
-        </div>;
-    }
-
     return (
-        errorMessage ? <ErrorPage message={errorMessage} cancel={navigation.toLanding} /> :
             !isInit ? <CwaSpinner /> :
                 <>
                     <Row id='process-row'>
@@ -524,7 +511,6 @@ const RecordPatientData = (props: any) => {
                                         </Form.Check>
                                     </Col>
                                 </Form.Group>
-                                {messageHtml}
                             </Card.Body>
 
                             {/*
@@ -537,7 +523,6 @@ const RecordPatientData = (props: any) => {
                                             className='my-1 my-md-0 p-0'
                                             block
                                             onClick={handleCancel}
-                                            disabled={isDataTransfer}
                                         >
                                             {t('translation:cancel')}
                                         </Button>

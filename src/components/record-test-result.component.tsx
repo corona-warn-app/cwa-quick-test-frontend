@@ -30,7 +30,6 @@ import useNavigation from '../misc/navigation';
 import utils from '../misc/utils';
 import { TestResult } from '../misc/enum';
 import { usePostTestResult } from '../api';
-import ErrorPage from './error-page.component';
 
 const RecordTestResult = (props: any) => {
 
@@ -43,8 +42,6 @@ const RecordTestResult = (props: any) => {
     const [message, setMessage] = React.useState('');
     const [isDataTransfer, setIsDataTransfer] = React.useState(false)
     const [isInputValid, setIsInputValid] = React.useState(false);
-    const [errorMessage, setErrorMessage] = React.useState<string>();
-    const { keycloak, initialized } = useKeycloak();
 
     React.useEffect(() => {
         const procValid = utils.isProcessNoValid(processNo);
@@ -75,24 +72,15 @@ const RecordTestResult = (props: any) => {
         let msg = '';
 
         if (error) {
-            
+
             msg = error.message
         }
-
-        setErrorMessage(msg);
+        props.setError({ error: error, message: msg, onCancel:navigation.toLanding });
     }
 
     const postTestResult = usePostTestResult(testResultToPost, processNo, finishProcess, handleError);
 
-    var messageHtml = undefined;
-    if (message.length > 0) {
-        messageHtml = <div className="alert alert-warning">
-            {message}
-        </div>;
-    }
-
     return (
-        errorMessage ? <ErrorPage message={errorMessage} cancel={navigation.toLanding} /> :
         <>
             <Card id='data-card'>
                 <Card.Header id='data-header' className='pb-0'>
@@ -183,7 +171,6 @@ const RecordTestResult = (props: any) => {
                             </Col>
                         </Form.Group>
                     </Form>
-                    {messageHtml}
                 </Card.Body>
 
                 {/*
@@ -195,7 +182,6 @@ const RecordTestResult = (props: any) => {
                             <Button
                                 className='my-1 my-md-0 p-0'
                                 block
-                                disabled={isDataTransfer}
                                 onClick={navigation.toLanding}
                             >
                                 {t('translation:cancel')}
@@ -205,8 +191,8 @@ const RecordTestResult = (props: any) => {
                             <Button
                                 className='my-1 my-md-0 p-0'
                                 block
-                                disabled={isDataTransfer || !isInputValid}
-                                onClick={()=>setTestResultToPost(testResult)}
+                                disabled={!isInputValid}
+                                onClick={() => setTestResultToPost(testResult)}
                             >
                                 {t('translation:data-submit')}
                             </Button>

@@ -31,23 +31,23 @@ import { getPatientFromScan } from '../misc/qr-code-value';
 
 const ErrorPage = (props: any) => {
 
-    const navigation = useNavigation();
     const { t } = useTranslation();
     const [show, setShow] = React.useState(true);
 
-    const handleClose = () => setShow(false);
-
+    React.useEffect(() => {
+        if (props)
+            setShow(props.show);
+    }, [props.show])
 
     return (
         <>
             <Modal
-            contentClassName='data-modal'
-                show={props.message}
-                onHide={handleClose}
+                contentClassName='data-modal'
+                show={show}
                 backdrop="static"
                 keyboard={false}
                 centered
-                >
+            >
                 <Modal.Header id='data-header' className='pb-0' >
                     <Row>
                         <Col >
@@ -60,25 +60,25 @@ const ErrorPage = (props: any) => {
     content area with process number input and radios
     */}
                 <Modal.Body className='py-0 bg-light'>
-                    <hr/>
+                    <hr />
                     <p className='text-center'>
                         <span className='font-weight-bold'>{t('translation:serverError')}</span>
-                        <span>{props.message}</span>
+                        <span>{props?.error?.message}</span>
                     </p>
 
-                    <hr/>
+                    <hr />
                 </Modal.Body>
 
                 {/*
     footer with cancel and submit button
     */}
                 <Modal.Footer id='data-footer'>
-                            <Button
-                                className='py-0'
-                                onClick={props.cancel}
-                            >
-                                {t('translation:cancel')}
-                            </Button>
+                    <Button
+                        className='py-0'
+                        onClick={()=>{props.onCancel(); props.onHide();}}
+                    >
+                        {t('translation:cancel')}
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </>
