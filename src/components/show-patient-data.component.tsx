@@ -55,10 +55,8 @@ const ShowPatientData = (props: any) => {
 
     // set patient data on mount and set hash from uuid
     React.useEffect(() => {
-        console.log('befor');
 
         if (props.patient) {
-            console.log('after');
             setPatient(props.patient)
         }
         else
@@ -79,13 +77,7 @@ const ShowPatientData = (props: any) => {
         }
     }, [patient])
 
-    React.useEffect(() => {
-        if (qrCodeValue) {
-            console.log(qrCodeValue);
-
-            console.log(JSON.stringify(getQrCodeValue(qrCodeValue)));
-        }
-    }, [qrCodeValue]);
+    
     // set process id from hash
     React.useEffect(() => {
         if (uuIdHash) {
@@ -108,7 +100,7 @@ const ShowPatientData = (props: any) => {
         let msg = '';
 
         if (error) {
-            console.log(JSON.stringify(error));
+            
             msg = error.message
         }
 

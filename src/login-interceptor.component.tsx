@@ -38,7 +38,7 @@ const LoginInterceptor = (props: any) => {
       keycloak.login();
     }
 
-  }, [initialized, keycloak]);
+  }, [initialized, keycloak, keycloak.authenticated]);
 
   return (
     <>
