@@ -76,6 +76,7 @@ const ShowPatientData = (props: any) => {
     }, [patient])
 
 
+    
     // set process id from hash
     React.useEffect(() => {
         if (uuIdHash) {
@@ -100,6 +101,7 @@ const ShowPatientData = (props: any) => {
 
         if (error) {
 
+            
             msg = error.message
         }
         props.setError({ error: error, message: msg, onCancel: navigation.toLanding });

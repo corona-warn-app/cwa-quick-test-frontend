@@ -73,6 +73,7 @@ const RecordTestResult = (props: any) => {
 
         if (error) {
 
+            
             msg = error.message
         }
         props.setError({ error: error, message: msg, onCancel:navigation.toLanding });
