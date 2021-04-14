@@ -165,7 +165,7 @@ const RecordPatientData = (props: any) => {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, consent, uuid, persDataInQR])
+    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, testId, consent, uuid, persDataInQR])
 
 
     // emit patient object to parent

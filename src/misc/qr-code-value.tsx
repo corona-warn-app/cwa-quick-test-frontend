@@ -10,7 +10,7 @@ export interface IQRCodeValue {
     timestamp: number
 }
 
-const baseUrl = 'https://s.coronwarn.app?v=1#';
+const baseUrl = 'https://s.coronawarn.app?v=1#';
 
 export const getQrCodeValueString = (guid: string, fn: string = '', ln: string = '', dob?: Date) => {
 

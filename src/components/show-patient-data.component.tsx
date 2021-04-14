@@ -118,10 +118,8 @@ const ShowPatientData = (props: any) => {
     const postPatient = usePostPatient(patientToPost, processId, finishProcess, handleError);
 
     return (
-        <>
-            <ErrorPage message={errorMessage} cancel={navigation.toLanding} />
-
-            {!isInit ? <CwaSpinner /> :
+        errorMessage ? <ErrorPage message={errorMessage} cancel={navigation.toLanding} /> :
+        !isInit ? <CwaSpinner /> :
                 <>
                     <Row id='process-row'>
                         <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
@@ -186,9 +184,7 @@ const ShowPatientData = (props: any) => {
                         </Card.Footer>
                     </Card>
                 </>
-            }
-
-        </>
+            
     )
 }
 
