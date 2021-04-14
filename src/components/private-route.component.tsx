@@ -40,7 +40,7 @@ interface PrivateRouteParams extends RouteProps {
     const { keycloak, initialized } = useKeycloak();
 
     const isAutherized = () => {
-        console.log("initialized: " + initialized);
+      
         if (keycloak && roles) {
             return roles.some(role  => {
                 // In keycloak there are two ways of assiging roles to the user 

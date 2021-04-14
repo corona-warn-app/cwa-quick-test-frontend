@@ -78,7 +78,7 @@ const RecordPatientData = (props: any) => {
         let msg = '';
 
         if (error) {
-            console.log(JSON.stringify(error));
+            
             msg = error.message
         }
 

@@ -64,56 +64,18 @@ const RecordTestResult = (props: any) => {
         setProcessNo(evt.currentTarget.value);
     }
 
-    const sendTestResult = () => {
-        // TODO i18n
-        setIsDataTransfer(true);
-        setMessage("Daten werden übermittelt");
-        fetch("/api/quicktest", {
-            method: 'put',
-            body: JSON.stringify({ shortHash: processNo, result: testResult }),
-            headers: new Headers({
-                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
-                'Content-Type': 'application/json'
-            }),
-        }).then(res => {
-            setIsDataTransfer(false);
-            if (!res.ok) {
-                if (res.status == 404) {
-                    setMessage(t('translation:unknown-process-number', { processNo: processNo }))
-                } else {
-                    setMessage(t('translation:server-error', { status: res.status }));
-                    console.log("server error status: ", res.status);
-                }
-            } else {
-                navigation.toLanding();
-            }
-        }, error => {
-            setIsDataTransfer(false);
-            if (error instanceof TypeError) {
-                console.log("server not reachable");
-                setMessage(t("translation:server-not-reachable"));
-            } else {
-                console.log("connection error" + error.message)
-                setMessage(t("translation:connection-error", { message: error.message }));
-            }
-        });
-    }
 
     const finishProcess = () => {
         navigation.toLanding();
     }
 
-    React.useEffect(()=>{
-        console.log(testResultToPost);
-        
-    }, [testResultToPost])
 
 
     const handleError = (error: any) => {
         let msg = '';
 
         if (error) {
-            console.log(JSON.stringify(error));
+            
             msg = error.message
         }
 

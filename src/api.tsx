@@ -19,12 +19,10 @@ export const usePostTestResult = (testResult: TestResult|undefined, processId: s
 
         if (testResult && processId) {
 
-            const uri = 'api/quicktest/' + processId + '/testResult';
+            const uri = '/api/quicktest/' + processId + '/testResult';
             const body = JSON.stringify({
                 result: testResult
             });
-
-            console.log(body);
 
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
@@ -53,7 +51,7 @@ export const usePostPatient = (patient: Patient|undefined, processId: string, on
 
         if (patient && processId) {
 
-            const uri = 'api/quicktest/' + processId + '/personalData';
+            const uri = '/api/quicktest/' + processId + '/personalData';
             const body = JSON.stringify({
                 confirmationCwa: patient.includePersData,
                 insuranceBillStatus: patient.processingConsens,
@@ -68,8 +66,6 @@ export const usePostPatient = (patient: Patient|undefined, processId: string, on
                 zipCode: patient.zip,
                 city: patient.city
             });
-
-            console.log(body);
 
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
@@ -124,7 +120,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
         if (!uuidHash || uuidHash === '' || !isNew)
             return;
 
-        const uri = 'api/quicktest';
+        const uri = '/api/quicktest';
         const body = JSON.stringify({ hashedGuid: uuidHash });
         const header = {
             "Authorization": initialized ? `Bearer ${keycloak.token}` : "",

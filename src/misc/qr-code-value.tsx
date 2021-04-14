@@ -49,8 +49,8 @@ export const getPatientFromScan = (data: string | null) => {
     if (data) {
         try {
             const scanData = getQrCodeValue(data);
-            console.log(JSON.stringify(scanData));
-            
+
+
             if (scanData) {
 
                 result = {
@@ -60,8 +60,7 @@ export const getPatientFromScan = (data: string | null) => {
                 }
             }
         } catch (e) {
-            console.log(JSON.stringify(e));
-            
+
             result = null;
         }
     }
