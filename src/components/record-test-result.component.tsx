@@ -29,6 +29,8 @@ import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
 import utils from '../misc/utils';
 import { TestResult } from '../misc/enum';
+import { usePostTestResult } from '../api';
+import ErrorPage from './error-page.component';
 
 const RecordTestResult = (props: any) => {
 
@@ -37,9 +39,11 @@ const RecordTestResult = (props: any) => {
 
     const [processNo, setProcessNo] = React.useState('');
     const [testResult, setTestResult] = React.useState<TestResult>();
+    const [testResultToPost, setTestResultToPost] = React.useState<TestResult>();
     const [message, setMessage] = React.useState('');
     const [isDataTransfer, setIsDataTransfer] = React.useState(false)
     const [isInputValid, setIsInputValid] = React.useState(false);
+    const [errorMessage, setErrorMessage] = React.useState<string>();
     const { keycloak, initialized } = useKeycloak();
 
     React.useEffect(() => {
@@ -95,6 +99,29 @@ const RecordTestResult = (props: any) => {
         });
     }
 
+    const finishProcess = () => {
+        navigation.toLanding();
+    }
+
+    React.useEffect(()=>{
+        console.log(testResultToPost);
+        
+    }, [testResultToPost])
+
+
+    const handleError = (error: any) => {
+        let msg = '';
+
+        if (error) {
+            console.log(JSON.stringify(error));
+            msg = error.message
+        }
+
+        setErrorMessage(msg);
+    }
+
+    const postTestResult = usePostTestResult(testResultToPost, processNo, finishProcess, handleError);
+
     var messageHtml = undefined;
     if (message.length > 0) {
         messageHtml = <div className="alert alert-warning">
@@ -103,6 +130,7 @@ const RecordTestResult = (props: any) => {
     }
 
     return (
+        errorMessage ? <ErrorPage message={errorMessage} cancel={navigation.toLanding} /> :
         <>
             <Card id='data-card'>
                 <Card.Header id='data-header' className='pb-0'>
@@ -216,7 +244,7 @@ const RecordTestResult = (props: any) => {
                                 className='my-1 my-md-0 p-0'
                                 block
                                 disabled={isDataTransfer || !isInputValid}
-                                onClick={sendTestResult}
+                                onClick={()=>setTestResultToPost(testResult)}
                             >
                                 {t('translation:data-submit')}
                             </Button>
