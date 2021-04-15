@@ -53,5 +53,7 @@
   "qr-code-no-patient-data": "QR-code enthält keine Patientendaten",
   "error-message": "Fehlermeldung",
   "serverError": "Es ist ein Fehler aufgetreten: ",
-  "error-patient-data-load": "Patientendaten konnten nicht geladen werden."
+  "error-patient-data-load": "Patientendaten konnten nicht geladen werden.",
+  "statistics": "Auswertungen",
+  "failed-report": "Meldungen Positive Tests"
 }

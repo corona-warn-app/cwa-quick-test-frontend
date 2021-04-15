@@ -36,6 +36,9 @@ import RecordPatientData from './components/record-patient-data.component';
 import ShowPatientData from './components/show-patient-data.component';
 import RecordTestResult from './components/record-test-result.component';
 import QrScan from './components/qr-scan.component';
+import Statistics from './components/statistics.component';
+import FailedReport from './components/failed-report.component';
+
 import PrivateRoute from './components/private-route.component';
 import IError from './misc/error';
 import ErrorPage from './components/error-page.component';
@@ -120,6 +123,22 @@ const Routing = (props: any) => {
                     roles={['c19_quick_test_lab']}
                     component={ QrScan }
                     render={ (props) => <QrScan {...props} setPatient={setPatient}/> }
+                />
+
+                <PrivateRoute 
+                    exact 
+                    path={routes.statistics}
+                    roles={['c19_quick_test_lab']}
+                    component={ Statistics }
+                    render={ (props) => <Statistics {...props} setError={setError}/> }
+                />
+
+                <PrivateRoute 
+                    exact 
+                    path={routes.failedReport}
+                    roles={['c19_quick_test_lab']}
+                    component={ FailedReport }
+                    render={ (props) => <FailedReport {...props} setError={setError}/> }
                 />
 
                 {/* Show QR Scan Data */}
