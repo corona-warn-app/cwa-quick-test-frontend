@@ -12,7 +12,7 @@ export const api = axios.create({
 
 const TRYS = 2;
 
-export const usePostTestResult = (testResult: TestResult|undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
+export const usePostTestResult = (testResult: TestResult | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
 
     React.useEffect(() => {
@@ -23,6 +23,7 @@ export const usePostTestResult = (testResult: TestResult|undefined, processId: s
             const body = JSON.stringify({
                 result: testResult
             });
+
 
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
@@ -44,7 +45,7 @@ export const usePostTestResult = (testResult: TestResult|undefined, processId: s
     }, [testResult])
 }
 
-export const usePostPatient = (patient: Patient|undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
+export const usePostPatient = (patient: Patient | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
 
     React.useEffect(() => {
