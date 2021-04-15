@@ -20,11 +20,10 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
-import { useKeycloak } from '@react-keycloak/web';
 
 import sha256 from 'crypto-js/sha256';
 
@@ -60,7 +59,6 @@ const RecordPatientData = (props: any) => {
     const [houseNumber, setHouseNumber] = React.useState('');
     const [phoneNumber, setPhoneNumber] = React.useState('');
     const [emailAddress, setEmailAddress] = React.useState('');
-    const [testId, setTestId] = React.useState('');
     const [dateOfBirth, setDateOfBirth] = React.useState<Date>();
     const [sex, setSex] = React.useState<Sex>();
     const [consent, setConsent] = React.useState(false);
@@ -69,9 +67,6 @@ const RecordPatientData = (props: any) => {
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
     const [validated, setValidated] = React.useState(false);
-
-    const [testIdList, setTestIdList] = React.useState<string[] | undefined>();
-
 
 
     const handleError = (error: any) => {
@@ -101,21 +96,11 @@ const RecordPatientData = (props: any) => {
             setHouseNumber(p.houseNumber);
             setPhoneNumber(p.phoneNumber);
             setEmailAddress(p.emailAddress);
-            setTestId(p.testId);
             setSex(p.sex);
         }
 
-        loadTestIdList();
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    // set hash from uuid
-    React.useEffect(() => {
-        if (!testId && testIdList && testIdList.length > 0) {
-            setTestId(testIdList[testIdList.length - 1])
-        }
-    }, [testIdList]);
 
     // set hash from uuid
     React.useEffect(() => {
@@ -148,7 +133,6 @@ const RecordPatientData = (props: any) => {
             && houseNumber !== ''
             && phoneNumber !== ''
             && emailAddress !== ''
-            && testId !== ''
             && consent
             && uuid) {
             setCanGoNext(true);
@@ -167,14 +151,13 @@ const RecordPatientData = (props: any) => {
                 houseNumber: houseNumber,
                 phoneNumber: phoneNumber,
                 emailAddress: emailAddress,
-                testId: testId
             });
         }
         else {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, testId, consent, uuid, persDataInQR, billStatus])
+    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, consent, uuid, persDataInQR, billStatus])
 
 
     // emit patient object to parent
@@ -182,48 +165,6 @@ const RecordPatientData = (props: any) => {
         props.setPatient(patient);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [patient])
-
-    const loadTestIdList = () => {
-        if (!testIdList && localStorage) {
-            const items = localStorage.getItem('testids');
-
-            if (items) {
-                setTestIdList(JSON.parse(items));
-            }
-            else {
-                setTestIdList([]);
-            }
-
-        }
-        else {
-            setTestIdList([]);
-        }
-    }
-
-    const addTestIdToHistory = (testId: string) => {
-
-        if (testId && testIdList) {
-
-            const curId = testIdList.indexOf(testId);
-
-            // add if not present
-            if (curId < 0) {
-                testIdList.push(testId);
-            }
-
-            // remove/add if present and not last
-            if (curId >= 0 && curId !== testIdList.length - 1) {
-                testIdList.splice(curId);
-                testIdList.push(testId);
-            }
-
-            if (localStorage) {
-                localStorage.setItem('testids', JSON.stringify(testIdList))
-            }
-
-            setTestIdList(testIdList);
-        }
-    }
 
     // on input chnage
     const handleFirstNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -249,9 +190,6 @@ const RecordPatientData = (props: any) => {
     }
     const handleEmailAddressChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setEmailAddress(evt.currentTarget.value);
-    }
-    const handleTestIdChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setTestId(evt.currentTarget.value);
     }
     const handleDateChange = (evt: Date | [Date, Date] | null) => {
         let date: Date;
@@ -291,7 +229,6 @@ const RecordPatientData = (props: any) => {
         setValidated(true);
 
         if (form.checkValidity() && canGoNext) {
-            addTestIdToHistory(testId);
             setTimeout(navigation.toShowRecordPatient, 200);
         }
 
@@ -530,29 +467,6 @@ const RecordPatientData = (props: any) => {
                                         minLength={5}
                                         maxLength={255}
                                     />
-                                </Col>
-                            </Form.Group>
-
-                            <hr />
-
-                            {/* test-ID input */}
-                            <Form.Group as={Row} controlId='formTestIdInput'>
-                                <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:test-id')}</Form.Label>
-
-                                <Col xs='7' sm='9' className='d-flex'>
-                                    <Form.Control
-                                        className='qt-input'
-                                        value={testId}
-                                        onChange={handleTestIdChange}
-                                        placeholder={t('translation:test-id')}
-                                        type='text'
-                                        list='testid-list'
-                                        required
-                                        maxLength={15}
-                                    />
-                                    <datalist id="testid-list">
-                                        {testIdList ? testIdList.map(i => <option key={i} value={i} />) : undefined}
-                                    </datalist>
                                 </Col>
                             </Form.Group>
 
