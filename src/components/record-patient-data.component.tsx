@@ -68,6 +68,8 @@ const RecordPatientData = (props: any) => {
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
     const [validated, setValidated] = React.useState(false);
+    
+    const [testIdList, setTestIdList] = React.useState<string[]|undefined>();
 
     
     const handleError = (error: any) => {
@@ -80,7 +82,6 @@ const RecordPatientData = (props: any) => {
         }
         props.setError({ error: error, message: msg, onCancel:navigation.toLanding });
     }
-
 
     const uuid = useGetUuid(props?.patient?.uuId, undefined, handleError);
 
@@ -170,6 +171,33 @@ const RecordPatientData = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [patient])
 
+    React.useEffect(() => {
+        if (!testIdList) {
+            if (localStorage) {
+                const items = localStorage.getItem('testids');
+                if (items) {
+                    setTestIdList(JSON.parse(items));
+                } else {
+                    setTestIdList([]);
+                }
+            } else {
+                setTestIdList([]);
+            }
+        }
+    })
+
+    const addTestIdToHistory = (testId: string) => {
+        if (testId && testIdList && testIdList.indexOf(testId)<0) {
+            testIdList.push(testId);
+            testIdList.sort();
+            if (localStorage) {
+                console.log("store testid"+testId);
+                localStorage.setItem('testids',JSON.stringify(testIdList))
+            }
+            setTestIdList(testIdList);
+        }
+    }
+
     // on input chnage
     const handleFirstNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setFirstName(evt.currentTarget.value);
@@ -233,6 +261,7 @@ const RecordPatientData = (props: any) => {
         setValidated(true);
 
         if (form.checkValidity() && canGoNext) {
+            addTestIdToHistory(testId);
             setTimeout(navigation.toShowRecordPatient, 200);
         }
 
@@ -479,8 +508,12 @@ const RecordPatientData = (props: any) => {
                                             onChange={handleTestIdChange}
                                             placeholder={t('translation:test-id')}
                                             type='text'
+                                            list='testid-list'
                                             required
                                         />
+                                        <datalist id="testid-list">
+                                            {testIdList ? testIdList.map(i => <option value={i}/>) : undefined}
+                                        </datalist>
                                     </Col>
                                 </Form.Group>
 
