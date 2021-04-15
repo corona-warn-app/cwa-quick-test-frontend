@@ -54,8 +54,9 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
 
             const uri = '/api/quicktest/' + processId + '/personalData';
             const body = JSON.stringify({
-                confirmationCwa: patient.includePersData,
-                insuranceBillStatus: patient.processingConsens,
+                confirmationCwa: patient.processingConsens,
+                //Todo
+                insuranceBillStatus: false,
                 testBrandId: patient.testId,
                 lastName: patient.name,
                 firstName: patient.firstName,
@@ -65,9 +66,11 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                 street: patient.street,
                 houseNumber: patient.houseNumber,
                 zipCode: patient.zip,
-                city: patient.city
+                city: patient.city,
+                birthdy:patient.dateOfBirth.toISOString().split('T')[0],
             });
-
+            console.log(JSON.stringify(body));
+            
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
                 'Content-Type': 'application/json'
