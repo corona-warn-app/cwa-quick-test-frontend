@@ -65,6 +65,7 @@ const RecordPatientData = (props: any) => {
     const [sex, setSex] = React.useState<Sex>();
     const [consent, setConsent] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
+    const [billStatus, setBillStatus] = React.useState(false)
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
     const [validated, setValidated] = React.useState(false);
@@ -72,7 +73,7 @@ const RecordPatientData = (props: any) => {
     const [testIdList, setTestIdList] = React.useState<string[] | undefined>();
 
 
-    
+
     const handleError = (error: any) => {
         let msg = '';
 
@@ -93,6 +94,7 @@ const RecordPatientData = (props: any) => {
             setDateOfBirth(p.dateOfBirth);
             setConsent(p.processingConsens);
             setIncludePersData(p.includePersData);
+            setBillStatus(p.billStatus);
             setZip(p.zip);
             setCity(p.city);
             setStreet(p.street);
@@ -157,6 +159,7 @@ const RecordPatientData = (props: any) => {
                 processingConsens: consent,
                 uuId: uuid,
                 includePersData: persDataInQR,
+                billStatus: billStatus,
                 sex: sex,
                 zip: zip,
                 city: city,
@@ -171,7 +174,7 @@ const RecordPatientData = (props: any) => {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, testId, consent, uuid, persDataInQR])
+    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, testId, consent, uuid, persDataInQR, billStatus])
 
 
     // emit patient object to parent
@@ -198,18 +201,21 @@ const RecordPatientData = (props: any) => {
     }
 
     const addTestIdToHistory = (testId: string) => {
-        
+
         if (testId && testIdList) {
 
             const curId = testIdList.indexOf(testId);
 
-            // remove if present and not last
-            if (curId >= 0 && curId !== testIdList.length - 1) {
-                testIdList.splice(curId);
+            // add if not present
+            if (curId < 0) {
+                testIdList.push(testId);
             }
 
-            // add to last position
-            testIdList.push(testId);
+            // remove/add if present and not last
+            if (curId >= 0 && curId !== testIdList.length - 1) {
+                testIdList.splice(curId);
+                testIdList.push(testId);
+            }
 
             if (localStorage) {
                 localStorage.setItem('testids', JSON.stringify(testIdList))
@@ -266,6 +272,9 @@ const RecordPatientData = (props: any) => {
     }
     const handlePersDataInQRChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setIncludePersData(evt.currentTarget.checked);
+    }
+    const handleBillStatusChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setBillStatus(evt.currentTarget.checked);
     }
 
     const handleCancel = () => {
@@ -542,7 +551,7 @@ const RecordPatientData = (props: any) => {
                                         maxLength={15}
                                     />
                                     <datalist id="testid-list">
-                                        {testIdList ? testIdList.map(i => <option value={i} />) : undefined}
+                                        {testIdList ? testIdList.map(i => <option key={i} value={i} />) : undefined}
                                     </datalist>
                                 </Col>
                             </Form.Group>
@@ -571,7 +580,27 @@ const RecordPatientData = (props: any) => {
 
                                 <Col sm='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
-                                        <Form.Check.Input className='ckb-input' onChange={handlePersDataInQRChange} type='checkbox' checked={persDataInQR} />
+                                        <Form.Check.Input
+                                            className='ckb-input'
+                                            onChange={handlePersDataInQRChange}
+                                            type='checkbox'
+                                            checked={persDataInQR}
+                                        />
+                                    </Form.Check>
+                                </Col>
+                            </Form.Group>
+
+                        <Form.Group as={Row} controlId='formBillStatusCheckbox'>
+                                <Form.Label className='input-label' column sm='10' >{t('translation:bill-status')}</Form.Label>
+
+                                <Col sm='2' className='jcc-xs-jcfs-md'>
+                                    <Form.Check className='align-self-center'>
+                                        <Form.Check.Input
+                                            className='ckb-input'
+                                            onChange={handleBillStatusChange}
+                                            type='checkbox'
+                                            checked={billStatus}
+                                        />
                                     </Form.Check>
                                 </Col>
                             </Form.Group>
