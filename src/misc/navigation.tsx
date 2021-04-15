@@ -33,6 +33,8 @@ const useNavigation = () => {
     const _toRecordTestResult = () => { history.push(routes.recordTestResult); }
     const _toQRScan = () => { history.push(routes.qrScan); }
     const _toQRDataShow = () => { history.push(routes.qrDataShow); }
+    const _toStatistics = () => { history.push(routes.statistics); }
+    const _toFailedReport = () => { history.push(routes.failedReport); }
 
     const navigation = {
         routes: routes,
@@ -42,6 +44,8 @@ const useNavigation = () => {
         toRecordTestResult: _toRecordTestResult,
         toQRScan: _toQRScan,
         toQRDataShow: _toQRDataShow,
+        toStatistics: _toStatistics,
+        toFailedReport: _toFailedReport,
     }
 
     return navigation;

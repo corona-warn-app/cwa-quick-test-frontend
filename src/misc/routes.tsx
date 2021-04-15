@@ -28,7 +28,9 @@ const useRoutes = () => {
         showPatientRecord: '/record/show',
         recordTestResult: '/record/result',
         qrScan: '/qr/scan',
-        qrDataShow: '/qr/scan/show'
+        qrDataShow: '/qr/scan/show',
+        statistics: '/statistics',
+        failedReport: '/failedreport'
     }
 
     return result;
