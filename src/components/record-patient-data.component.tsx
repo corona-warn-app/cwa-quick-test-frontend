@@ -68,19 +68,17 @@ const RecordPatientData = (props: any) => {
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
     const [validated, setValidated] = React.useState(false);
-    
-    const [testIdList, setTestIdList] = React.useState<string[]|undefined>();
 
-    
+    const [testIdList, setTestIdList] = React.useState<string[] | undefined>();
+
+
     const handleError = (error: any) => {
         let msg = '';
 
         if (error) {
-
-            
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel:navigation.toLanding });
+        props.setError({ error: error, message: msg, onCancel: navigation.toLanding });
     }
 
     const uuid = useGetUuid(props?.patient?.uuId, undefined, handleError);
@@ -103,8 +101,18 @@ const RecordPatientData = (props: any) => {
             setTestId(p.testId);
             setSex(p.sex);
         }
+
+        loadTestIdList();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    // set hash from uuid
+    React.useEffect(() => {
+        if (!testId && testIdList && testIdList.length > 0) {
+            setTestId(testIdList[testIdList.length - 1])
+        }
+    }, [testIdList]);
 
     // set hash from uuid
     React.useEffect(() => {
@@ -171,29 +179,41 @@ const RecordPatientData = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [patient])
 
-    React.useEffect(() => {
-        if (!testIdList) {
-            if (localStorage) {
-                const items = localStorage.getItem('testids');
-                if (items) {
-                    setTestIdList(JSON.parse(items));
-                } else {
-                    setTestIdList([]);
-                }
-            } else {
+    const loadTestIdList = () => {
+        if (!testIdList && localStorage) {
+            const items = localStorage.getItem('testids');
+
+            if (items) {
+                setTestIdList(JSON.parse(items));
+            }
+            else {
                 setTestIdList([]);
             }
+
         }
-    })
+        else {
+            setTestIdList([]);
+        }
+    }
 
     const addTestIdToHistory = (testId: string) => {
-        if (testId && testIdList && testIdList.indexOf(testId)<0) {
-            testIdList.push(testId);
-            testIdList.sort();
-            if (localStorage) {
-                console.log("store testid"+testId);
-                localStorage.setItem('testids',JSON.stringify(testIdList))
+        
+        if (testId && testIdList) {
+
+            const curId = testIdList.indexOf(testId);
+
+            // remove if present and not last
+            if (curId >= 0 && curId !== testIdList.length - 1) {
+                testIdList.splice(curId);
             }
+
+            // add to last position
+            testIdList.push(testId);
+
+            if (localStorage) {
+                localStorage.setItem('testids', JSON.stringify(testIdList))
+            }
+
             setTestIdList(testIdList);
         }
     }
@@ -268,325 +288,325 @@ const RecordPatientData = (props: any) => {
     }
 
     return (
-            !isInit ? <CwaSpinner /> :
-                <>
-                    <Row id='process-row'>
-                        <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
-                        <span>{processId}</span>
-                    </Row>
-                    <Card id='data-card'>
+        !isInit ? <CwaSpinner /> :
+            <>
+                <Row id='process-row'>
+                    <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
+                    <span>{processId}</span>
+                </Row>
+                <Card id='data-card'>
 
-                        <Form onSubmit={handleSubmit} validated={validated}>
+                    <Form onSubmit={handleSubmit} validated={validated}>
 
-                            {/*
+                        {/*
     header with title and id card query
     */}
-                            <Card.Header id='data-header' className='pb-0'>
-                                <Row>
-                                    <Col md='4'>
-                                        <Card.Title className='m-md-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-data')}</Card.Title>
-                                    </Col>
-                                    <Col md='8' className='d-flex justify-content-center'>
-                                        <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
-                                    </Col>
-                                </Row>
-                                <hr />
-                            </Card.Header>
+                        <Card.Header id='data-header' className='pb-0'>
+                            <Row>
+                                <Col md='4'>
+                                    <Card.Title className='m-md-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-data')}</Card.Title>
+                                </Col>
+                                <Col md='8' className='d-flex justify-content-center'>
+                                    <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
+                                </Col>
+                            </Row>
+                            <hr />
+                        </Card.Header>
 
-                            {/*
+                        {/*
     content area with patient inputs and check box
     */}
-                            <Card.Body id='data-body' className='pt-0'>
+                        <Card.Body id='data-body' className='pt-0'>
 
-                                {/* first name input */}
-                                <Form.Group as={Row} controlId='formNameInput' className='mb-1'>
-                                    <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:first-name')}</Form.Label>
+                            {/* first name input */}
+                            <Form.Group as={Row} controlId='formNameInput' className='mb-1'>
+                                <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:first-name')}</Form.Label>
 
-                                    <Col xs='7' sm='9' className='d-flex'>
-                                        <Form.Control
-                                            className='qt-input'
-                                            value={firstName}
-                                            onChange={handleFirstNameChange}
-                                            placeholder={t('translation:first-name')}
-                                            type='text'
-                                            required
-                                            maxLength={79}
-                                        />
-                                    </Col>
-                                </Form.Group>
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Form.Control
+                                        className='qt-input'
+                                        value={firstName}
+                                        onChange={handleFirstNameChange}
+                                        placeholder={t('translation:first-name')}
+                                        type='text'
+                                        required
+                                        maxLength={79}
+                                    />
+                                </Col>
+                            </Form.Group>
 
-                                {/* name input */}
-                                <Form.Group as={Row} controlId='formNameInput' className='mb-1'>
-                                    <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:name')}</Form.Label>
+                            {/* name input */}
+                            <Form.Group as={Row} controlId='formNameInput' className='mb-1'>
+                                <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:name')}</Form.Label>
 
-                                    <Col xs='7' sm='9' className='d-flex'>
-                                        <Form.Control
-                                            className='qt-input'
-                                            value={name}
-                                            onChange={handleNameChange}
-                                            placeholder={t('translation:name')}
-                                            type='text'
-                                            required
-                                            maxLength={79}
-                                        />
-                                    </Col>
-                                </Form.Group>
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Form.Control
+                                        className='qt-input'
+                                        value={name}
+                                        onChange={handleNameChange}
+                                        placeholder={t('translation:name')}
+                                        type='text'
+                                        required
+                                        maxLength={79}
+                                    />
+                                </Col>
+                            </Form.Group>
 
-                                {/* date of birth input */}
-                                <Form.Group as={Row} className='mb-1'>
-                                    <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:date-of-birth')}</Form.Label>
+                            {/* date of birth input */}
+                            <Form.Group as={Row} className='mb-1'>
+                                <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:date-of-birth')}</Form.Label>
 
-                                    <Col xs='7' sm='9' className='d-flex'>
-                                        <DatePicker
-                                            selected={dateOfBirth}
-                                            onChange={handleDateChange}
-                                            locale='de'
-                                            dateFormat='dd. MM. yyyy'
-                                            isClearable
-                                            placeholderText={t('translation:date-of-birth')}
-                                            className='qt-input form-control'
-                                            wrapperClassName='align-self-center'
-                                            showMonthDropdown
-                                            showYearDropdown
-                                            dropdownMode="select"
-                                            maxDate={new Date()}
-                                            minDate={new Date(1900, 0, 1, 12)}
-                                            openToDate={new Date(1990, 0, 1)}
-                                            required
-                                        />
-                                    </Col>
-                                </Form.Group>
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <DatePicker
+                                        selected={dateOfBirth}
+                                        onChange={handleDateChange}
+                                        locale='de'
+                                        dateFormat='dd. MM. yyyy'
+                                        isClearable
+                                        placeholderText={t('translation:date-of-birth')}
+                                        className='qt-input form-control'
+                                        wrapperClassName='align-self-center'
+                                        showMonthDropdown
+                                        showYearDropdown
+                                        dropdownMode="select"
+                                        maxDate={new Date()}
+                                        minDate={new Date(1900, 0, 1, 12)}
+                                        openToDate={new Date(1990, 0, 1)}
+                                        required
+                                    />
+                                </Col>
+                            </Form.Group>
 
-                                {/* sex input */}
-                                <Row>
-                                    <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:sex')}</Form.Label>
+                            {/* sex input */}
+                            <Row>
+                                <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:sex')}</Form.Label>
 
-                                    <Col xs='7' sm='9' className='d-flex'>
-                                        <Row>
-                                            <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio1'>
-                                                <Form.Check className='d-flex align-self-center'>
-                                                    <Form.Check.Input
-                                                        className='rdb-input'
-                                                        type='radio'
-                                                        name="sex-radios"
-                                                        id="sex-radio1"
-                                                        checked={sex === Sex.MALE}
-                                                        onChange={() => setSex(Sex.MALE)}
-                                                    />
-                                                    <Form.Label className='rdb-label mb-0'>{t('translation:male')}</Form.Label>
-                                                </Form.Check>
-                                            </Form.Group>
-                                            <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio2'>
-                                                <Form.Check className='d-flex align-self-center'>
-                                                    <Form.Check.Input required
-                                                        className='rdb-input'
-                                                        type='radio'
-                                                        name="sex-radios"
-                                                        id="sex-radio2"
-                                                        checked={sex === Sex.FEMALE}
-                                                        onChange={() => setSex(Sex.FEMALE)}
-                                                    />
-                                                    <Form.Label className='rdb-label mb-0'>{t('translation:female')}</Form.Label>
-                                                </Form.Check>
-                                            </Form.Group>
-                                            <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio3'>
-                                                <Form.Check className='d-flex align-self-center'>
-                                                    <Form.Check.Input
-                                                        className='rdb-input'
-                                                        type='radio'
-                                                        name="sex-radios"
-                                                        id="sex-radio3"
-                                                        checked={sex === Sex.DIVERSE}
-                                                        onChange={() => setSex(Sex.DIVERSE)}
-                                                    />
-                                                    <Form.Label className='rdb-label mb-0'>{t('translation:diverse')}</Form.Label>
-                                                </Form.Check>
-                                            </Form.Group>
-                                        </Row>
-                                    </Col>
-                                </Row>
-
-                                <hr />
-
-                                {/* address input */}
-                                <Row>
-                                    <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:address')}</Form.Label>
-
-                                    <Col xs='7' sm='9' className='d-flex'>
-                                        <Row>
-
-                                            <Form.Group as={Col} sm='4' className='mb-1' controlId='zipInput'>
-                                                <Form.Control
-                                                    className='qt-input'
-                                                    value={zip}
-                                                    onChange={handleZipChange}
-                                                    placeholder={t('translation:zip')}
-                                                    type='text'
-                                                    required
-                                                    pattern={utils.pattern.zip}
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Row>
+                                        <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio1'>
+                                            <Form.Check className='d-flex align-self-center'>
+                                                <Form.Check.Input
+                                                    className='rdb-input'
+                                                    type='radio'
+                                                    name="sex-radios"
+                                                    id="sex-radio1"
+                                                    checked={sex === Sex.MALE}
+                                                    onChange={() => setSex(Sex.MALE)}
                                                 />
-
-                                            </Form.Group>
-                                            <Form.Group as={Col} sm='8' className='my-1 mt-sm-0' controlId='cityInput'>
-                                                <Form.Control
-                                                    className='qt-input'
-                                                    value={city}
-                                                    onChange={handleCityChange}
-                                                    placeholder={t('translation:city')}
-                                                    type='text'
-                                                    required
-                                                    maxLength={255}
+                                                <Form.Label className='rdb-label mb-0'>{t('translation:male')}</Form.Label>
+                                            </Form.Check>
+                                        </Form.Group>
+                                        <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio2'>
+                                            <Form.Check className='d-flex align-self-center'>
+                                                <Form.Check.Input required
+                                                    className='rdb-input'
+                                                    type='radio'
+                                                    name="sex-radios"
+                                                    id="sex-radio2"
+                                                    checked={sex === Sex.FEMALE}
+                                                    onChange={() => setSex(Sex.FEMALE)}
                                                 />
-                                            </Form.Group>
-                                            <Form.Group as={Col} sm='8' className='my-1 mb-sm-0' controlId='streetInput'>
-                                                <Form.Control
-                                                    className='qt-input'
-                                                    value={street}
-                                                    onChange={handleStreetChange}
-                                                    placeholder={t('translation:street')}
-                                                    type='text'
-                                                    required
-                                                    maxLength={255}
+                                                <Form.Label className='rdb-label mb-0'>{t('translation:female')}</Form.Label>
+                                            </Form.Check>
+                                        </Form.Group>
+                                        <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId='sex-radio3'>
+                                            <Form.Check className='d-flex align-self-center'>
+                                                <Form.Check.Input
+                                                    className='rdb-input'
+                                                    type='radio'
+                                                    name="sex-radios"
+                                                    id="sex-radio3"
+                                                    checked={sex === Sex.DIVERSE}
+                                                    onChange={() => setSex(Sex.DIVERSE)}
                                                 />
-                                            </Form.Group>
-                                            <Form.Group as={Col} sm='4' className='mt-1 mb-sm-0' controlId='houseNumberInput'>
-                                                <Form.Control
-                                                    className='qt-input'
-                                                    value={houseNumber}
-                                                    onChange={handleHouseNumberChange}
-                                                    placeholder={t('translation:house-number')}
-                                                    type='text'
-                                                    required
-                                                    maxLength={15}
-                                                />
-                                            </Form.Group>
-                                        </Row>
-                                    </Col>
-                                </Row>
+                                                <Form.Label className='rdb-label mb-0'>{t('translation:diverse')}</Form.Label>
+                                            </Form.Check>
+                                        </Form.Group>
+                                    </Row>
+                                </Col>
+                            </Row>
 
-                                <hr />
+                            <hr />
 
-                                {/* phone number input */}
-                                <Form.Group as={Row} controlId='formPhoneInput' className='mb-1'>
-                                    <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:phone-number')}</Form.Label>
+                            {/* address input */}
+                            <Row>
+                                <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:address')}</Form.Label>
 
-                                    <Col xs='7' sm='9' className='d-flex'>
-                                        <Form.Control
-                                            className='qt-input'
-                                            value={phoneNumber}
-                                            onChange={handlePhoneNumberChange}
-                                            placeholder={t('translation:phone-number')}
-                                            type='tel'
-                                            required
-                                            pattern={utils.pattern.tel}
-                                            maxLength={79}
-                                        />
-                                    </Col>
-                                </Form.Group>
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Row>
 
-                                {/* email input */}
-                                <Form.Group as={Row} controlId='formEmailInput' className='mb-1'>
-                                    <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:email-address')}</Form.Label>
-
-                                    <Col xs='7' sm='9' className='d-flex'>
-                                        <Form.Control
-                                            className='qt-input'
-                                            value={emailAddress}
-                                            onChange={handleEmailAddressChange}
-                                            placeholder={t('translation:email-address')}
-                                            type='email'
-                                            required
-                                            pattern={utils.pattern.eMail}
-                                            minLength={5}
-                                            maxLength={255}
-                                        />
-                                    </Col>
-                                </Form.Group>
-
-                                <hr />
-
-                                {/* test-ID input */}
-                                <Form.Group as={Row} controlId='formTestIdInput'>
-                                    <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:test-id')}</Form.Label>
-
-                                    <Col xs='7' sm='9' className='d-flex'>
-                                        <Form.Control
-                                            className='qt-input'
-                                            value={testId}
-                                            onChange={handleTestIdChange}
-                                            placeholder={t('translation:test-id')}
-                                            type='text'
-                                            list='testid-list'
-                                            required
-                                            maxLength={15}
-                                        />
-                                        <datalist id="testid-list">
-                                            {testIdList ? testIdList.map(i => <option value={i}/>) : undefined}
-                                        </datalist>
-                                    </Col>
-                                </Form.Group>
-
-                                <hr />
-
-                                {/* processing consent check box */}
-                                <Form.Group as={Row} controlId='formConsentCheckbox'>
-                                    <Form.Label className='input-label' column sm='10' >{t('translation:processing-consent')}</Form.Label>
-
-                                    <Col sm='2' className='jcc-xs-jcfs-md'>
-                                        <Form.Check className='align-self-center'>
-                                            <Form.Check.Input
-                                                className='ckb-input'
-                                                onChange={handleConsentChange}
-                                                type='checkbox'
-                                                checked={consent}
+                                        <Form.Group as={Col} sm='4' className='mb-1' controlId='zipInput'>
+                                            <Form.Control
+                                                className='qt-input'
+                                                value={zip}
+                                                onChange={handleZipChange}
+                                                placeholder={t('translation:zip')}
+                                                type='text'
                                                 required
+                                                pattern={utils.pattern.zip}
                                             />
-                                        </Form.Check>
-                                    </Col>
-                                </Form.Group>
 
-                                <Form.Group as={Row} controlId='formKeepPrivateCheckbox'>
-                                    <Form.Label className='input-label' column sm='10' >{t('translation:patientdata-exclude')}</Form.Label>
+                                        </Form.Group>
+                                        <Form.Group as={Col} sm='8' className='my-1 mt-sm-0' controlId='cityInput'>
+                                            <Form.Control
+                                                className='qt-input'
+                                                value={city}
+                                                onChange={handleCityChange}
+                                                placeholder={t('translation:city')}
+                                                type='text'
+                                                required
+                                                maxLength={255}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group as={Col} sm='8' className='my-1 mb-sm-0' controlId='streetInput'>
+                                            <Form.Control
+                                                className='qt-input'
+                                                value={street}
+                                                onChange={handleStreetChange}
+                                                placeholder={t('translation:street')}
+                                                type='text'
+                                                required
+                                                maxLength={255}
+                                            />
+                                        </Form.Group>
+                                        <Form.Group as={Col} sm='4' className='mt-1 mb-sm-0' controlId='houseNumberInput'>
+                                            <Form.Control
+                                                className='qt-input'
+                                                value={houseNumber}
+                                                onChange={handleHouseNumberChange}
+                                                placeholder={t('translation:house-number')}
+                                                type='text'
+                                                required
+                                                maxLength={15}
+                                            />
+                                        </Form.Group>
+                                    </Row>
+                                </Col>
+                            </Row>
 
-                                    <Col sm='2' className='jcc-xs-jcfs-md'>
-                                        <Form.Check className='align-self-center'>
-                                            <Form.Check.Input className='ckb-input' onChange={handlePersDataInQRChange} type='checkbox' checked={persDataInQR} />
-                                        </Form.Check>
-                                    </Col>
-                                </Form.Group>
-                            </Card.Body>
+                            <hr />
 
-                            {/*
+                            {/* phone number input */}
+                            <Form.Group as={Row} controlId='formPhoneInput' className='mb-1'>
+                                <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:phone-number')}</Form.Label>
+
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Form.Control
+                                        className='qt-input'
+                                        value={phoneNumber}
+                                        onChange={handlePhoneNumberChange}
+                                        placeholder={t('translation:phone-number')}
+                                        type='tel'
+                                        required
+                                        pattern={utils.pattern.tel}
+                                        maxLength={79}
+                                    />
+                                </Col>
+                            </Form.Group>
+
+                            {/* email input */}
+                            <Form.Group as={Row} controlId='formEmailInput' className='mb-1'>
+                                <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:email-address')}</Form.Label>
+
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Form.Control
+                                        className='qt-input'
+                                        value={emailAddress}
+                                        onChange={handleEmailAddressChange}
+                                        placeholder={t('translation:email-address')}
+                                        type='email'
+                                        required
+                                        pattern={utils.pattern.eMail}
+                                        minLength={5}
+                                        maxLength={255}
+                                    />
+                                </Col>
+                            </Form.Group>
+
+                            <hr />
+
+                            {/* test-ID input */}
+                            <Form.Group as={Row} controlId='formTestIdInput'>
+                                <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:test-id')}</Form.Label>
+
+                                <Col xs='7' sm='9' className='d-flex'>
+                                    <Form.Control
+                                        className='qt-input'
+                                        value={testId}
+                                        onChange={handleTestIdChange}
+                                        placeholder={t('translation:test-id')}
+                                        type='text'
+                                        list='testid-list'
+                                        required
+                                        maxLength={15}
+                                    />
+                                    <datalist id="testid-list">
+                                        {testIdList ? testIdList.map(i => <option value={i} />) : undefined}
+                                    </datalist>
+                                </Col>
+                            </Form.Group>
+
+                            <hr />
+
+                            {/* processing consent check box */}
+                            <Form.Group as={Row} controlId='formConsentCheckbox'>
+                                <Form.Label className='input-label' column sm='10' >{t('translation:processing-consent')}</Form.Label>
+
+                                <Col sm='2' className='jcc-xs-jcfs-md'>
+                                    <Form.Check className='align-self-center'>
+                                        <Form.Check.Input
+                                            className='ckb-input'
+                                            onChange={handleConsentChange}
+                                            type='checkbox'
+                                            checked={consent}
+                                            required
+                                        />
+                                    </Form.Check>
+                                </Col>
+                            </Form.Group>
+
+                            <Form.Group as={Row} controlId='formKeepPrivateCheckbox'>
+                                <Form.Label className='input-label' column sm='10' >{t('translation:patientdata-exclude')}</Form.Label>
+
+                                <Col sm='2' className='jcc-xs-jcfs-md'>
+                                    <Form.Check className='align-self-center'>
+                                        <Form.Check.Input className='ckb-input' onChange={handlePersDataInQRChange} type='checkbox' checked={persDataInQR} />
+                                    </Form.Check>
+                                </Col>
+                            </Form.Group>
+                        </Card.Body>
+
+                        {/*
     footer with clear and nex button
     */}
-                            <Card.Footer id='data-footer'>
-                                <Row>
-                                    <Col xs='6' md='3'>
-                                        <Button
-                                            className='my-1 my-md-0 p-0'
-                                            block
-                                            onClick={handleCancel}
-                                        >
-                                            {t('translation:cancel')}
-                                        </Button>
-                                    </Col>
-                                    <Col xs='6' md='3' className='pr-md-0'>
-                                        <Button
-                                            className='my-1 my-md-0 p-0'
-                                            block
-                                            type='submit'
-                                        // onClick={navigation.toShowRecordPatient}
-                                        // disabled={!canGoNext}
-                                        >
-                                            {t('translation:next')}
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Card.Footer>
+                        <Card.Footer id='data-footer'>
+                            <Row>
+                                <Col xs='6' md='3'>
+                                    <Button
+                                        className='my-1 my-md-0 p-0'
+                                        block
+                                        onClick={handleCancel}
+                                    >
+                                        {t('translation:cancel')}
+                                    </Button>
+                                </Col>
+                                <Col xs='6' md='3' className='pr-md-0'>
+                                    <Button
+                                        className='my-1 my-md-0 p-0'
+                                        block
+                                        type='submit'
+                                    // onClick={navigation.toShowRecordPatient}
+                                    // disabled={!canGoNext}
+                                    >
+                                        {t('translation:next')}
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Card.Footer>
 
-                        </Form>
-                    </Card>
-                </>
+                    </Form>
+                </Card>
+            </>
     )
 }
 
