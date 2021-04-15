@@ -310,6 +310,7 @@ const RecordPatientData = (props: any) => {
                                             placeholder={t('translation:first-name')}
                                             type='text'
                                             required
+                                            maxLength={79}
                                         />
                                     </Col>
                                 </Form.Group>
@@ -326,6 +327,7 @@ const RecordPatientData = (props: any) => {
                                             placeholder={t('translation:name')}
                                             type='text'
                                             required
+                                            maxLength={79}
                                         />
                                     </Col>
                                 </Form.Group>
@@ -433,6 +435,7 @@ const RecordPatientData = (props: any) => {
                                                     placeholder={t('translation:city')}
                                                     type='text'
                                                     required
+                                                    maxLength={255}
                                                 />
                                             </Form.Group>
                                             <Form.Group as={Col} sm='8' className='my-1 mb-sm-0' controlId='streetInput'>
@@ -443,6 +446,7 @@ const RecordPatientData = (props: any) => {
                                                     placeholder={t('translation:street')}
                                                     type='text'
                                                     required
+                                                    maxLength={255}
                                                 />
                                             </Form.Group>
                                             <Form.Group as={Col} sm='4' className='mt-1 mb-sm-0' controlId='houseNumberInput'>
@@ -453,6 +457,7 @@ const RecordPatientData = (props: any) => {
                                                     placeholder={t('translation:house-number')}
                                                     type='text'
                                                     required
+                                                    maxLength={15}
                                                 />
                                             </Form.Group>
                                         </Row>
@@ -474,6 +479,7 @@ const RecordPatientData = (props: any) => {
                                             type='tel'
                                             required
                                             pattern={utils.pattern.tel}
+                                            maxLength={79}
                                         />
                                     </Col>
                                 </Form.Group>
@@ -491,6 +497,8 @@ const RecordPatientData = (props: any) => {
                                             type='email'
                                             required
                                             pattern={utils.pattern.eMail}
+                                            minLength={5}
+                                            maxLength={255}
                                         />
                                     </Col>
                                 </Form.Group>
@@ -510,6 +518,7 @@ const RecordPatientData = (props: any) => {
                                             type='text'
                                             list='testid-list'
                                             required
+                                            maxLength={15}
                                         />
                                         <datalist id="testid-list">
                                             {testIdList ? testIdList.map(i => <option value={i}/>) : undefined}
