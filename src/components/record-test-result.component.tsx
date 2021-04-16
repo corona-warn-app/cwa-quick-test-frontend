@@ -30,6 +30,7 @@ import utils from '../misc/utils';
 import { TestResult } from '../misc/enum';
 import { usePostTestResult } from '../api';
 import ITestResult from '../misc/test-result';
+import useLocalStorage from '../misc/local-storage';
 
 const RecordTestResult = (props: any) => {
 
@@ -42,11 +43,11 @@ const RecordTestResult = (props: any) => {
     const [message, setMessage] = React.useState('');
     const [isInputValid, setIsInputValid] = React.useState(false);
     const [testId, setTestId] = React.useState('');
-    const [testIdList, setTestIdList] = React.useState<string[] | undefined>();
+    const [testIdList, setTestIdList] = useLocalStorage('testids', []);
     const [validated, setValidated] = React.useState(false);
 
     React.useEffect(() => {
-        loadTestIdList();
+        // loadTestIdList();
     }, [])
 
     // set last testId
@@ -88,10 +89,6 @@ const RecordTestResult = (props: any) => {
             if (curId >= 0 && curId !== testIdList.length - 1) {
                 testIdList.splice(curId);
                 testIdList.push(testId);
-            }
-
-            if (localStorage) {
-                localStorage.setItem('testids', JSON.stringify(testIdList))
             }
 
             setTestIdList(testIdList);
@@ -198,7 +195,7 @@ const RecordTestResult = (props: any) => {
                                     maxLength={15}
                                 />
                                 <datalist id="testid-list">
-                                    {testIdList ? testIdList.map(i => <option key={i} value={i} />) : undefined}
+                                    {testIdList ? testIdList.map((i:string) => <option key={i} value={i} />) : undefined}
                                 </datalist>
                             </Col>
                         </Form.Group>

@@ -21,16 +21,17 @@
 
 const useRoutes = () => {
 
+    const bastPath = '/:mandant'
+
     const result = {
-        root: '/',
-        landing: '/',
-        recordPatient: '/record',
-        showPatientRecord: '/record/show',
-        recordTestResult: '/record/result',
-        qrScan: '/qr/scan',
-        qrDataShow: '/qr/scan/show',
-        statistics: '/statistics',
-        failedReport: '/failedreport'
+        root: bastPath,
+        landing: bastPath,
+        recordPatient: bastPath + '/record',
+        showPatientRecord: bastPath + '/record/show',
+        recordTestResult: bastPath + '/record/result',
+        qrScan: bastPath + '/qr/scan',
+        statistics: bastPath + '/statistics',
+        failedReport: bastPath + '/failedreport'
     }
 
     return result;
