@@ -63,7 +63,7 @@ const RecordPatientData = (props: any) => {
     const [sex, setSex] = React.useState<Sex>();
     const [consent, setConsent] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
-    const [billStatus, setBillStatus] = React.useState(false)
+    const [dataPrivacyApproved, setDataPrivacyApproved] = React.useState(false)
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
     const [validated, setValidated] = React.useState(false);
@@ -89,7 +89,7 @@ const RecordPatientData = (props: any) => {
             setDateOfBirth(p.dateOfBirth);
             setConsent(p.processingConsens);
             setIncludePersData(p.includePersData);
-            setBillStatus(p.billStatus);
+            setDataPrivacyApproved(p.dataPrivacyApproved);
             setZip(p.zip);
             setCity(p.city);
             setStreet(p.street);
@@ -134,6 +134,7 @@ const RecordPatientData = (props: any) => {
             && phoneNumber !== ''
             && emailAddress !== ''
             && consent
+            && dataPrivacyApproved
             && uuid) {
             setCanGoNext(true);
             setPatient({
@@ -143,7 +144,7 @@ const RecordPatientData = (props: any) => {
                 processingConsens: consent,
                 uuId: uuid,
                 includePersData: persDataInQR,
-                billStatus: billStatus,
+                dataPrivacyApproved: dataPrivacyApproved,
                 sex: sex,
                 zip: zip,
                 city: city,
@@ -157,7 +158,7 @@ const RecordPatientData = (props: any) => {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, consent, uuid, persDataInQR, billStatus])
+    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, consent, uuid, persDataInQR, dataPrivacyApproved])
 
 
     // emit patient object to parent
@@ -211,8 +212,8 @@ const RecordPatientData = (props: any) => {
     const handlePersDataInQRChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setIncludePersData(evt.currentTarget.checked);
     }
-    const handleBillStatusChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setBillStatus(evt.currentTarget.checked);
+    const handleDataPrivacyApproved = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setDataPrivacyApproved(evt.currentTarget.checked);
     }
 
     const handleCancel = () => {
@@ -504,16 +505,16 @@ const RecordPatientData = (props: any) => {
                                 </Col>
                             </Form.Group>
 
-                        <Form.Group as={Row} controlId='formBillStatusCheckbox'>
-                                <Form.Label className='input-label' column sm='10' >{t('translation:bill-status')}</Form.Label>
+                        <Form.Group as={Row} controlId='formDataPrivacyCheckbox'>
+                                <Form.Label className='input-label' column sm='10' >{t('translation:data-privacy-approve')}</Form.Label>
 
                                 <Col sm='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
                                         <Form.Check.Input
                                             className='ckb-input'
-                                            onChange={handleBillStatusChange}
+                                            onChange={handleDataPrivacyApproved}
                                             type='checkbox'
-                                            checked={billStatus}
+                                            checked={dataPrivacyApproved}
                                         />
                                     </Form.Check>
                                 </Col>

@@ -33,6 +33,7 @@
   "processing-consent": "Das Einverständnis zum Übermitteln des Testergebnisses für Zwecke der Corona-Warn-App auf den vom RKI betriebenen Server wurde erteilt.*",
   "patientdata-exclude": "Patientendaten im QR-Code",
   "bill-status": "KV Abrechnung",
+  "data-privacy-approve": "Zustimmung Datenschutz",
   "patient-data-correction": "Patientendaten korrigieren",
   "process-finish": "Vorgang abschließen",
   "qr-code": "QR Code",
