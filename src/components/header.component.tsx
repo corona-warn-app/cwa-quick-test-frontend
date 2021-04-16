@@ -29,6 +29,7 @@ import { useKeycloak } from '@react-keycloak/web';
 
 import useNavigation from '../misc/navigation';
 import C19Logo from '../assets/images/c-19_logo.png'
+import useLocalStorage from '../misc/local-storage';
 
 const Header = (props: any) => {
 
@@ -37,6 +38,7 @@ const Header = (props: any) => {
     const { keycloak } = useKeycloak();
 
     const [userName, setUserName] = React.useState('');
+    const [mandant, setMandant] = useLocalStorage('mandant', '');
 
     // set user name from keycloak
     React.useEffect(() => {
@@ -48,7 +50,7 @@ const Header = (props: any) => {
     }, [keycloak])
 
     const handleLogout = () => {
-        keycloak.logout({ redirectUri: window.location.origin + navigation.routes.landing });
+        keycloak.logout({ redirectUri: window.location.origin + '/#' + navigation.routes.landing.replace(':mandant', mandant as string) });
     }
 
     return (
@@ -56,23 +58,23 @@ const Header = (props: any) => {
             {/* simple header with logo */}
 
             {/* user icon and user name */}
-                <Row id='qt-header'>
-                    <Image src={C19Logo} onClick={navigation.toLanding} />
-                    <span className='header-font my-auto mx-1'>{t('translation:title')}</span>
-                </Row>
+            <Row id='qt-header'>
+                <Image src={C19Logo} onClick={navigation.toLanding} />
+                <span className='header-font my-auto mx-1'>{t('translation:title')}</span>
+            </Row>
             <Navbar id='user-container' >
-                    <NavDropdown
-                        className="nav-dropdown-title"
-                        title={userName}
-                        id="responsive-navbar-nav"
+                <NavDropdown
+                    className="nav-dropdown-title"
+                    title={userName}
+                    id="responsive-navbar-nav"
+                >
+                    <Navbar.Brand
+                        className='mx-0 dropdown-item'
+                        onClick={handleLogout}
                     >
-                        <Navbar.Brand
-                            className='mx-0 dropdown-item'
-                            onClick={handleLogout}
-                        >
-                            {t('translation:logout')}
-                        </Navbar.Brand>
-                    </NavDropdown>
+                        {t('translation:logout')}
+                    </Navbar.Brand>
+                </NavDropdown>
             </Navbar>
         </Container>
     )
