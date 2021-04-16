@@ -31,6 +31,7 @@
   "test-id":"Test-ID",
   "processing-consent": "Consent to processing in CWA",
   "bill-status": "bill status",
+  "data-privacy-approve": "Approve Dataprivacy",
   "patientdata-exclude": "Include patient data in QR-Code",
   "patient-data-correction": "Correct patient data",
   "process-finish": "Process finish",

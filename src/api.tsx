@@ -74,7 +74,8 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
             const uri = '/api/quicktest/' + processId + '/personalData';
             const body = JSON.stringify({
                 confirmationCwa: patient.processingConsens,
-                insuranceBillStatus: patient.billStatus,
+                insuranceBillStatus: true, // ToDo remove
+                // ToDo add dataPrivacy:dataPrivacyApproved
                 lastName: patient.name,
                 firstName: patient.firstName,
                 email: patient.emailAddress,
