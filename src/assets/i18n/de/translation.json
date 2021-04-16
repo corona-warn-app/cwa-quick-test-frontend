@@ -55,5 +55,8 @@
   "serverError": "Es ist ein Fehler aufgetreten: ",
   "error-patient-data-load": "Patientendaten konnten nicht geladen werden.",
   "statistics": "Auswertungen",
-  "failed-report": "Meldungen Positive Tests"
+  "failed-report": "Meldungen Positive Tests",
+  "totalTestCount": "Gasamtanzahl der Tests",
+  "positiveTestCount": "Anzahl der positiven Test"
+
 }

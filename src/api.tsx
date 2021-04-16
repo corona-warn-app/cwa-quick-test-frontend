@@ -5,6 +5,7 @@ import { v4 as newUuid } from 'uuid';
 import sha256 from 'crypto-js/sha256';
 import Patient from './misc/patient';
 import { TestResult } from './misc/enum';
+import StatisticData from './misc/statistic-data';
 
 export const api = axios.create({
     baseURL: ''
@@ -152,4 +153,34 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
     }, [uuidHash]);
 
     return result;
+}
+
+export const useStatistics = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [statisticData, setStatisticData] = React.useState<StatisticData>();
+
+    const header = {
+        "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+        'Content-Type': 'application/json'
+    };
+
+    React.useEffect(() => {
+        /* setStatisticData({totalTestCount: 20, positiveTestCount: 5}); */
+        if (!statisticData) {
+            api.get('/api/quickteststatistics', { headers: header })
+            .then(response => {
+                setStatisticData(response.data);
+                if (onSuccess) {
+                    onSuccess(response?.status);
+                }
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
+                }
+            });
+        }
+    },[]);
+
+    return statisticData;
 }
