@@ -48,7 +48,7 @@ const Root = (props: any) => {
 
   React.useEffect(() => {
 
-    if (mandant && mandant !== storedMandant) {
+    if (mandant && mandant !== storedMandant && !mandant.includes('&')) {
       setStoredMandant(mandant);
     }
 
@@ -59,9 +59,9 @@ const Root = (props: any) => {
 
   const updateKeycloakConfig = () => {
 
-    if (keycloakConfig && mandant) {
+    if (keycloakConfig && storedMandant) {
 
-      keycloakConfig.realm = mandant;
+      keycloakConfig.realm = storedMandant;
 
       setKeycloak(Keycloak(keycloakConfig));
 
