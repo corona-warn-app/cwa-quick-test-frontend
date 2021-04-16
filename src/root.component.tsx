@@ -20,26 +20,31 @@
  */
 
 import React from 'react';
+import { useParams } from 'react-router';
 
-import keycloak from './keycloak';
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-
 import Keycloak from 'keycloak-js'
 
 import LoginInterceptor from './login-interceptor.component';
 import Routing from './routing.component';
 
-import CwaSpinner from './components/spinner/spinner.component';
-import { useParams } from 'react-router';
 import useLocalStorage from './misc/local-storage';
+import { useGetKeycloakConfig } from './api';
 
 interface UrlMandant {
   mandant: string;
 }
 
 const Root = (props: any) => {
+
   const { mandant } = useParams<UrlMandant>();
+
+  const keycloakConfig = useGetKeycloakConfig();
+
   const [storedMandant, setStoredMandant] = useLocalStorage('mandant', '');
+
+  const [keycloak, setKeycloak] = React.useState<Keycloak.KeycloakInstance>();
+
 
   React.useEffect(() => {
 
@@ -49,13 +54,22 @@ const Root = (props: any) => {
 
     updateKeycloakConfig();
 
-  }, [mandant]);
+  }, [mandant, keycloakConfig]);
 
-  const updateKeycloakConfig = ()=>{
-    
+
+  const updateKeycloakConfig = () => {
+
+    if (keycloakConfig && mandant) {
+
+      keycloakConfig.realm = mandant;
+
+      setKeycloak(Keycloak(keycloakConfig));
+
+    }
+
   }
 
-  return (!mandant ? <></> :
+  return (!keycloak ? <></> :
     <ReactKeycloakProvider
       authClient={keycloak}
     >

@@ -1,10 +1,30 @@
+/*
+ * Corona-Warn-App / cwa-quick-test-frontend
+ *
+ * (C) 2021, T-Systems International GmbH
+ *
+ * Deutsche Telekom AG and all other contributors /
+ * copyright owners license this file to you under the Apache
+ * License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
 import axios from 'axios';
 import { useKeycloak } from '@react-keycloak/web';
 import React from 'react';
 import { v4 as newUuid } from 'uuid';
 import sha256 from 'crypto-js/sha256';
 import Patient from './misc/patient';
-import { TestResult } from './misc/enum';
 import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 
@@ -64,10 +84,10 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                 houseNumber: patient.houseNumber,
                 zipCode: patient.zip,
                 city: patient.city,
-                birthdy:patient.dateOfBirth.toISOString().split('T')[0],
+                birthdy: patient.dateOfBirth.toISOString().split('T')[0],
             });
             console.log(JSON.stringify(body));
-            
+
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
                 'Content-Type': 'application/json'
@@ -164,8 +184,40 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
         /* setStatisticData({totalTestCount: 20, positiveTestCount: 5}); */
         if (!statisticData) {
             api.get('/api/quickteststatistics', { headers: header })
+                .then(response => {
+                    setStatisticData(response.data);
+                    if (onSuccess) {
+                        onSuccess(response?.status);
+                    }
+                })
+                .catch(error => {
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+    }, []);
+
+    return statisticData;
+}
+
+export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+
+    const [result, setResult] = React.useState<Keycloak.KeycloakConfig>();
+
+    const header = {
+        'Content-Type': 'application/json'
+    };
+
+    React.useEffect(() => {
+
+        api.get('/api/config/keycloak.json', { headers: header })
             .then(response => {
-                setStatisticData(response.data);
+                setResult({
+                    clientId: response.data['resource'],
+                    url: response.data['auth-server-url'],
+                    realm: ''
+                });
                 if (onSuccess) {
                     onSuccess(response?.status);
                 }
@@ -175,8 +227,7 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
                     onError(error);
                 }
             });
-        }
-    },[]);
+    }, []);
 
-    return statisticData;
+    return result;
 }
