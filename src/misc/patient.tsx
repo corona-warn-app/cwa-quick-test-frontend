@@ -28,6 +28,7 @@ export default interface Patient {
     processingConsens?: boolean;
     uuId?: string;
     includePersData?: boolean;
+    billStatus?: boolean;
     sex?:Sex;
     zip?:string;
     city?:string;

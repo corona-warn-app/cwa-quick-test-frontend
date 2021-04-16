@@ -20,9 +20,8 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 
-import { useKeycloak } from '@react-keycloak/web';
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
@@ -30,6 +29,7 @@ import useNavigation from '../misc/navigation';
 import utils from '../misc/utils';
 import { TestResult } from '../misc/enum';
 import { usePostTestResult } from '../api';
+import ITestResult from '../misc/test-result';
 
 const RecordTestResult = (props: any) => {
 
@@ -38,29 +38,91 @@ const RecordTestResult = (props: any) => {
 
     const [processNo, setProcessNo] = React.useState('');
     const [testResult, setTestResult] = React.useState<TestResult>();
-    const [testResultToPost, setTestResultToPost] = React.useState<TestResult>();
+    const [testResultToPost, setTestResultToPost] = React.useState<ITestResult>();
     const [message, setMessage] = React.useState('');
-    const [isDataTransfer, setIsDataTransfer] = React.useState(false)
     const [isInputValid, setIsInputValid] = React.useState(false);
+    const [testId, setTestId] = React.useState('');
+    const [testIdList, setTestIdList] = React.useState<string[] | undefined>();
+    const [validated, setValidated] = React.useState(false);
 
     React.useEffect(() => {
-        const procValid = utils.isProcessNoValid(processNo);
-        if (processNo.length > 0) {
-            if (!procValid) {
-                setMessage(t('translation:wrong-process-number'));
-            } else {
-                if (message.length > 0) {
-                    setMessage("");
-                }
-            }
+        loadTestIdList();
+    }, [])
+
+    // set last testId
+    React.useEffect(() => {
+        if (!testId && testIdList && testIdList.length > 0) {
+            setTestId(testIdList[testIdList.length - 1])
         }
-        setIsInputValid(testResult != null && processNo.length > 0 && procValid);
-    }, [processNo, testResult]);
+    }, [testIdList]);
+
+    const loadTestIdList = () => {
+        if (!testIdList && localStorage) {
+            const items = localStorage.getItem('testids');
+
+            if (items) {
+                setTestIdList(JSON.parse(items));
+            }
+            else {
+                setTestIdList([]);
+            }
+
+        }
+        else {
+            setTestIdList([]);
+        }
+    }
+
+    const addTestIdToHistory = (testId: string) => {
+
+        if (testId && testIdList) {
+
+            const curId = testIdList.indexOf(testId);
+
+            // add if not present
+            if (curId < 0) {
+                testIdList.push(testId);
+            }
+
+            // remove/add if present and not last
+            if (curId >= 0 && curId !== testIdList.length - 1) {
+                testIdList.splice(curId);
+                testIdList.push(testId);
+            }
+
+            if (localStorage) {
+                localStorage.setItem('testids', JSON.stringify(testIdList))
+            }
+
+            setTestIdList(testIdList);
+        }
+    }
+
 
     const handleProcessNoChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setProcessNo(evt.currentTarget.value);
     }
+    const handleTestIdChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setTestId(evt.currentTarget.value);
+    }
 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        const form = event.currentTarget;
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        setValidated(true);
+
+        if (form.checkValidity()) {
+            addTestIdToHistory(testId);
+            setTestResultToPost({
+                result:testResult!,
+                testId:testId
+            })
+        }
+
+    }
 
     const finishProcess = () => {
         navigation.toLanding();
@@ -73,10 +135,10 @@ const RecordTestResult = (props: any) => {
 
         if (error) {
 
-            
+
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel:navigation.toLanding });
+        props.setError({ error: error, message: msg, onCancel: navigation.toLanding });
     }
 
     const postTestResult = usePostTestResult(testResultToPost, processNo, finishProcess, handleError);
@@ -84,20 +146,22 @@ const RecordTestResult = (props: any) => {
     return (
         <>
             <Card id='data-card'>
-                <Card.Header id='data-header' className='pb-0'>
-                    <Row>
-                        <Col md='6'>
-                            <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-result2')}</Card.Title>
-                        </Col>
-                    </Row>
-                    <hr />
-                </Card.Header>
 
-                {/*
+                <Form onSubmit={handleSubmit} validated={validated}>
+
+                    <Card.Header id='data-header' className='pb-0'>
+                        <Row>
+                            <Col md='6'>
+                                <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-result2')}</Card.Title>
+                            </Col>
+                        </Row>
+                        <hr />
+                    </Card.Header>
+
+                    {/*
     content area with process number input and radios
     */}
-                <Card.Body id='data-body' className='pt-0'>
-                    <Form>
+                    <Card.Body id='data-body' className='pt-0'>
                         {/* process number input */}
                         <Form.Group as={Row} controlId='formNameInput'>
                             <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:process-number')}</Form.Label>
@@ -111,7 +175,31 @@ const RecordTestResult = (props: any) => {
                                     required
                                     type='text'
                                     min={utils.shortHashLen}
+                                    maxLength={utils.shortHashLen}
+                                    pattern={utils.pattern.processNo}
                                 />
+                            </Col>
+                        </Form.Group>
+                        <hr />
+
+                        {/* test-ID input */}
+                        <Form.Group as={Row} controlId='formTestIdInput'>
+                            <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:test-id')}</Form.Label>
+
+                            <Col xs='7' sm='9' className='d-flex'>
+                                <Form.Control
+                                    className='qt-input'
+                                    value={testId}
+                                    onChange={handleTestIdChange}
+                                    placeholder={t('translation:test-id')}
+                                    type='text'
+                                    list='testid-list'
+                                    required
+                                    maxLength={15}
+                                />
+                                <datalist id="testid-list">
+                                    {testIdList ? testIdList.map(i => <option key={i} value={i} />) : undefined}
+                                </datalist>
                             </Col>
                         </Form.Group>
 
@@ -171,35 +259,38 @@ const RecordTestResult = (props: any) => {
                                 </Form.Check>
                             </Col>
                         </Form.Group>
-                    </Form>
-                </Card.Body>
+                    </Card.Body>
 
-                {/*
+                    {/*
     footer with cancel and submit button
     */}
-                <Card.Footer id='data-footer'>
-                    <Row>
-                        <Col sm='6' md='3'>
-                            <Button
-                                className='my-1 my-md-0 p-0'
-                                block
-                                onClick={navigation.toLanding}
-                            >
-                                {t('translation:cancel')}
-                            </Button>
-                        </Col>
-                        <Col sm='6' md='3' className='pr-md-0'>
-                            <Button
-                                className='my-1 my-md-0 p-0'
-                                block
-                                disabled={!isInputValid}
-                                onClick={() => setTestResultToPost(testResult)}
-                            >
-                                {t('translation:data-submit')}
-                            </Button>
-                        </Col>
-                    </Row>
-                </Card.Footer>
+                    <Card.Footer id='data-footer'>
+                        <Row>
+                            <Col sm='6' md='3'>
+                                <Button
+                                    className='my-1 my-md-0 p-0'
+                                    block
+                                    onClick={navigation.toLanding}
+                                >
+                                    {t('translation:cancel')}
+                                </Button>
+                            </Col>
+                            <Col sm='6' md='3' className='pr-md-0'>
+                                <Button
+                                    className='my-1 my-md-0 p-0'
+                                    block
+                                    type='submit'
+                                    // disabled={!isInputValid}
+                                    // onClick={() => setTestResultToPost(testResult)}
+                                >
+                                    {t('translation:data-submit')}
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Card.Footer>
+
+                </Form>
+
             </Card>
         </>
     )

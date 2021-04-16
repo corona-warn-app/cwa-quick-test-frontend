@@ -6,6 +6,7 @@ import sha256 from 'crypto-js/sha256';
 import Patient from './misc/patient';
 import { TestResult } from './misc/enum';
 import StatisticData from './misc/statistic-data';
+import ITestResult from './misc/test-result';
 
 export const api = axios.create({
     baseURL: ''
@@ -13,7 +14,7 @@ export const api = axios.create({
 
 const TRYS = 2;
 
-export const usePostTestResult = (testResult: TestResult | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
+export const usePostTestResult = (testResult: ITestResult | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
 
     React.useEffect(() => {
@@ -21,10 +22,7 @@ export const usePostTestResult = (testResult: TestResult | undefined, processId:
         if (testResult && processId) {
 
             const uri = '/api/quicktest/' + processId + '/testResult';
-            const body = JSON.stringify({
-                result: testResult
-            });
-
+            const body = JSON.stringify(testResult);
 
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
@@ -56,9 +54,7 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
             const uri = '/api/quicktest/' + processId + '/personalData';
             const body = JSON.stringify({
                 confirmationCwa: patient.processingConsens,
-                //Todo
-                insuranceBillStatus: false,
-                testBrandId: patient.testId,
+                insuranceBillStatus: patient.billStatus,
                 lastName: patient.name,
                 firstName: patient.firstName,
                 email: patient.emailAddress,
