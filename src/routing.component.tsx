@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import { Container } from 'react-bootstrap'
 
 import './i18n';
@@ -42,11 +42,9 @@ import FailedReport from './components/failed-report.component';
 import PrivateRoute from './components/private-route.component';
 import IError from './misc/error';
 import ErrorPage from './components/error-page.component';
-import useNavigation from './misc/navigation';
 
 const Routing = (props: any) => {
 
-    const navigation = useNavigation();
     const routes = useRoutes();
     const { t } = useTranslation();
     const [patient, setPatient] = React.useState<Patient>();
@@ -55,27 +53,26 @@ const Routing = (props: any) => {
 
     document.title = t('translation:title');
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if (error) {
             setErrorShow(true);
         }
-    },[error])
+    }, [error])
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if (!errorShow) {
             setError(undefined);
         }
-    },[errorShow])
+    }, [errorShow])
 
     return (
-        <BrowserRouter>
-
+        <>
             {/*
     header, every time shown. fit its children
     */}
             <Route path={routes.root}>
                 <Header />
-                <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={()=>setErrorShow(false)} />
+                <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} />
             </Route>
 
             {/*
@@ -88,64 +85,57 @@ const Routing = (props: any) => {
                     exact 
                     path={routes.landing} 
                     component={LandingPage}
-                /> 
+                />
 
                 {/* Record Patient Data */}
-                <PrivateRoute 
-                    exact 
-                    roles={['c19_quick_test_counter']} 
+                <PrivateRoute
+                    exact
+                    roles={['c19_quick_test_counter']}
                     path={routes.recordPatient}
-                    component={ RecordPatientData }
-                    render={ (props) => <RecordPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} /> }
+                    component={RecordPatientData}
+                    render={(props) => <RecordPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} />}
                 />
 
                 {/* Show Patient Data */}
                 <PrivateRoute 
                     roles={['c19_quick_test_counter']}
                     path={routes.showPatientRecord}
-                    component={ ShowPatientData }
-                    render={ (props) => <ShowPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} /> }
+                    component={ShowPatientData}
+                    render={(props) => <ShowPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} />}
                 />
-                    
+
                 {/* Record Test Result */}
-                <PrivateRoute 
+                <PrivateRoute
                     roles={['c19_quick_test_lab']}
                     path={routes.recordTestResult}
-                    component={ RecordTestResult }
-                    render={ (props) => <RecordTestResult {...props} setError={setError} /> }
+                    component={RecordTestResult}
+                    render={(props) => <RecordTestResult {...props} setError={setError} />}
                 />
-                    
+
                 {/* QR Scan */}
-                <PrivateRoute 
-                    exact 
+                <PrivateRoute
+                    exact
                     path={routes.qrScan}
                     roles={['c19_quick_test_lab']}
-                    component={ QrScan }
-                    render={ (props) => <QrScan {...props} setPatient={setPatient}/> }
+                    component={QrScan}
+                    render={(props) => <QrScan {...props} setPatient={setPatient} />}
                 />
 
-                <PrivateRoute 
-                    exact 
+                <PrivateRoute
+                    exact
                     path={routes.statistics}
                     roles={['c19_quick_test_lab']}
-                    component={ Statistics }
-                    render={ (props) => <Statistics {...props} setError={setError}/> }
+                    component={Statistics}
+                    render={(props) => <Statistics {...props} setError={setError} />}
                 />
 
-                <PrivateRoute 
-                    exact 
+                <PrivateRoute
+                    exact
                     path={routes.failedReport}
                     roles={['c19_quick_test_lab']}
-                    component={ FailedReport }
-                    render={ (props) => <FailedReport {...props} setError={setError}/> }
+                    component={FailedReport}
+                    render={(props) => <FailedReport {...props} setError={setError} />}
                 />
-
-                {/* Show QR Scan Data */}
-                {/* <PrivateRoute 
-                    roles={['c19_quick_test_lab']}
-                    path={routes.qrDataShow}
-                    component={ LandingPage }
-                /> */}
 
             </Container>
 
@@ -156,7 +146,7 @@ const Routing = (props: any) => {
                 <Footer />
             </Route>
 
-        </BrowserRouter >
+        </>
     )
 }
 

@@ -20,21 +20,22 @@
  */
 
 import { useHistory } from 'react-router-dom'
+import useLocalStorage from './local-storage';
 import useRoutes from './routes';
 
 const useNavigation = () => {
 
     const history = useHistory();
     const routes = useRoutes();
-    
-    const _toLanding = () => { history.push(routes.landing); }
-    const _toRecordPatient = () => { history.push(routes.recordPatient); }
-    const _toShowRecordPatient = () => { history.push(routes.showPatientRecord); }
-    const _toRecordTestResult = () => { history.push(routes.recordTestResult); }
-    const _toQRScan = () => { history.push(routes.qrScan); }
-    const _toQRDataShow = () => { history.push(routes.qrDataShow); }
-    const _toStatistics = () => { history.push(routes.statistics); }
-    const _toFailedReport = () => { history.push(routes.failedReport); }
+    const [mandant, setMandant] = useLocalStorage('mandant', '');
+
+    const _toLanding = () => { history.push(routes.landing.replace(':mandant', mandant as string)); }
+    const _toRecordPatient = () => { history.push(routes.recordPatient.replace(':mandant', mandant as string)); }
+    const _toShowRecordPatient = () => { history.push(routes.showPatientRecord.replace(':mandant', mandant as string)); }
+    const _toRecordTestResult = () => { history.push(routes.recordTestResult.replace(':mandant', mandant as string)); }
+    const _toQRScan = () => { history.push(routes.qrScan.replace(':mandant', mandant as string)); }
+    const _toStatistics = () => { history.push(routes.statistics.replace(':mandant', mandant as string)); }
+    const _toFailedReport = () => { history.push(routes.failedReport.replace(':mandant', mandant as string)); }
 
     const navigation = {
         routes: routes,
@@ -43,7 +44,6 @@ const useNavigation = () => {
         toShowRecordPatient: _toShowRecordPatient,
         toRecordTestResult: _toRecordTestResult,
         toQRScan: _toQRScan,
-        toQRDataShow: _toQRDataShow,
         toStatistics: _toStatistics,
         toFailedReport: _toFailedReport,
     }

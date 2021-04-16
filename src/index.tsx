@@ -21,28 +21,24 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, HashRouter, Route } from 'react-router-dom'
 
 import './assets/SCSS/index.scss';
 import './assets/SCSS/custom.scss';
 
 import reportWebVitals from './reportWebVitals';
 
-import keycloak from './keycloak';
-import { ReactKeycloakProvider } from '@react-keycloak/web';
-
-import LoginInterceptor from './login-interceptor.component';
-import Routing from './routing.component';
+import Root from './root.component';
 
 
 ReactDOM.render(
   <React.StrictMode>
-    <ReactKeycloakProvider
-      authClient={keycloak}
-    >
-      <LoginInterceptor>
-        <Routing />
-      </LoginInterceptor>
-    </ReactKeycloakProvider>
+    <HashRouter >
+    <Route path="/:mandant">
+      <Root />
+      </Route>
+    </HashRouter>
+    
   </React.StrictMode>,
 
   document.getElementById('root')
