@@ -6,17 +6,29 @@ import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
 import CwaSpinner from './spinner/spinner.component';
+import { useStatistics } from '../api';
+import StatisticData from '../misc/statistic-data'
 
 const Statistics = (props: any) => {
 
     const navigation = useNavigation();
     const { t } = useTranslation();
 
-    const [isInit, setIsInit] = React.useState(true)
+    const handleError = (error: any) => {
+        let msg = '';
 
+        if (error) {
+
+            
+            msg = error.message
+        }
+        props.setError({ error: error, message: msg, onCancel:navigation.toLanding });
+    }
+
+    const statisticData= useStatistics(undefined, handleError);
 
     return (
-        !isInit ? <CwaSpinner /> :
+        !statisticData ? <CwaSpinner /> :
             <>
                 <Card id='data-card'>
                     <Card.Header id='data-header' className='pb-0'>
@@ -32,7 +44,23 @@ const Statistics = (props: any) => {
     */}
                     <Card.Body id='data-header'>
                         <Row>
-                            TODO Hier kommt noch was.
+                            <Col md='6'>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:totalTestCount')}</Card.Text>
+                            </Col>
+                            <Col md='6'>
+                                {statisticData.totalTestCount}
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md='6'>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:positiveTestCount')}</Card.Text>
+                            </Col>
+                            <Col md='3'>
+                                {statisticData.positiveTestCount}
+                            </Col>
+                            <Col md='3'>
+                                {statisticData.totalTestCount>0 ? (100*statisticData.positiveTestCount/statisticData.totalTestCount).toFixed(2) : undefined} %
+                            </Col>
                         </Row>
                     </Card.Body>
 

@@ -81,10 +81,9 @@ const Routing = (props: any) => {
             <Container id='qt-body'>
 
                 {/* Landing */}
-                <PrivateRoute
-                    exact
-                    roles={['c19_quick_test_counter', 'c19_quick_test_counter']}
-                    path={routes.landing}
+                <Route 
+                    exact 
+                    path={routes.landing} 
                     component={LandingPage}
                 />
 
@@ -98,8 +97,8 @@ const Routing = (props: any) => {
                 />
 
                 {/* Show Patient Data */}
-                <PrivateRoute
-                    roles={['c19_quick_test_lab', 'c19_quick_test_counter']}
+                <PrivateRoute 
+                    roles={['c19_quick_test_counter']}
                     path={routes.showPatientRecord}
                     component={ShowPatientData}
                     render={(props) => <ShowPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} />}
