@@ -115,7 +115,7 @@ const RecordTestResult = (props: any) => {
             addTestIdToHistory(testId);
             setTestResultToPost({
                 result:testResult!,
-                testId:testId
+                testBrandId:testId
             })
         }
 
