@@ -5,6 +5,8 @@ import { v4 as newUuid } from 'uuid';
 import sha256 from 'crypto-js/sha256';
 import Patient from './misc/patient';
 import { TestResult } from './misc/enum';
+import StatisticData from './misc/statistic-data';
+import ITestResult from './misc/test-result';
 
 export const api = axios.create({
     baseURL: ''
@@ -12,7 +14,7 @@ export const api = axios.create({
 
 const TRYS = 2;
 
-export const usePostTestResult = (testResult: TestResult | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
+export const usePostTestResult = (testResult: ITestResult | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
 
     React.useEffect(() => {
@@ -20,10 +22,7 @@ export const usePostTestResult = (testResult: TestResult | undefined, processId:
         if (testResult && processId) {
 
             const uri = '/api/quicktest/' + processId + '/testResult';
-            const body = JSON.stringify({
-                result: testResult
-            });
-
+            const body = JSON.stringify(testResult);
 
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
@@ -55,9 +54,7 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
             const uri = '/api/quicktest/' + processId + '/personalData';
             const body = JSON.stringify({
                 confirmationCwa: patient.processingConsens,
-                //Todo
-                insuranceBillStatus: false,
-                testBrandId: patient.testId,
+                insuranceBillStatus: patient.billStatus,
                 lastName: patient.name,
                 firstName: patient.firstName,
                 email: patient.emailAddress,
@@ -152,4 +149,34 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
     }, [uuidHash]);
 
     return result;
+}
+
+export const useStatistics = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [statisticData, setStatisticData] = React.useState<StatisticData>();
+
+    const header = {
+        "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+        'Content-Type': 'application/json'
+    };
+
+    React.useEffect(() => {
+        /* setStatisticData({totalTestCount: 20, positiveTestCount: 5}); */
+        if (!statisticData) {
+            api.get('/api/quickteststatistics', { headers: header })
+            .then(response => {
+                setStatisticData(response.data);
+                if (onSuccess) {
+                    onSuccess(response?.status);
+                }
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
+                }
+            });
+        }
+    },[]);
+
+    return statisticData;
 }

@@ -19,22 +19,7 @@
  * under the License.
  */
 
-import {Sex} from './enum';
-
-export default interface Patient {
-    firstName: string;
-    name: string;
-    dateOfBirth: Date;
-    processingConsens?: boolean;
-    uuId?: string;
-    includePersData?: boolean;
-    billStatus?: boolean;
-    sex?:Sex;
-    zip?:string;
-    city?:string;
-    street?:string;
-    houseNumber?:string;
-    phoneNumber?:string;
-    emailAddress?:string;
-    testId?:string;
+export default interface StatisticData {
+    totalTestCount: number;
+    positiveTestCount:number;
 }

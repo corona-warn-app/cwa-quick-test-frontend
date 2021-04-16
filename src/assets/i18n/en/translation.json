@@ -30,6 +30,7 @@
   "email-address":"E-Mail Address",
   "test-id":"Test-ID",
   "processing-consent": "Consent to processing in CWA",
+  "bill-status": "bill status",
   "patientdata-exclude": "Include patient data in QR-Code",
   "patient-data-correction": "Correct patient data",
   "process-finish": "Process finish",
@@ -54,5 +55,7 @@
   "serverError": "An error occured: ",
   "error-patient-data-load": "Patient data failed to load.",
   "statistics": "Statistics",
-  "failed-report": "Failed Test Report"
+  "failed-report": "Failed Test Report",
+  "totalTestCount": "Total test count",
+  "positiveTestCount": "Posiive test count"
 }
