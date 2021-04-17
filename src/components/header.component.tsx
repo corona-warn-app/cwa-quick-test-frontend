@@ -39,6 +39,12 @@ const Header = (props: any) => {
 
     const [userName, setUserName] = React.useState('');
     const [mandant, setMandant] = useLocalStorage('mandant', '');
+    const [isInit, setIsInit] = React.useState(false)
+
+    React.useEffect(() => {
+        if (navigation)
+            setIsInit(true);
+    }, [navigation])
 
     // set user name from keycloak
     React.useEffect(() => {
@@ -50,16 +56,16 @@ const Header = (props: any) => {
     }, [keycloak])
 
     const handleLogout = () => {
-        keycloak.logout({ redirectUri: window.location.origin + '/#' + navigation.routes.landing.replace(':mandant', mandant as string) });
+        keycloak.logout({ redirectUri: window.location.origin + '/#' + navigation!.routes.landing.replace(':mandant', mandant as string) });
     }
 
-    return (
+    return (!isInit?<></>:
         <Container className='position-relative'>
             {/* simple header with logo */}
 
             {/* user icon and user name */}
             <Row id='qt-header'>
-                <Image src={C19Logo} onClick={navigation.toLanding} />
+                <Image src={C19Logo} onClick={navigation!.toLanding} />
                 <span className='header-font my-auto mx-1'>{t('translation:title')}</span>
             </Row>
             <Navbar id='user-container' >

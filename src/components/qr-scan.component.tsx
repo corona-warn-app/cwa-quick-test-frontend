@@ -29,6 +29,7 @@ import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
 import { getPatientFromScan } from '../misc/qr-code-value';
+import CwaSpinner from './spinner/spinner.component';
 
 //const testFull = 'https://s.coronwarn.app?v=1#eyJmbiI6IkdvcmRvbiIsImxuIjoiR3J1bmQiLCJkb2IiOiIxOTkwLTAxLTAzIiwiZ3VpZCI6ImQ3ZWM2MDU4LWUyMzEtNGU4Yy1hNDFmLTViZjg1ZDdmZTI3MiIsInRpbWVzdGFtcCI6MTYxNzk3ODg4NDY4NX0=';
 
@@ -38,6 +39,12 @@ const QrScan = (props: any) => {
     const { t } = useTranslation();
 
     const [message, setMessage] = React.useState('');
+    const [isInit, setIsInit] = React.useState(false)
+
+    React.useEffect(() => {
+        if (navigation)
+            setIsInit(true);
+    }, [navigation])
 
     const handleScan = (data: string | null) => {
         if (props.setPatient && data) {
@@ -46,7 +53,7 @@ const QrScan = (props: any) => {
                 
                 const scannedPatient = getPatientFromScan(data);
                 props.setPatient(scannedPatient);
-                navigation.toRecordPatient();
+                navigation!.toRecordPatient();
 
             } catch (e) {
                 setMessage(t('translation:qr-code-no-patient-data'));
@@ -69,7 +76,7 @@ const QrScan = (props: any) => {
         </div>;
     }
 
-    return (
+    return (!isInit? <CwaSpinner />:
         <>
             <Card id='data-card'>
                 <Card.Header id='data-header' className='pb-0'>
@@ -102,7 +109,7 @@ const QrScan = (props: any) => {
                             <Button
                                 className='my-1 my-md-0 p-0'
                                 block
-                                onClick={navigation.toLanding}
+                                onClick={navigation!.toLanding}
                             >
                                 {t('translation:cancel')}
                             </Button>

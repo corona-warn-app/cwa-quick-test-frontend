@@ -75,7 +75,7 @@ const RecordPatientData = (props: any) => {
         if (error) {
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel: navigation.toLanding });
+        props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
     }
 
     const uuid = useGetUuid(props?.patient?.uuId, undefined, handleError);
@@ -116,10 +116,10 @@ const RecordPatientData = (props: any) => {
 
     // set ready state for spinner
     React.useEffect(() => {
-        if (processId) {
+        if (processId && navigation) {
             setTimeout(setIsInit, 200, true);
         }
-    }, [processId]);
+    }, [processId, navigation]);
 
     // check completness on value change
     React.useEffect(() => {
@@ -218,7 +218,7 @@ const RecordPatientData = (props: any) => {
 
     const handleCancel = () => {
         props.setPatient(undefined);
-        navigation.toLanding();
+        navigation!.toLanding();
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -230,7 +230,7 @@ const RecordPatientData = (props: any) => {
         setValidated(true);
 
         if (form.checkValidity() && canGoNext) {
-            setTimeout(navigation.toShowRecordPatient, 200);
+            setTimeout(navigation!.toShowRecordPatient, 200);
         }
 
     }
