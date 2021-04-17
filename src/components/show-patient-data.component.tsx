@@ -93,6 +93,7 @@ const ShowPatientData = (props: any) => {
 
     const finishProcess = () => {
         props.setPatient(undefined);
+        props.setNotificationShow(true);
         navigation!.toLanding();
     }
 

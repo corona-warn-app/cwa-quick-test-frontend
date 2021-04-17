@@ -58,5 +58,6 @@
   "statistics": "Statistics",
   "failed-report": "Failed Test Report",
   "totalTestCount": "Total test count",
-  "positiveTestCount": "Positive test count"
+  "positiveTestCount": "Positive test count",
+  "successfull-transferred": "Data successfully transferred"
 }

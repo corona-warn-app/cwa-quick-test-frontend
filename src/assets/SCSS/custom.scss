@@ -308,4 +308,21 @@ hr {
     height: 20px;
     align-self: center;
     padding-left: 0.5rem;
+} 
+.qt-notification{
+    margin-bottom: 20%;
+    border-radius: 6px;
+    border-color: #46A800;
+    color: black;
+    display: flex;
 }
+
+.qt-notification-text{
+    font-size: 22px;
+}
+
+.success-icon {
+    background-image: url('../images/icon_success.svg') !important;
+    height: 40px;
+    width: 40px;
+  }

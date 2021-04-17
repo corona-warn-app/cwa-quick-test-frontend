@@ -129,6 +129,7 @@ const RecordTestResult = (props: any) => {
     }
 
     const finishProcess = () => {
+        props.setNotificationShow(true);
         navigation!.toLanding();
     }
 

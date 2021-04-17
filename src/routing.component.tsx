@@ -42,6 +42,7 @@ import FailedReport from './components/failed-report.component';
 import PrivateRoute from './components/private-route.component';
 import IError from './misc/error';
 import ErrorPage from './components/error-page.component';
+import NotificationPage from './components/notification-page.component';
 
 const Routing = (props: any) => {
 
@@ -50,6 +51,7 @@ const Routing = (props: any) => {
     const [patient, setPatient] = React.useState<Patient>();
     const [error, setError] = React.useState<IError>();
     const [errorShow, setErrorShow] = React.useState(false);
+    const [notificationShow, setNotificationShow] = React.useState(false);
 
     document.title = t('translation:title');
 
@@ -73,6 +75,7 @@ const Routing = (props: any) => {
             <Route path={routes.root}>
                 <Header />
                 <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} />
+                <NotificationPage show={notificationShow} setNotificationShow={setNotificationShow} />
             </Route>
 
             {/*
@@ -81,11 +84,13 @@ const Routing = (props: any) => {
             <Container id='qt-body'>
 
                 {/* Landing */}
-                <Route 
-                    exact 
-                    path={routes.landing} 
-                    component={LandingPage}
-                />
+                <Route
+                    exact
+                    path={routes.landing}
+                >
+                    <LandingPage setNotificationShow={setNotificationShow} />
+                </Route>
+
 
                 {/* Record Patient Data */}
                 <PrivateRoute
@@ -97,11 +102,11 @@ const Routing = (props: any) => {
                 />
 
                 {/* Show Patient Data */}
-                <PrivateRoute 
+                <PrivateRoute
                     roles={['c19_quick_test_counter']}
                     path={routes.showPatientRecord}
                     component={ShowPatientData}
-                    render={(props) => <ShowPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} />}
+                    render={(props) => <ShowPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} setNotificationShow={setNotificationShow} />}
                 />
 
                 {/* Record Test Result */}
@@ -109,7 +114,7 @@ const Routing = (props: any) => {
                     roles={['c19_quick_test_lab']}
                     path={routes.recordTestResult}
                     component={RecordTestResult}
-                    render={(props) => <RecordTestResult {...props} setError={setError} />}
+                    render={(props) => <RecordTestResult {...props} setError={setError} setNotificationShow={setNotificationShow} />}
                 />
 
                 {/* QR Scan */}
