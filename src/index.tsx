@@ -33,11 +33,11 @@ import Root from './root.component';
 
 ReactDOM.render(
   <React.StrictMode>
-    <HashRouter >
+    <BrowserRouter >
     <Route path="/:mandant">
       <Root />
       </Route>
-    </HashRouter>
+    </BrowserRouter>
     
   </React.StrictMode>,
 
