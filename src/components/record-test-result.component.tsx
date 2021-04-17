@@ -31,6 +31,7 @@ import { TestResult } from '../misc/enum';
 import { usePostTestResult } from '../api';
 import ITestResult from '../misc/test-result';
 import useLocalStorage from '../misc/local-storage';
+import CwaSpinner from './spinner/spinner.component';
 
 const RecordTestResult = (props: any) => {
 
@@ -45,6 +46,12 @@ const RecordTestResult = (props: any) => {
     const [testId, setTestId] = React.useState('');
     const [testIdList, setTestIdList] = useLocalStorage('testids', []);
     const [validated, setValidated] = React.useState(false);
+    const [isInit, setIsInit] = React.useState(false)
+
+    React.useEffect(() => {
+        if (navigation)
+            setIsInit(true);
+    }, [navigation])
 
     React.useEffect(() => {
         // loadTestIdList();
@@ -122,7 +129,7 @@ const RecordTestResult = (props: any) => {
     }
 
     const finishProcess = () => {
-        navigation.toLanding();
+        navigation!.toLanding();
     }
 
 
@@ -135,12 +142,12 @@ const RecordTestResult = (props: any) => {
 
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel: navigation.toLanding });
+        props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
     }
 
     const postTestResult = usePostTestResult(testResultToPost, processNo, finishProcess, handleError);
 
-    return (
+    return (!isInit? <CwaSpinner />:
         <>
             <Card id='data-card'>
 
@@ -267,7 +274,7 @@ const RecordTestResult = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={navigation.toLanding}
+                                    onClick={navigation!.toLanding}
                                 >
                                     {t('translation:cancel')}
                                 </Button>

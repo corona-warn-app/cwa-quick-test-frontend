@@ -19,36 +19,91 @@
  * under the License.
  */
 
+import React from 'react';
 import { useHistory } from 'react-router-dom'
 import useLocalStorage from './local-storage';
-import useRoutes from './routes';
 
-const useNavigation = () => {
+export interface IRoute {
+    [key: string]: string;
+}
+
+export interface INavigation {
+    routes: IRoute,
+    calculatedRoutes: IRoute,
+    toLanding: () => void,
+    toRecordPatient: () => void,
+    toShowRecordPatient: () => void,
+    toRecordTestResult: () => void,
+    toQRScan: () => void,
+    toStatistics: () => void,
+    toFailedReport: () => void,
+}
+
+export const useRoutes = () => {
+
+    const basePath = '/:mandant'
+
+    const result: IRoute = {
+        root: basePath,
+        landing: basePath,
+        recordPatient: basePath + '/record',
+        showPatientRecord: basePath + '/record/show',
+        recordTestResult: basePath + '/record/result',
+        qrScan: basePath + '/qr/scan',
+        statistics: basePath + '/statistics',
+        failedReport: basePath + '/failedreport'
+    }
+
+    return result;
+}
+
+export const useNavigation = () => {
 
     const history = useHistory();
     const routes = useRoutes();
     const [mandant, setMandant] = useLocalStorage('mandant', '');
+    const [calculatedRoutes, setCalculatedRoutes] = React.useState(routes);
+    const [result, setResult] = React.useState<INavigation>();
 
-    const _toLanding = () => { history.push(routes.landing.replace(':mandant', mandant as string)); }
-    const _toRecordPatient = () => { history.push(routes.recordPatient.replace(':mandant', mandant as string)); }
-    const _toShowRecordPatient = () => { history.push(routes.showPatientRecord.replace(':mandant', mandant as string)); }
-    const _toRecordTestResult = () => { history.push(routes.recordTestResult.replace(':mandant', mandant as string)); }
-    const _toQRScan = () => { history.push(routes.qrScan.replace(':mandant', mandant as string)); }
-    const _toStatistics = () => { history.push(routes.statistics.replace(':mandant', mandant as string)); }
-    const _toFailedReport = () => { history.push(routes.failedReport.replace(':mandant', mandant as string)); }
+    React.useEffect(() => {
+        if (routes) {
 
-    const navigation = {
-        routes: routes,
-        toLanding: _toLanding,
-        toRecordPatient: _toRecordPatient,
-        toShowRecordPatient: _toShowRecordPatient,
-        toRecordTestResult: _toRecordTestResult,
-        toQRScan: _toQRScan,
-        toStatistics: _toStatistics,
-        toFailedReport: _toFailedReport,
-    }
+            const c = calculatedRoutes;
 
-    return navigation;
+            c.root = routes.root.replace(':mandant', mandant as string);
+            c.landing = routes.landing.replace(':mandant', mandant as string);
+            c.recordPatient = routes.recordPatient.replace(':mandant', mandant as string);
+            c.showPatientRecord = routes.showPatientRecord.replace(':mandant', mandant as string);
+            c.recordTestResult = routes.recordTestResult.replace(':mandant', mandant as string);
+            c.qrScan = routes.qrScan.replace(':mandant', mandant as string);
+            c.statistics = routes.statistics.replace(':mandant', mandant as string);
+            c.failedReport = routes.failedReport.replace(':mandant', mandant as string);
+
+            setCalculatedRoutes(c);
+        }
+    }, [routes])
+
+    React.useEffect(() => {
+        if (calculatedRoutes) {
+
+            const n: INavigation = {
+                routes: routes,
+                calculatedRoutes: calculatedRoutes,
+
+                toLanding: () => { history.push(calculatedRoutes.landing); },
+                toRecordPatient: () => { history.push(calculatedRoutes.recordPatient); },
+                toShowRecordPatient: () => { history.push(calculatedRoutes.showPatientRecord); },
+                toRecordTestResult: () => { history.push(calculatedRoutes.recordTestResult); },
+                toQRScan: () => { history.push(calculatedRoutes.qrScan); },
+                toStatistics: () => { history.push(calculatedRoutes.statistics); },
+                toFailedReport: () => { history.push(calculatedRoutes.failedReport); },
+            }
+
+            setResult(n);
+        }
+    }, [calculatedRoutes])
+
+    return result;
 
 }
 

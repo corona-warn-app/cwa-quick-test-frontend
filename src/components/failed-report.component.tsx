@@ -33,8 +33,12 @@ const FailedReport = (props: any) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
 
-    const [isInit, setIsInit] = React.useState(true)
+    const [isInit, setIsInit] = React.useState(false)
 
+    React.useEffect(() => {
+        if (navigation)
+            setIsInit(true);
+    }, [navigation])
 
     return (
         !isInit ? <CwaSpinner /> :
@@ -67,7 +71,7 @@ const FailedReport = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={navigation.toLanding}
+                                    onClick={navigation!.toLanding}
                                 >
                                     {t('translation:cancel')}
                                 </Button>

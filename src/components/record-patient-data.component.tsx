@@ -63,7 +63,7 @@ const RecordPatientData = (props: any) => {
     const [sex, setSex] = React.useState<Sex>();
     const [consent, setConsent] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
-    const [dataPrivacyApproved, setDataPrivacyApproved] = React.useState(false)
+    const [privacyAgreement, setPrivacyAgreement] = React.useState(false)
     const [canGoNext, setCanGoNext] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
     const [validated, setValidated] = React.useState(false);
@@ -75,7 +75,7 @@ const RecordPatientData = (props: any) => {
         if (error) {
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel: navigation.toLanding });
+        props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
     }
 
     const uuid = useGetUuid(props?.patient?.uuId, undefined, handleError);
@@ -89,7 +89,7 @@ const RecordPatientData = (props: any) => {
             setDateOfBirth(p.dateOfBirth);
             setConsent(p.processingConsens);
             setIncludePersData(p.includePersData);
-            setDataPrivacyApproved(p.dataPrivacyApproved);
+            setPrivacyAgreement(p.privacyAgreement);
             setZip(p.zip);
             setCity(p.city);
             setStreet(p.street);
@@ -116,10 +116,10 @@ const RecordPatientData = (props: any) => {
 
     // set ready state for spinner
     React.useEffect(() => {
-        if (processId) {
+        if (processId && navigation) {
             setTimeout(setIsInit, 200, true);
         }
-    }, [processId]);
+    }, [processId, navigation]);
 
     // check completness on value change
     React.useEffect(() => {
@@ -134,7 +134,7 @@ const RecordPatientData = (props: any) => {
             && phoneNumber !== ''
             && emailAddress !== ''
             && consent
-            && dataPrivacyApproved
+            && privacyAgreement
             && uuid) {
             setCanGoNext(true);
             setPatient({
@@ -144,7 +144,7 @@ const RecordPatientData = (props: any) => {
                 processingConsens: consent,
                 uuId: uuid,
                 includePersData: persDataInQR,
-                dataPrivacyApproved: dataPrivacyApproved,
+                privacyAgreement: privacyAgreement,
                 sex: sex,
                 zip: zip,
                 city: city,
@@ -158,7 +158,7 @@ const RecordPatientData = (props: any) => {
             setCanGoNext(false);
             setPatient(undefined);
         }
-    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, consent, uuid, persDataInQR, dataPrivacyApproved])
+    }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, consent, uuid, persDataInQR, privacyAgreement])
 
 
     // emit patient object to parent
@@ -212,13 +212,13 @@ const RecordPatientData = (props: any) => {
     const handlePersDataInQRChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setIncludePersData(evt.currentTarget.checked);
     }
-    const handleDataPrivacyApproved = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setDataPrivacyApproved(evt.currentTarget.checked);
+    const handlePrivacyAgreement = (evt: React.ChangeEvent<HTMLInputElement>) => {
+        setPrivacyAgreement(evt.currentTarget.checked);
     }
 
     const handleCancel = () => {
         props.setPatient(undefined);
-        navigation.toLanding();
+        navigation!.toLanding();
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -230,7 +230,7 @@ const RecordPatientData = (props: any) => {
         setValidated(true);
 
         if (form.checkValidity() && canGoNext) {
-            setTimeout(navigation.toShowRecordPatient, 200);
+            setTimeout(navigation!.toShowRecordPatient, 200);
         }
 
     }
@@ -512,9 +512,9 @@ const RecordPatientData = (props: any) => {
                                     <Form.Check className='align-self-center'>
                                         <Form.Check.Input
                                             className='ckb-input'
-                                            onChange={handleDataPrivacyApproved}
+                                            onChange={handlePrivacyAgreement}
                                             type='checkbox'
-                                            checked={dataPrivacyApproved}
+                                            checked={privacyAgreement}
                                         />
                                     </Form.Check>
                                 </Col>

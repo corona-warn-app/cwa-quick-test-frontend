@@ -40,16 +40,22 @@ const Statistics = (props: any) => {
 
         if (error) {
 
-            
+
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel:navigation.toLanding });
+        props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
     }
 
-    const statisticData= useStatistics(undefined, handleError);
+    const statisticData = useStatistics(undefined, handleError);
+    const [isInit, setIsInit] = React.useState(false)
+
+    React.useEffect(() => {
+        if (navigation && statisticData)
+            setIsInit(true);
+    }, [navigation, statisticData])
 
     return (
-        !statisticData ? <CwaSpinner /> :
+        !isInit ? <CwaSpinner /> :
             <>
                 <Card id='data-card'>
                     <Card.Header id='data-header' className='pb-0'>
@@ -69,7 +75,7 @@ const Statistics = (props: any) => {
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:totalTestCount')}</Card.Text>
                             </Col>
                             <Col md='6'>
-                                {statisticData.totalTestCount}
+                                {statisticData!.totalTestCount}
                             </Col>
                         </Row>
                         <Row>
@@ -77,10 +83,10 @@ const Statistics = (props: any) => {
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:positiveTestCount')}</Card.Text>
                             </Col>
                             <Col md='3'>
-                                {statisticData.positiveTestCount}
+                                {statisticData!.positiveTestCount}
                             </Col>
                             <Col md='3'>
-                                {statisticData.totalTestCount>0 ? (100*statisticData.positiveTestCount/statisticData.totalTestCount).toFixed(2) : undefined} %
+                                {statisticData!.totalTestCount > 0 ? (100 * statisticData!.positiveTestCount / statisticData!.totalTestCount).toFixed(2) : undefined} %
                             </Col>
                         </Row>
                     </Card.Body>
@@ -94,7 +100,7 @@ const Statistics = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={navigation.toLanding}
+                                    onClick={navigation!.toLanding}
                                 >
                                     {t('translation:cancel')}
                                 </Button>

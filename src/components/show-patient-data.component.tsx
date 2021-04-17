@@ -58,7 +58,7 @@ const ShowPatientData = (props: any) => {
             setPatient(props.patient)
         }
         else
-            props.setError({ error: '', message: t('translation:error-patient-data-load'), onCancel: navigation.toLanding });
+            props.setError({ error: '', message: t('translation:error-patient-data-load'), onCancel: navigation!.toLanding });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -86,14 +86,14 @@ const ShowPatientData = (props: any) => {
 
     // set ready state for spinner
     React.useEffect(() => {
-        if (processId) {
+        if (processId && navigation) {
             setTimeout(setIsInit, 200, true);
         }
-    }, [processId]);
+    }, [processId, navigation]);
 
     const finishProcess = () => {
         props.setPatient(undefined);
-        navigation.toLanding();
+        navigation!.toLanding();
     }
 
     const handleError = (error: any) => {
@@ -104,7 +104,7 @@ const ShowPatientData = (props: any) => {
             
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel: navigation.toLanding });
+        props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
     }
 
     const postPatient = usePostPatient(patientToPost, processId, finishProcess, handleError);
@@ -157,7 +157,7 @@ const ShowPatientData = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={navigation.toRecordPatient}
+                                    onClick={navigation!.toRecordPatient}
                                 >
                                     {t('translation:patient-data-correction')}
                                 </Button>
