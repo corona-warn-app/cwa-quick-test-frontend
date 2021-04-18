@@ -59,7 +59,7 @@
   "statistics": "Auswertungen",
   "failed-report": "Meldungen positiver Tests",
   "totalTestCount": "Gasamtanzahl der Tests",
-  "positiveTestCount": "Anzahl der positiven Test",
+  "positiveTestCount": "Anzahl der positiven Tests",
   "successfull-transferred": "Die Daten wurden erfolgreich übermittelt"
 
 }
