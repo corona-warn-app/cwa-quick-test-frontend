@@ -505,8 +505,8 @@ const RecordPatientData = (props: any) => {
                                 </Col>
                             </Form.Group>
 
-                        <Form.Group as={Row} controlId='formDataPrivacyCheckbox'>
-                                <Form.Label className='input-label' column sm='10' >{t('translation:data-privacy-approve')}</Form.Label>
+                            <Form.Group as={Row} controlId='formDataPrivacyCheckbox'>
+                                <Form.Label className='input-label' column sm='10' >{t('translation:data-privacy-approve') + '*'}</Form.Label>
 
                                 <Col sm='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
@@ -515,6 +515,7 @@ const RecordPatientData = (props: any) => {
                                             onChange={handlePrivacyAgreement}
                                             type='checkbox'
                                             checked={privacyAgreement}
+                                            required
                                         />
                                     </Form.Check>
                                 </Col>

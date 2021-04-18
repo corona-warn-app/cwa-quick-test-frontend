@@ -39,6 +39,10 @@ const LandingPage = (props: any) => {
             setIsInit(true);
     }, [navigation])
 
+    const handleClick=()=>{
+        props.setNotificationShow(true);
+    }
+
     return (!isInit? <CwaSpinner />:
         <Container className='center-content'>
 

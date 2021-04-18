@@ -56,7 +56,7 @@ const Header = (props: any) => {
     }, [keycloak])
 
     const handleLogout = () => {
-        keycloak.logout({ redirectUri: window.location.origin + '/#' + navigation!.routes.landing.replace(':mandant', mandant as string) });
+        keycloak.logout({ redirectUri: window.location.origin + navigation!.calculatedRoutes.landing});
     }
 
     return (!isInit?<></>:
