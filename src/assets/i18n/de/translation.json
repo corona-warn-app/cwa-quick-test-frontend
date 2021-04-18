@@ -58,7 +58,7 @@
   "error-patient-data-load": "Patientendaten konnten nicht geladen werden.",
   "statistics": "Auswertungen",
   "failed-report": "Meldungen positiver Tests",
-  "totalTestCount": "Gasamtanzahl der Tests",
+  "totalTestCount": "Gesamtanzahl der Tests",
   "positiveTestCount": "Anzahl der positiven Tests",
   "successfull-transferred": "Die Daten wurden erfolgreich übermittelt"
 
