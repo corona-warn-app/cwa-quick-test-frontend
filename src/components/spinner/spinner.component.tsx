@@ -19,12 +19,21 @@
  * under the License.
  */
 
+import React from 'react';
 import './spinner.component.scss';
 
 const CwaSpinner = (props: any) => {
 
+    const [bg, setBg] = React.useState('#fff');
+
+    React.useEffect(()=>{
+        if (props.background) {
+            setBg(props.background)
+        }
+    },[])
+
     return (
-        <div className={'loader'}>Loading...</div>
+        <div className={'loader'} style={{ background: bg }}>Loading...</div>
     )
 }
 

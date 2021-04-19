@@ -27,6 +27,8 @@ import sha256 from 'crypto-js/sha256';
 import Patient from './misc/patient';
 import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
+import IQTArchiv from './misc/qt-archiv';
+import { TestResult } from './misc/enum';
 
 export const api = axios.create({
     baseURL: ''
@@ -228,6 +230,71 @@ export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onErr
                 }
             });
     }, []);
+
+    return result;
+}
+export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | undefined, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<IQTArchiv[]>();
+
+    const header = {
+        "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+        'Content-Type': 'application/json'
+    };
+
+    React.useEffect(() => {
+
+        if (start && end) {
+            const uri = '/api/quicktestarchive?testResult=' + TestResult.POSITIVE + '&dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
+            api.get(uri, { headers: header })
+                .then(response => {
+                    console.log(JSON.stringify(response.data));
+                    
+                    setResult(response.data.quickTestArchives);
+                    if (onSuccess) {
+                        onSuccess(response?.status);
+                    }
+                })
+                .catch(error => {
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+    }, [start, end]);
+
+    return result;
+}
+
+export const useGetPDF = (hash: string| undefined, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<string>();
+
+    const header = {
+        "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+        'Content-Type': 'application/pdf'
+    };
+
+    React.useEffect(() => {
+
+        if (hash) {
+            const uri = '/api/quicktestarchive/' + hash + '/pdf';
+            api.get(uri, { headers: header })
+                .then(response => {
+                    console.log(JSON.stringify(response.data));
+                    
+                    setResult(response.data);
+                    if (onSuccess) {
+                        onSuccess(response?.status);
+                    }
+                })
+                .catch(error => {
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+    }, [hash]);
 
     return result;
 }

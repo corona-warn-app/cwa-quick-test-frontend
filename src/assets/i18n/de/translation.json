@@ -60,6 +60,9 @@
   "failed-report": "Meldungen positiver Tests",
   "totalTestCount": "Gesamtanzahl der Tests",
   "positiveTestCount": "Anzahl der positiven Tests",
-  "successfull-transferred": "Die Daten wurden erfolgreich übermittelt"
+  "successfull-transferred": "Die Daten wurden erfolgreich übermittelt",
+  "timerange": "Zeitraum",
+  "from": "von",
+  "to": "bis"
 
 }

@@ -59,5 +59,8 @@
   "failed-report": "Failed Test Report",
   "totalTestCount": "Total test count",
   "positiveTestCount": "Positive test count",
-  "successfull-transferred": "Data successfully transferred"
+  "successfull-transferred": "Data successfully transferred",
+  "timerange": "Timerange",
+  "from": "from",
+  "to": "to"
 }
