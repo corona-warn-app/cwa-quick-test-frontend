@@ -36,6 +36,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import useOrientationChanged from '../misc/orientation-changed';
 import PagedList from './paged-list.component';
 
+
 const FailedReport = (props: any) => {
 
     const navigation = useNavigation();
