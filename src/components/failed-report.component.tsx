@@ -34,6 +34,7 @@ import { useGetPDF, useGetPositiveForTimeRange } from '../api';
 import utils from '../misc/utils';
 import { useKeycloak } from '@react-keycloak/web';
 import useOrientationChanged from '../misc/orientation-changed';
+import PagedList from './paged-list.component';
 
 const FailedReport = (props: any) => {
 
@@ -185,7 +186,7 @@ const FailedReport = (props: any) => {
                                             showMonthDropdown
                                             showYearDropdown
                                             dropdownMode="select"
-                                            maxDate={new Date()}
+                                            maxDate={endDate}
                                             minDate={new Date(1900, 0, 1, 12)}
                                             required
                                         />
@@ -204,7 +205,7 @@ const FailedReport = (props: any) => {
                                             showYearDropdown
                                             dropdownMode="select"
                                             maxDate={new Date()}
-                                            minDate={new Date(1900, 0, 1, 12)}
+                                            minDate={startDate}
                                             required
                                         />
                                     </Col>
@@ -215,17 +216,12 @@ const FailedReport = (props: any) => {
                         <hr />
 
                         {!filterComplete ? <></> :
-                            (!qtArchive) ? <CwaSpinner background='inherit' /> :
-                                <Row>
+                            (!qtArchive)
+                                ? <CwaSpinner background='inherit' />
+                                : <Row>
                                     <Col md='3'>
-                                        <ListGroup>
-                                            {qtArchive.map((archiv, index) => (
-                                                <ListGroupItem onClick={handleListSelect} action eventKey={archiv.hashedGuid} key={archiv.hashedGuid}>
-                                                    {archiv.hashedGuid.substring(0, utils.shortHashLen)}
-                                                </ListGroupItem>
-                                            ))}
-                                        </ListGroup>
-                                    <hr/>
+                                        <PagedList data={qtArchive} onSelected={setSelectedHash} />
+                                        <hr />
                                     </Col>
                                     <Col md='9' ref={parentRef}>
                                         {selectedHash && <>
