@@ -140,7 +140,7 @@ const FailedReport = (props: any) => {
                 parseInt(style.paddingLeft, 10) -
                 parseInt(style.paddingRight, 10);
 
-            console.log(containerWidth);
+            // console.log(containerWidth);
             setPageWidth(containerWidth);
         }
     }

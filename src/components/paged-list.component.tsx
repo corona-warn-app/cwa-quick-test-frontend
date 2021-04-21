@@ -63,14 +63,14 @@ const PagedList = (props: any) => {
     }, [props.data])
 
     React.useEffect(() => {
-        console.log('dataChange');
+        // console.log('dataChange');
         if (data && data.length > 0) {
             setPages(Math.ceil(data.length / displayItemCount));
         }
     }, [data])
 
     React.useEffect(() => {
-        console.log('pagesChange');
+        // console.log('pagesChange');
         if (pages) {
             setCurPage(1);
         }
@@ -80,7 +80,7 @@ const PagedList = (props: any) => {
     }, [pages])
 
     React.useEffect(() => {
-        console.log('curPageChange');
+        // console.log('curPageChange');
         if (curPage && curPage > 0 && curPage <= pages && data) {
 
             // (1-1)*10=0; (3-1)*10=20
@@ -173,7 +173,7 @@ const PagedList = (props: any) => {
     }
 
     const handleClick = (num: number) => {
-        console.log(num);
+        // console.log(num);
         if (!isNaN(num)) {
             setCurPage(num);
         }

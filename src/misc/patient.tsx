@@ -37,4 +37,5 @@ export default interface Patient {
     phoneNumber?:string;
     emailAddress?:string;
     testId?:string;
+    testResultHash?:string;
 }

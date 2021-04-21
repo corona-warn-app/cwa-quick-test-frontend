@@ -24,9 +24,9 @@ import Patient from './patient';
 import CryptoJS from 'crypto-js';
 
 export interface IQRCodeValue {
-    fn: string,
-    ln: string,
-    dob: string, //"1990-01-01",   - >day of birth
+    fn?: string,
+    ln?: string,
+    dob?: string, //"1990-01-01",   - >day of birth
     testid: string,
     timestamp: number,
     salt: string, // 32 Bit random in HEX
@@ -35,17 +35,16 @@ export interface IQRCodeValue {
 
 const baseUrl = 'https://s.coronawarn.app?v=1#';
 
-export const getQrCodeValueString = (guid: string, fn: string = '', ln: string = '', dob?: Date) => {
-
+export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob?: Date) => {
     let encodedJson = '';
 
     const value: IQRCodeValue = {
         fn: fn,
         ln: ln,
-        dob: dob ? dob.toISOString().split('T')[0] : '',
+        dob: dob ? dob.toISOString().split('T')[0] : undefined,
         testid: guid,
         timestamp: Date.now() / 1000 | 0,
-        salt:  CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
+        salt: CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
     }
 
     // const value: IQRCodeValue = { "fn": "Erika", "ln": "Mustermann", "dob": "1990-12-23", "timestamp": 1618386548, "testid": "52cddd8e-ff32-4478-af64-cb867cea1db5", "salt": "759F8FF3554F0E1BBF6EFF8DE298D9E9" }
@@ -53,13 +52,15 @@ export const getQrCodeValueString = (guid: string, fn: string = '', ln: string =
     const shaEntry = `${value.dob}#${value.fn}#${value.ln}#${value.timestamp.toString()}#${value.testid}#${value.salt}`;
     value.hash = CryptoJS.SHA256(shaEntry).toString(CryptoJS.enc.Hex);
 
-    // console.log("The hash: "+value.hash);
+    // console.log("The hash: " + value.hash);
 
 
     const json = JSON.stringify(value);
+    // console.log(json);
+
     encodedJson = btoa(json);
 
-    return (baseUrl + encodedJson);
+    return [(baseUrl + encodedJson), value.hash];
 }
 
 export const getQrCodeValue = (valueString: string) => {
@@ -83,7 +84,7 @@ export const getPatientFromScan = (data: string | null) => {
             const scanData = getQrCodeValue(data);
 
 
-            if (scanData) {
+            if (scanData && scanData.ln && scanData.fn && scanData.dob) {
 
                 result = {
                     name: scanData.ln,

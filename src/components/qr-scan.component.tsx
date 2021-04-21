@@ -48,9 +48,7 @@ const QrScan = (props: any) => {
 
     const handleScan = (data: string | null) => {
         if (props.setPatient && data) {
-            try {
-                console.log(data);
-                
+            try {                
                 const scannedPatient = getPatientFromScan(data);
                 props.setPatient(scannedPatient);
                 navigation!.toRecordPatient();
