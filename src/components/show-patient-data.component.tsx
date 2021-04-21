@@ -35,7 +35,7 @@ import utils from '../misc/utils';
 
 import CwaSpinner from './spinner/spinner.component';
 import { Sex } from '../misc/enum';
-import { getQrCodeValueString } from '../misc/qr-code-value';
+import { getQrCodeValue, getQrCodeValueString } from '../misc/qr-code-value';
 import { usePostPatient } from '../api';
 
 const ShowPatientData = (props: any) => {
@@ -46,21 +46,24 @@ const ShowPatientData = (props: any) => {
     const [isInit, setIsInit] = React.useState(false)
     const [patient, setPatient] = React.useState<Patient>();
     const [patientToPost, setPatientToPost] = React.useState<Patient>();
-    const [qrCodeValue, setQrCodeValue] = React.useState('');
+    const [qrCodeValue, setQrCodeValue] = React.useState<string[]>();
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
 
 
+
+
     // set patient data on mount and set hash from uuid
     React.useEffect(() => {
-
-        if (props.patient) {
-            setPatient(props.patient)
+        if (isInit) {
+            if (props.patient) {
+                setPatient(props.patient)
+            }
+            else
+                props.setError({ error: '', message: t('translation:error-patient-data-load'), onCancel: navigation!.toLanding });
         }
-        else
-            props.setError({ error: '', message: t('translation:error-patient-data-load'), onCancel: navigation!.toLanding });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [isInit])
 
     React.useEffect(() => {
         if (patient && patient.uuId) {
@@ -76,7 +79,7 @@ const ShowPatientData = (props: any) => {
     }, [patient])
 
 
-    
+
     // set process id from hash
     React.useEffect(() => {
         if (uuIdHash) {
@@ -84,12 +87,23 @@ const ShowPatientData = (props: any) => {
         }
     }, [uuIdHash]);
 
+    // set process id from hash
+    React.useEffect(() => {
+        if (qrCodeValue && qrCodeValue.length > 1) {
+            patient!.testResultHash = qrCodeValue[1]
+            // setPatient(patient)
+
+            // console.log(JSON.stringify(patient));
+
+        }
+    }, [qrCodeValue]);
+
     // set ready state for spinner
     React.useEffect(() => {
-        if (processId && navigation) {
+        if (navigation) {
             setTimeout(setIsInit, 200, true);
         }
-    }, [processId, navigation]);
+    }, [navigation]);
 
     const finishProcess = () => {
         props.setPatient(undefined);
@@ -102,7 +116,7 @@ const ShowPatientData = (props: any) => {
 
         if (error) {
 
-            
+
             msg = error.message
         }
         props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
@@ -141,7 +155,7 @@ const ShowPatientData = (props: any) => {
                             </Col>
                             <Col sm='7' className='px-4'>
                                 <Container id='qr-code-container'>
-                                    {qrCodeValue ? <><QRCode id='qr-code' size={256} renderAs='svg' value={qrCodeValue} />
+                                    {qrCodeValue ? <><QRCode id='qr-code' size={256} renderAs='svg' value={qrCodeValue[0]} />
                                         {/* <Card.Text className='input-label' >{qrCodeValue}</Card.Text> */}
                                     </> : <></>}
                                 </Container>
