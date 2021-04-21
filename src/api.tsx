@@ -46,7 +46,7 @@ export const usePostTestResult = (testResult: ITestResult | undefined, processId
             const uri = '/api/quicktest/' + processId + '/testResult';
             const body = JSON.stringify(testResult);
             // console.log(body);
-            
+
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
                 'Content-Type': 'application/json'
@@ -88,7 +88,7 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                 zipCode: patient.zip,
                 city: patient.city,
                 birthday: patient.dateOfBirth.toISOString().split('T')[0],
-                testResultServerHash:patient.testResultHash
+                testResultServerHash: patient.testResultHash
             });
             // console.log(JSON.stringify(body));
 
@@ -251,7 +251,7 @@ export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | 
             api.get(uri, { headers: header })
                 .then(response => {
                     console.log(JSON.stringify(response.data));
-                    
+
                     setResult(response.data.quickTestArchives);
                     if (onSuccess) {
                         onSuccess(response?.status);
@@ -268,7 +268,7 @@ export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | 
     return result;
 }
 
-export const useGetPDF = (hash: string| undefined, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
     const [result, setResult] = React.useState<string>();
 
@@ -284,7 +284,7 @@ export const useGetPDF = (hash: string| undefined, onSuccess?: (status: number) 
             api.get(uri, { headers: header })
                 .then(response => {
                     console.log(JSON.stringify(response.data));
-                    
+
                     setResult(response.data);
                     if (onSuccess) {
                         onSuccess(response?.status);
