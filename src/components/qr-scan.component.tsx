@@ -58,7 +58,7 @@ const QrScan = (props: any) => {
     }
 
     const handleError = (error: any) => {
-        if (window.location.protocol == 'http:') {
+        if (window.location.protocol === 'http:') {
             setMessage(t('translation:qr-scan-https-only'));
         } else {
             setMessage("Scan Error: " + error);

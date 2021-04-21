@@ -23,9 +23,7 @@ import React from 'react';
 import { ListGroup, ListGroupItem, Pagination } from 'react-bootstrap'
 
 import '../i18n';
-import { useTranslation } from 'react-i18next';
 
-import useNavigation from '../misc/navigation';
 import CwaSpinner from './spinner/spinner.component';
 import IQTArchiv from '../misc/qt-archiv';
 import utils from '../misc/utils';
@@ -49,6 +47,7 @@ const PagedList = (props: any) => {
         if (props && props.data) {
             setData(props.data);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.data])
 
     React.useEffect(() => {
@@ -64,6 +63,7 @@ const PagedList = (props: any) => {
         else {
             setCurPage(0)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pages])
 
     React.useEffect(() => {
@@ -136,6 +136,7 @@ const PagedList = (props: any) => {
             setDataToShow(undefined);
         }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [curPage])
 
     const handleListSelect = (evt: any) => {

@@ -64,6 +64,7 @@ export const usePostTestResult = (testResult: ITestResult | undefined, processId
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [testResult])
 }
 
@@ -108,6 +109,7 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [patient])
 }
 
@@ -130,6 +132,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
         else {
             setUuid(newUuid());
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // on new uuid
@@ -169,6 +172,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
                 }
             });
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uuidHash]);
 
     return result;
@@ -198,6 +202,7 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return statisticData;
@@ -229,6 +234,7 @@ export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onErr
                     onError(error);
                 }
             });
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return result;
@@ -260,6 +266,7 @@ export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | 
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [start, end]);
 
     return result;
@@ -292,6 +299,7 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hash]);
 
     return result;

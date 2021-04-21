@@ -33,7 +33,7 @@ const ErrorPage = (props: any) => {
     React.useEffect(() => {
         if (props)
             setShow(props.show);
-    }, [props.show])
+    }, [props, props.show])
 
     return (
         <>

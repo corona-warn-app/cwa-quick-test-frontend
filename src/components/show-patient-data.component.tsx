@@ -35,7 +35,7 @@ import utils from '../misc/utils';
 
 import CwaSpinner from './spinner/spinner.component';
 import { Sex } from '../misc/enum';
-import { getQrCodeValue, getQrCodeValueString } from '../misc/qr-code-value';
+import { getQrCodeValueString } from '../misc/qr-code-value';
 import { usePostPatient } from '../api';
 
 const ShowPatientData = (props: any) => {
@@ -49,9 +49,6 @@ const ShowPatientData = (props: any) => {
     const [qrCodeValue, setQrCodeValue] = React.useState<string[]>();
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
-
-
-
 
     // set patient data on mount and set hash from uuid
     React.useEffect(() => {
@@ -76,9 +73,8 @@ const ShowPatientData = (props: any) => {
                 setQrCodeValue(getQrCodeValueString(patient.uuId));
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [patient])
-
-
 
     // set process id from hash
     React.useEffect(() => {
@@ -92,6 +88,7 @@ const ShowPatientData = (props: any) => {
         if (qrCodeValue && qrCodeValue.length > 1) {
             patient!.testResultHash = qrCodeValue[1];
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [qrCodeValue]);
 
     // set ready state for spinner

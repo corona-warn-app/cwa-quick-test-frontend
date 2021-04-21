@@ -158,6 +158,7 @@ const RecordPatientData = (props: any) => {
             setCanGoNext(false);
             setPatient(undefined);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, consent, uuid, persDataInQR, privacyAgreement])
 
 

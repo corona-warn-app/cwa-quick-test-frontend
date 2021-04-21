@@ -56,6 +56,7 @@ const RecordTestResult = (props: any) => {
         if (!testId && testIdList && testIdList.length > 0) {
             setTestId(testIdList[testIdList.length - 1])
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [testIdList]);
 
     const addTestIdToHistory = (testId: string) => {

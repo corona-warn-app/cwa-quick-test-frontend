@@ -54,6 +54,7 @@ const Root = (props: any) => {
 
     updateKeycloakConfig();
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mandant, keycloakConfig]);
 
 

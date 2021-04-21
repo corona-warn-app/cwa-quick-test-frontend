@@ -67,6 +67,7 @@ export function PrivateRoute({
       setIsInit(true);
     }
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keycloak])
 
   return (
