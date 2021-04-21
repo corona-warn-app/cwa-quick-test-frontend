@@ -36,9 +36,6 @@ const useOrientationChanged = () => {
     // Add event listener
     window.addEventListener('orientationchange', handleChange);
 
-    // Call handler right away so state gets updated with initial window size
-    // handleChange();
-
     // Remove event listener on cleanup
     return () => window.removeEventListener('orientationchange', handleChange);
   }, []); // Empty array ensures that effect is only run on mount

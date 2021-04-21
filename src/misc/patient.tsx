@@ -19,7 +19,7 @@
  * under the License.
  */
 
-import {Sex} from './enum';
+import { Sex } from './enum';
 
 export default interface Patient {
     firstName: string;
@@ -29,13 +29,13 @@ export default interface Patient {
     uuId?: string;
     includePersData?: boolean;
     privacyAgreement?: boolean;
-    sex?:Sex;
-    zip?:string;
-    city?:string;
-    street?:string;
-    houseNumber?:string;
-    phoneNumber?:string;
-    emailAddress?:string;
-    testId?:string;
-    testResultHash?:string;
+    sex?: Sex;
+    zip?: string;
+    city?: string;
+    street?: string;
+    houseNumber?: string;
+    phoneNumber?: string;
+    emailAddress?: string;
+    testId?: string;
+    testResultHash?: string;
 }

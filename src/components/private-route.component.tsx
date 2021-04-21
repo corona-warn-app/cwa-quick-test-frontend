@@ -20,8 +20,9 @@
  */
 
 import React from 'react';
-import { useKeycloak } from '@react-keycloak/web';
 import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
+
+import { useKeycloak } from '@react-keycloak/web';
 import useNavigation from '../misc/navigation';
 
 interface PrivateRouteParams extends RouteProps {
@@ -38,7 +39,7 @@ export function PrivateRoute({
   render,
   ...rest }: PrivateRouteParams) {
 
-  const { keycloak, initialized } = useKeycloak();
+  const { keycloak } = useKeycloak();
   const navigation = useNavigation();
   const [isInit, setIsInit] = React.useState(false)
   const [isAuthorized, setIsAuthorized] = React.useState(false)

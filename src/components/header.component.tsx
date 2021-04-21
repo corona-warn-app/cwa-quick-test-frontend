@@ -29,7 +29,6 @@ import { useKeycloak } from '@react-keycloak/web';
 
 import useNavigation from '../misc/navigation';
 import C19Logo from '../assets/images/c-19_logo.png'
-import useLocalStorage from '../misc/local-storage';
 
 const Header = (props: any) => {
 
@@ -38,7 +37,6 @@ const Header = (props: any) => {
     const { keycloak } = useKeycloak();
 
     const [userName, setUserName] = React.useState('');
-    const [mandant, setMandant] = useLocalStorage('mandant', '');
     const [isInit, setIsInit] = React.useState(false)
 
     React.useEffect(() => {
@@ -56,10 +54,10 @@ const Header = (props: any) => {
     }, [keycloak])
 
     const handleLogout = () => {
-        keycloak.logout({ redirectUri: window.location.origin + navigation!.calculatedRoutes.landing});
+        keycloak.logout({ redirectUri: window.location.origin + navigation!.calculatedRoutes.landing });
     }
 
-    return (!isInit?<></>:
+    return (!isInit ? <></> :
         <Container className='position-relative'>
             {/* simple header with logo */}
 

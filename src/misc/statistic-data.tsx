@@ -21,5 +21,5 @@
 
 export default interface StatisticData {
     totalTestCount: number;
-    positiveTestCount:number;
+    positiveTestCount: number;
 }

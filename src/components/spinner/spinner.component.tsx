@@ -26,11 +26,11 @@ const CwaSpinner = (props: any) => {
 
     const [bg, setBg] = React.useState('#fff');
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if (props.background) {
             setBg(props.background)
         }
-    },[])
+    }, [])
 
     return (
         <div className={'loader'} style={{ background: bg }}>Loading...</div>

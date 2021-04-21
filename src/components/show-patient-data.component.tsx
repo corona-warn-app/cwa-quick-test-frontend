@@ -87,14 +87,10 @@ const ShowPatientData = (props: any) => {
         }
     }, [uuIdHash]);
 
-    // set process id from hash
+
     React.useEffect(() => {
         if (qrCodeValue && qrCodeValue.length > 1) {
-            patient!.testResultHash = qrCodeValue[1]
-            // setPatient(patient)
-
-            // console.log(JSON.stringify(patient));
-
+            patient!.testResultHash = qrCodeValue[1];
         }
     }, [qrCodeValue]);
 
@@ -115,8 +111,6 @@ const ShowPatientData = (props: any) => {
         let msg = '';
 
         if (error) {
-
-
             msg = error.message
         }
         props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
@@ -141,8 +135,6 @@ const ShowPatientData = (props: any) => {
                             <Col sm='5'>
                                 <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>{t('translation:qr-code')}</Card.Title>
                                 <hr />
-                                {/* <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:process')}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{processId}</Card.Text> */}
                                 <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.firstName + ' ' + patient?.name}</Card.Text>
                                 <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD. MM. yyyy' >{patient?.dateOfBirth as Date}</Moment>
@@ -156,7 +148,6 @@ const ShowPatientData = (props: any) => {
                             <Col sm='7' className='px-4'>
                                 <Container id='qr-code-container'>
                                     {qrCodeValue ? <><QRCode id='qr-code' size={256} renderAs='svg' value={qrCodeValue[0]} />
-                                        {/* <Card.Text className='input-label' >{qrCodeValue}</Card.Text> */}
                                     </> : <></>}
                                 </Container>
                             </Col>

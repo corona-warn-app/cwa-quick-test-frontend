@@ -34,7 +34,7 @@ const telRegExp = new RegExp(pattern.tel);
 const eMailRegExp = new RegExp(pattern.eMail);
 
 export default {
-    shortHashLen:shortHashLen,
+    shortHashLen: shortHashLen,
     pattern: pattern,
     shortHash: (uuIdHash: string) => uuIdHash.substring(0, shortHashLen),
     isProcessNoValid: (processNo: string) => processNoRegExp.test(processNo),

@@ -20,25 +20,17 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap'
-import QrReader from 'react-qr-reader'
-import Patient from '../misc/patient'
+import { ListGroup, ListGroupItem, Pagination } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
-import { getPatientFromScan } from '../misc/qr-code-value';
 import CwaSpinner from './spinner/spinner.component';
 import IQTArchiv from '../misc/qt-archiv';
 import utils from '../misc/utils';
 
-//const testFull = 'https://s.coronwarn.app?v=1#eyJmbiI6IkdvcmRvbiIsImxuIjoiR3J1bmQiLCJkb2IiOiIxOTkwLTAxLTAzIiwiZ3VpZCI6ImQ3ZWM2MDU4LWUyMzEtNGU4Yy1hNDFmLTViZjg1ZDdmZTI3MiIsInRpbWVzdGFtcCI6MTYxNzk3ODg4NDY4NX0=';
-
 const PagedList = (props: any) => {
-
-    const navigation = useNavigation();
-    const { t } = useTranslation();
 
     const displayItemCount = 12;
 
@@ -47,11 +39,8 @@ const PagedList = (props: any) => {
     const [pages, setPages] = React.useState(0);
     const [pageinationItems, setPageinationItems] = React.useState<JSX.Element[]>();
     const [curPage, setCurPage] = React.useState(1);
-    const [isInit, setIsInit] = React.useState(false)
 
     React.useEffect(() => {
-
-
         setData(undefined);
         setDataToShow(undefined);
         setPages(0);
@@ -63,14 +52,12 @@ const PagedList = (props: any) => {
     }, [props.data])
 
     React.useEffect(() => {
-        // console.log('dataChange');
         if (data && data.length > 0) {
             setPages(Math.ceil(data.length / displayItemCount));
         }
     }, [data])
 
     React.useEffect(() => {
-        // console.log('pagesChange');
         if (pages) {
             setCurPage(1);
         }
@@ -80,12 +67,9 @@ const PagedList = (props: any) => {
     }, [pages])
 
     React.useEffect(() => {
-        // console.log('curPageChange');
         if (curPage && curPage > 0 && curPage <= pages && data) {
 
-            // (1-1)*10=0; (3-1)*10=20
             const startIndex = (curPage - 1) * displayItemCount;
-            // (1*10)-1=9; (3*10)-1=29
             const endIndex = (curPage === pages)
                 ? data.length
                 : (curPage * displayItemCount)
@@ -154,12 +138,6 @@ const PagedList = (props: any) => {
 
     }, [curPage])
 
-    React.useEffect(() => {
-        if (navigation && data)
-            setIsInit(true);
-    }, [navigation, data])
-
-
     const handleListSelect = (evt: any) => {
         try {
             const hash = evt.target.dataset['rbEventKey'];
@@ -173,7 +151,6 @@ const PagedList = (props: any) => {
     }
 
     const handleClick = (num: number) => {
-        // console.log(num);
         if (!isNaN(num)) {
             setCurPage(num);
         }

@@ -90,7 +90,6 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                 birthday: patient.dateOfBirth.toISOString().split('T')[0],
                 testResultServerHash: patient.testResultHash
             });
-            // console.log(JSON.stringify(body));
 
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
@@ -185,7 +184,6 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
     };
 
     React.useEffect(() => {
-        /* setStatisticData({totalTestCount: 20, positiveTestCount: 5}); */
         if (!statisticData) {
             api.get('/api/quickteststatistics', { headers: header })
                 .then(response => {
@@ -248,10 +246,9 @@ export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | 
 
         if (start && end) {
             const uri = '/api/quicktestarchive?testResult=' + TestResult.POSITIVE + '&dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
+
             api.get(uri, { headers: header })
                 .then(response => {
-                    console.log(JSON.stringify(response.data));
-
                     setResult(response.data.quickTestArchives);
                     if (onSuccess) {
                         onSuccess(response?.status);
@@ -281,10 +278,9 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
 
         if (hash) {
             const uri = '/api/quicktestarchive/' + hash + '/pdf';
+
             api.get(uri, { headers: header })
                 .then(response => {
-                    console.log(JSON.stringify(response.data));
-
                     setResult(response.data);
                     if (onSuccess) {
                         onSuccess(response?.status);

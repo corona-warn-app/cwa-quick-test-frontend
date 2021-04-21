@@ -25,10 +25,6 @@ import { Button, Card, Col, Modal, Row } from 'react-bootstrap'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from '../misc/navigation';
-import { getPatientFromScan } from '../misc/qr-code-value';
-
-
 const ErrorPage = (props: any) => {
 
     const { t } = useTranslation();
@@ -75,7 +71,7 @@ const ErrorPage = (props: any) => {
                 <Modal.Footer id='data-footer'>
                     <Button
                         className='py-0'
-                        onClick={()=>{props.onCancel(); props.onHide();}}
+                        onClick={() => { props.onCancel(); props.onHide(); }}
                     >
                         {t('translation:cancel')}
                     </Button>

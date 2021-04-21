@@ -541,8 +541,6 @@ const RecordPatientData = (props: any) => {
                                         className='my-1 my-md-0 p-0'
                                         block
                                         type='submit'
-                                    // onClick={navigation.toShowRecordPatient}
-                                    // disabled={!canGoNext}
                                     >
                                         {t('translation:next')}
                                     </Button>

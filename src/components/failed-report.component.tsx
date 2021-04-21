@@ -20,21 +20,20 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Container, Form, ListGroup, ListGroupItem, Row } from 'react-bootstrap'
+import { Button, Card, Col, Form, Row } from 'react-bootstrap'
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
-
-import useNavigation from '../misc/navigation';
-import CwaSpinner from './spinner/spinner.component';
-import DatePicker from 'react-datepicker';
-import { idText } from 'typescript';
-import { useGetPDF, useGetPositiveForTimeRange } from '../api';
-import utils from '../misc/utils';
 import { useKeycloak } from '@react-keycloak/web';
-import useOrientationChanged from '../misc/orientation-changed';
+
+import DatePicker from 'react-datepicker';
+import CwaSpinner from './spinner/spinner.component';
 import PagedList from './paged-list.component';
+
+import { useGetPositiveForTimeRange } from '../api';
+import useNavigation from '../misc/navigation';
+import useOrientationChanged from '../misc/orientation-changed';
 
 
 const FailedReport = (props: any) => {
@@ -70,8 +69,6 @@ const FailedReport = (props: any) => {
     }, [orientationChanged])
 
     const qtArchive = useGetPositiveForTimeRange(startDate, endDate);
-    // const pdf = useGetPDF(selectedHash);
-
 
     const handleDateChange = (evt: Date | [Date, Date] | null, change: (date: Date | undefined) => void, hour: number) => {
         let date: Date | undefined;
@@ -107,49 +104,23 @@ const FailedReport = (props: any) => {
         }
     }, [startDate, endDate])
 
-    const handleListSelect = (evt: any) => {
-        try {
-            const hash = evt.target.dataset['rbEventKey'];
-
-            if (hash) {
-                setSelectedHash(hash);
-            }
-        } catch (error) {
-
-        }
-
-    }
-
     const calcWidth = () => {
-        // get stage container
+        // get container
         const container = parentRef.current;
-        // recusiveLogElements(container);
+
         if (container) {
 
             const style = window.getComputedStyle(container);
-            // console.log(style.height);
-            // console.log(style.marginTop);
-            // console.log(style.paddingBottom);
-            // console.log(style.paddingTop);
-            // console.log(style.marginBottom);
 
-            // console.log(     JSON.stringify(container.parentElement));
-            // calc some width + height
+            // calc some width
             var containerWidth =
                 container.offsetWidth -
                 parseInt(style.paddingLeft, 10) -
                 parseInt(style.paddingRight, 10);
 
-            // console.log(containerWidth);
             setPageWidth(containerWidth);
         }
     }
-
-    React.useEffect(() => {
-        if (selectedHash) {
-
-        }
-    }, [selectedHash])
 
     return (
         !isInit ? <CwaSpinner /> :
@@ -235,7 +206,6 @@ const FailedReport = (props: any) => {
                                                     }
                                                 }}
                                                 renderMode='svg'
-                                                // file={{ data: pdf }}
                                                 onLoadSuccess={onDocumentLoadSuccess}
                                             >
                                                 <Page pageNumber={pageNumber} width={pageWidth} />

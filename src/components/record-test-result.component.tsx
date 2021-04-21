@@ -41,8 +41,6 @@ const RecordTestResult = (props: any) => {
     const [processNo, setProcessNo] = React.useState('');
     const [testResult, setTestResult] = React.useState<TestResult>();
     const [testResultToPost, setTestResultToPost] = React.useState<ITestResult>();
-    const [message, setMessage] = React.useState('');
-    const [isInputValid, setIsInputValid] = React.useState(false);
     const [testId, setTestId] = React.useState('');
     const [testIdList, setTestIdList] = useLocalStorage('testids', []);
     const [validated, setValidated] = React.useState(false);
@@ -53,33 +51,12 @@ const RecordTestResult = (props: any) => {
             setIsInit(true);
     }, [navigation])
 
-    React.useEffect(() => {
-        // loadTestIdList();
-    }, [])
-
     // set last testId
     React.useEffect(() => {
         if (!testId && testIdList && testIdList.length > 0) {
             setTestId(testIdList[testIdList.length - 1])
         }
     }, [testIdList]);
-
-    const loadTestIdList = () => {
-        if (!testIdList && localStorage) {
-            const items = localStorage.getItem('testids');
-
-            if (items) {
-                setTestIdList(JSON.parse(items));
-            }
-            else {
-                setTestIdList([]);
-            }
-
-        }
-        else {
-            setTestIdList([]);
-        }
-    }
 
     const addTestIdToHistory = (testId: string) => {
 
@@ -121,8 +98,8 @@ const RecordTestResult = (props: any) => {
         if (form.checkValidity()) {
             addTestIdToHistory(testId);
             setTestResultToPost({
-                result:testResult!,
-                testBrandId:testId
+                result: testResult!,
+                testBrandId: testId
             })
         }
 
@@ -133,14 +110,10 @@ const RecordTestResult = (props: any) => {
         navigation!.toLanding();
     }
 
-
-
     const handleError = (error: any) => {
         let msg = '';
 
         if (error) {
-
-
             msg = error.message
         }
         props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
@@ -148,7 +121,7 @@ const RecordTestResult = (props: any) => {
 
     const postTestResult = usePostTestResult(testResultToPost, processNo, finishProcess, handleError);
 
-    return (!isInit? <CwaSpinner />:
+    return (!isInit ? <CwaSpinner /> :
         <>
             <Card id='data-card'>
 
@@ -203,7 +176,7 @@ const RecordTestResult = (props: any) => {
                                     maxLength={15}
                                 />
                                 <datalist id="testid-list">
-                                    {testIdList ? testIdList.map((i:string) => <option key={i} value={i} />) : undefined}
+                                    {testIdList ? testIdList.map((i: string) => <option key={i} value={i} />) : undefined}
                                 </datalist>
                             </Col>
                         </Form.Group>
@@ -285,8 +258,6 @@ const RecordTestResult = (props: any) => {
                                     className='my-1 my-md-0 p-0'
                                     block
                                     type='submit'
-                                    // disabled={!isInputValid}
-                                    // onClick={() => setTestResultToPost(testResult)}
                                 >
                                     {t('translation:data-submit')}
                                 </Button>
