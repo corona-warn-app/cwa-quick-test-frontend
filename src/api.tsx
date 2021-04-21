@@ -88,7 +88,7 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                 zipCode: patient.zip,
                 city: patient.city,
                 birthday: patient.dateOfBirth.toISOString().split('T')[0],
-                testResultHash:patient.testResultHash
+                testResultServerHash:patient.testResultHash
             });
             console.log(JSON.stringify(body));
 
