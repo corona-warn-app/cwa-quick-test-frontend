@@ -31,9 +31,11 @@ import DatePicker from 'react-datepicker';
 import CwaSpinner from './spinner/spinner.component';
 import PagedList from './paged-list.component';
 
-import { useGetPositiveForTimeRange } from '../api';
+import { useGetPDF, useGetPositiveForTimeRange } from '../api';
 import useNavigation from '../misc/navigation';
 import useOrientationChanged from '../misc/orientation-changed';
+import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 
 const FailedReport = (props: any) => {
@@ -45,18 +47,23 @@ const FailedReport = (props: any) => {
 
     const [isInit, setIsInit] = React.useState(false)
     const [filterComplete, setFilterComplete] = React.useState(false)
-    const [startDate, setStartDate] = React.useState<Date>();
+    const [startDate, setStartDate] = React.useState<Date | undefined>();
     const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
     const [selectedHash, setSelectedHash] = React.useState<string>();
     const [numPages, setNumPages] = React.useState(null);
     const [pageNumber, setPageNumber] = React.useState(1);
     const [pageWidth, setPageWidth] = React.useState<number>();
+    const [pdfUrl, setPdfUrl] = React.useState<string>();
 
     const parentRef = React.useRef<HTMLDivElement>(null);
+
+    const history = useHistory();
 
     const onDocumentLoadSuccess = (pdf: any) => {
         setNumPages(pdf.numPages);
         calcWidth();
+
+        setPdfUrl(window.location.origin + '/api/quicktestarchive/' + selectedHash + '/pdf');
     }
 
     React.useEffect(() => {
@@ -69,12 +76,14 @@ const FailedReport = (props: any) => {
     }, [orientationChanged])
 
     const qtArchive = useGetPositiveForTimeRange(startDate, endDate);
+    const pdf = useGetPDF(selectedHash);
 
     const handleDateChange = (evt: Date | [Date, Date] | null, change: (date: Date | undefined) => void, hour: number) => {
         let date: Date | undefined;
 
         if (evt instanceof Date) {
-            date = evt;
+            date = new Date(evt);
+            // date = evt;
         }
         else if (evt != null) {
             date = evt[0];
@@ -89,10 +98,11 @@ const FailedReport = (props: any) => {
     }
     const handleStartDateChange = (evt: Date | [Date, Date] | null) => {
         handleDateChange(evt, setStartDate, 0);
+        handleDateChange(evt, setEndDate, 24);
     }
 
     const handleEndDateChange = (evt: Date | [Date, Date] | null) => {
-        handleDateChange(evt, setEndDate, 24);
+        handleDateChange(evt, setEndDate, 23);
     }
 
     React.useEffect(() => {
@@ -103,6 +113,12 @@ const FailedReport = (props: any) => {
             setSelectedHash('');
         }
     }, [startDate, endDate])
+
+    React.useEffect(() => {
+        if (pdf) {
+            console.log(pdf);
+        }
+    }, [pdf])
 
     const calcWidth = () => {
         // get container
@@ -138,14 +154,14 @@ const FailedReport = (props: any) => {
                     {/*
     content area
     */}
-                    <Card.Body id='data-header'>
+                    <Card.Body id='data-header' className='qt-frame-card '>
                         {/* date of filter input */}
                         <Form.Group as={Row} className='mb-1'>
                             <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:timerange')}</Form.Label>
 
                             <Col xs='7' sm='9' className='d-flex'>
                                 <Row >
-                                    <Col xs='12' sm='6' className='d-flex'>
+                                    <Col xs='12' sm='12' className='d-flex'>
                                         <DatePicker
                                             selected={startDate}
                                             onChange={handleStartDateChange}
@@ -158,12 +174,12 @@ const FailedReport = (props: any) => {
                                             showMonthDropdown
                                             showYearDropdown
                                             dropdownMode="select"
-                                            maxDate={endDate}
+                                            maxDate={new Date()}
                                             minDate={new Date(1900, 0, 1, 12)}
                                             required
                                         />
                                     </Col>
-                                    <Col className='d-flex'>
+                                    {/* <Col className='d-flex'>
                                         <DatePicker
                                             selected={endDate}
                                             onChange={handleEndDateChange}
@@ -180,7 +196,7 @@ const FailedReport = (props: any) => {
                                             minDate={startDate}
                                             required
                                         />
-                                    </Col>
+                                    </Col> */}
                                 </Row>
                             </Col>
                         </Form.Group>
@@ -188,16 +204,16 @@ const FailedReport = (props: any) => {
                         <hr />
 
                         {!filterComplete ? <></> :
-                            (!qtArchive)
+                            (qtArchive === undefined)
                                 ? <CwaSpinner background='inherit' />
-                                : <Row>
+                                : <Row className='flex-fill'>
                                     <Col md='3'>
                                         <PagedList data={qtArchive} onSelected={setSelectedHash} />
                                         <hr />
                                     </Col>
                                     <Col md='9' ref={parentRef}>
                                         {selectedHash && <>
-                                            <Document
+                                            {/* <Document
                                                 file={{
                                                     url: '/api/quicktestarchive/' + selectedHash + '/pdf',
                                                     httpHeaders: {
@@ -210,7 +226,9 @@ const FailedReport = (props: any) => {
                                             >
                                                 <Page pageNumber={pageNumber} width={pageWidth} />
                                             </Document>
-                                            <p>Page {pageNumber} of {numPages}</p>
+                                            <p>Page {pageNumber} of {numPages}</p> */}
+
+                                            {!pdf ? <></> : <iframe src={pdf} className='qt-IFrame' />}
 
                                         </>
                                         }

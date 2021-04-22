@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { ListGroup, ListGroupItem, Pagination } from 'react-bootstrap'
+import { Col, Form, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap'
 
 import '../i18n';
 
@@ -33,14 +33,16 @@ const PagedList = (props: any) => {
     const displayItemCount = 12;
 
     const [data, setData] = React.useState<IQTArchiv[]>();
-    const [dataToShow, setDataToShow] = React.useState<IQTArchiv[]>();
+    const [dataToFilter, setDataToFilter] = React.useState<IQTArchiv[]>([]);
+    const [dataToShow, setDataToShow] = React.useState<IQTArchiv[]>([]);
     const [pages, setPages] = React.useState(0);
     const [pageinationItems, setPageinationItems] = React.useState<JSX.Element[]>();
     const [curPage, setCurPage] = React.useState(1);
+    const [filter, setFilter] = React.useState<string>('');
 
     React.useEffect(() => {
         setData(undefined);
-        setDataToShow(undefined);
+        setDataToShow([]);
         setPages(0);
         props.onSelected('');
 
@@ -52,7 +54,7 @@ const PagedList = (props: any) => {
 
     React.useEffect(() => {
         if (data && data.length > 0) {
-            setPages(Math.ceil(data.length / displayItemCount));
+            setDataToFilter(data);
         }
     }, [data])
 
@@ -67,14 +69,21 @@ const PagedList = (props: any) => {
     }, [pages])
 
     React.useEffect(() => {
-        if (curPage && curPage > 0 && curPage <= pages && data) {
+        let _pages = 0;
+
+        if (dataToFilter) {
+            _pages = Math.ceil(dataToFilter.length / displayItemCount);
+            setPages(_pages);
+        }
+
+        if (curPage && curPage > 0 && curPage <= _pages && dataToFilter) {
 
             const startIndex = (curPage - 1) * displayItemCount;
-            const endIndex = (curPage === pages)
-                ? data.length
+            const endIndex = (curPage === _pages)
+                ? dataToFilter.length
                 : (curPage * displayItemCount)
 
-            setDataToShow(data.slice(startIndex, endIndex));
+            setDataToShow(dataToFilter.slice(startIndex, endIndex));
 
 
             // pagination
@@ -83,12 +92,12 @@ const PagedList = (props: any) => {
                 ? curPage
                 : curPage - 1;
 
-            let max = (curPage + 1 < pages)
+            let max = (curPage + 1 < _pages)
                 ? curPage + 1
                 : curPage;
 
             let useBeginElipsis: boolean = (index > 2);
-            let useEndElipsis: boolean = (max + 1 < pages);
+            let useEndElipsis: boolean = (max + 1 < _pages);
 
             if (1 < index) {
                 p.push(<Pagination.Item
@@ -120,24 +129,43 @@ const PagedList = (props: any) => {
                     key='ee' />);
             }
 
-            if (pages > max) {
+            if (_pages > max) {
                 p.push(<Pagination.Item
-                    key={pages}
-                    active={curPage === pages}
+                    key={_pages}
+                    active={curPage === _pages}
                     onClick={(evt: any) => handleClick(parseInt(evt.target.text))
                     }>
-                    {pages}
+                    {_pages}
                 </Pagination.Item>);
             }
 
             setPageinationItems(p);
         }
         else {
-            setDataToShow(undefined);
+            setDataToShow([]);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [curPage])
+    }, [curPage, dataToFilter])
+
+    React.useEffect(() => {
+        console.log(filter);
+
+        let filterData = data;
+        if (filter && data) {
+            filterData = data.filter((item) => item.hashedGuid.startsWith(filter));
+        }
+
+        if (!filterData) {
+            filterData = [];
+        }
+
+        console.log(JSON.stringify(filterData));
+
+
+        setDataToFilter(filterData);
+
+    }, [filter])
 
     const handleListSelect = (evt: any) => {
         try {
@@ -157,8 +185,17 @@ const PagedList = (props: any) => {
         }
     }
 
-    return (!dataToShow ? <CwaSpinner background='#eeeeee' /> :
+    return (dataToShow === undefined ? <CwaSpinner background='#eeeeee' /> :
         <>
+            <Form.Control
+                className='qt-input'
+                value={filter}
+                onChange={(evt) => setFilter(evt.currentTarget.value)}
+                // placeholder={t('translation:first-name')}
+                type='text'
+                maxLength={utils.shortHashLen}
+            />
+            <hr />
             <ListGroup>
                 {dataToShow.map((archiv, index) => (
                     <ListGroupItem

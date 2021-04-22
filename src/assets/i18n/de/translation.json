@@ -57,12 +57,12 @@
   "serverError": "Es ist ein Fehler aufgetreten: ",
   "error-patient-data-load": "Patientendaten konnten nicht geladen werden.",
   "statistics": "Auswertungen",
-  "failed-report": "Meldungen positiver Tests",
+  "failed-report": "Testergebnisse",
   "totalTestCount": "Gesamtanzahl der Tests",
   "positiveTestCount": "Anzahl der positiven Tests",
   "successfull-transferred": "Die Daten wurden erfolgreich übermittelt",
-  "timerange": "Zeitraum",
-  "from": "von",
+  "timerange": "Testzeitraum",
+  "from": "am",
   "to": "bis"
 
 }

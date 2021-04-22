@@ -60,6 +60,16 @@ hr {
     padding: 1rem 1rem 2rem 1rem;
 }
 
+.qt-IFrame{
+    height: 100%;
+    width: inherit;
+}
+
+.qt-frame-card{
+    display: flex;
+    flex-direction: column;
+}
+
 #qt-footer {
     margin: 0;
     padding: 1rem;

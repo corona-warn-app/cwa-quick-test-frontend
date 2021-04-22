@@ -56,7 +56,7 @@
   "serverError": "An error occured: ",
   "error-patient-data-load": "Patient data failed to load.",
   "statistics": "Statistics",
-  "failed-report": "Failed Test Report",
+  "failed-report": "Test Report",
   "totalTestCount": "Total test count",
   "positiveTestCount": "Positive test count",
   "successfull-transferred": "Data successfully transferred",
