@@ -81,6 +81,7 @@ export const useNavigation = () => {
 
             setCalculatedRoutes(c);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [routes])
 
     React.useEffect(() => {
@@ -101,6 +102,7 @@ export const useNavigation = () => {
 
             setResult(n);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [calculatedRoutes])
 
     return result;

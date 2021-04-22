@@ -22,7 +22,6 @@
 import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap'
 import QrReader from 'react-qr-reader'
-import Patient from '../misc/patient'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +30,6 @@ import useNavigation from '../misc/navigation';
 import { getPatientFromScan } from '../misc/qr-code-value';
 import CwaSpinner from './spinner/spinner.component';
 
-//const testFull = 'https://s.coronwarn.app?v=1#eyJmbiI6IkdvcmRvbiIsImxuIjoiR3J1bmQiLCJkb2IiOiIxOTkwLTAxLTAzIiwiZ3VpZCI6ImQ3ZWM2MDU4LWUyMzEtNGU4Yy1hNDFmLTViZjg1ZDdmZTI3MiIsInRpbWVzdGFtcCI6MTYxNzk3ODg4NDY4NX0=';
 
 const QrScan = (props: any) => {
 
@@ -48,7 +46,7 @@ const QrScan = (props: any) => {
 
     const handleScan = (data: string | null) => {
         if (props.setPatient && data) {
-            try {                
+            try {
                 const scannedPatient = getPatientFromScan(data);
                 props.setPatient(scannedPatient);
                 navigation!.toRecordPatient();
@@ -60,7 +58,7 @@ const QrScan = (props: any) => {
     }
 
     const handleError = (error: any) => {
-        if (window.location.protocol == 'http:') {
+        if (window.location.protocol === 'http:') {
             setMessage(t('translation:qr-scan-https-only'));
         } else {
             setMessage("Scan Error: " + error);
@@ -74,7 +72,7 @@ const QrScan = (props: any) => {
         </div>;
     }
 
-    return (!isInit? <CwaSpinner />:
+    return (!isInit ? <CwaSpinner /> :
         <>
             <Card id='data-card'>
                 <Card.Header id='data-header' className='pb-0'>

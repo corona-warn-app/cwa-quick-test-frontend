@@ -27,7 +27,7 @@ import CwaSpinner from './components/spinner/spinner.component';
 
 
 const LoginInterceptor = (props: any) => {
-  
+
   const { keycloak, initialized } = useKeycloak();
 
 

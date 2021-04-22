@@ -64,6 +64,7 @@ export const usePostTestResult = (testResult: ITestResult | undefined, processId
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [testResult])
 }
 
@@ -90,7 +91,6 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                 birthday: patient.dateOfBirth.toISOString().split('T')[0],
                 testResultServerHash: patient.testResultHash
             });
-            // console.log(JSON.stringify(body));
 
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
@@ -109,6 +109,7 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [patient])
 }
 
@@ -131,6 +132,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
         else {
             setUuid(newUuid());
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // on new uuid
@@ -170,6 +172,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
                 }
             });
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uuidHash]);
 
     return result;
@@ -185,7 +188,6 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
     };
 
     React.useEffect(() => {
-        /* setStatisticData({totalTestCount: 20, positiveTestCount: 5}); */
         if (!statisticData) {
             api.get('/api/quickteststatistics', { headers: header })
                 .then(response => {
@@ -200,6 +202,7 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return statisticData;
@@ -231,6 +234,7 @@ export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onErr
                     onError(error);
                 }
             });
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return result;
@@ -248,10 +252,9 @@ export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | 
 
         if (start && end) {
             const uri = '/api/quicktestarchive?testResult=' + TestResult.POSITIVE + '&dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
+
             api.get(uri, { headers: header })
                 .then(response => {
-                    console.log(JSON.stringify(response.data));
-
                     setResult(response.data.quickTestArchives);
                     if (onSuccess) {
                         onSuccess(response?.status);
@@ -263,6 +266,7 @@ export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | 
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [start, end]);
 
     return result;
@@ -281,10 +285,9 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
 
         if (hash) {
             const uri = '/api/quicktestarchive/' + hash + '/pdf';
+
             api.get(uri, { headers: header })
                 .then(response => {
-                    console.log(JSON.stringify(response.data));
-
                     setResult(response.data);
                     if (onSuccess) {
                         onSuccess(response?.status);
@@ -296,6 +299,7 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
                     }
                 });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hash]);
 
     return result;

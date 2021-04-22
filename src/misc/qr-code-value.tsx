@@ -19,7 +19,6 @@
  * under the License.
  */
 
-import { timeStamp } from 'node:console';
 import Patient from './patient';
 import CryptoJS from 'crypto-js';
 
@@ -47,16 +46,10 @@ export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob
         salt: CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
     }
 
-    // const value: IQRCodeValue = { "fn": "Erika", "ln": "Mustermann", "dob": "1990-12-23", "timestamp": 1618386548, "testid": "52cddd8e-ff32-4478-af64-cb867cea1db5", "salt": "759F8FF3554F0E1BBF6EFF8DE298D9E9" }
-
     const shaEntry = `${value.dob}#${value.fn}#${value.ln}#${value.timestamp.toString()}#${value.testid}#${value.salt}`;
     value.hash = CryptoJS.SHA256(shaEntry).toString(CryptoJS.enc.Hex);
 
-    // console.log("The hash: " + value.hash);
-
-
     const json = JSON.stringify(value);
-    // console.log(json);
 
     encodedJson = btoa(json);
 
@@ -82,7 +75,6 @@ export const getPatientFromScan = (data: string | null) => {
     if (data) {
         try {
             const scanData = getQrCodeValue(data);
-
 
             if (scanData && scanData.ln && scanData.fn && scanData.dob) {
 

@@ -158,6 +158,7 @@ const RecordPatientData = (props: any) => {
             setCanGoNext(false);
             setPatient(undefined);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [firstName, name, dateOfBirth, sex, zip, city, street, houseNumber, phoneNumber, emailAddress, consent, uuid, persDataInQR, privacyAgreement])
 
 
@@ -541,8 +542,6 @@ const RecordPatientData = (props: any) => {
                                         className='my-1 my-md-0 p-0'
                                         block
                                         type='submit'
-                                    // onClick={navigation.toShowRecordPatient}
-                                    // disabled={!canGoNext}
                                     >
                                         {t('translation:next')}
                                     </Button>

@@ -26,11 +26,12 @@ const CwaSpinner = (props: any) => {
 
     const [bg, setBg] = React.useState('#fff');
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if (props.background) {
             setBg(props.background)
         }
-    },[])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div className={'loader'} style={{ background: bg }}>Loading...</div>

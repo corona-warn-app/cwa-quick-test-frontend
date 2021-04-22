@@ -19,19 +19,20 @@
  * under the License.
  */
 
+import React from 'react';
 import { Button, Container } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
-import React from 'react';
 import CwaSpinner from './spinner/spinner.component';
 
 const LandingPage = (props: any) => {
 
     const navigation = useNavigation();
     const { t } = useTranslation();
+
     const [isInit, setIsInit] = React.useState(false)
 
     React.useEffect(() => {
@@ -39,11 +40,7 @@ const LandingPage = (props: any) => {
             setIsInit(true);
     }, [navigation])
 
-    const handleClick=()=>{
-        props.setNotificationShow(true);
-    }
-
-    return (!isInit? <CwaSpinner />:
+    return (!isInit ? <CwaSpinner /> :
         <Container className='center-content'>
 
             <h1 className='mx-auto mb-5'>{t('translation:welcome')}</h1>

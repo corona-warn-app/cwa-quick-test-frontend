@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap'
+import { Button, Card, Col, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -28,7 +28,6 @@ import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
 import CwaSpinner from './spinner/spinner.component';
 import { useStatistics } from '../api';
-import StatisticData from '../misc/statistic-data'
 
 const Statistics = (props: any) => {
 
@@ -39,8 +38,6 @@ const Statistics = (props: any) => {
         let msg = '';
 
         if (error) {
-
-
             msg = error.message
         }
         props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
