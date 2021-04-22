@@ -234,7 +234,7 @@ export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onErr
                     onError(error);
                 }
             });
-            // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return result;
@@ -286,9 +286,13 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
         if (hash) {
             const uri = '/api/quicktestarchive/' + hash + '/pdf';
 
-            api.get(uri, { headers: header })
+            api.get(uri, { headers: header, responseType:'arraybuffer' })
                 .then(response => {
-                    setResult(response.data);
+                    const file = new Blob(
+                        [response.data],
+                        {type: 'application/pdf'});
+                    
+                    setResult(URL.createObjectURL(file));
                     if (onSuccess) {
                         onSuccess(response?.status);
                     }
