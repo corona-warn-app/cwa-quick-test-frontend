@@ -49,6 +49,7 @@ const ShowPatientData = (props: any) => {
     const [qrCodeValue, setQrCodeValue] = React.useState<string[]>();
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
+    const [postInProgress, setPostInProgress] = React.useState(false);
 
     // set patient data on mount and set hash from uuid
     React.useEffect(() => {
@@ -102,6 +103,7 @@ const ShowPatientData = (props: any) => {
         props.setPatient(undefined);
         props.setNotificationShow(true);
         navigation!.toLanding();
+        setPostInProgress(false);
     }
 
     const handleError = (error: any) => {
@@ -114,6 +116,11 @@ const ShowPatientData = (props: any) => {
     }
 
     const postPatient = usePostPatient(patientToPost, processId, finishProcess, handleError);
+
+    const handlePost = ()=>{
+        setPostInProgress(true);
+        setPatientToPost(patient);
+    }
 
     return (
         !isInit ? <CwaSpinner /> :
@@ -169,7 +176,8 @@ const ShowPatientData = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={() => setPatientToPost(patient)}
+                                    disabled={postInProgress}
+                                    onClick={() => handlePost()}
                                 >
                                     {t('translation:process-finish')}
                                 </Button>
