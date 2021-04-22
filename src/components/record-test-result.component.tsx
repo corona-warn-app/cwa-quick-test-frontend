@@ -45,6 +45,7 @@ const RecordTestResult = (props: any) => {
     const [testIdList, setTestIdList] = useLocalStorage('testids', []);
     const [validated, setValidated] = React.useState(false);
     const [isInit, setIsInit] = React.useState(false)
+    const [postInProgress, setPostInProgress] = React.useState(false);
 
     React.useEffect(() => {
         if (navigation)
@@ -98,6 +99,7 @@ const RecordTestResult = (props: any) => {
 
         if (form.checkValidity()) {
             addTestIdToHistory(testId);
+            setPostInProgress(true);
             setTestResultToPost({
                 result: testResult!,
                 testBrandId: testId
@@ -109,6 +111,7 @@ const RecordTestResult = (props: any) => {
     const finishProcess = () => {
         props.setNotificationShow(true);
         navigation!.toLanding();
+        setPostInProgress(false);
     }
 
     const handleError = (error: any) => {
@@ -258,6 +261,7 @@ const RecordTestResult = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
+                                    disabled={postInProgress}
                                     type='submit'
                                 >
                                     {t('translation:data-submit')}
