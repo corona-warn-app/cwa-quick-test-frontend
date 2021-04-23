@@ -23,6 +23,7 @@ import React from 'react';
 import { Col, Form, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap'
 
 import '../i18n';
+import { useTranslation } from 'react-i18next';
 
 import CwaSpinner from './spinner/spinner.component';
 import IQTArchiv from '../misc/qt-archiv';
@@ -31,6 +32,7 @@ import utils from '../misc/utils';
 const PagedList = (props: any) => {
 
     const displayItemCount = 12;
+    const { t } = useTranslation();
 
     const [data, setData] = React.useState<IQTArchiv[]>();
     const [dataToFilter, setDataToFilter] = React.useState<IQTArchiv[]>([]);
@@ -44,6 +46,7 @@ const PagedList = (props: any) => {
         setData(undefined);
         setDataToShow([]);
         setPages(0);
+        setFilter('');
         props.onSelected('');
 
         if (props && props.data) {
@@ -53,7 +56,7 @@ const PagedList = (props: any) => {
     }, [props.data])
 
     React.useEffect(() => {
-        if (data && data.length > 0) {
+        if (data) {
             setDataToFilter(data);
         }
     }, [data])
@@ -185,40 +188,43 @@ const PagedList = (props: any) => {
         }
     }
 
-    return (dataToShow === undefined ? <CwaSpinner background='#eeeeee' /> :
-        <>
-            <Form.Control
-                className='qt-input'
-                value={filter}
-                onChange={(evt) => setFilter(evt.currentTarget.value)}
-                // placeholder={t('translation:first-name')}
-                type='text'
-                maxLength={utils.shortHashLen}
-            />
-            <hr />
-            <ListGroup>
-                {dataToShow.map((archiv, index) => (
-                    <ListGroupItem
-                        onClick={handleListSelect}
-                        action
-                        eventKey={archiv.hashedGuid}
-                        key={archiv.hashedGuid}
-                    >
-                        {archiv.hashedGuid.substring(0, utils.shortHashLen)}
-                    </ListGroupItem>
-                ))}
-                {pages > 1 && (<>
-                    <hr />
-                    <Pagination size='sm' className='mb-0 justify-content-center' >
-                        <Pagination.Prev disabled={curPage === 1} onClick={() => handleClick(curPage - 1)} />
+    return (dataToShow === undefined
+        ? <CwaSpinner background='#eeeeee' />
+        : 
+            <>
+                <Form.Control
+                    className='qt-input'
+                    value={filter}
+                    onChange={(evt) => setFilter(evt.currentTarget.value)}
+                    placeholder={t('translation:search')}
+                    type='text'
+                    maxLength={utils.shortHashLen}
+                />
+                <hr />
+                <ListGroup>
+                    {dataToShow.map((archiv, index) => (
+                        <ListGroupItem
+                            onClick={handleListSelect}
+                            action
+                            eventKey={archiv.hashedGuid}
+                            key={archiv.hashedGuid}
+                        >
+                            {archiv.hashedGuid.substring(0, utils.shortHashLen)}
+                        </ListGroupItem>
+                    ))}
+                    {pages > 1 && (<>
+                        <hr />
+                        <Pagination size='sm' className='mb-0 justify-content-center' >
+                            <Pagination.Prev disabled={curPage === 1} onClick={() => handleClick(curPage - 1)} />
 
-                        {pageinationItems}
+                            {pageinationItems}
 
-                        <Pagination.Next disabled={curPage === pages} onClick={() => handleClick(curPage + 1)} />
-                    </Pagination>
-                </>)}
-            </ListGroup>
-        </>
+                            <Pagination.Next disabled={curPage === pages} onClick={() => handleClick(curPage + 1)} />
+                        </Pagination>
+                    </>)}
+                </ListGroup><hr />
+            </>
+            
     )
 }
 
