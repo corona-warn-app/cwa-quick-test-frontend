@@ -46,6 +46,7 @@ const PagedList = (props: any) => {
         setData(undefined);
         setDataToShow([]);
         setPages(0);
+        setFilter('');
         props.onSelected('');
 
         if (props && props.data) {
@@ -189,8 +190,7 @@ const PagedList = (props: any) => {
 
     return (dataToShow === undefined
         ? <CwaSpinner background='#eeeeee' />
-        : !dataToShow.length ? <></>
-            :
+        : 
             <>
                 <Form.Control
                     className='qt-input'
