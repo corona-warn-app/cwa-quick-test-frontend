@@ -21,11 +21,9 @@
 
 import React from 'react';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap'
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
-import { useKeycloak } from '@react-keycloak/web';
 
 import DatePicker from 'react-datepicker';
 import CwaSpinner from './spinner/spinner.component';
@@ -33,49 +31,29 @@ import PagedList from './paged-list.component';
 
 import { useGetPDF, useGetPositiveForTimeRange } from '../api';
 import useNavigation from '../misc/navigation';
-import useOrientationChanged from '../misc/orientation-changed';
-import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
+import { TestResult } from '../misc/enum';
 
 
 const FailedReport = (props: any) => {
 
     const navigation = useNavigation();
     const { t } = useTranslation();
-    const { keycloak, initialized } = useKeycloak();
-    const orientationChanged = useOrientationChanged();
 
     const [isInit, setIsInit] = React.useState(false)
     const [filterComplete, setFilterComplete] = React.useState(false)
     const [startDate, setStartDate] = React.useState<Date | undefined>();
     const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
     const [selectedHash, setSelectedHash] = React.useState<string>();
-    const [numPages, setNumPages] = React.useState(null);
-    const [pageNumber, setPageNumber] = React.useState(1);
-    const [pageWidth, setPageWidth] = React.useState<number>();
-    const [pdfUrl, setPdfUrl] = React.useState<string>();
+    const [filterTestResult, setFilterTestResult] = React.useState<TestResult>();
 
     const parentRef = React.useRef<HTMLDivElement>(null);
-
-    const history = useHistory();
-
-    const onDocumentLoadSuccess = (pdf: any) => {
-        setNumPages(pdf.numPages);
-        calcWidth();
-
-        setPdfUrl(window.location.origin + '/api/quicktestarchive/' + selectedHash + '/pdf');
-    }
 
     React.useEffect(() => {
         if (navigation)
             setIsInit(true);
     }, [navigation])
 
-    React.useEffect(() => {
-        calcWidth();
-    }, [orientationChanged])
-
-    const qtArchive = useGetPositiveForTimeRange(startDate, endDate);
+    const qtArchive = useGetPositiveForTimeRange(filterTestResult, startDate, endDate);
     const pdf = useGetPDF(selectedHash);
 
     const handleDateChange = (evt: Date | [Date, Date] | null, change: (date: Date | undefined) => void, hour: number) => {
@@ -120,23 +98,6 @@ const FailedReport = (props: any) => {
         }
     }, [pdf])
 
-    const calcWidth = () => {
-        // get container
-        const container = parentRef.current;
-
-        if (container) {
-
-            const style = window.getComputedStyle(container);
-
-            // calc some width
-            var containerWidth =
-                container.offsetWidth -
-                parseInt(style.paddingLeft, 10) -
-                parseInt(style.paddingRight, 10);
-
-            setPageWidth(containerWidth);
-        }
-    }
 
     return (
         !isInit ? <CwaSpinner /> :
@@ -200,8 +161,70 @@ const FailedReport = (props: any) => {
                                 </Row>
                             </Col>
                         </Form.Group>
+                        <hr />
+                        <Row>
+                            <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:filter-record-result')}</Form.Label>
+
+                            <Col xs='7' sm='9' className='d-flex'>
+                                <Row>
+                                    <Form.Group as={Col} xs='12' sm='6' md='3' className='d-flex mb-0' controlId='filterTestResult-radio1'>
+                                        <Form.Check className='d-flex align-self-center'>
+                                            <Form.Check.Input
+                                                className='rdb-input'
+                                                type='radio'
+                                                name="filterTestResult-radios"
+                                                id="filterTestResult-radio1"
+                                                checked={filterTestResult === undefined}
+                                                onChange={() => setFilterTestResult(undefined)}
+                                            />
+                                            <Form.Label className='rdb-label mb-0'>{t('translation:filter-none')}</Form.Label>
+                                        </Form.Check>
+                                    </Form.Group>
+                                    <Form.Group as={Col} xs='12' sm='6' md='3' className='d-flex mb-0' controlId='filterTestResult-radio2'>
+                                        <Form.Check className='d-flex align-self-center'>
+                                            <Form.Check.Input required
+                                                className='rdb-input'
+                                                type='radio'
+                                                name="filterTestResult-radios"
+                                                id="filterTestResult-radio2"
+                                                checked={filterTestResult === TestResult.POSITIVE}
+                                                onChange={() => setFilterTestResult(TestResult.POSITIVE)}
+                                            />
+                                            <Form.Label className='rdb-label mb-0'>{t('translation:result-positive')}</Form.Label>
+                                        </Form.Check>
+                                    </Form.Group>
+                                    <Form.Group as={Col} xs='12' sm='6' md='3' className='d-flex mb-0' controlId='filterTestResult-radio3'>
+                                        <Form.Check className='d-flex align-self-center'>
+                                            <Form.Check.Input
+                                                className='rdb-input'
+                                                type='radio'
+                                                name="filterTestResult-radios"
+                                                id="filterTestResult-radio3"
+                                                checked={filterTestResult === TestResult.NEGATIVE}
+                                                onChange={() => setFilterTestResult(TestResult.NEGATIVE)}
+                                            />
+                                            <Form.Label className='rdb-label mb-0'>{t('translation:result-negative')}</Form.Label>
+                                        </Form.Check>
+                                    </Form.Group>
+                                    <Form.Group as={Col} xs='12' sm='6' md='3' className='d-flex mb-0' controlId='filterTestResult-radio4'>
+                                        <Form.Check className='d-flex align-self-center'>
+                                            <Form.Check.Input
+                                                className='rdb-input'
+                                                type='radio'
+                                                name="filterTestResult-radios"
+                                                id="filterTestResult-radio4"
+                                                checked={filterTestResult === TestResult.INVALID}
+                                                onChange={() => setFilterTestResult(TestResult.INVALID)}
+                                            />
+                                            <Form.Label className='rdb-label mb-0'>{t('translation:result-failed')}</Form.Label>
+                                        </Form.Check>
+                                    </Form.Group>
+                                </Row>
+                            </Col>
+                        </Row>
 
                         <hr />
+
 
                         {!filterComplete ? <></> :
                             (qtArchive === undefined)
@@ -209,28 +232,10 @@ const FailedReport = (props: any) => {
                                 : <Row className='flex-fill'>
                                     <Col md='3'>
                                         <PagedList data={qtArchive} onSelected={setSelectedHash} />
-                                        <hr />
                                     </Col>
                                     <Col md='9' ref={parentRef}>
-                                        {selectedHash && <>
-                                            {/* <Document
-                                                file={{
-                                                    url: '/api/quicktestarchive/' + selectedHash + '/pdf',
-                                                    httpHeaders: {
-                                                        "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
-                                                        'Content-Type': 'application/pdf'
-                                                    }
-                                                }}
-                                                renderMode='svg'
-                                                onLoadSuccess={onDocumentLoadSuccess}
-                                            >
-                                                <Page pageNumber={pageNumber} width={pageWidth} />
-                                            </Document>
-                                            <p>Page {pageNumber} of {numPages}</p> */}
-
-                                            {!pdf ? <></> : <iframe src={pdf} className='qt-IFrame' />}
-
-                                        </>
+                                        {!pdf ? <></> : <>
+                                            <iframe src={pdf} className='qt-IFrame' /></>
                                         }
                                     </Col>
                                 </Row>

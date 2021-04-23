@@ -62,5 +62,8 @@
   "successfull-transferred": "Data successfully transferred",
   "timerange": "Timerange",
   "from": "from",
-  "to": "to"
+  "to": "to",
+  "filter-none":"none",
+  "filter-record-result": "testresult",
+  "search":"search"
 }

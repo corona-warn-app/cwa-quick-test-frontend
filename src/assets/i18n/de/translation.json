@@ -63,6 +63,9 @@
   "successfull-transferred": "Die Daten wurden erfolgreich übermittelt",
   "timerange": "Testzeitraum",
   "from": "am",
-  "to": "bis"
+  "to": "bis",
+  "filter-none":"keins",
+  "filter-record-result": "Testergebnis",
+  "search":"Suchen"
 
 }

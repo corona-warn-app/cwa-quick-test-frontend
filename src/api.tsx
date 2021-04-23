@@ -239,7 +239,7 @@ export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onErr
 
     return result;
 }
-export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | undefined, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+export const useGetPositiveForTimeRange = (testResult: TestResult | undefined, start: Date | undefined, end: Date | undefined, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
     const [result, setResult] = React.useState<IQTArchiv[]>();
 
@@ -251,7 +251,12 @@ export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | 
     React.useEffect(() => {
 
         if (start && end) {
-            const uri = '/api/quicktestarchive?testResult=' + TestResult.POSITIVE + '&dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
+            let tp = '';
+
+            if (testResult) {
+                tp = 'testResult=' + testResult + '&'
+            }
+            const uri = '/api/quicktestarchive?' + tp + 'dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
 
             api.get(uri, { headers: header })
                 .then(response => {
@@ -267,7 +272,7 @@ export const useGetPositiveForTimeRange = (start: Date | undefined, end: Date | 
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [start, end]);
+    }, [testResult, start, end]);
 
     return result;
 }
@@ -286,12 +291,12 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
         if (hash) {
             const uri = '/api/quicktestarchive/' + hash + '/pdf';
 
-            api.get(uri, { headers: header, responseType:'arraybuffer' })
+            api.get(uri, { headers: header, responseType: 'arraybuffer' })
                 .then(response => {
                     const file = new Blob(
                         [response.data],
-                        {type: 'application/pdf'});
-                    
+                        { type: 'application/pdf' });
+
                     setResult(URL.createObjectURL(file));
                     if (onSuccess) {
                         onSuccess(response?.status);
