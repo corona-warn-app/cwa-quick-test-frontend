@@ -63,7 +63,7 @@
   "timerange": "Timerange",
   "from": "from",
   "to": "to",
-  "filter-none":"none",
+  "filter-none":"all",
   "filter-record-result": "testresult",
   "search":"search"
 }

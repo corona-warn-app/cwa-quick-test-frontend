@@ -64,7 +64,7 @@
   "timerange": "Testzeitraum",
   "from": "am",
   "to": "bis",
-  "filter-none":"keins",
+  "filter-none":"alle",
   "filter-record-result": "Testergebnis",
   "search":"Suchen"
 
