@@ -250,6 +250,8 @@ export const useGetPositiveForTimeRange = (testResult: TestResult | undefined, s
 
     React.useEffect(() => {
 
+        setResult(undefined);
+
         if (start && end) {
             let tp = '';
 
@@ -307,6 +309,9 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
                         onError(error);
                     }
                 });
+        }
+        else {
+            setResult(undefined);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hash]);
