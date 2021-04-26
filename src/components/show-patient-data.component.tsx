@@ -141,7 +141,7 @@ const ShowPatientData = (props: any) => {
                                 <hr />
                                 <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.firstName + ' ' + patient?.name}</Card.Text>
-                                <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD. MM. yyyy' >{patient?.dateOfBirth as Date}</Moment>
+                                <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD.MM.yyyy' >{patient?.dateOfBirth as Date}</Moment>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.sex === Sex.MALE ? t('translation:male') : patient?.sex === Sex.FEMALE ? t('translation:female') : t('translation:diverse')}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.street + ' ' + patient?.houseNumber}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.zip + ' ' + patient?.city}</Card.Text>
