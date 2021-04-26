@@ -71,6 +71,7 @@ const FailedReport = (props: any) => {
             date.setHours(hour);
         }
 
+        setFilterTestResult(undefined);
         change(date);
 
     }
@@ -93,10 +94,10 @@ const FailedReport = (props: any) => {
     }, [startDate, endDate])
 
     React.useEffect(() => {
-        if (pdf) {
-            console.log(pdf);
+        if (selectedHash) {
+            setSelectedHash(undefined);
         }
-    }, [pdf])
+    }, [filterTestResult])
 
 
     return (

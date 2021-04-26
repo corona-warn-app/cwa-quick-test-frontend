@@ -152,9 +152,9 @@ const PagedList = (props: any) => {
     }, [curPage, dataToFilter])
 
     React.useEffect(() => {
-        console.log(filter);
 
         let filterData = data;
+        
         if (filter && data) {
             filterData = data.filter((item) => item.hashedGuid.startsWith(filter));
         }
@@ -162,9 +162,6 @@ const PagedList = (props: any) => {
         if (!filterData) {
             filterData = [];
         }
-
-        console.log(JSON.stringify(filterData));
-
 
         setDataToFilter(filterData);
 
@@ -190,16 +187,17 @@ const PagedList = (props: any) => {
 
     return (dataToShow === undefined
         ? <CwaSpinner background='#eeeeee' />
-        : 
-            <>
-                <Form.Control
-                    className='qt-input'
-                    value={filter}
-                    onChange={(evt) => setFilter(evt.currentTarget.value)}
-                    placeholder={t('translation:search')}
-                    type='text'
-                    maxLength={utils.shortHashLen}
-                />
+        :
+        <>
+            <Form.Control
+                className='qt-input'
+                value={filter}
+                onChange={(evt) => setFilter(evt.currentTarget.value)}
+                placeholder={t('translation:search')}
+                type='text'
+                maxLength={utils.shortHashLen}
+            />
+            { dataToShow.length === 0 ? <></> : <>
                 <hr />
                 <ListGroup>
                     {dataToShow.map((archiv, index) => (
@@ -222,9 +220,11 @@ const PagedList = (props: any) => {
                             <Pagination.Next disabled={curPage === pages} onClick={() => handleClick(curPage + 1)} />
                         </Pagination>
                     </>)}
-                </ListGroup><hr />
-            </>
-            
+                </ListGroup>
+            </>}
+            <hr />
+        </>
+
     )
 }
 
