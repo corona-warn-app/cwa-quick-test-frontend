@@ -310,7 +310,7 @@ const RecordPatientData = (props: any) => {
                                         selected={dateOfBirth}
                                         onChange={handleDateChange}
                                         locale='de'
-                                        dateFormat='dd. MM. yyyy'
+                                        dateFormat='dd.MM.yyyy'
                                         isClearable
                                         placeholderText={t('translation:date-of-birth')}
                                         className='qt-input form-control'
