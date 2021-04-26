@@ -310,7 +310,7 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
                     }
                 });
         }
-        else{
+        else {
             setResult(undefined);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
