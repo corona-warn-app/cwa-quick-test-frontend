@@ -426,6 +426,7 @@ const RecordPatientData = (props: any) => {
                                                 placeholder={t('translation:house-number')}
                                                 type='text'
                                                 required
+                                                pattern={utils.pattern.houseNo}
                                                 maxLength={15}
                                             />
                                         </Form.Group>
