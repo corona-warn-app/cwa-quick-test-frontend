@@ -80,7 +80,7 @@ const Routing = (props: any) => {
                 <Header />
                 <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} />
                 <NotificationPage show={notificationShow} setNotificationShow={setNotificationShow} />
-                {/* <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} /> */}
+                <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
                 <ImprintPage show={imprintShow} setShow={setImprintShow} />
             </Route>
 
