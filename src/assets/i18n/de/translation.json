@@ -67,6 +67,7 @@
   "to": "bis",
   "filter-none":"alle",
   "filter-record-result": "Testergebnis",
-  "search":"Suchen"
+  "search":"Suchen",
+  "dp-title":"Datenschutzhinweis"
 
 }

@@ -43,6 +43,7 @@ import PrivateRoute from './components/private-route.component';
 import IError from './misc/error';
 import ErrorPage from './components/error-page.component';
 import NotificationPage from './components/notification-page.component';
+import DataprivacyPage from './components/dataprivacy.component';
 
 const Routing = (props: any) => {
 
@@ -52,6 +53,7 @@ const Routing = (props: any) => {
     const [error, setError] = React.useState<IError>();
     const [errorShow, setErrorShow] = React.useState(false);
     const [notificationShow, setNotificationShow] = React.useState(false);
+    const [dataPrivacyShow, setDataPrivacyShow] = React.useState(false);
 
     document.title = t('translation:title');
 
@@ -76,6 +78,7 @@ const Routing = (props: any) => {
                 <Header />
                 <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} />
                 <NotificationPage show={notificationShow} setNotificationShow={setNotificationShow} />
+                <DataprivacyPage show={dataPrivacyShow} setDataPrivacyShow={setDataPrivacyShow} />
             </Route>
 
             {/*
@@ -148,7 +151,7 @@ const Routing = (props: any) => {
     footer, every time shown. fit its children
     */}
             <Route path={routes.root}>
-                <Footer />
+                <Footer setDataPrivacyShow={setDataPrivacyShow} />
             </Route>
 
         </>
