@@ -30,17 +30,31 @@ import DataProtectLogo from '../assets/images/data_protect.png'
 const Footer = (props: any) => {
     const { t } = useTranslation();
 
-    
-const handleDataPrivacyClick = () => {
-    props.setDataPrivacyShow(true)
-}
+
+    const handleDataPrivacyClick = () => {
+        props.setDataPrivacyShow(true)
+    }
+
+    const handleImprintClick = () => {
+        props.setImprintShow(true)
+    }
 
     return (
         // simple footer with imprint and data privacy --> links tbd
         <Row id='qt-footer'>
-            <span className="my-0 mx-5 footer-font">{t('translation:imprint')}</span>
+            <span
+                className="my-0 mx-5 footer-font"
+                onClick={handleImprintClick}>
+                {t('translation:imprint')}
+            </span>
+
             <Image className="my-auto" src={DataProtectLogo} />
-            <span className="my-0 mx-2 footer-font" onClick={handleDataPrivacyClick}>{t('translation:data-privacy')}</span>
+
+            <span
+                className="my-0 mx-2 footer-font"
+                onClick={handleDataPrivacyClick}>
+                {t('translation:data-privacy')}
+            </span>
         </Row>
 
     )

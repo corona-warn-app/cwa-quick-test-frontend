@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Alert, Modal, Image, Row, Col, Card, Button } from 'react-bootstrap'
+import { Alert, Modal, Image, Row, Col, Card, Button, Container } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +39,7 @@ const DataprivacyPage = (props: any) => {
     }, [props.show])
 
     const handleClose = () => {
-        props.setDataPrivacyShow(false)
+        props.setShow(false)
     }
 
     return (
@@ -63,16 +63,21 @@ const DataprivacyPage = (props: any) => {
                 </Modal.Header>
                 <Modal.Body className='py-0 bg-light'>
                     <hr />
-                    <h5 className='text-justify'>Der Schutz Ihrer persönlichen Daten hat für die T-Systems International GmbH einen hohen Stellenwert. Es ist uns wichtig, Sie darüber zu informieren, welche persönlichen Daten erfasst werden, wie diese verwendet werden und welche Gestaltungsmöglichkeiten Sie dabei haben.
+                    <Container className='px-1 px-sm-2 px-md-3'>
+                    <h5 className='text-justify'>
+                        Der Schutz Ihrer persönlichen Daten hat für die T-Systems International GmbH einen hohen Stellenwert. Es ist uns wichtig, Sie darüber zu informieren, welche persönlichen Daten erfasst werden, wie diese verwendet werden und welche Gestaltungsmöglichkeiten Sie dabei haben.
                     </h5>
+
+                    <br />
+
                     <ol>
-                        <li className='text-justify'><strong>Welche Daten werden erfasst, wie werden sie verwendet und wie lange werden sie gespeichert?</strong>
-                    <ol type='a'>
+                        <li className='text-justify'>
+                            <strong>Welche Daten werden erfasst, wie werden sie verwendet und wie lange werden sie gespeichert?</strong>
+                            <ol type='a' className='pr-2 pr-md-4'>
                                 <li>
                                     <strong>Technische Merkmale:</strong> Wenn Sie unsere Webseiten besuchen, verzeichnet der Web-Server vorübergehend den Domain-Namen oder die IP- Adresse Ihres Computers, die Dateianfrage des Clients (Dateiname und URL), den http-Antwort-Code und die Webseite, von der aus Sie uns besuchen.
                                     Die protokollierten Daten werden ausschließlich für Zwecke der Datensicherheit, insbesondere zur Abwehr von Angriffsversuchen auf unseren Webserver verwendet (Art. 6 Abs. 1f DSGVO). Sie werden weder für die Erstellung von individuellen Anwenderprofilen verwendet noch an Dritte weitergegeben und werden nach spätestens 7 Tagen gelöscht. Die statistische Auswertung anonymisierter Datensätze behalten wir uns vor.
-
-                        </li>
+                                </li>
                             </ol>
                         </li>
                         <span className='font-weight-bold'>{t('translation:serverError')}</span>
@@ -81,7 +86,7 @@ const DataprivacyPage = (props: any) => {
                         <span className='font-weight-bold'>{t('translation:serverError')}</span>
                         <span>{props?.error?.message}</span>
                     </p>
-
+                    </Container>
                     <hr />
                 </Modal.Body>
 

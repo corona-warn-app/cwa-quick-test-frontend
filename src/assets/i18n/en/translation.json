@@ -67,5 +67,6 @@
   "filter-none":"all",
   "filter-record-result": "testresult",
   "search":"search",
-  "dp-title":"Dataprivacy"
+  "dp-title":"Dataprivacy",
+  "imprint-title":"Imprint"
 }
