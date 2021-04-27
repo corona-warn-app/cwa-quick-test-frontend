@@ -89,7 +89,7 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                 zipCode: patient.zip,
                 city: patient.city,
                 birthday: patient.dateOfBirth.toISOString().split('T')[0],
-                testResultServerHash: patient.testResultHash
+                testResultServerHash: patient.testResultHash ? patient.testResultHash : '0000000000000000000000000000000000000000000000000000000000000000'
             });
 
             const header = {

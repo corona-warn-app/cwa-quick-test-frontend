@@ -66,12 +66,13 @@ const ShowPatientData = (props: any) => {
     React.useEffect(() => {
         if (patient && patient.uuId) {
             setUuIdHash(sha256(patient.uuId).toString());
+            if (patient.processingConsens) {
+                if (patient.includePersData) {
 
-            if (patient.includePersData) {
-
-                setQrCodeValue(getQrCodeValueString(patient.uuId, patient.firstName, patient.name, patient.dateOfBirth));
-            } else {
-                setQrCodeValue(getQrCodeValueString(patient.uuId));
+                    setQrCodeValue(getQrCodeValueString(patient.uuId, patient.firstName, patient.name, patient.dateOfBirth));
+                } else {
+                    setQrCodeValue(getQrCodeValueString(patient.uuId));
+                }
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -117,7 +118,7 @@ const ShowPatientData = (props: any) => {
 
     const postPatient = usePostPatient(patientToPost, processId, finishProcess, handleError);
 
-    const handlePost = ()=>{
+    const handlePost = () => {
         setPostInProgress(true);
         setPatientToPost(patient);
     }
