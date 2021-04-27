@@ -46,6 +46,7 @@ const ImprintPage = (props: any) => {
                 // dialogClassName='modal-90w'
                 size='lg'
                 scrollable
+                contentClassName='bg-light'
                 show={show}
                 aria-labelledby="example-custom-modal-styling-title"
                 centered
@@ -58,11 +59,8 @@ const ImprintPage = (props: any) => {
                         </Col>
                     </Row>
                 </Modal.Header>
-
-                <Modal.Body
-                    className='py-0 bg-light'
-                >
-                    <hr />
+                <hr className='mx-3 mb-0' />
+                <Modal.Body className='px-3 bg-light'>
 
                     <h5 className='text-justify'>
                         T-Systems International GmbH
@@ -116,9 +114,8 @@ const ImprintPage = (props: any) => {
                         </p>
 
                     </Container>
-                    <hr />
                 </Modal.Body>
-
+                <hr className='mx-3 mt-0' />
                 {/*
     footer with ok button
     */}
