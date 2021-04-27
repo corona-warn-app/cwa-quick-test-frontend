@@ -49,7 +49,7 @@ const LandingPage = (props: any) => {
             <Button block className='landing-btn' onClick={navigation!.toRecordTestResult}>{t('translation:record-result')}</Button>
             <Button block className='landing-btn' onClick={navigation!.toQRScan}>{t('translation:record-qr-scan')}</Button>
             <Button block className='landing-btn' onClick={navigation!.toFailedReport}>{t('translation:failed-report')}</Button>
-            <Button block className='landing-btn' onClick={navigation!.toStatistics}>{t('translation:statistics')}</Button>
+            <Button block className='landing-btn' onClick={navigation!.toStatistics}>{t('translation:statistics-menu-item')}</Button>
 
         </Container>
     )

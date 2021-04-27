@@ -58,7 +58,10 @@ const Statistics = (props: any) => {
                     <Card.Header id='data-header' className='pb-0'>
                         <Row>
                             <Col md='6'>
-                                <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:statistics')}</Card.Title>
+                                <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >
+                                    {t('translation:statistics')}
+                                    {new Date().toLocaleDateString()}
+                                </Card.Title>
                             </Col>
                         </Row>
                         <hr />
