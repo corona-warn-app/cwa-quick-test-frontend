@@ -133,7 +133,6 @@ const RecordPatientData = (props: any) => {
             && houseNumber !== ''
             && phoneNumber !== ''
             && emailAddress !== ''
-            && consent
             && privacyAgreement
             && uuid) {
             setCanGoNext(true);
@@ -486,7 +485,6 @@ const RecordPatientData = (props: any) => {
                                             onChange={handleConsentChange}
                                             type='checkbox'
                                             checked={consent}
-                                            required
                                         />
                                     </Form.Check>
                                 </Col>

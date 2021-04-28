@@ -179,7 +179,7 @@ hr {
     border: 1px solid $primary;
 }
 .footer-font {
-    font-size: 14px;
+    font-size: 14px !important;
     color: #757575;
 }
 
@@ -335,4 +335,8 @@ hr {
     background-image: url('../images/icon_success.svg') !important;
     height: 40px;
     width: 40px;
+  }
+
+  .modal-90w{
+      max-width: 90% !important;
   }

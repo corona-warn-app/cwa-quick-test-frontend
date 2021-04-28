@@ -30,7 +30,7 @@
   "phone-number":"Telefonnummer*",
   "email-address":"E-Mail Adresse*",
   "test-id":"Test-ID*",
-  "processing-consent": "Das Einverständnis zum Übermitteln des Testergebnisses für Zwecke der Corona-Warn-App auf den vom RKI betriebenen Server wurde erteilt.*",
+  "processing-consent": "Das Einverständnis zum Übermitteln des Testergebnisses für Zwecke der Corona-Warn-App auf den vom RKI betriebenen Server wurde erteilt.",
   "patientdata-exclude": "Patient wünscht Anzeige des Testergebnisses mit Name und Geburtsdatum in der Corona-Warn-App.",
   "bill-status": "KV Abrechnung",
   "data-privacy-approve": "Zustimmung Datenschutz",
@@ -67,6 +67,8 @@
   "to": "bis",
   "filter-none":"alle",
   "filter-record-result": "Testergebnis",
-  "search":"Suchen"
+  "search":"Suchen",
+  "dp-title":"Datenschutzhinweis",
+  "imprint-title":"Impressum"
 
 }
