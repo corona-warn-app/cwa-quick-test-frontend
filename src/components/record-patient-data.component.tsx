@@ -206,11 +206,23 @@ const RecordPatientData = (props: any) => {
 
         setDateOfBirth(date);
     }
-    const handleConsentChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setConsent(evt.currentTarget.checked);
+    const handleConsentChange = (evt:any) => {
+        if (consent) {
+            setConsent(false);
+        }
+        else{
+        setConsent(true);
+        }
+        setIncludePersData(false);
     }
-    const handlePersDataInQRChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setIncludePersData(evt.currentTarget.checked);
+    const handlePersDataInQRChange = (evt: any) => {
+        if (persDataInQR) {
+            setIncludePersData(false);
+        }
+        else{
+            setIncludePersData(true);
+        }
+        setConsent(false);
     }
     const handlePrivacyAgreement = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setPrivacyAgreement(evt.currentTarget.checked);
@@ -476,14 +488,18 @@ const RecordPatientData = (props: any) => {
 
                             {/* processing consent check box */}
                             <Form.Group as={Row} controlId='formConsentCheckbox'>
-                                <Form.Label className='input-label' column sm='10' >{t('translation:processing-consent')}</Form.Label>
+                                <Form.Label className='input-label' column sm='10' >
+                                    <strong>{t('translation:processing-consent-title')}</strong><br/>{t('translation:processing-consent')}
+                                </Form.Label>
 
                                 <Col sm='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
                                         <Form.Check.Input
-                                            className='ckb-input'
+                                            className='rdb-input'
+                                            onClick={handleConsentChange}
                                             onChange={handleConsentChange}
-                                            type='checkbox'
+                                            type='radio'
+                                            name="check-radios"
                                             checked={consent}
                                         />
                                     </Form.Check>
@@ -491,14 +507,18 @@ const RecordPatientData = (props: any) => {
                             </Form.Group>
 
                             <Form.Group as={Row} controlId='formKeepPrivateCheckbox'>
-                                <Form.Label className='input-label' column sm='10' >{t('translation:patientdata-exclude')}</Form.Label>
+                                <Form.Label className='input-label' column sm='10' >
+                                    <strong>{t('translation:patientdata-exclude-title')}</strong><br/>{t('translation:patientdata-exclude')}
+                                </Form.Label>
 
                                 <Col sm='2' className='jcc-xs-jcfs-md'>
                                     <Form.Check className='align-self-center'>
                                         <Form.Check.Input
-                                            className='ckb-input'
+                                            className='rdb-input'
+                                            onClick={handlePersDataInQRChange}
                                             onChange={handlePersDataInQRChange}
-                                            type='checkbox'
+                                            type='radio'
+                                            name="check-radios"
                                             checked={persDataInQR}
                                         />
                                     </Form.Check>
