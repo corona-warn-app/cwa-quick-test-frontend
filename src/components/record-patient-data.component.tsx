@@ -252,7 +252,7 @@ const RecordPatientData = (props: any) => {
                         <Card.Header id='data-header' className='pb-0'>
                             <Row>
                                 <Col md='4'>
-                                    <Card.Title className='m-md-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-data')}</Card.Title>
+                                    <Card.Title className='m-md-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-result2')}</Card.Title>
                                 </Col>
                                 <Col md='8' className='d-flex justify-content-center'>
                                     <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
