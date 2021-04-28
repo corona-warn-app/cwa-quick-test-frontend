@@ -30,6 +30,8 @@
   "phone-number":"Telefonnummer*",
   "email-address":"E-Mail Adresse*",
   "test-id":"Test-ID*",
+  "processing-consent-title":"Testergebnis in CWA anzeigen (ohne Personalisierung)",
+  "patientdata-exclude-title":"Testergebnis in CWA anzeigen (mit Personalisierung)",
   "processing-consent": "Die Datenschutzhinweise zur Übermittlung des Testergebnisses und der CWA Test ID an das RKI wurden ausgehändigt und erläutert, die Einwilligung zur Übermittlung wurde vom Patienten erteilt.",
   "patientdata-exclude": "Die Datenschutzhinweise zur Übermittlung des Testergebnisses und der CWA Test ID an das RKI sowie von Vorname, Name und Geburtsdatum an die CWA App wurden ausgehändigt und erläutert, die Einwilligung zur Übermittlung wurde vom Patienten erteilt.",
   "bill-status": "KV Abrechnung",
