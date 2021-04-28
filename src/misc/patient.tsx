@@ -24,7 +24,7 @@ import { Sex } from './enum';
 export default interface Patient {
     firstName: string;
     name: string;
-    dateOfBirth: Date;
+    dateOfBirth?: Date;
     processingConsens?: boolean;
     uuId?: string;
     includePersData?: boolean;

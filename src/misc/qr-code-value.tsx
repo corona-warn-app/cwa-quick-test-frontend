@@ -21,6 +21,7 @@
 
 import Patient from './patient';
 import CryptoJS from 'crypto-js';
+import vCardParser from './vCard-parser';
 
 export interface IQRCodeValue {
     fn?: string,
@@ -59,15 +60,47 @@ export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob
 export const getQrCodeValue = (valueString: string) => {
 
     if (valueString) {
-        const encodedJson = valueString.split('#')[1];
+        // console.log(valueString);
 
-        const json = atob(encodedJson);
+        const data = vCardParser(valueString)
 
-        const value: IQRCodeValue = JSON.parse(json);
+        // console.log(data);
+        // console.log(JSON.stringify(data));
 
-        return (value);
+
+        // const encodedJson = valueString.split('#')[1];
+
+        // const json = atob(encodedJson);
+
+        // const value: IQRCodeValue = JSON.parse(json);
+
+        return (data);
     }
 }
+
+// export const getPatientFromScan = (data: string | null) => {
+//     let result: Patient | null = null;
+
+//     if (data) {
+//         try {
+//             const scanData = getQrCodeValue(data);
+
+//             if (scanData && scanData.ln && scanData.fn && scanData.dob) {
+
+//                 result = {
+//                     name: scanData.ln,
+//                     firstName: scanData.fn,
+//                     dateOfBirth: new Date(scanData.dob)
+//                 }
+//             }
+//         } catch (e) {
+
+//             result = null;
+//         }
+//     }
+
+//     return result;
+// }
 
 export const getPatientFromScan = (data: string | null) => {
     let result: Patient | null = null;
@@ -76,12 +109,21 @@ export const getPatientFromScan = (data: string | null) => {
         try {
             const scanData = getQrCodeValue(data);
 
-            if (scanData && scanData.ln && scanData.fn && scanData.dob) {
+            if (scanData && scanData.length > 0) {
 
+                const s = scanData[0];
+                const ph = s.telephone.find((num) => num.value !== '');
+                const em = s.email.find((ema) => ema.value !== '');
                 result = {
-                    name: scanData.ln,
-                    firstName: scanData.fn,
-                    dateOfBirth: new Date(scanData.dob)
+                    name: s.name.surname,
+                    firstName: s.name.name,
+                    dateOfBirth: s.birthday ? new Date(s.birthday) : undefined,
+                    zip: s.address[0].value.postalCode,
+                    city: s.address[0].value.city,
+                    street: s.address[0].value.street,
+                    houseNumber: s.address[0].value.number,
+                    phoneNumber: ph ? ph.value : undefined,
+                    emailAddress: em ? em.value : undefined,
                 }
             }
         } catch (e) {
