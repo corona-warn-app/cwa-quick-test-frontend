@@ -147,7 +147,7 @@ const ShowPatientData = (props: any) => {
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.street + ' ' + patient?.houseNumber}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.zip + ' ' + patient?.city}</Card.Text>
                                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.phoneNumber}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.emailAddress}</Card.Text>
+                                {!patient?.emailAddress ? <></> : <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.emailAddress}</Card.Text>}
                                 <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.testId}</Card.Text>
                             </Col>
                             <Col sm='7' className='px-4'>

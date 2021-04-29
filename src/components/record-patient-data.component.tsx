@@ -132,7 +132,6 @@ const RecordPatientData = (props: any) => {
             && street !== ''
             && houseNumber !== ''
             && phoneNumber !== ''
-            && emailAddress !== ''
             && privacyAgreement
             && uuid) {
             setCanGoNext(true);
@@ -476,7 +475,6 @@ const RecordPatientData = (props: any) => {
                                         onChange={handleEmailAddressChange}
                                         placeholder={t('translation:email-address')}
                                         type='email'
-                                        required
                                         pattern={utils.pattern.eMail}
                                         minLength={5}
                                         maxLength={255}

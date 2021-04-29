@@ -28,7 +28,7 @@
   "street": "Straße*",
   "house-number": "Hausnr.*",
   "phone-number":"Telefonnummer*",
-  "email-address":"E-Mail Adresse*",
+  "email-address":"E-Mail Adresse",
   "test-id":"Test-ID*",
   "processing-consent-title":"Testergebnis in CWA anzeigen (ohne Personalisierung)",
   "patientdata-exclude-title":"Testergebnis in CWA anzeigen (mit Personalisierung)",
