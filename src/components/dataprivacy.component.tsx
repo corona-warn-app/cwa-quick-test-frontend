@@ -72,28 +72,27 @@ const DataprivacyPage = (props: any) => {
                                 <ol type='a' className='pr-2 pr-md-4'>
                                     <li>
                                         <strong>Technische Merkmale:</strong> <br />
-                                        Wenn Sie unser Schnelltestportal besuchen, verzeichnet der Server vorübergehend den Domain-Namen oder die IP- Adresse Ihres Computers, die Dateianfrage des Clients (Dateiname und URL), den http-Antwort-Code und die Webseite, von der aus Sie uns besuchen.<br />
-Im Auditlog speichern wir Ihren Benutzernamen, die Teststellen-ID, den verwendeten Tenant und die ausgeführten Datenbankoperationen (z.B. Eingabe von Patientendaten, Eingabe von Testergebnissen,…)<br />
-Die protokollierten Daten werden ausschließlich für Zwecke der Datensicherheit, insbesondere zur Abwehr von Angriffsversuchen auf unseren Webserver verwendet (Art. 6 Abs. 1f DSGVO). Sie werden weder für die Erstellung von individuellen Anwenderprofilen verwendet noch an Dritte weitergegeben und werden nach spätestens 7 Tagen gelöscht. Die statistische Auswertung anonymisierter Datensätze behalten wir uns vor.<br />
+                                        Wenn Sie unser Schnelltestportal besuchen, verzeichnet der Server Ihren Benutzernamen, die Teststellen-ID, den verwendeten Mandanten (und die von Ihnen ausgeführten Datenbankoperationen (z.B. Eingabe von Patientendaten, Eingabe von Testergebnissen,…). 
+Die protokollierten Daten werden ausschließlich für Zwecke der Datensicherheit, insbesondere zur Abwehr von Angriffsversuchen auf unseren Server verwendet (Art. 6 Abs. 1f DSGVO). Sie werden weder für die Erstellung von individuellen Anwenderprofilen verwendet noch an Dritte weitergegeben und werden nach spätestens 7 bis maximal 30 Tagen gelöscht. Die statistische Auswertung anonymisierter Datensätze behalten wir uns vor.<br />
                                     </li>
                                     <li className='py-3'>
                                         <strong>Authentifizierungsdaten:</strong> <br />
-                                        Wenn Sie sich an unserem Schnelltest-Portal anmelden, wird die Anmeldung dokumentiert. Diese Dokumentation umfasst den Benutzernamen, den Zeitpunkt der Anmeldung, die IP-Adresse, von der aus die Anmeldung durchgeführt wurde und die Session-Dauer. Rechtsgrundlage dieser Verarbeitung ist § 26 Abs. 1 BDSG, soweit Sie als Beschäftigter eines Unternehmens, welches unsere Leistungen in Anspruch nimmt, tätig sind. Sind Sie auf selbständiger Basis für ein Unternehmen tätig, welches unsere Leistungen in Anspruch nimmt, erfolgt die Verarbeitung auf Grund der durch Ihren Auftraggeber eingeholten Einwilligung zur Speicherung.<br />
+                                        Wenn Sie sich an unserem Schnelltest-Portal  anmelden, werden erfolgreiche und fehlgeschlagene Anmeldeversuche dokumentiert. Diese Dokumentation umfasst den Benutzernamen, den Zeitpunkt der Anmeldung, die IP-Adresse, von der aus die Anmeldung durchgeführt wurde und die Session-Dauer.  Rechtsgrundlage dieser Verarbeitung ist § 26 Abs. 1 BDSG, soweit Sie als Beschäftigter eines Unternehmens, welches unsere Leistungen in Anspruch nimmt, tätig sind. Sind Sie auf selbständiger Basis für ein Unternehmen tätig, welches unsere Leistungen in Anspruch nimmt, erfolgt die Verarbeitung auf Grund der durch Ihren Auftraggeber eingeholten Einwilligung zur Speicherung.<br />
                                     </li>
                                     <li>
                                         <strong>Archivierung von Testergebnissen:</strong> <br />
-                                        Die Testergebnisse der von ihnen getesteten Personen werden gemäß gesetzlicher Grundlage zusammen mit den Testdaten archiviert und 10 Jahre aufbewahrt und dann gelöscht.<br />
+                                        Ihr Benutzername wird zusammen mit den Testdaten der von ihnen getesteten Personen gemäß gesetzlicher Grundlage archiviert und 10 Jahre aufbewahrt und dann gelöscht.<br />
                                     </li>
                                 </ol>
                             </li>
                             <li className='text-justify py-3' >
-                                <strong>Wird mein Nutzungsverhalten ausgewertet, z. B. für Werbung oder Tracking?<br />
-                                    Erläuterungen und Definitionen
-                                </strong>
+                                <strong>Wird mein Nutzungsverhalten ausgewertet, z. B. für Werbung oder Tracking?<br /></strong>
+                                Wir werten Ihr Verhalten nicht für Werbung oder Tracking aus.
+                                
                                 <ol type='a' className='pr-2 pr-md-4'>
                                     <li>
                                         <strong>Erforderliche Cookies</strong><br />
-                                        Diese Cookies sind notwendig, damit Sie durch die Seiten navigieren und wesentliche Funktionen nutzen können. Sie ermöglichen Grundfunktionen, wie die Bestellabwicklung im Online-Shop und den Zugriff auf gesicherte Bereiche der Webseite. Zudem dienen sie der anonymen Auswertung des Nutzerverhaltens, die von uns verwendet werden, um unseren Webauftritt stetig für Sie weiterzuentwickeln. Rechtsgrundlage für diese Cookies ist Art. 6 Abs. 1b DSGVO bzw. bei Drittstaaten Art. 49 Abs. 1b DSGVO.
+                                        Diese Cookies sind notwendig, damit Sie durch die Seiten navigieren und wesentliche Funktionen nutzen können. Rechtsgrundlage für diese Cookies ist Art. 6 Abs. 1b DSGVO bzw. bei Drittstaaten Art. 49 Abs. 1b DSGVO.
                                     </li>
 
                                 </ol>
@@ -126,7 +125,7 @@ Weitere Informationen, auch zum Datenschutz im allgemeinen und in speziellen Pro
                                 Datenverantwortliche ist die T-Systems International GmbH. Bei Fragen können Sie sich an unseren <a href='http://www.telekom.de/kontakt'>Kundenservice</a> wenden oder an unseren Datenschutzbeauftragten, Herrn Dr. Claus D. Ulmer, Friedrich-Ebert-Allee 140, 53113 Bonn, <a href='mailto:datenschutz@telekom.de'>datenschutz@telekom.de</a>.
                             </li>
                             <li className='text-justify py-3' >
-                                <strong>Wird mein Nutzungsverhalten ausgewertet, z. B. für Werbung oder Tracking?</strong><br />
+                                <strong>Welche Rechte habe ich? </strong><br />
                                 Sie haben das Recht,
                                 <ol type='a' className='pr-2 pr-md-4'>
                                     <li>
@@ -148,7 +147,7 @@ Weitere Informationen, auch zum Datenschutz im allgemeinen und in speziellen Pro
                                         unter bestimmten Voraussetzungen die <strong>Einschränkung</strong> von Daten zu verlangen, soweit eine Löschung nicht möglich bzw. die Löschpflicht streitig ist (Art. 18 DSGVO);
                                     </li>
                                     <li>
-                                        auf <strong>Datenübertragbarkeit</strong>, d.h. Sie können Ihre Daten, die Sie uns bereitgestellt haben, in einem gängigen maschinenlesbaren Format, wie z.B. CSV, erhalten und ggf. an andere übermitteln (Art. 20 DSGVO;)
+                                        auf <strong>Datenübertragbarkeit</strong>, d.h. Sie können Ihre Daten, die Sie uns bereitgestellt haben, in einem gängigen maschinenlesbaren Format, wie z.B. CSV, erhalten und ggf. an andere übermitteln (Art. 20 DSGVO);
                                     </li>
                                     <li>
                                         sich bei der zuständigen <strong>Aufsichtsbehörde</strong> über die Datenverarbeitung zu <strong>beschweren</strong> (für Telekommunikationsverträge: Bundesbeauftragter für den Datenschutz und die Informationsfreiheit; im Übrigen: Landesbeauftragte für den Datenschutz und die Informationsfreiheit Nordrhein-Westfalen).
@@ -176,7 +175,7 @@ Weitere Informationen, auch zum Datenschutz im allgemeinen und in speziellen Pro
                                     </li>
                                 </ol>
                                 Darüber hinaus erfolgt eine Verarbeitung Ihrer Daten in Drittstaaten nur, soweit durch bestimmte Maßnahmen sichergestellt ist, dass hierfür ein angemessenes Datenschutzniveau besteht (z.B. Angemessenheitsbeschluss der EU-Kommission oder sog. geeignete Garantien, Art. 44ff. DSGVO).<br/><br/>
-                                Stand der Datenschutzhinweise 27.04.2021
+                                Stand der Datenschutzhinweise 30.04.2021
                             </li>
                         </ol>
                     </Container>
