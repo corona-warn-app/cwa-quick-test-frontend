@@ -72,30 +72,23 @@ const DataprivacyPage = (props: any) => {
                                 <ol type='a' className='pr-2 pr-md-4'>
                                     <li>
                                         <strong>Technische Merkmale:</strong> <br />
-                                        Wenn Sie unser Schnelltestportal besuchen, verzeichnet der Server Ihren Benutzernamen, die Teststellen-ID, den verwendeten Mandanten (und die von Ihnen ausgeführten Datenbankoperationen (z.B. Eingabe von Patientendaten, Eingabe von Testergebnissen,…). 
-Die protokollierten Daten werden ausschließlich für Zwecke der Datensicherheit, insbesondere zur Abwehr von Angriffsversuchen auf unseren Server verwendet (Art. 6 Abs. 1f DSGVO). Sie werden weder für die Erstellung von individuellen Anwenderprofilen verwendet noch an Dritte weitergegeben und werden nach spätestens 7 bis maximal 30 Tagen gelöscht. Die statistische Auswertung anonymisierter Datensätze behalten wir uns vor.<br />
+                                        Wenn Sie sich an unserem Schnelltestportal anmelden, verzeichnet der Server Ihren Benutzernamen, die Teststellen-ID, den verwendeten Mandanten (und die von Ihnen ausgeführten Datenbankoperationen (z.B. Eingabe von Patientendaten, Eingabe von Testergebnissen). 
+Die protokollierten Daten werden ausschließlich für Zwecke der Datensicherheit, insbesondere zur Abwehr von Angriffsversuchen auf unseren Server verwendet (Art. 6 Abs. 1f DSGVO). Sie werden weder für die Erstellung von individuellen Anwenderprofilen verwendet noch an Dritte weitergegeben und werden nach Ablauf eines Zeitraums von 7 Tagen bis 30 Tagen gelöscht. Die statistische Auswertung anonymisierter Datensätze behalten wir uns vor.<br />
                                     </li>
                                     <li className='py-3'>
                                         <strong>Authentifizierungsdaten:</strong> <br />
-                                        Wenn Sie sich an unserem Schnelltest-Portal  anmelden, werden erfolgreiche und fehlgeschlagene Anmeldeversuche dokumentiert. Diese Dokumentation umfasst den Benutzernamen, den Zeitpunkt der Anmeldung, die IP-Adresse, von der aus die Anmeldung durchgeführt wurde und die Session-Dauer.  Rechtsgrundlage dieser Verarbeitung ist § 26 Abs. 1 BDSG, soweit Sie als Beschäftigter eines Unternehmens, welches unsere Leistungen in Anspruch nimmt, tätig sind. Sind Sie auf selbständiger Basis für ein Unternehmen tätig, welches unsere Leistungen in Anspruch nimmt, erfolgt die Verarbeitung auf Grund der durch Ihren Auftraggeber eingeholten Einwilligung zur Speicherung.<br />
+                                        Wenn Sie sich an unserem Schnelltest-Portal anmelden, werden erfolgreiche und fehlgeschlagene Anmeldeversuche dokumentiert. Diese Dokumentation umfasst den Benutzernamen, Ihren Vor- und Nachnamen, den Zeitpunkt der Anmeldung, die IP-Adresse, von der aus die Anmeldung durchgeführt wurde und die Session-Dauer. Rechtsgrundlage dieser Verarbeitung ist § 26 Abs. 1 BDSG, soweit Sie als Beschäftigter eines Unternehmens, welches unsere Leistungen in Anspruch nimmt, tätig sind. Sind Sie auf selbständiger Basis für ein Unternehmen tätig, welches unsere Leistungen in Anspruch nimmt, erfolgt die Verarbeitung auf Grund der durch Ihren Auftraggeber eingeholten Einwilligung zur Speicherung.<br />
                                     </li>
                                     <li>
                                         <strong>Archivierung von Testergebnissen:</strong> <br />
-                                        Ihr Benutzername wird zusammen mit den Testdaten der von ihnen getesteten Personen gemäß gesetzlicher Grundlage archiviert und 10 Jahre aufbewahrt und dann gelöscht.<br />
+                                        Ihr Benutzername wird zusammen mit den Patientendaten des durchgeführten Tests (Name, Vorname, Geburtsdatum, Geschlecht, Adresse, Testhersteller, eingesetzter Test, Tag des Testergebnisses) und dem Testergebnis gemäß gesetzlicher Grundlage archiviert und 10 Jahre aufbewahrt und dann gelöscht.<br />
                                     </li>
                                 </ol>
                             </li>
                             <li className='text-justify py-3' >
                                 <strong>Wird mein Nutzungsverhalten ausgewertet, z. B. für Werbung oder Tracking?<br /></strong>
-                                Wir werten Ihr Verhalten nicht für Werbung oder Tracking aus.
-                                
-                                <ol type='a' className='pr-2 pr-md-4'>
-                                    <li>
-                                        <strong>Erforderliche Cookies</strong><br />
-                                        Diese Cookies sind notwendig, damit Sie durch die Seiten navigieren und wesentliche Funktionen nutzen können. Rechtsgrundlage für diese Cookies ist Art. 6 Abs. 1b DSGVO bzw. bei Drittstaaten Art. 49 Abs. 1b DSGVO.
-                                    </li>
-
-                                </ol>
+                                Es werden nur für die Nutzung des Schnelltest-Portals erforderliche Cookies verwendet. Diese Cookies sind notwendig, damit Sie durch die Seiten navigieren und wesentliche Funktionen nutzen können. Sie ermöglichen die Benutzung des Schnelltestportals. Rechtsgrundlage für diese Cookies ist Art. 6 Abs. 1b DSGVO bzw. bei Drittstaaten Art. 49 Abs. 1b DSGVO.
+                             
                             </li>
                             <Table className='my-3'>
                                 <thead>
@@ -175,7 +168,7 @@ Weitere Informationen, auch zum Datenschutz im allgemeinen und in speziellen Pro
                                     </li>
                                 </ol>
                                 Darüber hinaus erfolgt eine Verarbeitung Ihrer Daten in Drittstaaten nur, soweit durch bestimmte Maßnahmen sichergestellt ist, dass hierfür ein angemessenes Datenschutzniveau besteht (z.B. Angemessenheitsbeschluss der EU-Kommission oder sog. geeignete Garantien, Art. 44ff. DSGVO).<br/><br/>
-                                Stand der Datenschutzhinweise 30.04.2021
+                                Stand der Datenschutzhinweise 29.04.2021
                             </li>
                         </ol>
                     </Container>
