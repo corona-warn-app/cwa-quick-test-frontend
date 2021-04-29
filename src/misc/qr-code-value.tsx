@@ -47,7 +47,7 @@ export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob
         salt: CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
     }
 
-    const shaEntry = `${value.dob}#${value.fn}#${value.ln}#${value.timestamp.toString()}#${value.testid}#${value.salt}`;
+    const shaEntry = getShaEntry(value);
     value.hash = CryptoJS.SHA256(shaEntry).toString(CryptoJS.enc.Hex);
 
     const json = JSON.stringify(value);
@@ -55,6 +55,23 @@ export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob
     encodedJson = btoa(json);
 
     return [(baseUrl + encodedJson), value.hash];
+}
+
+const getShaEntry = (value: IQRCodeValue): string => {
+    let result = '';
+
+    if (value) {
+
+        if (value.dob && value.fn && value.ln) {
+            result = `${value.dob}#${value.fn}#${value.ln}#${value.timestamp.toString()}#${value.testid}#${value.salt}`;
+        }
+        else {
+            result = `${value.timestamp.toString()}#${value.salt}`;
+        }
+
+    }
+
+    return result;
 }
 
 export const getQrCodeValue = (valueString: string) => {
