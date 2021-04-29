@@ -140,7 +140,8 @@ const dateLine = (context: any, fieldValue: any, fieldName: any) => {
     let dateValue;
 
     if (fieldValue.length === 8) { // "19960415" format ?
-        dateValue = new Date(fieldValue.substr(0, 4), fieldValue.substr(4, 2), fieldValue.substr(6, 2));
+        const formatValue = fieldValue.substr(0, 4) + '-' + fieldValue.substr(4, 2) + '-' + fieldValue.substr(6, 2);
+        dateValue = new Date(formatValue);
     } else {
         // last chance to try as date.
         dateValue = new Date(fieldValue);
@@ -286,7 +287,6 @@ const parse = (data: string) => {
         console.log(error);
 
     }
-
     return context.cards as IvCard[];
 }
 export default parse;
