@@ -77,7 +77,6 @@ const getShaEntry = (value: IQRCodeValue): string => {
 export const getQrCodeValue = (valueString: string) => {
 
     if (valueString) {
-        // console.log(valueString);
 
         const data = vCardParser(valueString)
 
