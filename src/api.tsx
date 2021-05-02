@@ -45,7 +45,7 @@ export const usePostTestResult = (testResult: ITestResult | undefined, processId
 
             const uri = '/api/quicktest/' + processId + '/testResult';
             const body = JSON.stringify(testResult);
-            // console.log(body);
+            console.log(body);
 
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
@@ -77,7 +77,7 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
 
             const uri = '/api/quicktest/' + processId + '/personalData';
             const body = JSON.stringify({
-                confirmationCwa: patient.processingConsens,
+                confirmationCwa: patient.processingConsens || patient.includePersData,
                 privacyAgreement: patient.privacyAgreement,
                 lastName: patient.name,
                 firstName: patient.firstName,
@@ -91,6 +91,9 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                 birthday: patient.dateOfBirth ? patient.dateOfBirth.toISOString().split('T')[0] : '',
                 testResultServerHash: patient.testResultHash ? patient.testResultHash : '0000000000000000000000000000000000000000000000000000000000000000'
             });
+
+            console.log(body);
+            
 
             const header = {
                 "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
