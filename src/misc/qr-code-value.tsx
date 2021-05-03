@@ -51,8 +51,9 @@ export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob
     value.hash = CryptoJS.SHA256(shaEntry).toString(CryptoJS.enc.Hex);
 
     const json = JSON.stringify(value);
+    const buffer = Buffer.from(json);
 
-    encodedJson = btoa(json);
+    encodedJson = buffer.toString('base64');
 
     return [(baseUrl + encodedJson), value.hash];
 }
@@ -68,6 +69,7 @@ const getShaEntry = (value: IQRCodeValue): string => {
         else {
             result = `${value.timestamp.toString()}#${value.salt}`;
         }
+        console.log(result);
 
     }
 
