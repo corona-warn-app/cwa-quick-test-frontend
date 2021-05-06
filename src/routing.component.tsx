@@ -127,7 +127,7 @@ const Routing = (props: any) => {
                 <PrivateRoute
                     exact
                     path={routes.qrScan}
-                    roles={['c19_quick_test_lab']}
+                    roles={['c19_quick_test_counter']}
                     component={QrScan}
                     render={(props) => <QrScan {...props} setPatient={setPatient} />}
                 />
@@ -135,7 +135,7 @@ const Routing = (props: any) => {
                 <PrivateRoute
                     exact
                     path={routes.statistics}
-                    roles={['c19_quick_test_lab']}
+                    roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
                     component={Statistics}
                     render={(props) => <Statistics {...props} setError={setError} />}
                 />
@@ -143,7 +143,7 @@ const Routing = (props: any) => {
                 <PrivateRoute
                     exact
                     path={routes.failedReport}
-                    roles={['c19_quick_test_lab']}
+                    roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
                     component={FailedReport}
                     render={(props) => <FailedReport {...props} setError={setError} />}
                 />
