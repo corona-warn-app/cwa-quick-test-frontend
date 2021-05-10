@@ -93,7 +93,7 @@ const RecordPatientData = (props: any) => {
             setZip(p.zip);
             setCity(p.city);
             setStreet(p.street);
-            setHouseNumber(p.houseNumber);
+            // setHouseNumber(p.houseNumber);
             setPhoneNumber(p.phoneNumber);
             setEmailAddress(p.emailAddress);
             setSex(p.sex);
@@ -130,7 +130,7 @@ const RecordPatientData = (props: any) => {
             && zip !== ''
             && city !== ''
             && street !== ''
-            && houseNumber !== ''
+            //&& houseNumber !== ''
             && phoneNumber !== ''
             && emailAddress !== ''
             && privacyAgreement
@@ -148,7 +148,7 @@ const RecordPatientData = (props: any) => {
                 zip: zip,
                 city: city,
                 street: street,
-                houseNumber: houseNumber,
+                // houseNumber: houseNumber,
                 phoneNumber: phoneNumber,
                 emailAddress: emailAddress,
             });
@@ -392,7 +392,7 @@ const RecordPatientData = (props: any) => {
                             <Row>
                                 <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:address')}</Form.Label>
 
-                                <Col xs='7' sm='9' className='d-flex'>
+                                <Col xs='7' sm='9' className=''>
                                     <Row>
 
                                         <Form.Group as={Col} sm='4' className='mb-1' controlId='zipInput'>
@@ -418,7 +418,7 @@ const RecordPatientData = (props: any) => {
                                                 maxLength={255}
                                             />
                                         </Form.Group>
-                                        <Form.Group as={Col} sm='8' className='my-1 mb-sm-0' controlId='streetInput'>
+                                        <Form.Group as={Col} className='my-1 mb-sm-0' controlId='streetInput'>
                                             <Form.Control
                                                 className='qt-input'
                                                 value={street}
@@ -429,7 +429,7 @@ const RecordPatientData = (props: any) => {
                                                 maxLength={255}
                                             />
                                         </Form.Group>
-                                        <Form.Group as={Col} sm='4' className='mt-1 mb-sm-0' controlId='houseNumberInput'>
+                                        {/* <Form.Group as={Col} sm='4' className='mt-1 mb-sm-0' controlId='houseNumberInput'>
                                             <Form.Control
                                                 className='qt-input'
                                                 value={houseNumber}
@@ -440,7 +440,7 @@ const RecordPatientData = (props: any) => {
                                                 pattern={utils.pattern.houseNo}
                                                 maxLength={15}
                                             />
-                                        </Form.Group>
+                                        </Form.Group> */}
                                     </Row>
                                 </Col>
                             </Row>
