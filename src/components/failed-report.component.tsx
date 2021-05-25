@@ -32,6 +32,7 @@ import PagedList from './paged-list.component';
 import { useGetPDF, useGetPositiveForTimeRange } from '../api';
 import useNavigation from '../misc/navigation';
 import { TestResult } from '../misc/enum';
+import CardHeader from './modules/card-header.component';
 
 
 const FailedReport = (props: any) => {
@@ -104,14 +105,7 @@ const FailedReport = (props: any) => {
         !isInit ? <CwaSpinner /> :
             <>
                 <Card id='data-card'>
-                    <Card.Header id='data-header' className='pb-0'>
-                        <Row>
-                            <Col md='6'>
-                                <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:failed-report')}</Card.Title>
-                            </Col>
-                        </Row>
-                        <hr />
-                    </Card.Header>
+                    <CardHeader title={t('translation:failed-report')} />
 
                     {/*
     content area

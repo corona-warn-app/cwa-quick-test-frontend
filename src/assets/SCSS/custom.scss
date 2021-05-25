@@ -258,6 +258,15 @@ hr {
     }
 }
 
+.jcc-xs-jcfe-md {
+    display: flex;
+    justify-content: center;
+
+    @include media-breakpoint-up(md) {
+        justify-content: flex-end;
+    }
+}
+
 .position-inherit {
     position: inherit;
 }

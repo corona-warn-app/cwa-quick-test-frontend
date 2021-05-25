@@ -68,5 +68,7 @@
   "filter-record-result": "testresult",
   "search":"search",
   "dp-title":"Dataprivacy",
-  "imprint-title":"Imprint"
+  "imprint-title":"Imprint",
+  "standardised-first-name": "Standardised Given name",
+  "standardised-name": "Standardised Family name"
 }

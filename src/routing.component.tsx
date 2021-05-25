@@ -26,8 +26,8 @@ import { Container } from 'react-bootstrap'
 import './i18n';
 import { useTranslation } from 'react-i18next';
 
-import useRoutes from './misc/routes';
-import Patient from './misc/patient';
+import useNavigation from './misc/navigation';
+import IQuickTest from './misc/quick-test';
 
 import Footer from './components/footer.component';
 import Header from './components/header.component';
@@ -48,9 +48,9 @@ import ImprintPage from './components/imprint.component';
 
 const Routing = (props: any) => {
 
-    const routes = useRoutes();
+    const navigation = useNavigation();
     const { t } = useTranslation();
-    const [patient, setPatient] = React.useState<Patient>();
+    const [quickTest, setQuickTest] = React.useState<IQuickTest>();
     const [error, setError] = React.useState<IError>();
     const [errorShow, setErrorShow] = React.useState(false);
     const [notificationShow, setNotificationShow] = React.useState(false);
@@ -71,12 +71,12 @@ const Routing = (props: any) => {
         }
     }, [errorShow])
 
-    return (
+    return (!navigation ? <></> :
         <>
             {/*
     header, every time shown. fit its children
     */}
-            <Route path={routes.root}>
+            <Route path={navigation.routes.root}>
                 <Header />
                 <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} />
                 <NotificationPage show={notificationShow} setNotificationShow={setNotificationShow} />
@@ -92,7 +92,7 @@ const Routing = (props: any) => {
                 {/* Landing */}
                 <Route
                     exact
-                    path={routes.landing}
+                    path={navigation.routes.landing}
                 >
                     <LandingPage setNotificationShow={setNotificationShow} />
                 </Route>
@@ -102,23 +102,23 @@ const Routing = (props: any) => {
                 <PrivateRoute
                     exact
                     roles={['c19_quick_test_counter']}
-                    path={routes.recordPatient}
+                    path={navigation.routes.recordPatient}
                     component={RecordPatientData}
-                    render={(props) => <RecordPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} />}
+                    render={(props) => <RecordPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} />}
                 />
 
                 {/* Show Patient Data */}
                 <PrivateRoute
                     roles={['c19_quick_test_counter']}
-                    path={routes.showPatientRecord}
+                    path={navigation.routes.showPatientRecord}
                     component={ShowPatientData}
-                    render={(props) => <ShowPatientData {...props} setPatient={setPatient} patient={patient} setError={setError} setNotificationShow={setNotificationShow} />}
+                    render={(props) => <ShowPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} setNotificationShow={setNotificationShow} />}
                 />
 
                 {/* Record Test Result */}
                 <PrivateRoute
                     roles={['c19_quick_test_lab']}
-                    path={routes.recordTestResult}
+                    path={navigation.routes.recordTestResult}
                     component={RecordTestResult}
                     render={(props) => <RecordTestResult {...props} setError={setError} setNotificationShow={setNotificationShow} />}
                 />
@@ -126,15 +126,15 @@ const Routing = (props: any) => {
                 {/* QR Scan */}
                 <PrivateRoute
                     exact
-                    path={routes.qrScan}
+                    path={navigation.routes.qrScan}
                     roles={['c19_quick_test_counter']}
                     component={QrScan}
-                    render={(props) => <QrScan {...props} setPatient={setPatient} />}
+                    render={(props) => <QrScan {...props} setQuickTest={setQuickTest} />}
                 />
 
                 <PrivateRoute
                     exact
-                    path={routes.statistics}
+                    path={navigation.routes.statistics}
                     roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
                     component={Statistics}
                     render={(props) => <Statistics {...props} setError={setError} />}
@@ -142,7 +142,7 @@ const Routing = (props: any) => {
 
                 <PrivateRoute
                     exact
-                    path={routes.failedReport}
+                    path={navigation.routes.failedReport}
                     roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
                     component={FailedReport}
                     render={(props) => <FailedReport {...props} setError={setError} />}
@@ -153,7 +153,7 @@ const Routing = (props: any) => {
             {/*
     footer, every time shown. fit its children
     */}
-            <Route path={routes.root}>
+            <Route path={navigation.routes.root}>
                 <Footer setDataPrivacyShow={setDataPrivacyShow} setImprintShow={setImprintShow} />
             </Route>
 

@@ -28,6 +28,7 @@ import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
 import CwaSpinner from './spinner/spinner.component';
 import { useStatistics } from '../api';
+import CardHeader from './modules/card-header.component';
 
 const Statistics = (props: any) => {
 
@@ -55,17 +56,8 @@ const Statistics = (props: any) => {
         !isInit ? <CwaSpinner /> :
             <>
                 <Card id='data-card'>
-                    <Card.Header id='data-header' className='pb-0'>
-                        <Row>
-                            <Col md='6'>
-                                <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >
-                                    {t('translation:statistics')}
-                                    {new Date().toLocaleDateString()}
-                                </Card.Title>
-                            </Col>
-                        </Row>
-                        <hr />
-                    </Card.Header>
+                    <CardHeader title={t('translation:statistics') + new Date().toLocaleDateString()} />
+
                     {/*
     content area with patient inputs and check box
     */}

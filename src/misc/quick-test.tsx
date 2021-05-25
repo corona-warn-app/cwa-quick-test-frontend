@@ -19,22 +19,36 @@
  * under the License.
  */
 
-const useRoutes = () => {
+import { Sex } from './enum';
 
-    const bastPath = '/:mandant'
 
-    const result = {
-        root: bastPath,
-        landing: bastPath,
-        recordPatient: bastPath + '/record',
-        showPatientRecord: bastPath + '/record/show',
-        recordTestResult: bastPath + '/record/result',
-        qrScan: bastPath + '/qr/scan',
-        statistics: bastPath + '/statistics',
-        failedReport: bastPath + '/failedreport'
-    }
-
-    return result;
+export interface IPersonData {
+    givenName: string;
+    familyName: string;
+    standardisedGivenName: string;
+    standardisedFamilyName: string;
+    dateOfBirth: Date | undefined;
+    sex: Sex | undefined;
 }
 
-export default useRoutes
+export interface IAddressData {
+    zip?: string;
+    city?: string;
+    street?: string;
+    houseNumber?: string;
+}
+
+export default interface IQuickTest {
+    personData: IPersonData;
+
+    addressData: IAddressData;
+
+    processingConsens?: boolean;
+    uuId?: string;
+    includePersData?: boolean;
+    privacyAgreement?: boolean;
+    phoneNumber?: string;
+    emailAddress?: string;
+    testId?: string;
+    testResultHash?: string;
+}

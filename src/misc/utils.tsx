@@ -26,13 +26,15 @@ const pattern = {
     zip: '^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$',
     houseNo: '^([1-9]{1}[0-9a-zA-Z-\\s/]{0,14})$',
     tel: '^([+]{1}[1-9]{1,2}|[0]{1}[1-9]{1})[0-9]{5,}$',
-    eMail: '^[\\w\\d\\.-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$'
+    eMail: '^[\\w\\d\\.-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
+    standardisedName: '^[A-Z<]*$'
 }
 
 const processNoRegExp = new RegExp(pattern.processNo);
 const zipRegExp = new RegExp(pattern.zip);
 const telRegExp = new RegExp(pattern.tel);
 const eMailRegExp = new RegExp(pattern.eMail);
+const standardisedNameRegExp = new RegExp(pattern.standardisedName);
 
 export default {
     shortHashLen: shortHashLen,
@@ -41,5 +43,10 @@ export default {
     isProcessNoValid: (processNo: string) => processNoRegExp.test(processNo),
     isZipValid: (zip: string) => zipRegExp.test(zip),
     isTelValid: (tel: string) => telRegExp.test(tel),
-    isEMailValid: (eMail: string) => eMailRegExp.test(eMail)
+    isEMailValid: (eMail: string) => eMailRegExp.test(eMail),
+    isStandardisedNameValid: (value: string) => standardisedNameRegExp.test(value),
+    pickerDateFormat: 'dd.MM.yyyy',
+    pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',
+    momentDateFormat: 'DD.MM.yyyy',
+    momentDateTimeFormat: 'yyyy-MM-DD / hh:mm A'
 }

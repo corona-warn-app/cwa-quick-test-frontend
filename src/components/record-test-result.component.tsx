@@ -32,6 +32,8 @@ import { usePostTestResult } from '../api';
 import ITestResult from '../misc/test-result';
 import useLocalStorage from '../misc/local-storage';
 import CwaSpinner from './spinner/spinner.component';
+import CardFooter from './modules/card-footer.component';
+import CardHeader from './modules/card-header.component';
 
 const RecordTestResult = (props: any) => {
 
@@ -114,6 +116,10 @@ const RecordTestResult = (props: any) => {
         setPostInProgress(false);
     }
 
+    const handleCancel = () => {
+        navigation?.toLanding();
+    }
+
     const handleError = (error: any) => {
         let msg = '';
 
@@ -131,14 +137,7 @@ const RecordTestResult = (props: any) => {
 
                 <Form onSubmit={handleSubmit} validated={validated}>
 
-                    <Card.Header id='data-header' className='pb-0'>
-                        <Row>
-                            <Col md='6'>
-                                <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:record-result2')}</Card.Title>
-                            </Col>
-                        </Row>
-                        <hr />
-                    </Card.Header>
+                    <CardHeader title={t('translation:record-result2')} />
 
                     {/*
     content area with process number input and radios
@@ -246,30 +245,7 @@ const RecordTestResult = (props: any) => {
                     {/*
     footer with cancel and submit button
     */}
-                    <Card.Footer id='data-footer'>
-                        <Row>
-                            <Col sm='6' md='3'>
-                                <Button
-                                    className='my-1 my-md-0 p-0'
-                                    block
-                                    onClick={navigation!.toLanding}
-                                >
-                                    {t('translation:cancel')}
-                                </Button>
-                            </Col>
-                            <Col sm='6' md='3' className='pr-md-0'>
-                                <Button
-                                    className='my-1 my-md-0 p-0'
-                                    block
-                                    disabled={postInProgress}
-                                    type='submit'
-                                >
-                                    {t('translation:data-submit')}
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Card.Footer>
-
+                    <CardFooter okText={t('translation:data-submit')} handleCancel={handleCancel} />
                 </Form>
 
             </Card>

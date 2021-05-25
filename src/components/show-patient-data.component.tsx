@@ -26,7 +26,7 @@ import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import useNavigation from '../misc/navigation';
-import Patient from '../misc/patient';
+import IQuickTest from '../misc/quick-test';
 
 import Moment from 'react-moment';
 import sha256 from 'crypto-js/sha256';
@@ -36,7 +36,8 @@ import utils from '../misc/utils';
 import CwaSpinner from './spinner/spinner.component';
 import { Sex } from '../misc/enum';
 import { getQrCodeValueString } from '../misc/qr-code-value';
-import { usePostPatient } from '../api';
+import { usePostQuickTest } from '../api';
+import CardFooter from './modules/card-footer.component';
 
 const ShowPatientData = (props: any) => {
 
@@ -44,18 +45,19 @@ const ShowPatientData = (props: any) => {
     const { t } = useTranslation();
 
     const [isInit, setIsInit] = React.useState(false)
-    const [patient, setPatient] = React.useState<Patient>();
-    const [patientToPost, setPatientToPost] = React.useState<Patient>();
+    const [quickTest, setQuickTest] = React.useState<IQuickTest>();
+    const [quickTestToPost, setQuickTestToPost] = React.useState<IQuickTest>();
     const [qrCodeValue, setQrCodeValue] = React.useState<string[]>();
     const [uuIdHash, setUuIdHash] = React.useState('');
     const [processId, setProcessId] = React.useState('');
     const [postInProgress, setPostInProgress] = React.useState(false);
 
-    // set patient data on mount and set hash from uuid
+    // set quickTest data on mount and set hash from uuid
     React.useEffect(() => {
+        console.log(JSON.stringify(props));
         if (isInit) {
-            if (props.patient) {
-                setPatient(props.patient)
+            if (props.quickTest) {
+                setQuickTest(props.quickTest)
             }
             else
                 props.setError({ error: '', message: t('translation:error-patient-data-load'), onCancel: navigation!.toLanding });
@@ -64,19 +66,19 @@ const ShowPatientData = (props: any) => {
     }, [isInit])
 
     React.useEffect(() => {
-        if (patient && patient.uuId) {
-            setUuIdHash(sha256(patient.uuId).toString());
+        if (quickTest && quickTest.personData && quickTest.uuId) {
+            setUuIdHash(sha256(quickTest.uuId).toString());
 
-            if (patient.includePersData) {
+            if (quickTest.includePersData) {
 
-                setQrCodeValue(getQrCodeValueString(patient.uuId, patient.firstName, patient.name, patient.dateOfBirth));
+                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth));
             }
-            if (patient.processingConsens) {
-                setQrCodeValue(getQrCodeValueString(patient.uuId));
+            if (quickTest.processingConsens) {
+                setQrCodeValue(getQrCodeValueString(quickTest.uuId));
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [patient])
+    }, [quickTest])
 
     // set process id from hash
     React.useEffect(() => {
@@ -88,7 +90,7 @@ const ShowPatientData = (props: any) => {
 
     React.useEffect(() => {
         if (qrCodeValue && qrCodeValue.length > 1) {
-            patient!.testResultHash = qrCodeValue[1];
+            quickTest!.testResultHash = qrCodeValue[1];
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [qrCodeValue]);
@@ -101,7 +103,7 @@ const ShowPatientData = (props: any) => {
     }, [navigation]);
 
     const finishProcess = () => {
-        props.setPatient(undefined);
+        props.setQuickTest(undefined);
         props.setNotificationShow(true);
         navigation!.toLanding();
         setPostInProgress(false);
@@ -116,15 +118,15 @@ const ShowPatientData = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
     }
 
-    const postPatient = usePostPatient(patientToPost, processId, finishProcess, handleError);
+    const postPatient = usePostQuickTest(quickTestToPost, processId, finishProcess, handleError);
 
     const handlePost = () => {
         setPostInProgress(true);
-        setPatientToPost(patient);
+        setQuickTestToPost(quickTest);
     }
 
     return (
-        !isInit ? <CwaSpinner /> :
+        !(isInit && quickTest && quickTest.personData && quickTest.addressData) ? <CwaSpinner /> :
             <>
                 <Row id='process-row'>
                     <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
@@ -141,15 +143,15 @@ const ShowPatientData = (props: any) => {
                                 <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>{t('translation:qr-code')}</Card.Title>
                                 <hr />
                                 <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.firstName + ' ' + patient?.name}</Card.Text>
-                                <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format='DD.MM.yyyy' >{patient?.dateOfBirth as Date}</Moment>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.sex === Sex.MALE ? t('translation:male') : patient?.sex === Sex.FEMALE ? t('translation:female') : t('translation:diverse')}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.street}</Card.Text>
-                                {/* <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.street + ' ' + patient?.houseNumber}</Card.Text> */}
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.zip + ' ' + patient?.city}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{patient?.phoneNumber}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.emailAddress}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{patient?.testId}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest.personData.givenName + ' ' + quickTest.personData.familyName}</Card.Text>
+                                <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format={utils.momentDateFormat} >{quickTest.personData.dateOfBirth as Date}</Moment>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{quickTest.personData.sex === Sex.MALE ? t('translation:male') : quickTest.personData.sex === Sex.FEMALE ? t('translation:female') : t('translation:diverse')}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest.addressData.street}</Card.Text>
+                                {/* <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest?.addressData.street + ' ' + quickTest?.addressData.houseNumber}</Card.Text> */}
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{quickTest.addressData.zip + ' ' + quickTest.addressData.city}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest.phoneNumber}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{quickTest.emailAddress}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{quickTest.testId}</Card.Text>
                             </Col>
                             <Col sm='7' className='px-4'>
                                 <Container id='qr-code-container'>
@@ -163,29 +165,15 @@ const ShowPatientData = (props: any) => {
                     {/*
     footer with correction and finish button
     */}
-                    <Card.Footer id='data-footer'>
-                        <Row>
-                            <Col sm='6' md='4'>
-                                <Button
-                                    className='my-1 my-md-0 p-0'
-                                    block
-                                    onClick={navigation!.toRecordPatient}
-                                >
-                                    {t('translation:patient-data-correction')}
-                                </Button>
-                            </Col>
-                            <Col sm='6' md='3' className='pr-md-0'>
-                                <Button
-                                    className='my-1 my-md-0 p-0'
-                                    block
-                                    disabled={postInProgress}
-                                    onClick={() => handlePost()}
-                                >
-                                    {t('translation:process-finish')}
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Card.Footer>
+                    
+                    <CardFooter
+                        cancelText={t('translation:patient-data-correction')}
+                        okText={t('translation:process-finish')}
+                        handleCancel={navigation!.toRecordPatient}
+                        handleOk={() => handlePost()}
+                        disabled={postInProgress}
+                    />
+
                 </Card>
             </>
 

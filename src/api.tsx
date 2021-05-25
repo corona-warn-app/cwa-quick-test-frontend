@@ -24,17 +24,66 @@ import { useKeycloak } from '@react-keycloak/web';
 import React from 'react';
 import { v4 as newUuid } from 'uuid';
 import sha256 from 'crypto-js/sha256';
-import Patient from './misc/patient';
+import IQuickTest from './misc/quick-test';
 import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
 import { TestResult } from './misc/enum';
+import DiseaseAgents from './assets/json-res/disease-agent-targeted.json';
+import TestManufacturers from './assets/json-res/test-manf.json';
 
 export const api = axios.create({
     baseURL: ''
 });
 
 const TRYS = 2;
+
+interface IValue {
+    active: boolean,
+    display: string,
+    lang: string,
+    system: string,
+    version: string
+    valueSetId?: string,
+}
+
+export interface IValueSet {
+    [key: string]: IValue;
+}
+
+// Disease Agents
+export const useGetDiseaseAgents = () => {
+
+    const [diseaseAgents, setDiseaseAgents] = React.useState<IValueSet>();
+
+    React.useEffect(() => {
+        // get object via api
+        // const diseaseAgentsData = getApiData('/diseaseAgents');
+
+        // get object via public
+        const diseaseAgentsData = DiseaseAgents.valueSetValues;
+        setDiseaseAgents(diseaseAgentsData);
+    }, [])
+
+    return diseaseAgents;
+}
+
+// TestManufacturers
+export const useGetTestManufacturers = () => {
+
+    const [testManufacturers, setTestManufacturers] = React.useState<IValueSet>();
+
+    React.useEffect(() => {
+        // get object via api
+        // const testManufacturers = getApiData('/testManufacturers');
+
+        // get object via public
+        const testManufacturers = TestManufacturers.valueSetValues;
+        setTestManufacturers(testManufacturers);
+    }, [])
+
+    return testManufacturers;
+}
 
 export const usePostTestResult = (testResult: ITestResult | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
@@ -67,28 +116,28 @@ export const usePostTestResult = (testResult: ITestResult | undefined, processId
     }, [testResult])
 }
 
-export const usePostPatient = (patient: Patient | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
+export const usePostQuickTest = (quickTest: IQuickTest | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
 
     React.useEffect(() => {
 
-        if (patient && processId) {
+        if (quickTest && quickTest.personData && quickTest.addressData && processId) {
 
             const uri = '/api/quicktest/' + processId + '/personalData';
             const body = JSON.stringify({
-                confirmationCwa: patient.processingConsens || patient.includePersData,
-                privacyAgreement: patient.privacyAgreement,
-                lastName: patient.name,
-                firstName: patient.firstName,
-                email: patient.emailAddress,
-                phoneNumber: patient.phoneNumber,
-                sex: patient.sex,
-                street: patient.street,
-                houseNumber: patient.houseNumber,
-                zipCode: patient.zip,
-                city: patient.city,
-                birthday: patient.dateOfBirth ? patient.dateOfBirth.toISOString().split('T')[0] : '',
-                testResultServerHash: patient.testResultHash ? patient.testResultHash : '0000000000000000000000000000000000000000000000000000000000000000'
+                confirmationCwa: quickTest.processingConsens || quickTest.includePersData,
+                privacyAgreement: quickTest.privacyAgreement,
+                lastName: quickTest.personData.familyName,
+                firstName: quickTest.personData.givenName,
+                birthday: quickTest.personData.dateOfBirth ? quickTest.personData.dateOfBirth.toISOString().split('T')[0] : '',
+                sex: quickTest.personData.sex,
+                email: quickTest.emailAddress,
+                phoneNumber: quickTest.phoneNumber,
+                street: quickTest.addressData.street,
+                houseNumber: quickTest.addressData.houseNumber,
+                zipCode: quickTest.addressData.zip,
+                city: quickTest.addressData.city,
+                testResultServerHash: quickTest.testResultHash ? quickTest.testResultHash : '0000000000000000000000000000000000000000000000000000000000000000'
             });
 
             const header = {
@@ -109,7 +158,7 @@ export const usePostPatient = (patient: Patient | undefined, processId: string, 
                 });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [patient])
+    }, [quickTest])
 }
 
 export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
