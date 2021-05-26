@@ -34,6 +34,7 @@ const AddressInputs = (props: any) => {
             //     setHouseNumber(data.houseNumber);
             // }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     React.useEffect(() => {
@@ -44,6 +45,7 @@ const AddressInputs = (props: any) => {
                 street: street
             })
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [zip, city, street])
 
     return (!props ? <></>

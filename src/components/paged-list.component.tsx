@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Col, Form, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap'
+import { Form, ListGroup, ListGroupItem, Pagination } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -165,6 +165,7 @@ const PagedList = (props: any) => {
 
         setDataToFilter(filterData);
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter])
 
     const handleListSelect = (evt: any) => {

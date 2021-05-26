@@ -65,7 +65,7 @@ export const useNavigation = () => {
 
     const history = useHistory();
     const routes = useRoutes();
-    const [mandant, setMandant] = useLocalStorage('mandant', '');
+    const [mandant] = useLocalStorage('mandant', '');
     const [calculatedRoutes, setCalculatedRoutes] = React.useState<IRoute>();
     const [result, setResult] = React.useState<INavigation>();
 

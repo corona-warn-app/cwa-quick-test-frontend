@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Card, Col, Form, Row } from 'react-bootstrap';
+import { Card, Form, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -166,7 +166,7 @@ const RecordPatientData = (props: any) => {
                 </Row>
                 <Card id='data-card'>
 
-                    <Form onSubmit={handleSubmit} validated={validated}>
+                    <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
 
                         {/*
     header with title and id card query

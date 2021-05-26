@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap'
+import { Card, Col, Container, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -118,7 +118,7 @@ const ShowPatientData = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
     }
 
-    const postPatient = usePostQuickTest(quickTestToPost, processId, finishProcess, handleError);
+    usePostQuickTest(quickTestToPost, processId, finishProcess, handleError);
 
     const handlePost = () => {
         setPostInProgress(true);

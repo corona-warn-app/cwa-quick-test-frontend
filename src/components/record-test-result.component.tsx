@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+import { Card, Col, Form, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -129,13 +129,13 @@ const RecordTestResult = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
     }
 
-    const postTestResult = usePostTestResult(testResultToPost, processNo, finishProcess, handleError);
+    usePostTestResult(testResultToPost, processNo, finishProcess, handleError);
 
     return (!isInit ? <CwaSpinner /> :
         <>
             <Card id='data-card'>
 
-                <Form onSubmit={handleSubmit} validated={validated}>
+                <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
 
                     <CardHeader title={t('translation:record-result2')} />
 
@@ -245,7 +245,11 @@ const RecordTestResult = (props: any) => {
                     {/*
     footer with cancel and submit button
     */}
-                    <CardFooter okText={t('translation:data-submit')} handleCancel={handleCancel} />
+                    <CardFooter
+                        okText={t('translation:data-submit')}
+                        handleCancel={handleCancel}
+                        disabled={postInProgress}
+                    />
                 </Form>
 
             </Card>

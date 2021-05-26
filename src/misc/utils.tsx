@@ -19,6 +19,7 @@
  * under the License.
  */
 
+
 const shortHashLen = 8;
 
 const pattern = {
@@ -36,7 +37,7 @@ const telRegExp = new RegExp(pattern.tel);
 const eMailRegExp = new RegExp(pattern.eMail);
 const standardisedNameRegExp = new RegExp(pattern.standardisedName);
 
-export default {
+const utils = {
     shortHashLen: shortHashLen,
     pattern: pattern,
     shortHash: (uuIdHash: string) => uuIdHash.substring(0, shortHashLen),
@@ -50,3 +51,5 @@ export default {
     momentDateFormat: 'DD.MM.yyyy',
     momentDateTimeFormat: 'yyyy-MM-DD / hh:mm A'
 }
+
+export default utils;

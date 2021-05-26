@@ -81,10 +81,6 @@ const FailedReport = (props: any) => {
         handleDateChange(evt, setEndDate, 24);
     }
 
-    const handleEndDateChange = (evt: Date | [Date, Date] | null) => {
-        handleDateChange(evt, setEndDate, 23);
-    }
-
     React.useEffect(() => {
         if (startDate && endDate)
             setFilterComplete(true)
@@ -98,6 +94,7 @@ const FailedReport = (props: any) => {
         if (selectedHash) {
             setSelectedHash(undefined);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filterTestResult])
 
 
@@ -135,24 +132,6 @@ const FailedReport = (props: any) => {
                                             required
                                         />
                                     </Col>
-                                    {/* <Col className='d-flex'>
-                                        <DatePicker
-                                            selected={endDate}
-                                            onChange={handleEndDateChange}
-                                            locale='de'
-                                            dateFormat='dd. MM. yyyy'
-                                            isClearable
-                                            placeholderText={t('translation:to')}
-                                            className='qt-input form-control'
-                                            wrapperClassName='align-self-center'
-                                            showMonthDropdown
-                                            showYearDropdown
-                                            dropdownMode="select"
-                                            maxDate={new Date()}
-                                            minDate={startDate}
-                                            required
-                                        />
-                                    </Col> */}
                                 </Row>
                             </Col>
                         </Form.Group>
@@ -230,7 +209,7 @@ const FailedReport = (props: any) => {
                                     </Col>
                                     <Col md='9' ref={parentRef}>
                                         {!pdf ? <></> : <>
-                                            <iframe src={pdf} className='qt-IFrame' /></>
+                                            <iframe title='qt-IFrame' src={pdf} className='qt-IFrame' /></>
                                         }
                                     </Col>
                                 </Row>
