@@ -55,6 +55,7 @@ const RecordPatientData = (props: any) => {
     const [phoneNumber, setPhoneNumber] = React.useState('');
     const [emailAddress, setEmailAddress] = React.useState('');
     const [consent, setConsent] = React.useState(false);
+    const [dccConsent, setDccConsent] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [privacyAgreement, setPrivacyAgreement] = React.useState(false)
     const [validated, setValidated] = React.useState(false);
@@ -151,6 +152,7 @@ const RecordPatientData = (props: any) => {
                 privacyAgreement: privacyAgreement,
                 phoneNumber: phoneNumber,
                 emailAddress: emailAddress,
+                dccConsent: dccConsent
             })
             setTimeout(navigation!.toShowRecordPatient, 200);
         }
@@ -211,14 +213,16 @@ const RecordPatientData = (props: any) => {
                             <hr />
 
                             {/* processing consent check box */}
-                            <FormGroupConsentCkb controlId='formConsentCheckbox' title={<><strong>{t('translation:processing-consent-title')}</strong><br />{t('translation:processing-consent')}</>}
+                            <FormGroupConsentCkb controlId='formConsentCheckbox' title={t('translation:processing-consent-title')}
+                                accordion={t('translation:processing-consent')}
                                 onClick={handleConsentChange}
                                 onChange={handleConsentChange}
                                 type='radio'
                                 name="check-radios"
                                 checked={consent}
                             />
-                            <FormGroupConsentCkb controlId='formKeepPrivateCheckbox' title={<><strong>{t('translation:patientdata-exclude-title')}</strong><br />{t('translation:patientdata-exclude')}</>}
+                            <FormGroupConsentCkb controlId='formKeepPrivateCheckbox' title={t('translation:patientdata-exclude-title')}
+                                accordion={t('translation:patientdata-exclude')}
                                 onClick={handlePersDataInQRChange}
                                 onChange={handlePersDataInQRChange}
                                 type='radio'
@@ -226,9 +230,15 @@ const RecordPatientData = (props: any) => {
                                 checked={persDataInQR}
                             />
                             <FormGroupConsentCkb controlId='formDataPrivacyCheckbox' title={t('translation:data-privacy-approve')}
-                                onChange={handlePrivacyAgreement}
+                                onChange={(evt: any) => setPrivacyAgreement(evt.currentTarget.checked)}
                                 type='checkbox'
                                 checked={privacyAgreement}
+                                required
+                            />
+                            <FormGroupConsentCkb controlId='formDccCheckbox' title={t('translation:dccConsent-title')}
+                                onChange={(evt: any) => setDccConsent(evt.currentTarget.checked)}
+                                type='checkbox'
+                                checked={dccConsent}
                                 required
                             />
                         </Card.Body>

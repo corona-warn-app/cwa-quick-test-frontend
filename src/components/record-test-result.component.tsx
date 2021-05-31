@@ -28,12 +28,13 @@ import { useTranslation } from 'react-i18next';
 import useNavigation from '../misc/navigation';
 import utils from '../misc/utils';
 import { TestResult } from '../misc/enum';
-import { usePostTestResult } from '../api';
+import { ITests, useGetTests, usePostTestResult } from '../api';
 import ITestResult from '../misc/test-result';
 import useLocalStorage from '../misc/local-storage';
 import CwaSpinner from './spinner/spinner.component';
 import CardFooter from './modules/card-footer.component';
 import CardHeader from './modules/card-header.component';
+import { JsxElement } from 'typescript';
 
 const RecordTestResult = (props: any) => {
 
@@ -43,52 +44,52 @@ const RecordTestResult = (props: any) => {
     const [processNo, setProcessNo] = React.useState('');
     const [testResult, setTestResult] = React.useState<TestResult>();
     const [testResultToPost, setTestResultToPost] = React.useState<ITestResult>();
-    const [testId, setTestId] = React.useState('');
-    const [testIdList, setTestIdList] = useLocalStorage('testids', []);
+    const [testId, setTestId] = useLocalStorage('testId', '');
+    const [testName, setTestName] = useLocalStorage('testName', '');
+
     const [validated, setValidated] = React.useState(false);
     const [isInit, setIsInit] = React.useState(false)
     const [postInProgress, setPostInProgress] = React.useState(false);
+
+    const tests = useGetTests();
 
     React.useEffect(() => {
         if (navigation)
             setIsInit(true);
     }, [navigation])
 
-    // set last testId
-    React.useEffect(() => {
-        if (!testId && testIdList && testIdList.length > 0) {
-            setTestId(testIdList[testIdList.length - 1])
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [testIdList]);
-
-    const addTestIdToHistory = (testId: string) => {
-
-        if (testId && testIdList) {
-
-            const curId = testIdList.indexOf(testId);
-
-            // add if not present
-            if (curId < 0) {
-                testIdList.push(testId);
-            }
-
-            // remove/add if present and not last
-            if (curId >= 0 && curId !== testIdList.length - 1) {
-                testIdList.splice(curId);
-                testIdList.push(testId);
-            }
-
-            setTestIdList(testIdList);
-        }
-    }
-
-
     const handleProcessNoChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
         setProcessNo(evt.currentTarget.value);
     }
-    const handleTestIdChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setTestId(evt.currentTarget.value);
+
+    const handleTestChange = (evt: any, change: (str: string) => void) => {
+        const value = evt.currentTarget.value;
+
+        if (tests && value) {
+            const id = (value as string).slice(0, 8);
+            const name = (value as string).slice(11);
+            console.log(id);
+            console.log(name);
+
+            const find = tests.find((item) => item.testBrandName === name && item.testBrandId === id);
+            if (find) {
+                setTestId(find.testBrandId);
+                setTestName(find.testBrandName);
+            }
+            else {
+                change(value)
+            }
+        }
+        else {
+            change(value)
+        }
+    }
+
+    const handleTestIdChange = (evt: any) => {
+        handleTestChange(evt, setTestId);
+    }
+    const handleTestNameChange = (evt: any) => {
+        handleTestChange(evt, setTestName);
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -100,11 +101,11 @@ const RecordTestResult = (props: any) => {
         setValidated(true);
 
         if (form.checkValidity()) {
-            addTestIdToHistory(testId);
             setPostInProgress(true);
             setTestResultToPost({
                 result: testResult!,
-                testBrandId: testId
+                testBrandId: testId,
+                testBrandName: testName
             })
         }
 
@@ -176,10 +177,32 @@ const RecordTestResult = (props: any) => {
                                     type='text'
                                     list='testid-list'
                                     required
-                                    maxLength={15}
                                 />
                                 <datalist id="testid-list">
-                                    {testIdList ? testIdList.map((i: string) => <option key={i} value={i} />) : undefined}
+                                    {tests ? tests.map((i: ITests) => <option key={i.testBrandId} value={i.testBrandId + ' - ' + i.testBrandName} />) : undefined}
+                                </datalist>
+
+                            </Col>
+                        </Form.Group>
+
+                        <hr />
+                        {/* test-name input */}
+                        <Form.Group as={Row} controlId='formTestNameInput'>
+                            <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:test-name')}</Form.Label>
+
+                            <Col xs='7' sm='9' className='d-flex'>
+                                <Form.Control
+                                    className='qt-input'
+                                    value={testName}
+                                    onChange={handleTestNameChange}
+                                    placeholder={t('translation:test-name')}
+                                    type='text'
+                                    list='testname-list'
+                                    required
+                                    maxLength={255}
+                                />
+                                <datalist id="testname-list">
+                                    {tests ? tests.map((i: ITests) => <option key={i.testBrandId} value={i.testBrandId + ' - ' + i.testBrandName} />) : undefined}
                                 </datalist>
                             </Col>
                         </Form.Group>

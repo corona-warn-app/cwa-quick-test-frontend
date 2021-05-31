@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Row, Col } from "react-bootstrap";
+import { Form, Row, Col, Accordion, Button } from "react-bootstrap";
 
 import { IValueSet } from "../../api";
 
@@ -53,10 +53,19 @@ export const FormGroupConsentCkb = (props: any) => {
 
     return (!props ? <></> :
         <Form.Group as={Row} controlId='props.controlId'>
-            <Form.Label className='input-label' column sm='10' >{props.title}{(props.required ? '*' : '')}</Form.Label>
+            <Col sm='10'>
+                <Accordion >
+                    <Accordion.Toggle as={Form.Label} className='input-label' eventKey='0' >
+                        <strong>{props.title}{(props.required ? '*' : '')}</strong>
+                    </Accordion.Toggle>
 
+                    <Accordion.Collapse className='px-3' eventKey='0'>
+                        <span className='input-label text-justify'>{props.accordion}</span>
+                    </Accordion.Collapse>
+                </Accordion>
+            </Col>
             <Col sm='2' className='jcc-xs-jcfs-md'>
-                <Form.Check className='align-self-center'>
+                <Form.Check>
                     <Form.Check.Input
                         className={props.type === 'radio' ? 'rdb-input' : 'ckb-input'}
                         onClick={props.onClick}

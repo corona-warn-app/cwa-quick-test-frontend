@@ -29,6 +29,7 @@
   "phone-number":"Phone Number",
   "email-address":"E-Mail Address",
   "test-id":"Test-ID",
+  "test-name":"Test-Name",
   "processing-consent": "Consent to processing in CWA",
   "bill-status": "bill status",
   "data-privacy-approve": "Approve Dataprivacy",
