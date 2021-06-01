@@ -23,7 +23,13 @@ export const FormGroupInput = (props: any) => {
                     min={props.min}
                     max={props.max}
                     pattern={props.pattern}
+                    list={props.datalistId}
                 />
+                {!(props.datalist && props.datalistId)
+                    ? <></>
+                    : <datalist id={props.datalistId}>
+                        {props.datalist}
+                    </datalist>}
             </Col>
         </Form.Group>
     )
@@ -98,6 +104,29 @@ export const FormGroupSexRadio = (props: any) => {
                 />
                 <Form.Label className='rdb-label mb-0'>{props.title}</Form.Label>
             </Form.Check>
+        </Form.Group>
+    )
+}
+
+export const FormGroupRadio = (props: any) => {
+
+    return (!props ? <></> :
+        <Form.Group as={Row} controlId={props.controlId} className='mb-1'>
+            <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
+
+            <Col xs='7' sm='9' className='d-flex'>
+                <Form.Check className='align-self-center'>
+                    <Form.Check.Input
+                        className='rdb-input'
+                        type='radio'
+                        name={props.name}
+                        id={props.controlId}
+                        checked={props.checked}
+                        onChange={props.onChange}
+                        required={props.required}
+                    />
+                </Form.Check>
+            </Col>
         </Form.Group>
     )
 }
