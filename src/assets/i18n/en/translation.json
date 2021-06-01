@@ -29,6 +29,7 @@
   "phone-number":"Phone Number",
   "email-address":"E-Mail Address",
   "test-id":"Test-ID",
+  "test-name":"Test-Name",
   "processing-consent": "Consent to processing in CWA",
   "bill-status": "bill status",
   "data-privacy-approve": "Approve Dataprivacy",
@@ -68,5 +69,7 @@
   "filter-record-result": "testresult",
   "search":"search",
   "dp-title":"Dataprivacy",
-  "imprint-title":"Imprint"
+  "imprint-title":"Imprint",
+  "standardised-first-name": "Standardised Given name",
+  "standardised-name": "Standardised Family name"
 }

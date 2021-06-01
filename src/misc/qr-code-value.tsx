@@ -19,7 +19,7 @@
  * under the License.
  */
 
-import Patient from './patient';
+import IQuickTest from './quick-test';
 import CryptoJS from 'crypto-js';
 import vCardParser from './vCard-parser';
 
@@ -120,8 +120,8 @@ export const getQrCodeValue = (valueString: string) => {
 //     return result;
 // }
 
-export const getPatientFromScan = (data: string | null) => {
-    let result: Patient | null = null;
+export const getPersonDataFromScan = (data: string | null) => {
+    let result: IQuickTest | null = null;
 
     if (data) {
         try {
@@ -133,13 +133,20 @@ export const getPatientFromScan = (data: string | null) => {
                 const ph = s.telephone.find((num) => num.value !== '');
                 const em = s.email.find((ema) => ema.value !== '');
                 result = {
-                    name: s.name.surname,
-                    firstName: s.name.name,
-                    dateOfBirth: s.birthday ? new Date(s.birthday) : undefined,
-                    zip: s.address[0].value.postalCode,
-                    city: s.address[0].value.city,
-                    street: s.address[0].value.street,
-                    houseNumber: s.address[0].value.number,
+                    personData: {
+                        familyName: s.name.surname,
+                        givenName: s.name.name,
+                        standardisedGivenName: '',
+                        standardisedFamilyName: '',
+                        dateOfBirth: s.birthday ? new Date(s.birthday) : undefined,
+                        sex: undefined
+                    },
+                    addressData: {
+                        zip: s.address[0].value.postalCode,
+                        city: s.address[0].value.city,
+                        street: s.address[0].value.street,
+                        houseNumber: s.address[0].value.number
+                    },
                     phoneNumber: ph ? ph.value : undefined,
                     emailAddress: em ? em.value : undefined,
                 }

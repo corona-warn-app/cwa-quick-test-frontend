@@ -34,6 +34,7 @@ const ImprintPage = (props: any) => {
     React.useEffect(() => {
         if (props)
             setShow(props.show);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.show])
 
     const handleClose = () => {
@@ -110,7 +111,7 @@ const ImprintPage = (props: any) => {
                         </p>
 
                         <p>
-                            <a href='https://www.t-systems.com/de/de/kontakt#_blank' target='_blank'>Kontakt aufnehmen</a>
+                            <a href='https://www.t-systems.com/de/de/kontakt#_blank' rel='noreferrer' target='_blank'>Kontakt aufnehmen</a>
                         </p>
 
                     </Container>

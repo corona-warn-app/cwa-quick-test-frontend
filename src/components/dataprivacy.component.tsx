@@ -34,6 +34,7 @@ const DataprivacyPage = (props: any) => {
     React.useEffect(() => {
         if (props)
             setShow(props.show);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.show])
 
     const handleClose = () => {

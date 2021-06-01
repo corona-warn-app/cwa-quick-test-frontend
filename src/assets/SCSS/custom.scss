@@ -120,6 +120,12 @@ hr {
     border-radius: $data-card-border-radius;
     box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.15);
 }
+
+.form-flex {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
 .data-modal{
     background-color: $light;
     border-radius: $data-card-border-radius;
@@ -255,6 +261,15 @@ hr {
 
     @include media-breakpoint-up(md) {
         justify-content: flex-start;
+    }
+}
+
+.jcc-xs-jcfe-md {
+    display: flex;
+    justify-content: center;
+
+    @include media-breakpoint-up(md) {
+        justify-content: flex-end;
     }
 }
 

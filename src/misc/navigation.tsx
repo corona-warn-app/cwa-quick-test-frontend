@@ -43,16 +43,20 @@ export const useRoutes = () => {
 
     const basePath = '/:mandant'
 
-    const result: IRoute = {
-        root: basePath,
-        landing: basePath,
-        recordPatient: basePath + '/record',
-        showPatientRecord: basePath + '/record/show',
-        recordTestResult: basePath + '/record/result',
-        qrScan: basePath + '/qr/scan',
-        statistics: basePath + '/statistics',
-        failedReport: basePath + '/failedreport'
-    }
+    const [result, setResult] = React.useState<IRoute>();
+
+    React.useEffect(() => {
+        setResult({
+            root: basePath,
+            landing: basePath,
+            recordPatient: basePath + '/record',
+            showPatientRecord: basePath + '/record/show',
+            recordTestResult: basePath + '/record/result',
+            qrScan: basePath + '/qr/scan',
+            statistics: basePath + '/statistics',
+            failedReport: basePath + '/failedreport'
+        });
+    }, [])
 
     return result;
 }
@@ -61,14 +65,13 @@ export const useNavigation = () => {
 
     const history = useHistory();
     const routes = useRoutes();
-    const [mandant, setMandant] = useLocalStorage('mandant', '');
-    const [calculatedRoutes, setCalculatedRoutes] = React.useState(routes);
+    const [mandant] = useLocalStorage('mandant', '');
+    const [calculatedRoutes, setCalculatedRoutes] = React.useState<IRoute>();
     const [result, setResult] = React.useState<INavigation>();
 
     React.useEffect(() => {
         if (routes) {
-
-            const c = calculatedRoutes;
+            const c = routes;
 
             c.root = routes.root.replace(':mandant', mandant as string);
             c.landing = routes.landing.replace(':mandant', mandant as string);
@@ -85,9 +88,8 @@ export const useNavigation = () => {
     }, [routes])
 
     React.useEffect(() => {
-        if (calculatedRoutes) {
-
-            const n: INavigation = {
+        if (calculatedRoutes && routes) {
+            setResult({
                 routes: routes,
                 calculatedRoutes: calculatedRoutes,
 
@@ -98,9 +100,7 @@ export const useNavigation = () => {
                 toQRScan: () => { history.push(calculatedRoutes.qrScan); },
                 toStatistics: () => { history.push(calculatedRoutes.statistics); },
                 toFailedReport: () => { history.push(calculatedRoutes.failedReport); },
-            }
-
-            setResult(n);
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [calculatedRoutes])

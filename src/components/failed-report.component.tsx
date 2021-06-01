@@ -32,6 +32,7 @@ import PagedList from './paged-list.component';
 import { useGetPDF, useGetPositiveForTimeRange } from '../api';
 import useNavigation from '../misc/navigation';
 import { TestResult } from '../misc/enum';
+import CardHeader from './modules/card-header.component';
 
 
 const FailedReport = (props: any) => {
@@ -80,10 +81,6 @@ const FailedReport = (props: any) => {
         handleDateChange(evt, setEndDate, 24);
     }
 
-    const handleEndDateChange = (evt: Date | [Date, Date] | null) => {
-        handleDateChange(evt, setEndDate, 23);
-    }
-
     React.useEffect(() => {
         if (startDate && endDate)
             setFilterComplete(true)
@@ -97,6 +94,7 @@ const FailedReport = (props: any) => {
         if (selectedHash) {
             setSelectedHash(undefined);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filterTestResult])
 
 
@@ -104,14 +102,7 @@ const FailedReport = (props: any) => {
         !isInit ? <CwaSpinner /> :
             <>
                 <Card id='data-card'>
-                    <Card.Header id='data-header' className='pb-0'>
-                        <Row>
-                            <Col md='6'>
-                                <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:failed-report')}</Card.Title>
-                            </Col>
-                        </Row>
-                        <hr />
-                    </Card.Header>
+                    <CardHeader title={t('translation:failed-report')} />
 
                     {/*
     content area
@@ -141,24 +132,6 @@ const FailedReport = (props: any) => {
                                             required
                                         />
                                     </Col>
-                                    {/* <Col className='d-flex'>
-                                        <DatePicker
-                                            selected={endDate}
-                                            onChange={handleEndDateChange}
-                                            locale='de'
-                                            dateFormat='dd. MM. yyyy'
-                                            isClearable
-                                            placeholderText={t('translation:to')}
-                                            className='qt-input form-control'
-                                            wrapperClassName='align-self-center'
-                                            showMonthDropdown
-                                            showYearDropdown
-                                            dropdownMode="select"
-                                            maxDate={new Date()}
-                                            minDate={startDate}
-                                            required
-                                        />
-                                    </Col> */}
                                 </Row>
                             </Col>
                         </Form.Group>
@@ -236,7 +209,7 @@ const FailedReport = (props: any) => {
                                     </Col>
                                     <Col md='9' ref={parentRef}>
                                         {!pdf ? <></> : <>
-                                            <iframe src={pdf} className='qt-IFrame' /></>
+                                            <iframe title='qt-IFrame' src={pdf} className='qt-IFrame' /></>
                                         }
                                     </Col>
                                 </Row>
