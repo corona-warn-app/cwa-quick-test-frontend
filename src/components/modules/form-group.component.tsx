@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Row, Col, Accordion, Button } from "react-bootstrap";
+import { Form, Row, Col, Accordion } from "react-bootstrap";
 
 import { IValueSet } from "../../api";
 

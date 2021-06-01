@@ -34,7 +34,6 @@ import useLocalStorage from '../misc/local-storage';
 import CwaSpinner from './spinner/spinner.component';
 import CardFooter from './modules/card-footer.component';
 import CardHeader from './modules/card-header.component';
-import { JsxElement } from 'typescript';
 
 const RecordTestResult = (props: any) => {
 

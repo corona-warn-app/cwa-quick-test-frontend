@@ -116,6 +116,7 @@ const RecordPatientData = (props: any) => {
         }
         setIncludePersData(false);
     }
+    
     const handlePersDataInQRChange = (evt: any) => {
         if (persDataInQR) {
             setIncludePersData(false);
@@ -124,9 +125,6 @@ const RecordPatientData = (props: any) => {
             setIncludePersData(true);
         }
         setConsent(false);
-    }
-    const handlePrivacyAgreement = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setPrivacyAgreement(evt.currentTarget.checked);
     }
 
     const handleCancel = () => {
