@@ -49,7 +49,7 @@ const TestResultInputs = (props: any) => {
             const find = tests.find((item) => (value.length <= 15 || item.testBrandName === name) && item.testBrandId === id);
             if (find) {
                 setTestId(find.testBrandId);
-                setTestName(Buffer.from(find.testBrandName).toString('utf8'));
+                setTestName(find.testBrandName);
             }
             else {
                 change(value)
