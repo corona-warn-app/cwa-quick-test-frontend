@@ -51,6 +51,4 @@ export default interface IQuickTest {
     emailAddress?: string;
     testId?: string;
     testResultHash?: string;
-    dccConsent?: boolean;
-    dccConsentCwa?: boolean;
 }

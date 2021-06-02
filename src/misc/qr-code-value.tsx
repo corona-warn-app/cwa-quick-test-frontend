@@ -36,14 +36,14 @@ export interface IQRCodeValue {
 
 const baseUrl = 'https://s.coronawarn.app?v=1#';
 
-export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob?: Date, dccConsentCwa?: boolean) => {
+export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob?: Date) => {
     let encodedJson = '';
 
     const value: IQRCodeValue = {
         fn: fn,
         ln: ln,
         dob: dob ? dob.toISOString().split('T')[0] : undefined,
-        dcc: dccConsentCwa ? true : false,
+        dcc: fn && ln && dob ? true : undefined,
         testid: guid,
         timestamp: Date.now() / 1000 | 0,
         salt: CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
@@ -65,8 +65,8 @@ const getShaEntry = (value: IQRCodeValue): string => {
 
     if (value) {
 
-        if (value.dob && value.fn && value.ln && value.dcc !== undefined) {
-            result = `${value.dob}#${value.fn}#${value.ln}#${value.timestamp.toString()}#${value.testid}#${value.salt}#${+value.dcc}`;
+        if (value.dob && value.fn && value.ln) {
+            result = `${value.dob}#${value.fn}#${value.ln}#${value.timestamp.toString()}#${value.testid}#${value.salt}#1`;
         }
         else {
             result = `${value.timestamp.toString()}#${value.salt}`;

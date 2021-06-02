@@ -69,9 +69,9 @@ const ShowPatientData = (props: any) => {
         if (quickTest && quickTest.personData && quickTest.uuId) {
             setUuIdHash(sha256(quickTest.uuId).toString());
 
-            if (quickTest.includePersData || quickTest.dccConsentCwa) {
+            if (quickTest.includePersData) {
 
-                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth, quickTest.dccConsentCwa));
+                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth));
             }
             if (quickTest.processingConsens) {
                 setQrCodeValue(getQrCodeValueString(quickTest.uuId));
