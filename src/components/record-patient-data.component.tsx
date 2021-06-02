@@ -56,6 +56,7 @@ const RecordPatientData = (props: any) => {
     const [emailAddress, setEmailAddress] = React.useState('');
     const [consent, setConsent] = React.useState(false);
     const [dccConsent, setDccConsent] = React.useState(false);
+    const [dccConsentCwa, setDccConsentCwa] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [privacyAgreement, setPrivacyAgreement] = React.useState(false)
     const [validated, setValidated] = React.useState(false);
@@ -78,6 +79,8 @@ const RecordPatientData = (props: any) => {
             const p = props.quickTest;
 
             setConsent(p.processingConsens);
+            setDccConsent(p.dccConsent);
+            setDccConsentCwa(p.dccConsentCwa);
             setIncludePersData(p.includePersData);
             setPrivacyAgreement(p.privacyAgreement);
             setPhoneNumber(p.phoneNumber);
@@ -108,23 +111,21 @@ const RecordPatientData = (props: any) => {
 
 
     const handleConsentChange = (evt: any) => {
-        if (consent) {
-            setConsent(false);
-        }
-        else {
-            setConsent(true);
-        }
+        setConsent(!consent)
         setIncludePersData(false);
+        setDccConsentCwa(false);
     }
-    
+
     const handlePersDataInQRChange = (evt: any) => {
-        if (persDataInQR) {
-            setIncludePersData(false);
-        }
-        else {
-            setIncludePersData(true);
-        }
+        setIncludePersData(!persDataInQR);
         setConsent(false);
+        setDccConsentCwa(false);
+    }
+
+    const handleDccConsentCwaChange = (evt: any) => {
+        setDccConsentCwa(!dccConsentCwa);
+        setConsent(false);
+        setIncludePersData(false);
     }
 
     const handleCancel = () => {
@@ -150,7 +151,8 @@ const RecordPatientData = (props: any) => {
                 privacyAgreement: privacyAgreement,
                 phoneNumber: phoneNumber,
                 emailAddress: emailAddress,
-                dccConsent: dccConsent
+                dccConsent: dccConsent,
+                dccConsentCwa: dccConsentCwa
             })
             setTimeout(navigation!.toShowRecordPatient, 200);
         }
@@ -227,6 +229,14 @@ const RecordPatientData = (props: any) => {
                                 name="check-radios"
                                 checked={persDataInQR}
                             />
+                            <FormGroupConsentCkb controlId='formDccConsentCwaCheckbox' title={t('translation:dccConsentCwa-title')}
+                                // accordion={t('translation:patientdata-exclude')}
+                                onClick={handleDccConsentCwaChange}
+                                onChange={handleDccConsentCwaChange}
+                                type='radio'
+                                name="check-radios"
+                                checked={dccConsentCwa}
+                            />
                             <FormGroupConsentCkb controlId='formDataPrivacyCheckbox' title={t('translation:data-privacy-approve')}
                                 onChange={(evt: any) => setPrivacyAgreement(evt.currentTarget.checked)}
                                 type='checkbox'
@@ -237,7 +247,6 @@ const RecordPatientData = (props: any) => {
                                 onChange={(evt: any) => setDccConsent(evt.currentTarget.checked)}
                                 type='checkbox'
                                 checked={dccConsent}
-                                required
                             />
                         </Card.Body>
 

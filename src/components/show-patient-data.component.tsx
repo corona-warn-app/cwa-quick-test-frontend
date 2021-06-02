@@ -54,7 +54,7 @@ const ShowPatientData = (props: any) => {
 
     // set quickTest data on mount and set hash from uuid
     React.useEffect(() => {
-        console.log(JSON.stringify(props));
+        // console.log(JSON.stringify(props));
         if (isInit) {
             if (props.quickTest) {
                 setQuickTest(props.quickTest)
@@ -69,9 +69,9 @@ const ShowPatientData = (props: any) => {
         if (quickTest && quickTest.personData && quickTest.uuId) {
             setUuIdHash(sha256(quickTest.uuId).toString());
 
-            if (quickTest.includePersData) {
+            if (quickTest.includePersData || quickTest.dccConsentCwa) {
 
-                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth));
+                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth, quickTest.dccConsentCwa));
             }
             if (quickTest.processingConsens) {
                 setQrCodeValue(getQrCodeValueString(quickTest.uuId));

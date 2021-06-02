@@ -130,7 +130,7 @@ export const usePostQuickTest = (quickTest: IQuickTest | undefined, processId: s
 
             const uri = '/api/quicktest/' + processId + '/personalData';
             const body = JSON.stringify({
-                confirmationCwa: quickTest.processingConsens || quickTest.includePersData,
+                confirmationCwa: quickTest.processingConsens || quickTest.includePersData || quickTest.dccConsentCwa,
                 privacyAgreement: quickTest.privacyAgreement,
                 lastName: quickTest.personData.familyName,
                 firstName: quickTest.personData.givenName,
@@ -147,7 +147,8 @@ export const usePostQuickTest = (quickTest: IQuickTest | undefined, processId: s
                 standardisedGivenName: quickTest.personData.standardisedGivenName,
                 diseaseAgentTargeted: '840539006',
                 dccConsent: quickTest.dccConsent,
-                testType: "LP217198-3"
+                testType: "LP217198-3",
+                dccConsentCwa: quickTest.dccConsentCwa
 
                 // new fields 4 API
 
@@ -155,6 +156,7 @@ export const usePostQuickTest = (quickTest: IQuickTest | undefined, processId: s
                 // standardisedGivenName: quickTest.personData.standardisedGivenName, --> "type": "string", "pattern": "^[A-Z<]*$", "maxLength": 50,
                 // diseaseAgentTargeted: quickTest.personData.diseaseAgentTargeted --> immer "840539006" , "type": "string"
                 // dccConsent: quickTest.dccConsent --> "type": "boolean"
+                // dccConsentCwa: quickTest.dccConsentCwa --> "type": "boolean"
                 // testType: quickTest.testType --> immer "LP217198-3" , "type": "string"
             });
 
