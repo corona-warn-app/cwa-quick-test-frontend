@@ -38,6 +38,7 @@ const TestResultInputs = (props: any) => {
 
     const handleTestChange = (evt: any, change: (str: string) => void) => {
         const value = evt.currentTarget.value;
+        console.log(value);
 
         if (tests && value) {
             const id = (value as string).slice(0, 8);
@@ -45,7 +46,7 @@ const TestResultInputs = (props: any) => {
             // console.log(id);
             // console.log(name);
 
-            const find = tests.find((item) => item.testBrandName === name && item.testBrandId === id);
+            const find = tests.find((item) => (value.length <= 15 || item.testBrandName === name) && item.testBrandId === id);
             if (find) {
                 setTestId(find.testBrandId);
                 setTestName(find.testBrandName);
