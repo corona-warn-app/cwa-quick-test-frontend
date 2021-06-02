@@ -42,8 +42,8 @@ const TestResultInputs = (props: any) => {
         if (tests && value) {
             const id = (value as string).slice(0, 8);
             const name = (value as string).slice(11);
-            console.log(id);
-            console.log(name);
+            // console.log(id);
+            // console.log(name);
 
             const find = tests.find((item) => item.testBrandName === name && item.testBrandId === id);
             if (find) {

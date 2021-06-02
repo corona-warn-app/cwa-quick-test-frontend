@@ -57,15 +57,18 @@ export const FormGroupAddressInput = (props: any) => {
 
 export const FormGroupConsentCkb = (props: any) => {
 
+    const accordionRef = React.useRef(null);
+    const [collapsed, setCollapsed] = React.useState(false);
+
     return (!props ? <></> :
         <Form.Group as={Row} controlId='props.controlId'>
             <Col sm='10'>
-                <Accordion >
+                <Accordion ref={accordionRef} onSelect={(evt) => setCollapsed(evt !== null)}>
                     <Accordion.Toggle as={Form.Label} className='input-label' eventKey='0' >
-                        <strong>{props.title}{(props.required ? '*' : '')}</strong>
+                        <strong>{props.title}{(props.required ? '*' : '')}</strong>{!collapsed && props.accordion ? ' (...)' : ''}
                     </Accordion.Toggle>
 
-                    <Accordion.Collapse className='px-3' eventKey='0'>
+                    <Accordion.Collapse className='px-3' eventKey='0' >
                         <span className='input-label text-justify'>{props.accordion}</span>
                     </Accordion.Collapse>
                 </Accordion>

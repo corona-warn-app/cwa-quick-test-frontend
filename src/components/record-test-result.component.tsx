@@ -62,7 +62,7 @@ const RecordTestResult = (props: any) => {
         setValidated(true);
 
         if (form.checkValidity()) {
-            console.log(JSON.stringify(testResult));
+            // console.log(JSON.stringify(testResult));
             
             setPostInProgress(true);
             setTestResultToPost(testResult);
