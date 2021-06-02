@@ -142,16 +142,47 @@ const ShowPatientData = (props: any) => {
                             <Col sm='5'>
                                 <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>{t('translation:qr-code')}</Card.Title>
                                 <hr />
-                                <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >{t('translation:patient-data')}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest.personData.givenName + ' ' + quickTest.personData.familyName}</Card.Text>
-                                <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format={utils.momentDateFormat} >{quickTest.personData.dateOfBirth as Date}</Moment>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{quickTest.personData.sex === Sex.MALE ? t('translation:male') : quickTest.personData.sex === Sex.FEMALE ? t('translation:female') : t('translation:diverse')}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest.addressData.street}</Card.Text>
+
+                                <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >
+                                    {t('translation:patient-data')}
+                                </Card.Text>
+
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >
+                                    {quickTest.personData.givenName + ' ' + quickTest.personData.familyName}
+                                </Card.Text>
+
+                                <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format={utils.momentDateFormat} >
+                                    {quickTest.personData.dateOfBirth as Date}
+                                </Moment>
+
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >
+                                    {quickTest.personData.sex === Sex.MALE
+                                        ? t('translation:male')
+                                        : quickTest.personData.sex === Sex.FEMALE
+                                            ? t('translation:female')
+                                            : t('translation:diverse')}
+                                </Card.Text>
+
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >
+                                    {quickTest.addressData.street}
+                                </Card.Text>
+
                                 {/* <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest?.addressData.street + ' ' + quickTest?.addressData.houseNumber}</Card.Text> */}
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{quickTest.addressData.zip + ' ' + quickTest.addressData.city}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest.phoneNumber}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{quickTest.emailAddress}</Card.Text>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm' >{quickTest.testId}</Card.Text>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >
+                                    {quickTest.addressData.zip + ' ' + quickTest.addressData.city}
+                                </Card.Text>
+
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >
+                                    {quickTest.phoneNumber}
+                                </Card.Text>
+
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >
+                                    {quickTest.emailAddress}
+                                </Card.Text>
+
+                                <Card.Text className='input-label jcc-xs-jcfs-sm' >
+                                    {quickTest.testId}
+                                </Card.Text>
                             </Col>
                             <Col sm='7' className='px-4'>
                                 <Container id='qr-code-container'>
@@ -165,7 +196,7 @@ const ShowPatientData = (props: any) => {
                     {/*
     footer with correction and finish button
     */}
-                    
+
                     <CardFooter
                         cancelText={t('translation:patient-data-correction')}
                         okText={t('translation:process-finish')}
