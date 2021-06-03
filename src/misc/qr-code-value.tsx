@@ -69,7 +69,7 @@ const getShaEntry = (value: IQRCodeValue): string => {
             result = `${value.dob}#${value.fn}#${value.ln}#${value.timestamp.toString()}#${value.testid}#${value.salt}#1`;
         }
         else {
-            result = `${value.timestamp.toString()}#${value.salt}`;
+            result = `${value.timestamp.toString()}#${value.salt}#1`;
         }
         // console.log(result);
 
