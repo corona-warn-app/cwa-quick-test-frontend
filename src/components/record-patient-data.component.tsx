@@ -80,7 +80,9 @@ const RecordPatientData = (props: any) => {
             setIncludePersData(p.includePersData);
             setPrivacyAgreement(p.privacyAgreement);
             setPhoneNumber(p.phoneNumber);
-            setEmailAddress(p.emailAddress);
+            if (p.emailAddress) {
+                setEmailAddress(p.emailAddress);
+            }
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -138,7 +140,7 @@ const RecordPatientData = (props: any) => {
                 includePersData: persDataInQR,
                 privacyAgreement: privacyAgreement,
                 phoneNumber: phoneNumber,
-                emailAddress: emailAddress
+                emailAddress: emailAddress ? emailAddress : undefined
             })
             setTimeout(navigation!.toShowRecordPatient, 200);
         }
@@ -190,7 +192,6 @@ const RecordPatientData = (props: any) => {
                                 value={emailAddress}
                                 onChange={(evt: any) => setEmailAddress(evt.target.value)}
                                 type='email'
-                                required
                                 pattern={utils.pattern.eMail}
                                 minLength={5}
                                 maxLength={255}
