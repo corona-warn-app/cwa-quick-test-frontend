@@ -27,7 +27,7 @@ export interface IQRCodeValue {
     fn?: string,
     ln?: string,
     dob?: string, //"1990-01-01",   - >day of birth
-    dcc?: boolean,
+    dgc?: boolean,
     testid: string,
     timestamp: number,
     salt: string, // 32 Bit random in HEX
@@ -43,7 +43,7 @@ export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob
         fn: fn,
         ln: ln,
         dob: dob ? dob.toISOString().split('T')[0] : undefined,
-        dcc: true,
+        dgc: true,
         testid: guid,
         timestamp: Date.now() / 1000 | 0,
         salt: CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
