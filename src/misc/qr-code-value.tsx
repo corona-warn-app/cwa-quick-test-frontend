@@ -43,7 +43,7 @@ export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob
         fn: fn,
         ln: ln,
         dob: dob ? dob.toISOString().split('T')[0] : undefined,
-        dcc: fn && ln && dob ? true : undefined,
+        dcc: true,
         testid: guid,
         timestamp: Date.now() / 1000 | 0,
         salt: CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
