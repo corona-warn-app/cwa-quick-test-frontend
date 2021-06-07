@@ -38,7 +38,7 @@ const TestResultInputs = (props: any) => {
 
     const handleTestChange = (evt: any, change: (str: string) => void) => {
         const value = evt.currentTarget.value;
-        console.log(value);
+        // console.log(value);
 
         if (tests && value) {
             const id = (value as string).slice(0, 8);
@@ -86,7 +86,7 @@ const TestResultInputs = (props: any) => {
                 value={testName}
                 onChange={handleTestNameChange}
                 required
-                maxLength={255}
+                maxLength={200}
                 datalistId='testname-list'
                 datalist={tests ? tests.map((i: ITests) => <option key={i.testBrandId} value={i.testBrandId + ' - ' + i.testBrandName} />) : undefined}
             />
