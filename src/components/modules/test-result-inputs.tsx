@@ -38,7 +38,7 @@ const TestResultInputs = (props: any) => {
 
     const handleTestChange = (evt: any, change: (str: string) => void) => {
         const value = evt.currentTarget.value;
-        console.log(value);
+        // console.log(value);
 
         if (tests && value) {
             const id = (value as string).slice(0, 8);
