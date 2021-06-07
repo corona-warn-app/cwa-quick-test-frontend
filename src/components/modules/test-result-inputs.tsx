@@ -86,7 +86,7 @@ const TestResultInputs = (props: any) => {
                 value={testName}
                 onChange={handleTestNameChange}
                 required
-                maxLength={255}
+                maxLength={200}
                 datalistId='testname-list'
                 datalist={tests ? tests.map((i: ITests) => <option key={i.testBrandId} value={i.testBrandId + ' - ' + i.testBrandName} />) : undefined}
             />
