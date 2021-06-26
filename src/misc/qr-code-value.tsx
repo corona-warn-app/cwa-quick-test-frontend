@@ -136,21 +136,21 @@ export const getPersonDataFromScan = (data: string | null) => {
                 const em = s.email.find((ema) => ema.value !== '');
                 result = {
                     personData: {
-                        familyName: s.name.surname,
-                        givenName: s.name.name,
+                        familyName: s.name.surname.trim(),
+                        givenName: s.name.name.trim(),
                         standardisedGivenName: '',
                         standardisedFamilyName: '',
                         dateOfBirth: s.birthday ? new Date(s.birthday) : undefined,
                         sex: undefined
                     },
                     addressData: {
-                        zip: s.address[0].value.postalCode,
-                        city: s.address[0].value.city,
-                        street: s.address[0].value.street,
-                        houseNumber: s.address[0].value.number
+                        zip: s.address[0].value.postalCode.trim(),
+                        city: s.address[0].value.city.trim(),
+                        street: s.address[0].value.street.trim(),
+                        houseNumber: s.address[0].value.number.trim()
                     },
-                    phoneNumber: ph ? ph.value : undefined,
-                    emailAddress: em ? em.value : undefined,
+                    phoneNumber: ph ? ph.value.replace(/\s/g,'') : undefined,
+                    emailAddress: em ? em.value.trim() : undefined,
                 }
             }
         } catch (e) {
