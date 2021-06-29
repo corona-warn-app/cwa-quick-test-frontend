@@ -26,7 +26,7 @@
     "husky": "^5.1.3",
     "i18next": "^19.9.2",
     "i18next-resource-store-loader": "^0.1.2",
-    "keycloak-js": "^10.0.1",
+    "keycloak-js": "^12.0.4",
     "lint-staged": "^10.5.4",
     "moment": "^2.29.1",
     "node-sass": "^5.0.0",
