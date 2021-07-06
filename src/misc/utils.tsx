@@ -19,6 +19,20 @@
  * under the License.
  */
 
+export interface IUtils {
+    shortHashLen: number,
+    pattern: { [key: string]: string },
+    shortHash: (value: string) => string,
+    isProcessNoValid: (value: string) => boolean,
+    isZipValid: (value: string) => boolean,
+    isTelValid: (value: string) => boolean,
+    isEMailValid: (value: string) => boolean,
+    isStandardisedNameValid: (value: string) => boolean,
+    pickerDateFormat: string,
+    pickerDateTimeFormat: string,
+    momentDateFormat: string,
+    momentDateTimeFormat: string
+}
 
 const shortHashLen = 8;
 
@@ -37,7 +51,7 @@ const telRegExp = new RegExp(pattern.tel);
 const eMailRegExp = new RegExp(pattern.eMail);
 const standardisedNameRegExp = new RegExp(pattern.standardisedName);
 
-const utils = {
+const utils: IUtils = {
     shortHashLen: shortHashLen,
     pattern: pattern,
     shortHash: (uuIdHash: string) => uuIdHash.substring(0, shortHashLen),

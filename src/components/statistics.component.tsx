@@ -25,7 +25,7 @@ import { Button, Card, Col, Row } from 'react-bootstrap'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from '../misc/navigation';
+import useNavigation from '../misc/useNavigation';
 import CwaSpinner from './spinner/spinner.component';
 import { useStatistics } from '../api';
 import CardHeader from './modules/card-header.component';

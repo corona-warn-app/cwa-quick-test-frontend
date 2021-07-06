@@ -33,7 +33,8 @@ const ErrorPage = (props: any) => {
     React.useEffect(() => {
         if (props)
             setShow(props.show);
-    }, [props, props.show])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.show])
 
     return (
         <>
@@ -59,7 +60,7 @@ const ErrorPage = (props: any) => {
                     <hr />
                     <p className='text-center'>
                         <span className='font-weight-bold'>{t('translation:serverError')}</span>
-                        <span>{props?.error?.message}</span>
+                        <span>{props?.error ? props?.error?.message : props.message}</span>
                     </p>
 
                     <hr />

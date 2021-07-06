@@ -25,7 +25,7 @@ import { Card, Col, Container, Row } from 'react-bootstrap'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from '../misc/navigation';
+import useNavigation from '../misc/useNavigation';
 import IQuickTest from '../misc/quick-test';
 
 import Moment from 'react-moment';

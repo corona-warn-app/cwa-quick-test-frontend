@@ -29,14 +29,27 @@ import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
 import { TestResult } from './misc/enum';
-import DiseaseAgents from './assets/json-res/disease-agent-targeted.json';
-import TestManufacturers from './assets/json-res/test-manf.json';
 
 export const api = axios.create({
     baseURL: ''
 });
 
+const valueSetApi = axios.create({
+    baseURL: 'https://distribution-dfe4f5c711db.dcc-rules.de'
+});
+
 const TRYS = 2;
+
+export enum Value_Sets {
+    CountryCodes = 'country-2-codes',
+    TestResult = 'covid-19-lab-result',
+    TestManufacturer = 'covid-19-lab-test-manufacturer-and-name',
+    TestType = 'covid-19-lab-test-type',
+    DiseaseAgent = 'disease-agent-targeted',
+    VaccineType = 'sct-vaccines-covid-19',
+    VaccinesManufacturer = 'vaccines-covid-19-auth-holders',
+    Vaccines = 'vaccines-covid-19-names'
+}
 
 interface IValue {
     active: boolean,
@@ -56,38 +69,109 @@ export interface ITests {
     testBrandName: string
 }
 
-// Disease Agents
-export const useGetDiseaseAgents = () => {
-
-    const [diseaseAgents, setDiseaseAgents] = React.useState<IValueSet>();
-
-    React.useEffect(() => {
-        // get object via api
-        // const diseaseAgentsData = getApiData('/diseaseAgents');
-
-        // get object via public
-        const diseaseAgentsData = DiseaseAgents.valueSetValues;
-        setDiseaseAgents(diseaseAgentsData);
-    }, [])
-
-    return diseaseAgents;
+interface IValueSetHashListItem {
+    id: string;
+    hash: string;
 }
 
-// TestManufacturers
-export const useGetTestManufacturers = () => {
+export interface IValueSetList {
+    [key: string]: IValueSet;
+}
 
-    const [testManufacturers, setTestManufacturers] = React.useState<IValueSet>();
+export const useGetValueSets = (onInit?: (isInit: boolean) => void, onError?: (msg: string) => void) => {
 
+    const [valueSetHashList, setValueSetHashList] = React.useState<IValueSetHashListItem[]>();
+
+    const [valueSetList] = React.useState<IValueSetList>({});
+    const [result, setResult] = React.useState<IValueSetList>();
+    const [isInit, setIsInit] = React.useState<boolean>(false);
+
+    // on mount load hash list
     React.useEffect(() => {
-        // get object via api
-        // const testManufacturers = getApiData('/testManufacturers');
+        const uri = '/valuesets';
 
-        // get object via public
-        const testManufacturers = TestManufacturers.valueSetValues;
-        setTestManufacturers(testManufacturers);
+        valueSetApi.get(uri).then((response) => {
+            if (response && response.data && response.data.length > 0) {
+                setValueSetHashList(response.data);
+            }
+            else {
+                if (onError) {
+                    onError('failed to request valuesets');
+                }
+            }
+        })
+            .catch((error) => {
+                if (onError) {
+                    onError(error.message);
+                }
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return testManufacturers;
+    // 4 hashlist load all valueSets
+    React.useEffect(() => {
+        if (valueSetHashList) {
+            for (const hashListitem of valueSetHashList) {
+                setValueSet(hashListitem);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [valueSetHashList])
+
+    React.useEffect(() => {
+        if (onInit) {
+            onInit(isInit);
+        }
+        if (isInit) {
+            setResult(valueSetList);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isInit, onInit])
+
+    const setValueSet = (hashListItem: IValueSetHashListItem) => {
+        if (hashListItem && hashListItem.hash) {
+            const uri = '/valuesets/' + hashListItem.hash;
+
+            valueSetApi.get(uri)
+                .then((response) => {
+                    valueSetList[hashListItem.id] = response.data.valueSetValues;
+                })
+                .catch((error) => {
+                    valueSetList[hashListItem.id] = {};
+                    console.log(error);
+                })
+                .finally(() => {
+                    // if all keys added to list --> init = true
+                    if (valueSetHashList && valueSetHashList.length === Object.keys(valueSetList).length) {
+                        setIsInit(true);
+                    }
+                });
+        }
+        else {
+            console.log('no valid valueset hash');
+        }
+    }
+
+    return result;
+}
+
+// ValueSetList
+export const useGetValueSetHashList = () => {
+
+    const [valueSetList, setValueSetList] = React.useState<IValueSetHashListItem[]>();
+
+    React.useEffect(() => {
+        const uri = '/valuesets';
+
+        valueSetApi.get(uri).then((response) => {
+            console.log(response.data);
+
+            setValueSetList(response.data);
+        });
+
+    }, [])
+
+    return valueSetList;
 }
 
 export const usePostTestResult = (testResult: ITestResult | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {

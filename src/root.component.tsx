@@ -28,7 +28,7 @@ import Keycloak from 'keycloak-js'
 import LoginInterceptor from './login-interceptor.component';
 import Routing from './routing.component';
 
-import useLocalStorage from './misc/local-storage';
+import useLocalStorage from './misc/useLocalStorage';
 import { useGetKeycloakConfig } from './api';
 
 interface UrlMandant {

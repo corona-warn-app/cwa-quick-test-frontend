@@ -25,7 +25,7 @@ import { Card, Form } from 'react-bootstrap';
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from '../misc/navigation';
+import useNavigation from '../misc/useNavigation';
 import utils from '../misc/utils';
 import {usePostTestResult } from '../api';
 import ITestResult from '../misc/test-result';

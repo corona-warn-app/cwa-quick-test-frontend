@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 
 import sha256 from 'crypto-js/sha256';
 
-import useNavigation from '../misc/navigation';
+import useNavigation from '../misc/useNavigation';
 import CwaSpinner from './spinner/spinner.component';
 import utils from '../misc/utils';
 

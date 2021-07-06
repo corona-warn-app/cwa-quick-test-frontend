@@ -25,7 +25,7 @@ import { Button, Container } from 'react-bootstrap'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from '../misc/navigation';
+import useNavigation from '../misc/useNavigation';
 import CwaSpinner from './spinner/spinner.component';
 
 const LandingPage = (props: any) => {

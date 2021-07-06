@@ -26,7 +26,7 @@ import QrReader from 'react-qr-reader'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from '../misc/navigation';
+import useNavigation from '../misc/useNavigation';
 import { getPersonDataFromScan } from '../misc/qr-code-value';
 import CwaSpinner from './spinner/spinner.component';
 import CardHeader from './modules/card-header.component';

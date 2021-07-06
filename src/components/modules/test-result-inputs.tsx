@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { TestResult } from "../../misc/enum";
 import { FormGroupInput, FormGroupRadio } from "./form-group.component";
-import useLocalStorage from "../../misc/local-storage";
+import useLocalStorage from "../../misc/useLocalStorage";
 import ITestResult from "../../misc/test-result";
 import { ITests, useGetTests } from "../../api";
 

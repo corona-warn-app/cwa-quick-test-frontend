@@ -30,7 +30,7 @@ import CwaSpinner from './spinner/spinner.component';
 import PagedList from './paged-list.component';
 
 import { useGetPDF, useGetPositiveForTimeRange } from '../api';
-import useNavigation from '../misc/navigation';
+import useNavigation from '../misc/useNavigation';
 import { TestResult } from '../misc/enum';
 import CardHeader from './modules/card-header.component';
 
