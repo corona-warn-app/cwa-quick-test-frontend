@@ -45,7 +45,7 @@ import ErrorPage from './components/error-page.component';
 import NotificationPage from './components/notification-page.component';
 import DataprivacyPage from './components/dataprivacy.component';
 import ImprintPage from './components/imprint.component';
-import { IAppContext } from './misc/appContext';
+import AppContext, { IAppContext } from './misc/appContext';
 import { useGetValueSets } from './api';
 import utils from './misc/utils';
 import CwaSpinner from './components/spinner/spinner.component';
@@ -91,7 +91,7 @@ const Routing = () => {
     return (
         !(isInit && context.valueSets && context.navigation)
             ? <CwaSpinner />
-            : <>
+            : <AppContext.Provider value={context}>
                 {/*
     header, every time shown. fit its children
     */}
@@ -176,7 +176,7 @@ const Routing = () => {
                     <Footer setDataPrivacyShow={setDataPrivacyShow} setImprintShow={setImprintShow} />
                 </Route>
 
-            </>
+            </AppContext.Provider>
     )
 }
 

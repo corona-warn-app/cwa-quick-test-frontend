@@ -35,7 +35,7 @@ export const api = axios.create({
 });
 
 const valueSetApi = axios.create({
-    baseURL: 'https://distribution-dfe4f5c711db.dcc-rules.de'
+    baseURL: ''
 });
 
 const TRYS = 2;

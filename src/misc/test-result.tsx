@@ -25,4 +25,5 @@ export default interface ITestResult {
     result: TestResult;
     testBrandId?: string;
     testBrandName?: string;
+    dccTestManufacturer?: string;
 }

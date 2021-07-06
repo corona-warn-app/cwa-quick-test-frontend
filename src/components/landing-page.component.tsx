@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Container } from 'react-bootstrap'
+import { Button, Container, Fade } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -41,17 +41,19 @@ const LandingPage = (props: any) => {
     }, [navigation])
 
     return (!isInit ? <CwaSpinner /> :
-        <Container className='center-content'>
+        <Fade appear={true} in={true} >
+            <Container className='center-content'>
 
-            <h1 className='mx-auto mb-5'>{t('translation:welcome')}</h1>
+                <h1 className='mx-auto mb-5'>{t('translation:welcome')}</h1>
 
-            <Button block className='landing-btn' onClick={navigation!.toRecordPatient}>{t('translation:record-patient-data')}</Button>
-            <Button block className='landing-btn' onClick={navigation!.toRecordTestResult}>{t('translation:record-result')}</Button>
-            <Button block className='landing-btn' onClick={navigation!.toQRScan}>{t('translation:record-qr-scan')}</Button>
-            <Button block className='landing-btn' onClick={navigation!.toFailedReport}>{t('translation:failed-report')}</Button>
-            <Button block className='landing-btn' onClick={navigation!.toStatistics}>{t('translation:statistics-menu-item')}</Button>
+                <Button block className='landing-btn' onClick={navigation!.toRecordPatient}>{t('translation:record-patient-data')}</Button>
+                <Button block className='landing-btn' onClick={navigation!.toRecordTestResult}>{t('translation:record-result')}</Button>
+                <Button block className='landing-btn' onClick={navigation!.toQRScan}>{t('translation:record-qr-scan')}</Button>
+                <Button block className='landing-btn' onClick={navigation!.toFailedReport}>{t('translation:failed-report')}</Button>
+                <Button block className='landing-btn' onClick={navigation!.toStatistics}>{t('translation:statistics-menu-item')}</Button>
 
-        </Container>
+            </Container>
+        </Fade>
     )
 }
 

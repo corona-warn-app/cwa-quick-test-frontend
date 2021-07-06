@@ -23,6 +23,8 @@
     font-weight: bold;
 }
 
+@import "@fortawesome/fontawesome-free/css/solid.min.css";
+
 // Override default variables before the import
 $body-bg: white;
 $font-family-base: TeleNeo;
@@ -38,6 +40,14 @@ $menu-padding: 1rem;
 $data-card-border-radius: 10px;
 $input-border-radius: 4px;
 $user-image-width:39px;
+
+select,
+option {
+    font-family: "Font Awesome 5 Free", "TeleNeo";
+}
+body {
+    overflow-y: scroll;
+  }
 
 hr {
     margin-left: 0;

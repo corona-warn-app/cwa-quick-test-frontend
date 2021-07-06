@@ -4,20 +4,23 @@ import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
 import { TestResult } from "../../misc/enum";
-import { FormGroupInput, FormGroupRadio } from "./form-group.component";
+import { FormGroupInput, FormGroupRadio, FormGroupValueSetSelect } from "./form-group.component";
 import useLocalStorage from "../../misc/useLocalStorage";
 import ITestResult from "../../misc/test-result";
-import { ITests, useGetTests } from "../../api";
+import { ITests, useGetTests, Value_Sets } from "../../api";
+import AppContext from "../../misc/appContext";
 
 
 const TestResultInputs = (props: any) => {
 
+    const context = React.useContext(AppContext);
     const { t } = useTranslation();
 
     const [testResult, setTestResult] = React.useState<TestResult>();
 
     const [testId, setTestId] = useLocalStorage('testId', '');
     const [testName, setTestName] = useLocalStorage('testName', '');
+    const [testManufacturers, setTestManufacturers] = useLocalStorage('testManufacturers', '');
 
     const tests = useGetTests();
 
@@ -26,14 +29,15 @@ const TestResultInputs = (props: any) => {
             const result: ITestResult = {
                 testBrandId: testId,
                 testBrandName: testName,
-                result: testResult
+                result: testResult,
+                dccTestManufacturer: testManufacturers
             }
 
             props.onChange(result);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [testId, testName, testResult])
+    }, [testId, testName, testResult, testManufacturers])
 
 
     const handleTestChange = (evt: any, change: (str: string) => void) => {
@@ -89,6 +93,14 @@ const TestResultInputs = (props: any) => {
                 maxLength={200}
                 datalistId='testname-list'
                 datalist={tests ? tests.map((i: ITests) => <option key={i.testBrandId} value={i.testBrandId + ' - ' + i.testBrandName} />) : undefined}
+            />
+
+            <hr />
+            {/* combobox testManufacturers */}
+            <FormGroupValueSetSelect controlId='formTestManufactorersInput' title={t('translation:testManufacturers')}
+                value={testManufacturers}
+                onChange={(evt: any) => setTestManufacturers(evt.target.value)}
+                valueSet={context!.valueSets![Value_Sets.TestManufacturer]}
             />
 
             <hr />
