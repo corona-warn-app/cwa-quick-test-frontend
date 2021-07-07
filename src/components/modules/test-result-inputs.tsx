@@ -7,7 +7,7 @@ import { TestResult } from "../../misc/enum";
 import { FormGroupInput, FormGroupRadio, FormGroupValueSetSelect } from "./form-group.component";
 import useLocalStorage from "../../misc/useLocalStorage";
 import ITestResult from "../../misc/test-result";
-import { ITests, useGetTests, Value_Sets } from "../../api";
+import { getValueSetDisplay, ITests, useGetTests, Value_Sets } from "../../api";
 import AppContext from "../../misc/appContext";
 
 
@@ -20,7 +20,8 @@ const TestResultInputs = (props: any) => {
 
     const [testId, setTestId] = useLocalStorage('testId', '');
     const [testName, setTestName] = useLocalStorage('testName', '');
-    const [testManufacturers, setTestManufacturers] = useLocalStorage('testManufacturers', '');
+    const [testManufacturerId, setTestManufacturerId] = useLocalStorage('testManufacturers', '');
+    const [testManufacturerDescription, setTestManufacturerDescription] = React.useState('');
 
     const tests = useGetTests();
 
@@ -30,15 +31,27 @@ const TestResultInputs = (props: any) => {
                 testBrandId: testId,
                 testBrandName: testName,
                 result: testResult,
-                dccTestManufacturer: testManufacturers
+                dccTestManufacturerId: testManufacturerId,
+                dccTestManufacturerDescription: testManufacturerDescription
             }
-
+            
             props.onChange(result);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [testId, testName, testResult, testManufacturers])
+    }, [testId, testName, testResult, testManufacturerId, testManufacturerDescription])
 
+    React.useEffect(() => {
+        if (testManufacturerId) {
+            const desc = getValueSetDisplay(testManufacturerId, context!.valueSets![Value_Sets.TestManufacturer]);
+            if (desc) {
+                setTestManufacturerDescription(desc);
+            }
+        }
+        else {
+            setTestManufacturerDescription('');
+        }
+    }, [testManufacturerId])
 
     const handleTestChange = (evt: any, change: (str: string) => void) => {
         const value = evt.currentTarget.value;
@@ -98,8 +111,8 @@ const TestResultInputs = (props: any) => {
             <hr />
             {/* combobox testManufacturers */}
             <FormGroupValueSetSelect controlId='formTestManufactorersInput' title={t('translation:testManufacturers')}
-                value={testManufacturers}
-                onChange={(evt: any) => setTestManufacturers(evt.target.value)}
+                value={testManufacturerId}
+                onChange={(evt: any) => setTestManufacturerId(evt.target.value)}
                 valueSet={context!.valueSets![Value_Sets.TestManufacturer]}
             />
 

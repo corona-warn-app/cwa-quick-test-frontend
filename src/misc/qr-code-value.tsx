@@ -36,14 +36,14 @@ export interface IQRCodeValue {
 
 const baseUrl = 'https://s.coronawarn.app?v=1#';
 
-export const getQrCodeValueString = (guid: string, fn?: string, ln?: string, dob?: Date) => {
+export const getQrCodeValueString = (guid: string, dccConsent?: boolean, fn?: string, ln?: string, dob?: Date) => {
     let encodedJson = '';
 
     const value: IQRCodeValue = {
         fn: fn,
         ln: ln,
         dob: dob ? dob.toISOString().split('T')[0] : undefined,
-        dgc: true,
+        dgc: dccConsent ? dccConsent : false,
         testid: guid,
         timestamp: Date.now() / 1000 | 0,
         salt: CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
@@ -149,7 +149,7 @@ export const getPersonDataFromScan = (data: string | null) => {
                         street: s.address[0].value.street.trim(),
                         houseNumber: s.address[0].value.number.trim()
                     },
-                    phoneNumber: ph ? ph.value.replace(/\s/g,'') : undefined,
+                    phoneNumber: ph ? ph.value.replace(/\s/g, '') : undefined,
                     emailAddress: em ? em.value.trim() : undefined,
                 }
             }

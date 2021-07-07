@@ -55,6 +55,7 @@ const RecordPatientData = (props: any) => {
     const [phoneNumber, setPhoneNumber] = React.useState('');
     const [emailAddress, setEmailAddress] = React.useState('');
     const [consent, setConsent] = React.useState(false);
+    const [dccConsent, setDccConsent] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [privacyAgreement, setPrivacyAgreement] = React.useState(false)
     const [validated, setValidated] = React.useState(false);
@@ -83,6 +84,7 @@ const RecordPatientData = (props: any) => {
             if (p.emailAddress) {
                 setEmailAddress(p.emailAddress);
             }
+            setDccConsent(p.dccConsent);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -139,7 +141,8 @@ const RecordPatientData = (props: any) => {
                 includePersData: persDataInQR,
                 privacyAgreement: privacyAgreement,
                 phoneNumber: phoneNumber,
-                emailAddress: emailAddress ? emailAddress : undefined
+                emailAddress: emailAddress ? emailAddress : undefined,
+                dccConsent: dccConsent
             })
             setTimeout(context.navigation!.toShowRecordPatient, 200);
         }
@@ -169,7 +172,7 @@ const RecordPatientData = (props: any) => {
     */}
                             <Card.Body id='data-body' className='pt-0'>
 
-                                <PersonInputs quickTest={props.quickTest} onChange={setPerson} />
+                                <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} />
 
                                 <hr />
 
@@ -222,6 +225,11 @@ const RecordPatientData = (props: any) => {
                                     type='checkbox'
                                     checked={privacyAgreement}
                                     required
+                                />
+                                <FormGroupConsentCkb controlId='formDccConsentCheckbox' title={t('translation:dccConsent')}
+                                    onChange={(evt: any) => setDccConsent(evt.currentTarget.checked)}
+                                    type='checkbox'
+                                    checked={dccConsent}
                                 />
                             </Card.Body>
 

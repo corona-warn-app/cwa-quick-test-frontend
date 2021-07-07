@@ -67,14 +67,15 @@ const ShowPatientData = (props: any) => {
 
     React.useEffect(() => {
         if (quickTest && quickTest.personData && quickTest.uuId) {
+
             setUuIdHash(sha256(quickTest.uuId).toString());
 
             if (quickTest.includePersData) {
 
-                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth));
+                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.dccConsent, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth));
             }
             if (quickTest.processingConsens) {
-                setQrCodeValue(getQrCodeValueString(quickTest.uuId));
+                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.dccConsent));
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

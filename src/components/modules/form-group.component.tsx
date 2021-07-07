@@ -8,7 +8,7 @@ import { IValueSet } from "../../api";
 export const FormGroupInput = (props: any) => {
 
     return (!props ? <></> :
-        <Form.Group as={Row} controlId={props.controlId} className='mb-1'>
+        <Form.Group as={Row} controlId={props.controlId} hidden={props.hidden} className='mb-1'>
             <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
 
             <Col xs='7' sm='9' className='d-flex'>

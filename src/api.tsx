@@ -164,8 +164,6 @@ export const useGetValueSetHashList = () => {
         const uri = '/valuesets';
 
         valueSetApi.get(uri).then((response) => {
-            console.log(response.data);
-
             setValueSetList(response.data);
         });
 
@@ -235,7 +233,9 @@ export const usePostQuickTest = (quickTest: IQuickTest | undefined, processId: s
                 testResultServerHash: quickTest.testResultHash ? quickTest.testResultHash : '0000000000000000000000000000000000000000000000000000000000000000',
 
                 diseaseAgentTargeted: '840539006',
-                testType: "LP217198-3"
+                testType: "LP217198-3",
+
+                dccConsent: quickTest.dccConsent
             });
 
             const header = {
@@ -487,5 +487,15 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hash]);
 
+    return result;
+}
+
+// returns display value for key 
+export const getValueSetDisplay = (key: string | undefined, valueSet: IValueSet | undefined): string | undefined => {
+    let result = key;
+
+    if (valueSet && key && valueSet[key]) {
+        result = valueSet[key].display;
+    }
     return result;
 }
