@@ -107,7 +107,7 @@ const RecordTestResult = (props: any) => {
         setShowProcessIdInputModal(true);
         setProcessNo('');
     }
-    
+
     const handleProcessIdInputChange = (processNo: string) => {
         setProcessNo(processNo);
         setProcessNoForModal(processNo);
@@ -143,7 +143,11 @@ const RecordTestResult = (props: any) => {
                             />
                             <hr />
 
-                            <TestResultInputs quickTest={quickTest} hidden={quickTest === undefined} onChange={setTestResult} />
+                            <TestResultInputs
+                                quickTest={quickTest}
+                                hidden={quickTest === undefined}
+                                onChange={setTestResult}
+                            />
                         </Card.Body>
 
                         {/*
