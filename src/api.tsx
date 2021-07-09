@@ -394,6 +394,35 @@ export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onErr
 
     return result;
 }
+
+export const useGetContextConfig = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+
+    const [result, setResult] = React.useState<any>();
+
+    const header = {
+        'Content-Type': 'application/json'
+    };
+
+    React.useEffect(() => {
+
+        api.get('/api/config/context.json', { headers: header })
+            .then(response => {
+                setResult(response.data);
+                if (onSuccess) {
+                    onSuccess(response?.status);
+                }
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
+                }
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return result;
+}
+
 export const useGetPositiveForTimeRange = (testResult: TestResult | undefined, start: Date | undefined, end: Date | undefined, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
     const [result, setResult] = React.useState<IQTArchiv[]>();

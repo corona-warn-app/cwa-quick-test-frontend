@@ -22,6 +22,7 @@
 
 import React from 'react';
 import axios from 'axios';
+import useLocalStorage from './useLocalStorage';
 
 interface IValueSetHashListItem {
     id: string;
@@ -64,6 +65,7 @@ export interface IValueSetList {
 export const useGetValueSets = (onInit?: (isInit: boolean) => void, onError?: (msg: string) => void) => {
 
     const [valueSetHashList, setValueSetHashList] = React.useState<IValueSetHashListItem[]>();
+    const [dccRulesService] = useLocalStorage('dccRulesService', '');
 
     const [valueSetList] = React.useState<IValueSetList>({});
     const [result, setResult] = React.useState<IValueSetList>();
@@ -71,7 +73,7 @@ export const useGetValueSets = (onInit?: (isInit: boolean) => void, onError?: (m
 
     // on mount load hash list
     React.useEffect(() => {
-        const uri = '/valuesets';
+        const uri = dccRulesService + '/valuesets';
 
         valueSetApi.get(uri).then((response) => {
             if (response && response.data && response.data.length > 0) {
@@ -113,7 +115,7 @@ export const useGetValueSets = (onInit?: (isInit: boolean) => void, onError?: (m
 
     const setValueSet = (hashListItem: IValueSetHashListItem) => {
         if (hashListItem && hashListItem.hash) {
-            const uri = '/valuesets/' + hashListItem.hash;
+            const uri = dccRulesService+ '/valuesets/' + hashListItem.hash;
 
             valueSetApi.get(uri)
                 .then((response) => {
@@ -136,25 +138,6 @@ export const useGetValueSets = (onInit?: (isInit: boolean) => void, onError?: (m
     }
 
     return result;
-}
-
-// ValueSetList
-export const useGetValueSetHashList = () => {
-
-    const [valueSetList, setValueSetList] = React.useState<IValueSetHashListItem[]>();
-
-    React.useEffect(() => {
-        const uri = '/valuesets';
-
-        valueSetApi.get(uri).then((response) => {
-            console.log(response.data);
-
-            setValueSetList(response.data);
-        });
-
-    }, [])
-
-    return valueSetList;
 }
 
 // returns display value for key 

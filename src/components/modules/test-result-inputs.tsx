@@ -31,11 +31,11 @@ const TestResultInputs = (props: any) => {
     React.useEffect(() => {
         if (testResult) {
             const result: ITestResult = {
-                testBrandId: testId,
-                testBrandName: testName,
+                testBrandId: dccConsent ? undefined :testId,
+                testBrandName: dccConsent ? undefined: testName,
                 result: testResult,
-                dccTestManufacturerId: testManufacturerId,
-                dccTestManufacturerDescription: testManufacturerDescription
+                dccTestManufacturerId: dccConsent ? testManufacturerId : undefined,
+                dccTestManufacturerDescription:  dccConsent ?testManufacturerDescription : undefined
             }
 
             props.onChange(result);
