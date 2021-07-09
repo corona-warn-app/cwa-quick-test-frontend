@@ -1,6 +1,6 @@
 import React from "react";
 import { INavigation } from "./useNavigation";
-import { IValueSetList } from "../api";
+import { IValueSetList } from "./useValueSet";
 import { IUtils } from "./utils";
 
 export interface IAppContext {

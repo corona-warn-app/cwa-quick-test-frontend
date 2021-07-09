@@ -26,7 +26,7 @@ import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import utils from '../misc/utils';
-import { usePostTestResult } from '../api';
+import { IQuickTestDccAPIResponseModel, useGetQuicktest, usePostTestResult } from '../api';
 import ITestResult from '../misc/test-result';
 import CwaSpinner from './spinner/spinner.component';
 import CardFooter from './modules/card-footer.component';
@@ -34,6 +34,7 @@ import CardHeader from './modules/card-header.component';
 import { FormGroupInput } from './modules/form-group.component';
 import TestResultInputs from './modules/test-result-inputs';
 import AppContext from '../misc/appContext';
+import ProcessIdInput from './process-input.component';
 
 const RecordTestResult = (props: any) => {
 
@@ -41,12 +42,16 @@ const RecordTestResult = (props: any) => {
     const { t } = useTranslation();
 
     const [processNo, setProcessNo] = React.useState('');
+    const [processNoForModal, setProcessNoForModal] = React.useState('');
     const [testResult, setTestResult] = React.useState<ITestResult>();
     const [testResultToPost, setTestResultToPost] = React.useState<ITestResult>();
 
     const [validated, setValidated] = React.useState(false);
     const [isInit, setIsInit] = React.useState(false)
+    const [showProcessIdInputModal, setShowProcessIdInputModal] = React.useState(true)
     const [postInProgress, setPostInProgress] = React.useState(false);
+
+
 
     React.useEffect(() => {
         if (context.navigation && context.valueSets)
@@ -88,10 +93,31 @@ const RecordTestResult = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
-    usePostTestResult(testResultToPost, processNo, finishProcess, handleError);
+    const handleProcessIdInputCancel = () => {
+        if (!processNo) {
+            context.navigation!.toLanding();
+        }
+    }
 
-    return (
-        !(isInit && context && context.valueSets)
+    const handleProcessIdInputHide = () => {
+        setShowProcessIdInputModal(false);
+    }
+
+    const handleProcessIdInputClick = () => {
+        setShowProcessIdInputModal(true);
+        setProcessNo('');
+    }
+    
+    const handleProcessIdInputChange = (processNo: string) => {
+        setProcessNo(processNo);
+        setProcessNoForModal(processNo);
+    }
+
+    usePostTestResult(testResultToPost, processNo, finishProcess, handleError);
+    const quickTest: IQuickTestDccAPIResponseModel | undefined = useGetQuicktest(processNo, handleProcessIdInputHide, (error: any) => props.setError({ error: '', message: t('translation:error-processId-data-load'), onCancel: context.navigation!.toLanding }));
+
+    return (<>{
+        !(isInit && context && context.valueSets && processNo && !showProcessIdInputModal)
             ? <CwaSpinner />
             : <Fade appear={true} in={true} >
                 <Card id='data-card'>
@@ -108,6 +134,8 @@ const RecordTestResult = (props: any) => {
                             < FormGroupInput controlId='formProcessInput' title={t('translation:process-number')}
                                 value={processNo}
                                 onChange={(evt: any) => setProcessNo(evt.currentTarget.value)}
+                                onClick={handleProcessIdInputClick}
+                                readOnly
                                 required
                                 min={utils.shortHashLen}
                                 maxLength={utils.shortHashLen}
@@ -115,7 +143,7 @@ const RecordTestResult = (props: any) => {
                             />
                             <hr />
 
-                            <TestResultInputs onChange={setTestResult} />
+                            <TestResultInputs quickTest={quickTest} hidden={quickTest === undefined} onChange={setTestResult} />
                         </Card.Body>
 
                         {/*
@@ -130,6 +158,15 @@ const RecordTestResult = (props: any) => {
 
                 </Card>
             </Fade>
+    }
+        <ProcessIdInput
+            show={showProcessIdInputModal}
+            processNo={processNoForModal}
+            onHide={() => { }}
+            onCancel={handleProcessIdInputCancel}
+            onChange={handleProcessIdInputChange}
+        />
+    </>
     )
 }
 

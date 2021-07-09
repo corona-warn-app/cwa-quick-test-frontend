@@ -72,5 +72,8 @@
   "imprint-title":"Imprint",
   "standardised-first-name": "Standardised Given name",
   "standardised-name": "Standardised Family name",
-  "testManufacturers": "Test manufacturers and names"
+  "testManufacturers": "Test manufacturers and names",
+  "testId-input-header": "Process number input",
+  "error-processId-data-load": "The entered sample ID is not known!",
+  "ok":"OK"
 }

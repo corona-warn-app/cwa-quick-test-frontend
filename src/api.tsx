@@ -28,28 +28,13 @@ import IQuickTest from './misc/quick-test';
 import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
-import { TestResult } from './misc/enum';
+import { Sex, TestResult } from './misc/enum';
 
 export const api = axios.create({
     baseURL: ''
 });
 
-const valueSetApi = axios.create({
-    baseURL: ''
-});
-
 const TRYS = 2;
-
-export enum Value_Sets {
-    CountryCodes = 'country-2-codes',
-    TestResult = 'covid-19-lab-result',
-    TestManufacturer = 'covid-19-lab-test-manufacturer-and-name',
-    TestType = 'covid-19-lab-test-type',
-    DiseaseAgent = 'disease-agent-targeted',
-    VaccineType = 'sct-vaccines-covid-19',
-    VaccinesManufacturer = 'vaccines-covid-19-auth-holders',
-    Vaccines = 'vaccines-covid-19-names'
-}
 
 interface IValue {
     active: boolean,
@@ -69,107 +54,106 @@ export interface ITests {
     testBrandName: string
 }
 
-interface IValueSetHashListItem {
-    id: string;
-    hash: string;
+export interface IShortHashedGuid {
+    shortHashedGuid: string;
 }
 
-export interface IValueSetList {
-    [key: string]: IValueSet;
+export interface IQuickTestDccAPIResponseModel {
+    dccConsent: boolean,
+    testResult: number
 }
 
-export const useGetValueSets = (onInit?: (isInit: boolean) => void, onError?: (msg: string) => void) => {
+export interface IQuickTestAPIModel {
+    lastName: string,
+    firstName: string,
+    standardisedFamilyName?: string,
+    standardisedGivenName?: string,
+    birthday: string,
+    sex?: Sex,
 
-    const [valueSetHashList, setValueSetHashList] = React.useState<IValueSetHashListItem[]>();
+    street: string,
+    houseNumber?: string,
+    zipCode: string,
+    city: string,
 
-    const [valueSetList] = React.useState<IValueSetList>({});
-    const [result, setResult] = React.useState<IValueSetList>();
-    const [isInit, setIsInit] = React.useState<boolean>(false);
+    email: string,
+    phoneNumber: string,
 
-    // on mount load hash list
+    confirmationCwa: boolean,
+    privacyAgreement: boolean,
+
+    testResultServerHash: string,
+
+    diseaseAgentTargeted: string,
+    testType: string,
+
+    dccConsent: boolean
+}
+
+export const useGetPendingProcessIds = (onSuccess?: () => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<IShortHashedGuid[]>();
+
     React.useEffect(() => {
-        const uri = '/valuesets';
+        const uri = '/api/quicktest/';
 
-        valueSetApi.get(uri).then((response) => {
-            if (response && response.data && response.data.length > 0) {
-                setValueSetHashList(response.data);
-            }
-            else {
-                if (onError) {
-                    onError('failed to request valuesets');
+        const header = {
+            "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+            'Content-Type': 'application/json'
+        };
+
+        api.get(uri, { headers: header })
+            .then(response => {
+
+                setResult(response.data.quickTests);
+
+                if (onSuccess) {
+                    onSuccess();
                 }
-            }
-        })
-            .catch((error) => {
+            })
+            .catch(error => {
                 if (onError) {
-                    onError(error.message);
+                    onError(error);
                 }
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    // 4 hashlist load all valueSets
-    React.useEffect(() => {
-        if (valueSetHashList) {
-            for (const hashListitem of valueSetHashList) {
-                setValueSet(hashListitem);
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [valueSetHashList])
-
-    React.useEffect(() => {
-        if (onInit) {
-            onInit(isInit);
-        }
-        if (isInit) {
-            setResult(valueSetList);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isInit, onInit])
-
-    const setValueSet = (hashListItem: IValueSetHashListItem) => {
-        if (hashListItem && hashListItem.hash) {
-            const uri = '/valuesets/' + hashListItem.hash;
-
-            valueSetApi.get(uri)
-                .then((response) => {
-                    valueSetList[hashListItem.id] = response.data.valueSetValues;
-                })
-                .catch((error) => {
-                    valueSetList[hashListItem.id] = {};
-                    console.log(error);
-                })
-                .finally(() => {
-                    // if all keys added to list --> init = true
-                    if (valueSetHashList && valueSetHashList.length === Object.keys(valueSetList).length) {
-                        setIsInit(true);
-                    }
-                });
-        }
-        else {
-            console.log('no valid valueset hash');
-        }
-    }
-
     return result;
 }
 
-// ValueSetList
-export const useGetValueSetHashList = () => {
-
-    const [valueSetList, setValueSetList] = React.useState<IValueSetHashListItem[]>();
+export const useGetQuicktest = (processId?: string, onSuccess?: () => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<IQuickTestDccAPIResponseModel>();
 
     React.useEffect(() => {
-        const uri = '/valuesets';
+        if (processId) {
+            const uri = '/api/quicktest/' + processId;
 
-        valueSetApi.get(uri).then((response) => {
-            setValueSetList(response.data);
-        });
+            const header = {
+                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+                'Content-Type': 'application/json'
+            };
 
-    }, [])
+            api.get(uri, { headers: header })
+                .then(response => {
 
-    return valueSetList;
+                    setResult(response.data);
+
+                    if (onSuccess) {
+                        onSuccess();
+                    }
+                })
+                .catch(error => {
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [processId])
+
+    return result;
 }
 
 export const usePostTestResult = (testResult: ITestResult | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
@@ -487,15 +471,5 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [hash]);
 
-    return result;
-}
-
-// returns display value for key 
-export const getValueSetDisplay = (key: string | undefined, valueSet: IValueSet | undefined): string | undefined => {
-    let result = key;
-
-    if (valueSet && key && valueSet[key]) {
-        result = valueSet[key].display;
-    }
     return result;
 }

@@ -15,6 +15,9 @@ export const FormGroupInput = (props: any) => {
                 <Form.Control
                     className='qt-input'
                     value={props.value}
+                    readOnly={props.readOnly}
+                    disabled={props.disabled}
+                    onClick={props.onClick}
                     onChange={props.onChange}
                     placeholder={props.placeholder ? props.placeholder : props.title}
                     type={props.type ? props.type : 'text'}

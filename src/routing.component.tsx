@@ -46,9 +46,9 @@ import NotificationPage from './components/notification-page.component';
 import DataprivacyPage from './components/dataprivacy.component';
 import ImprintPage from './components/imprint.component';
 import AppContext, { IAppContext } from './misc/appContext';
-import { useGetValueSets } from './api';
 import utils from './misc/utils';
 import CwaSpinner from './components/spinner/spinner.component';
+import { useGetValueSets } from './misc/useValueSet';
 
 
 const Routing = () => {
