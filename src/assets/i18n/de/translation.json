@@ -74,5 +74,9 @@
   "dp-title":"Datenschutzhinweis",
   "imprint-title":"Impressum",
   "standardised-first-name": "Standardisierter Vorname",
-  "standardised-name": "Standardisierter Name"
+  "standardised-name": "Standardisierter Name",
+  "testManufacturers": "Testhersteller und -name",
+  "testId-input-header": "Eingabe Proben-ID",
+  "error-processId-data-load": "Die eingegebene Proben-ID ist uns nicht bekannt!",
+  "ok":"OK"
 }

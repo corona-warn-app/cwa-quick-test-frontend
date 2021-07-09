@@ -21,7 +21,7 @@
 
 import React from 'react';
 import { useHistory } from 'react-router-dom'
-import useLocalStorage from './local-storage';
+import useLocalStorage from './useLocalStorage';
 
 export interface IRoute {
     [key: string]: string;

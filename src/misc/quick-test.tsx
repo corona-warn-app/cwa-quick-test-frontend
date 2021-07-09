@@ -25,8 +25,8 @@ import { Sex } from './enum';
 export interface IPersonData {
     givenName: string;
     familyName: string;
-    standardisedGivenName: string;
-    standardisedFamilyName: string;
+    standardisedGivenName?: string;
+    standardisedFamilyName?: string;
     dateOfBirth: Date | undefined;
     sex: Sex | undefined;
 }
@@ -51,4 +51,5 @@ export default interface IQuickTest {
     emailAddress?: string;
     testId?: string;
     testResultHash?: string;
+    dccConsent?: boolean;
 }

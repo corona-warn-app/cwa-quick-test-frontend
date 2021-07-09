@@ -8,13 +8,16 @@ import { IValueSet } from "../../api";
 export const FormGroupInput = (props: any) => {
 
     return (!props ? <></> :
-        <Form.Group as={Row} controlId={props.controlId} className='mb-1'>
+        <Form.Group as={Row} controlId={props.controlId} hidden={props.hidden} className='mb-1'>
             <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
 
             <Col xs='7' sm='9' className='d-flex'>
                 <Form.Control
                     className='qt-input'
                     value={props.value}
+                    readOnly={props.readOnly}
+                    disabled={props.disabled}
+                    onClick={props.onClick}
                     onChange={props.onChange}
                     placeholder={props.placeholder ? props.placeholder : props.title}
                     type={props.type ? props.type : 'text'}
@@ -136,12 +139,12 @@ export const FormGroupRadio = (props: any) => {
 
 export const FormGroupValueSetSelect = (props: any) => {
 
-    const valueSet = props.valueSet();
+    const valueSet = props.valueSet;
     const [options, setOptions] = React.useState<JSX.Element[]>();
 
     React.useEffect(() => {
         if (valueSet) {
-            const options = getOptionsForValueSet(valueSet)
+            const options = getOptionsForValueSet(valueSet);
             setOptions(options);
         }
     }, [valueSet])
@@ -150,14 +153,16 @@ export const FormGroupValueSetSelect = (props: any) => {
     const getOptionsForValueSet = (valueSet: IValueSet): JSX.Element[] => {
         const result: JSX.Element[] = [];
         for (const key of Object.keys(valueSet)) {
-            result.push(<option key={key} value={key}>{valueSet[key].display}</option>)
+            result.push(valueSet[key].active === false
+                ? <option key={key} value={key}>&#xf071; {valueSet[key].display}</option>
+                : <option key={key} value={key}>{valueSet[key].display}</option>);
         }
 
         return result;
     }
 
     return (!(props && options) ? <></> :
-        <Form.Group as={Row} controlId={props.controlId} className='pb-3 mb-0'>
+        <Form.Group as={Row} hidden={props.hidden} controlId={props.controlId} className='mb-1'>
             <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
 
             <Col xs='7' sm='9' className='d-flex'>
@@ -168,7 +173,7 @@ export const FormGroupValueSetSelect = (props: any) => {
                     placeholder={props.placeholder ? props.placeholder : props.title}
                     required={props.required}
                 >
-                    <option disabled={props.required} key={0} value={props.required ? '' : undefined} >{props.placeholder ? props.placeholder : props.title}</option>
+                    <option disabled={props.required} key={0} value=''>{props.placeholder ? props.placeholder : props.title}</option>
                     {options}
                 </Form.Control>
             </Col>

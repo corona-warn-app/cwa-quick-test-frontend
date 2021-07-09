@@ -60,8 +60,8 @@ const PersonInputs = (props: any) => {
         const result: IPersonData = {
             givenName: givenName,
             familyName: familyName,
-            standardisedGivenName: standardisedGivenName,
-            standardisedFamilyName: standardisedFamilyName,
+            standardisedGivenName: props.dccConsent ? standardisedGivenName : undefined,
+            standardisedFamilyName: props.dccConsent ? standardisedFamilyName : undefined,
             dateOfBirth: dateOfBirth,
             sex: sex
         }
@@ -69,7 +69,7 @@ const PersonInputs = (props: any) => {
         props.onChange(result);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [givenName, familyName, standardisedGivenName, standardisedFamilyName, dateOfBirth, sex])
+    }, [givenName, familyName, standardisedGivenName, standardisedFamilyName, dateOfBirth, sex, props.dccConsent])
 
 
     const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {
@@ -124,8 +124,9 @@ const PersonInputs = (props: any) => {
             <FormGroupInput controlId='formStandadisedGivenNameInput' title={t('translation:standardised-first-name')}
                 value={standardisedGivenName}
                 onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedGivenName)}
-                required
+                required={props.dccConsent}
                 pattern={utils.pattern.standardisedName}
+                hidden={!props.dccConsent}
                 maxLength={50}
             />
 
@@ -133,12 +134,13 @@ const PersonInputs = (props: any) => {
             <FormGroupInput controlId='formStandadisedNameInput' title={t('translation:standardised-name')}
                 value={standardisedFamilyName}
                 onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedFamilyName)}
-                required
+                required={props.dccConsent}
                 pattern={utils.pattern.standardisedName}
+                hidden={!props.dccConsent}
                 maxLength={50}
             />
 
-            <hr />
+            <hr hidden={!props.dccConsent} />
 
             {/* date of birth input */}
             <Form.Group as={Row} controlId='formDateOfBirthInput' className='pb-3 mb-0'>

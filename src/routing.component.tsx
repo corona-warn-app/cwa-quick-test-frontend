@@ -26,7 +26,7 @@ import { Container } from 'react-bootstrap'
 import './i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from './misc/navigation';
+import useNavigation from './misc/useNavigation';
 import IQuickTest from './misc/quick-test';
 
 import Footer from './components/footer.component';
@@ -45,10 +45,14 @@ import ErrorPage from './components/error-page.component';
 import NotificationPage from './components/notification-page.component';
 import DataprivacyPage from './components/dataprivacy.component';
 import ImprintPage from './components/imprint.component';
+import AppContext, { IAppContext } from './misc/appContext';
+import utils from './misc/utils';
+import CwaSpinner from './components/spinner/spinner.component';
+import { useGetValueSets } from './misc/useValueSet';
 
-const Routing = (props: any) => {
 
-    const navigation = useNavigation();
+const Routing = () => {
+
     const { t } = useTranslation();
     const [quickTest, setQuickTest] = React.useState<IQuickTest>();
     const [error, setError] = React.useState<IError>();
@@ -56,6 +60,14 @@ const Routing = (props: any) => {
     const [notificationShow, setNotificationShow] = React.useState(false);
     const [dataPrivacyShow, setDataPrivacyShow] = React.useState(false);
     const [imprintShow, setImprintShow] = React.useState(false);
+    const [isInit, setIsInit] = React.useState(false);
+
+
+    const context: IAppContext = {
+        navigation: useNavigation(),
+        valueSets: useGetValueSets(undefined, (msg) => { setError({ message: msg }) }),
+        utils: utils
+    }
 
     document.title = t('translation:title');
 
@@ -71,93 +83,100 @@ const Routing = (props: any) => {
         }
     }, [errorShow])
 
-    return (!navigation ? <></> :
-        <>
-            {/*
+    React.useEffect(() => {
+        if (context.valueSets && Object.entries(context.valueSets).length > 0 && context.navigation)
+            setIsInit(true);
+    }, [context.navigation, context.valueSets])
+
+    return (
+        !(isInit && context.valueSets && context.navigation)
+            ? <CwaSpinner />
+            : <AppContext.Provider value={context}>
+                {/*
     header, every time shown. fit its children
     */}
-            <Route path={navigation.routes.root}>
-                <Header />
-                <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} />
-                <NotificationPage show={notificationShow} setNotificationShow={setNotificationShow} />
-                <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
-                <ImprintPage show={imprintShow} setShow={setImprintShow} />
-            </Route>
-
-            {/*
-    Content area. fit the rest of screen and children
-    */}
-            <Container id='qt-body'>
-
-                {/* Landing */}
-                <Route
-                    exact
-                    path={navigation.routes.landing}
-                >
-                    <LandingPage setNotificationShow={setNotificationShow} />
+                <Route path={context.navigation.routes.root}>
+                    <Header />
+                    <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} />
+                    <NotificationPage show={notificationShow} setNotificationShow={setNotificationShow} />
+                    <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
+                    <ImprintPage show={imprintShow} setShow={setImprintShow} />
                 </Route>
 
+                {/*
+    Content area. fit the rest of screen and children
+    */}
+                <Container id='qt-body'>
 
-                {/* Record Patient Data */}
-                <PrivateRoute
-                    exact
-                    roles={['c19_quick_test_counter']}
-                    path={navigation.routes.recordPatient}
-                    component={RecordPatientData}
-                    render={(props) => <RecordPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} />}
-                />
+                    {/* Landing */}
+                    <Route
+                        exact
+                        path={context.navigation.routes.landing}
+                    >
+                        <LandingPage setNotificationShow={setNotificationShow} />
+                    </Route>
 
-                {/* Show Patient Data */}
-                <PrivateRoute
-                    roles={['c19_quick_test_counter']}
-                    path={navigation.routes.showPatientRecord}
-                    component={ShowPatientData}
-                    render={(props) => <ShowPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} setNotificationShow={setNotificationShow} />}
-                />
 
-                {/* Record Test Result */}
-                <PrivateRoute
-                    roles={['c19_quick_test_lab']}
-                    path={navigation.routes.recordTestResult}
-                    component={RecordTestResult}
-                    render={(props) => <RecordTestResult {...props} setError={setError} setNotificationShow={setNotificationShow} />}
-                />
+                    {/* Record Patient Data */}
+                    <PrivateRoute
+                        exact
+                        roles={['c19_quick_test_counter']}
+                        path={context.navigation.routes.recordPatient}
+                        component={RecordPatientData}
+                        render={(props) => <RecordPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} />}
+                    />
 
-                {/* QR Scan */}
-                <PrivateRoute
-                    exact
-                    path={navigation.routes.qrScan}
-                    roles={['c19_quick_test_counter']}
-                    component={QrScan}
-                    render={(props) => <QrScan {...props} setQuickTest={setQuickTest} />}
-                />
+                    {/* Show Patient Data */}
+                    <PrivateRoute
+                        roles={['c19_quick_test_counter']}
+                        path={context.navigation.routes.showPatientRecord}
+                        component={ShowPatientData}
+                        render={(props) => <ShowPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} setNotificationShow={setNotificationShow} />}
+                    />
 
-                <PrivateRoute
-                    exact
-                    path={navigation.routes.statistics}
-                    roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
-                    component={Statistics}
-                    render={(props) => <Statistics {...props} setError={setError} />}
-                />
+                    {/* Record Test Result */}
+                    <PrivateRoute
+                        roles={['c19_quick_test_lab']}
+                        path={context.navigation.routes.recordTestResult}
+                        component={RecordTestResult}
+                        render={(props) => <RecordTestResult {...props} setError={setError} setNotificationShow={setNotificationShow} />}
+                    />
 
-                <PrivateRoute
-                    exact
-                    path={navigation.routes.failedReport}
-                    roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
-                    component={FailedReport}
-                    render={(props) => <FailedReport {...props} setError={setError} />}
-                />
+                    {/* QR Scan */}
+                    <PrivateRoute
+                        exact
+                        path={context.navigation.routes.qrScan}
+                        roles={['c19_quick_test_counter']}
+                        component={QrScan}
+                        render={(props) => <QrScan {...props} setQuickTest={setQuickTest} />}
+                    />
 
-            </Container>
+                    <PrivateRoute
+                        exact
+                        path={context.navigation.routes.statistics}
+                        roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
+                        component={Statistics}
+                        render={(props) => <Statistics {...props} setError={setError} />}
+                    />
 
-            {/*
+                    <PrivateRoute
+                        exact
+                        path={context.navigation.routes.failedReport}
+                        roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
+                        component={FailedReport}
+                        render={(props) => <FailedReport {...props} setError={setError} />}
+                    />
+
+                </Container>
+
+                {/*
     footer, every time shown. fit its children
     */}
-            <Route path={navigation.routes.root}>
-                <Footer setDataPrivacyShow={setDataPrivacyShow} setImprintShow={setImprintShow} />
-            </Route>
+                <Route path={context.navigation.routes.root}>
+                    <Footer setDataPrivacyShow={setDataPrivacyShow} setImprintShow={setImprintShow} />
+                </Route>
 
-        </>
+            </AppContext.Provider>
     )
 }
 

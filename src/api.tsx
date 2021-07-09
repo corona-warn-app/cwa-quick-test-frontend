@@ -28,9 +28,7 @@ import IQuickTest from './misc/quick-test';
 import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
-import { TestResult } from './misc/enum';
-import DiseaseAgents from './assets/json-res/disease-agent-targeted.json';
-import TestManufacturers from './assets/json-res/test-manf.json';
+import { Sex, TestResult } from './misc/enum';
 
 export const api = axios.create({
     baseURL: ''
@@ -56,38 +54,106 @@ export interface ITests {
     testBrandName: string
 }
 
-// Disease Agents
-export const useGetDiseaseAgents = () => {
-
-    const [diseaseAgents, setDiseaseAgents] = React.useState<IValueSet>();
-
-    React.useEffect(() => {
-        // get object via api
-        // const diseaseAgentsData = getApiData('/diseaseAgents');
-
-        // get object via public
-        const diseaseAgentsData = DiseaseAgents.valueSetValues;
-        setDiseaseAgents(diseaseAgentsData);
-    }, [])
-
-    return diseaseAgents;
+export interface IShortHashedGuid {
+    shortHashedGuid: string;
 }
 
-// TestManufacturers
-export const useGetTestManufacturers = () => {
+export interface IQuickTestDccAPIResponseModel {
+    dccConsent: boolean,
+    testResult: number
+}
 
-    const [testManufacturers, setTestManufacturers] = React.useState<IValueSet>();
+export interface IQuickTestAPIModel {
+    lastName: string,
+    firstName: string,
+    standardisedFamilyName?: string,
+    standardisedGivenName?: string,
+    birthday: string,
+    sex?: Sex,
+
+    street: string,
+    houseNumber?: string,
+    zipCode: string,
+    city: string,
+
+    email: string,
+    phoneNumber: string,
+
+    confirmationCwa: boolean,
+    privacyAgreement: boolean,
+
+    testResultServerHash: string,
+
+    diseaseAgentTargeted: string,
+    testType: string,
+
+    dccConsent: boolean
+}
+
+export const useGetPendingProcessIds = (onSuccess?: () => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<IShortHashedGuid[]>();
 
     React.useEffect(() => {
-        // get object via api
-        // const testManufacturers = getApiData('/testManufacturers');
+        const uri = '/api/quicktest/';
 
-        // get object via public
-        const testManufacturers = TestManufacturers.valueSetValues;
-        setTestManufacturers(testManufacturers);
+        const header = {
+            "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+            'Content-Type': 'application/json'
+        };
+
+        api.get(uri, { headers: header })
+            .then(response => {
+
+                setResult(response.data.quickTests);
+
+                if (onSuccess) {
+                    onSuccess();
+                }
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
+                }
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    return testManufacturers;
+    return result;
+}
+
+export const useGetQuicktest = (processId?: string, onSuccess?: () => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<IQuickTestDccAPIResponseModel>();
+
+    React.useEffect(() => {
+        if (processId) {
+            const uri = '/api/quicktest/' + processId;
+
+            const header = {
+                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+                'Content-Type': 'application/json'
+            };
+
+            api.get(uri, { headers: header })
+                .then(response => {
+
+                    setResult(response.data);
+
+                    if (onSuccess) {
+                        onSuccess();
+                    }
+                })
+                .catch(error => {
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [processId])
+
+    return result;
 }
 
 export const usePostTestResult = (testResult: ITestResult | undefined, processId: string, onSuccess?: () => void, onError?: (error: any) => void) => {
@@ -151,7 +217,9 @@ export const usePostQuickTest = (quickTest: IQuickTest | undefined, processId: s
                 testResultServerHash: quickTest.testResultHash ? quickTest.testResultHash : '0000000000000000000000000000000000000000000000000000000000000000',
 
                 diseaseAgentTargeted: '840539006',
-                testType: "LP217198-3"
+                testType: "LP217198-3",
+
+                dccConsent: quickTest.dccConsent
             });
 
             const header = {

@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useKeycloak } from '@react-keycloak/web';
 
-import useNavigation from '../misc/navigation';
+import useNavigation from '../misc/useNavigation';
 import C19Logo from '../assets/images/c-19_logo.png'
 
 const Header = (props: any) => {

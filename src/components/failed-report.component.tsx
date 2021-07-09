@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+import { Button, Card, Col, Fade, Form, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -30,14 +30,14 @@ import CwaSpinner from './spinner/spinner.component';
 import PagedList from './paged-list.component';
 
 import { useGetPDF, useGetPositiveForTimeRange } from '../api';
-import useNavigation from '../misc/navigation';
 import { TestResult } from '../misc/enum';
 import CardHeader from './modules/card-header.component';
+import AppContext from '../misc/appContext';
 
 
 const FailedReport = (props: any) => {
 
-    const navigation = useNavigation();
+    const context = React.useContext(AppContext);
     const { t } = useTranslation();
 
     const [isInit, setIsInit] = React.useState(false)
@@ -50,9 +50,9 @@ const FailedReport = (props: any) => {
     const parentRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
-        if (navigation)
+        if (context.navigation && context.valueSets)
             setIsInit(true);
-    }, [navigation])
+    }, [context.navigation, context.valueSets])
 
     const qtArchive = useGetPositiveForTimeRange(filterTestResult, startDate, endDate);
     const pdf = useGetPDF(selectedHash);
@@ -99,8 +99,9 @@ const FailedReport = (props: any) => {
 
 
     return (
-        !isInit ? <CwaSpinner /> :
-            <>
+        !(isInit && context && context.valueSets)
+            ? <CwaSpinner />
+            : <Fade appear={true} in={true} >
                 <Card id='data-card'>
                     <CardHeader title={t('translation:failed-report')} />
 
@@ -225,7 +226,7 @@ const FailedReport = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={navigation!.toLanding}
+                                    onClick={context.navigation!.toLanding}
                                 >
                                     {t('translation:cancel')}
                                 </Button>
@@ -233,8 +234,7 @@ const FailedReport = (props: any) => {
                         </Row>
                     </Card.Footer>
                 </Card>
-            </>
-
+            </Fade>
     )
 }
 

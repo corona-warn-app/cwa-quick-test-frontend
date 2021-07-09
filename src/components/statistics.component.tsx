@@ -20,19 +20,19 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap'
+import { Button, Card, Col, Fade, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from '../misc/navigation';
 import CwaSpinner from './spinner/spinner.component';
 import { useStatistics } from '../api';
 import CardHeader from './modules/card-header.component';
+import AppContext from '../misc/appContext';
 
 const Statistics = (props: any) => {
 
-    const navigation = useNavigation();
+    const context = React.useContext(AppContext);
     const { t } = useTranslation();
 
     const handleError = (error: any) => {
@@ -41,20 +41,21 @@ const Statistics = (props: any) => {
         if (error) {
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
+        props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
     const statisticData = useStatistics(undefined, handleError);
     const [isInit, setIsInit] = React.useState(false)
 
     React.useEffect(() => {
-        if (navigation && statisticData)
+        if (context.navigation && context.valueSets && statisticData)
             setIsInit(true);
-    }, [navigation, statisticData])
+    }, [context.navigation, context.valueSets, statisticData])
 
     return (
-        !isInit ? <CwaSpinner /> :
-            <>
+        !(isInit && context && context.valueSets)
+            ? <CwaSpinner />
+            : <Fade appear={true} in={true} >
                 <Card id='data-card'>
                     <CardHeader title={t('translation:statistics') + new Date().toLocaleDateString()} />
 
@@ -92,7 +93,7 @@ const Statistics = (props: any) => {
                                 <Button
                                     className='my-1 my-md-0 p-0'
                                     block
-                                    onClick={navigation!.toLanding}
+                                    onClick={context.navigation!.toLanding}
                                 >
                                     {t('translation:cancel')}
                                 </Button>
@@ -100,8 +101,7 @@ const Statistics = (props: any) => {
                         </Row>
                     </Card.Footer>
                 </Card>
-            </>
-
+            </Fade>
     )
 }
 

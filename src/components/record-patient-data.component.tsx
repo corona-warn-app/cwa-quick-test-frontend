@@ -20,14 +20,13 @@
  */
 
 import React from 'react';
-import { Card, Form, Row } from 'react-bootstrap';
+import { Card, Container, Fade, Form, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import sha256 from 'crypto-js/sha256';
 
-import useNavigation from '../misc/navigation';
 import CwaSpinner from './spinner/spinner.component';
 import utils from '../misc/utils';
 
@@ -38,11 +37,12 @@ import CardHeader from './modules/card-header.component';
 import { IAddressData, IPersonData } from '../misc/quick-test';
 import AddressInputs from './modules/address-inputs';
 import { FormGroupConsentCkb, FormGroupInput } from './modules/form-group.component';
+import AppContext from '../misc/appContext';
 
 
 const RecordPatientData = (props: any) => {
 
-    const navigation = useNavigation();
+    const context = React.useContext(AppContext);
     const { t } = useTranslation();
 
     const [isInit, setIsInit] = React.useState(false)
@@ -55,6 +55,7 @@ const RecordPatientData = (props: any) => {
     const [phoneNumber, setPhoneNumber] = React.useState('');
     const [emailAddress, setEmailAddress] = React.useState('');
     const [consent, setConsent] = React.useState(false);
+    const [dccConsent, setDccConsent] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [privacyAgreement, setPrivacyAgreement] = React.useState(false)
     const [validated, setValidated] = React.useState(false);
@@ -66,7 +67,7 @@ const RecordPatientData = (props: any) => {
         if (error) {
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel: navigation!.toLanding });
+        props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
     const uuid = useGetUuid(props?.quickTest?.uuId, undefined, handleError);
@@ -83,6 +84,7 @@ const RecordPatientData = (props: any) => {
             if (p.emailAddress) {
                 setEmailAddress(p.emailAddress);
             }
+            setDccConsent(p.dccConsent);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,10 +104,9 @@ const RecordPatientData = (props: any) => {
 
     // set ready state for spinner
     React.useEffect(() => {
-        if (processId && navigation) {
-            setTimeout(setIsInit, 200, true);
-        }
-    }, [processId, navigation]);
+        if (processId && context.navigation && context.valueSets)
+            setIsInit(true);
+    }, [processId, context.navigation, context.valueSets])
 
 
     const handleConsentChange = (evt: any) => {
@@ -120,7 +121,7 @@ const RecordPatientData = (props: any) => {
 
     const handleCancel = () => {
         props.setQuickTest(undefined);
-        navigation!.toLanding();
+        context.navigation!.toLanding();
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -140,98 +141,107 @@ const RecordPatientData = (props: any) => {
                 includePersData: persDataInQR,
                 privacyAgreement: privacyAgreement,
                 phoneNumber: phoneNumber,
-                emailAddress: emailAddress ? emailAddress : undefined
+                emailAddress: emailAddress ? emailAddress : undefined,
+                dccConsent: dccConsent
             })
-            setTimeout(navigation!.toShowRecordPatient, 200);
+            setTimeout(context.navigation!.toShowRecordPatient, 200);
         }
 
     }
 
     return (
-        !isInit ? <CwaSpinner /> :
-            <>
-                <Row id='process-row'>
-                    <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
-                    <span>{processId}</span>
-                </Row>
-                <Card id='data-card'>
+        !(isInit && context && context.valueSets)
+            ? <CwaSpinner />
+            : <Fade appear={true} in={true} >
+                <Container className='form-flex p-0 '>
+                    <Row id='process-row'>
+                        <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
+                        <span>{processId}</span>
+                    </Row>
+                    <Card id='data-card'>
 
-                    <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
+                        <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
 
-                        {/*
+                            {/*
     header with title and id card query
     */}
-                        <CardHeader idCard={true} title={t('translation:record-result2')} />
+                            <CardHeader idCard={true} title={t('translation:record-result2')} />
 
-                        {/*
+                            {/*
     content area with patient inputs and check box
     */}
-                        <Card.Body id='data-body' className='pt-0'>
+                            <Card.Body id='data-body' className='pt-0'>
 
-                            <PersonInputs quickTest={props.quickTest} onChange={setPerson} />
+                                <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} />
 
-                            <hr />
+                                <hr />
 
-                            {/* address input */}
-                            <AddressInputs quickTest={props.quickTest} onChange={setAddress} />
+                                {/* address input */}
+                                <AddressInputs quickTest={props.quickTest} onChange={setAddress} />
 
-                            <hr />
+                                <hr />
 
-                            {/* phone number input */}
+                                {/* phone number input */}
 
-                            < FormGroupInput controlId='formPhoneInput' title={t('translation:phone-number')}
-                                value={phoneNumber}
-                                onChange={(evt: any) => setPhoneNumber(evt.target.value)}
-                                type='tel'
-                                required
-                                pattern={utils.pattern.tel}
-                                maxLength={79}
-                            />
+                                < FormGroupInput controlId='formPhoneInput' title={t('translation:phone-number')}
+                                    value={phoneNumber}
+                                    onChange={(evt: any) => setPhoneNumber(evt.target.value)}
+                                    type='tel'
+                                    required
+                                    pattern={utils.pattern.tel}
+                                    maxLength={79}
+                                />
 
-                            < FormGroupInput controlId='formEmailInput' title={t('translation:email-address')}
-                                value={emailAddress}
-                                onChange={(evt: any) => setEmailAddress(evt.target.value)}
-                                type='email'
-                                pattern={utils.pattern.eMail}
-                                minLength={5}
-                                maxLength={255}
-                            />
+                                < FormGroupInput controlId='formEmailInput' title={t('translation:email-address')}
+                                    value={emailAddress}
+                                    onChange={(evt: any) => setEmailAddress(evt.target.value)}
+                                    type='email'
+                                    pattern={utils.pattern.eMail}
+                                    minLength={5}
+                                    maxLength={255}
+                                />
 
-                            <hr />
+                                <hr />
 
-                            {/* processing consent check box */}
-                            <FormGroupConsentCkb controlId='formConsentCheckbox' title={t('translation:processing-consent-title')}
-                                accordion={t('translation:processing-consent')}
-                                onClick={handleConsentChange}
-                                onChange={handleConsentChange}
-                                type='radio'
-                                name="check-radios"
-                                checked={consent}
-                            />
-                            <FormGroupConsentCkb controlId='formKeepPrivateCheckbox' title={t('translation:patientdata-exclude-title')}
-                                accordion={t('translation:patientdata-exclude')}
-                                onClick={handlePersDataInQRChange}
-                                onChange={handlePersDataInQRChange}
-                                type='radio'
-                                name="check-radios"
-                                checked={persDataInQR}
-                            />
-                            <FormGroupConsentCkb controlId='formDataPrivacyCheckbox' title={t('translation:data-privacy-approve')}
-                                onChange={(evt: any) => setPrivacyAgreement(evt.currentTarget.checked)}
-                                type='checkbox'
-                                checked={privacyAgreement}
-                                required
-                            />
-                        </Card.Body>
+                                {/* processing consent check box */}
+                                <FormGroupConsentCkb controlId='formConsentCheckbox' title={t('translation:processing-consent-title')}
+                                    accordion={t('translation:processing-consent')}
+                                    onClick={handleConsentChange}
+                                    onChange={handleConsentChange}
+                                    type='radio'
+                                    name="check-radios"
+                                    checked={consent}
+                                />
+                                <FormGroupConsentCkb controlId='formKeepPrivateCheckbox' title={t('translation:patientdata-exclude-title')}
+                                    accordion={t('translation:patientdata-exclude')}
+                                    onClick={handlePersDataInQRChange}
+                                    onChange={handlePersDataInQRChange}
+                                    type='radio'
+                                    name="check-radios"
+                                    checked={persDataInQR}
+                                />
+                                <FormGroupConsentCkb controlId='formDataPrivacyCheckbox' title={t('translation:data-privacy-approve')}
+                                    onChange={(evt: any) => setPrivacyAgreement(evt.currentTarget.checked)}
+                                    type='checkbox'
+                                    checked={privacyAgreement}
+                                    required
+                                />
+                                <FormGroupConsentCkb controlId='formDccConsentCheckbox' title={t('translation:dccConsent')}
+                                    onChange={(evt: any) => setDccConsent(evt.currentTarget.checked)}
+                                    type='checkbox'
+                                    checked={dccConsent}
+                                />
+                            </Card.Body>
 
-                        {/*
+                            {/*
     footer with clear and nex button
     */}
-                        <CardFooter handleCancel={handleCancel} />
+                            <CardFooter handleCancel={handleCancel} />
 
-                    </Form>
-                </Card>
-            </>
+                        </Form>
+                    </Card>
+                </Container>
+            </Fade>
     )
 }
 

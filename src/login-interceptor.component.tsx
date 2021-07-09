@@ -45,8 +45,8 @@ const LoginInterceptor = (props: any) => {
       {
         initialized && keycloak.authenticated
           ? props.children
-          : <CwaSpinner
-          />}
+          : <CwaSpinner />
+      }
     </>
   );
 }
