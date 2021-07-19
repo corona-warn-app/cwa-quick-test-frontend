@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Row, Image, Container, Navbar, NavDropdown } from 'react-bootstrap'
+import { Row, Image, Container, Navbar, NavDropdown, Nav } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -57,6 +57,8 @@ const Header = (props: any) => {
         keycloak.logout({ redirectUri: window.location.origin + navigation!.calculatedRoutes.landing });
     }
 
+    const changePasswordUrl = keycloak.authServerUrl+'realms/'+keycloak.realm+'/account/password';
+
     return (!isInit ? <></> :
         <Container className='position-relative'>
             {/* simple header with logo */}
@@ -72,12 +74,16 @@ const Header = (props: any) => {
                     title={userName}
                     id="responsive-navbar-nav"
                 >
-                    <Navbar.Brand
+                    <Nav.Link
                         className='mx-0 dropdown-item'
                         onClick={handleLogout}
                     >
                         {t('translation:logout')}
-                    </Navbar.Brand>
+                    </Nav.Link>
+                    <NavDropdown.Divider/>
+                    <Nav.Link className='mx-0 dropdown-item' href={changePasswordUrl} target='passwordchange'>
+                        {t('translation:change-password')}
+                    </Nav.Link>
                 </NavDropdown>
             </Navbar>
         </Container>
