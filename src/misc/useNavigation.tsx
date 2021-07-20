@@ -21,6 +21,7 @@
 
 import React from 'react';
 import { useHistory } from 'react-router-dom'
+import UserManagment from '../components/user-management.component';
 import useLocalStorage from './useLocalStorage';
 
 export interface IRoute {
@@ -37,6 +38,7 @@ export interface INavigation {
     toQRScan: () => void,
     toStatistics: () => void,
     toFailedReport: () => void,
+    toUserManagement: () => void,
 }
 
 export const useRoutes = () => {
@@ -54,7 +56,8 @@ export const useRoutes = () => {
             recordTestResult: basePath + '/record/result',
             qrScan: basePath + '/qr/scan',
             statistics: basePath + '/statistics',
-            failedReport: basePath + '/failedreport'
+            failedReport: basePath + '/failedreport',
+            userManagment: basePath + '/usermanagement'
         });
     }, [])
 
@@ -81,6 +84,7 @@ export const useNavigation = () => {
             c.qrScan = routes.qrScan.replace(':mandant', mandant as string);
             c.statistics = routes.statistics.replace(':mandant', mandant as string);
             c.failedReport = routes.failedReport.replace(':mandant', mandant as string);
+            c.userManagement = routes.userManagment.replace(':mandant', mandant as string);
 
             setCalculatedRoutes(c);
         }
@@ -100,6 +104,7 @@ export const useNavigation = () => {
                 toQRScan: () => { history.push(calculatedRoutes.qrScan); },
                 toStatistics: () => { history.push(calculatedRoutes.statistics); },
                 toFailedReport: () => { history.push(calculatedRoutes.failedReport); },
+                toUserManagement: () => { history.push(calculatedRoutes.userManagement); },
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -79,5 +79,6 @@
   "testId-input-header": "Eingabe Proben-ID",
   "error-processId-data-load": "Die eingegebene Proben-ID ist uns nicht bekannt!",
   "ok":"OK",
-  "change-password":"Passwort ändern"
+  "change-password":"Passwort ändern",
+  "user-management":"Benutzerverwaltung"
 }

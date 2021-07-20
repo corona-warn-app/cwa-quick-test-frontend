@@ -51,6 +51,7 @@ const LandingPage = (props: any) => {
                 <Button block className='landing-btn' onClick={navigation!.toQRScan}>{t('translation:record-qr-scan')}</Button>
                 <Button block className='landing-btn' onClick={navigation!.toFailedReport}>{t('translation:failed-report')}</Button>
                 <Button block className='landing-btn' onClick={navigation!.toStatistics}>{t('translation:statistics-menu-item')}</Button>
+                <Button block className='landing-btn' onClick={navigation!.toUserManagement}>{t('translation:user-management')}</Button>
 
             </Container>
         </Fade>
