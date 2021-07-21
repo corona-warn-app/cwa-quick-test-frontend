@@ -29,6 +29,7 @@ import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
 import { Sex, TestResult } from './misc/enum';
+import { IUser, IGroup } from './misc/user';
 
 export const api = axios.create({
     baseURL: ''
@@ -501,4 +502,63 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
     }, [hash]);
 
     return result;
+}
+
+export const useGetUsers =  (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<IUser[]>();
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            const fakeUsers: IUser[] = [
+                {
+                    firstName: 'Artur',
+                    lastName: 'Hochdahler',
+                    email: 'mail@domain.com',
+                    roleLab: true,
+                    roleCounter: true,
+                    group: '',
+                    password: ''
+                },
+                {
+                    firstName: 'Artur2',
+                    lastName: 'Hochdahler2',
+                    email: 'mail2@domain.com',
+                    roleCounter: true,
+                    roleLab: false,
+                    group: '',
+                    password: ''
+                }
+            ]
+            setResult(fakeUsers);
+        }, 500);
+    }, []);
+
+    return result;
+}
+
+export const useGetGroups = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<IGroup[]>();
+
+    React.useEffect(() => {
+        setTimeout(() => {
+            const fakeGroups: IGroup[] = [
+                {
+                    name: 'gruppe1',
+                    id: '0',
+                    data: 'Must-Apotheke,Sachsstr.4,54220 Oberfinken'
+                },
+                {
+                    name: 'gruppe2',
+                    id: '1',
+                    data: 'Must-Apotheke,Sachsstr.4,54220 Unterfinken'
+                },
+            ]
+            setResult(fakeGroups);
+        }, 500);
+    }, []);
+
+    return result;
+
 }

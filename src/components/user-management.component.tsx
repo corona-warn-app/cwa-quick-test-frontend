@@ -20,37 +20,17 @@
  */
 
 import React from 'react';
-import { Card, Fade, Modal, Table, Button } from 'react-bootstrap';
+import { Card, Fade, Table, Button } from 'react-bootstrap';
 import CwaSpinner from './spinner/spinner.component';
 import CardHeader from './modules/card-header.component';
 import { useTranslation } from 'react-i18next';
-import { FormGroupConsentCkb, FormGroupInput } from './modules/form-group.component';
 import UserModal from './user-modal.component';
 import GroupModal from './group-modal.component';
+import ConfirmModal from './confirm-modal.component';
 
 import AppContext from '../misc/appContext';
 import { IUser, IGroup } from '../misc/user';
-
-const fakeUsers: IUser[] = [
-    {
-        firstName: 'Artur',
-        lastName: 'Hochdahler',
-        email: 'mail@domain.com',
-        roleLab: true,
-        roleCounter: true,
-        group: '',
-        password: ''
-    },
-    {
-        firstName: 'Artur2',
-        lastName: 'Hochdahler2',
-        email: 'mail2@domain.com',
-        roleCounter: true,
-        roleLab: false,
-        group: '',
-        password: ''
-    }
-]
+import { useGetUsers, useGetGroups } from '../api';
 
 const emptyUser: IUser = {
     firstName: '',
@@ -68,20 +48,6 @@ const emptyGroup: IGroup = {
     data: '',
 }
 
-
-const fakeGroups: IGroup[] = [
-    {
-        name: 'gruppe1',
-        id: '0',
-        data: 'Must-Apotheke,Sachsstr.4,54220 Oberfinken'
-    },
-    {
-        name: 'gruppe2',
-        id: '1',
-        data: 'Must-Apotheke,Sachsstr.4,54220 Unterfinken'
-    },
-]
-
 const UserManagment = (props: any) => {
     const context = React.useContext(AppContext);
     const { t } = useTranslation();
@@ -96,20 +62,37 @@ const UserManagment = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
-    React.useEffect(() => {
-        setUsers(fakeUsers);
-    }, [])
-
+    const bUsers = useGetUsers(handleError);
+    const bGroups = useGetGroups(handleError);
     const [users, setUsers] = React.useState<IUser[]>([]);
-    const [groups, setGroups] = React.useState<IGroup[]>(fakeGroups);
+    const [groups, setGroups] = React.useState<IGroup[]>([]);
     const [isInit, setIsInit] = React.useState(true);
     const [isUserData, setIsUserData] = React.useState(false);
     const [editUser, setEditUser] = React.useState<IUser>(emptyUser);
     const [isGroupEdit, setIsGroupEdit] = React.useState(false);
     const [editGroup, setEditGroup] = React.useState<IGroup>(emptyGroup);
 
+    const [showConfirm, setShowConfirm] = React.useState(false);
+    const [confirmMessage, setConfirmMessage] = React.useState('');
+    const [confirmHandle, setConfirmHandle] = React.useState<() => void>();
+
+    React.useEffect(() => {
+        if (bUsers) {
+            setUsers(bUsers);
+        }
+        setIsInit(!!(bGroups && bUsers));
+    }, [bUsers]);
+
+    React.useEffect(() => {
+        if (bGroups) {
+            setGroups(bGroups);
+        }
+        setIsInit(!!(bGroups && bUsers));
+    }, [bGroups]);
+
+
     const userUpdate = (user:IUser) => {
-        if (editUser) {
+        if (editUser && editUser.email) {
             const fuser = users.find(u => u.email === user.email);
             if (fuser) {
                 fuser.firstName = user.firstName;
@@ -123,6 +106,10 @@ const UserManagment = (props: any) => {
         }
         setUsers(users);
         setIsUserData(false);
+    }
+
+    const toBeDone = () => {
+        window.alert("TO BE DONE");
     }
 
     const groupUpdate = (group:IGroup) => {
@@ -147,7 +134,13 @@ const UserManagment = (props: any) => {
     }
 
     const deleteGroup = (group:IGroup) => {
-        setGroups(groups.filter(g => g.id !== group.id));
+        setConfirmMessage("Wollen Sie wirklich die Gruppe "+group.name+ " löschen?")
+        setShowConfirm(true);
+        const handle = () => {
+            setGroups(groups.filter(g => g.id !== group.id));
+        };
+        // need to wrap a function again because react apply each function passed to hook
+        setConfirmHandle(() => handle);
     }
 
     const startEditUser = (user: IUser) => {
@@ -156,7 +149,13 @@ const UserManagment = (props: any) => {
     }
 
     const deleteUser = (user:IUser) => {
-        setUsers(users.filter(u => u.email !== user.email));
+        setConfirmMessage("Wollen Sie wirklich den User "+user.email+ " löschen?")
+        setShowConfirm(true);
+        const handle = () => {
+            setUsers(users.filter(u => u.email !== user.email));
+        };
+        // need to wrap a function again because react apply each function passed to hook
+        setConfirmHandle(() => handle);
     }
 
     const rolesAsString = (user:IUser) => {
@@ -176,13 +175,13 @@ const UserManagment = (props: any) => {
 
     const userRows = users.map(u => <tr><td>{u.email}</td><td>{u.firstName}</td><td>{u.lastName}</td>
         <td>{u.group}</td><td>{rolesAsString(u)}</td>
-        <td><Button size="sm" onClick={() => startEditUser(u)}>Bearbeiten</Button>&nbsp;
+        <td><Button size="sm" onClick={() => startEditUser({...u})}>Bearbeiten</Button>&nbsp;
         <Button size="sm" onClick={() => deleteUser(u)}>Löschen</Button></td></tr>);
 
     const groupRows = groups.map(g => <tr><td>{g.name}</td><td>{g.id}</td><td>
         <Button size="sm" onClick={() => startEditGroup(g)}>Bearbeiten</Button>&nbsp;
         <Button size="sm" onClick={() => deleteGroup(g)}>Löschen</Button>
-        &nbsp;<Button size="sm">Neue Untergruppe</Button></td></tr>);
+        &nbsp;<Button size="sm" onClick={toBeDone}>Neue Untergruppe</Button></td></tr>);
 
     return (!(isInit && context && context.valueSets)
             ? <CwaSpinner />
@@ -207,7 +206,7 @@ const UserManagment = (props: any) => {
                                 {userRows}
                             </tbody>
                         </Table>
-                        <Button onClick={() => {setEditUser(emptyUser); setIsUserData(true)}}>Neuen Benutzer Hinzufügen</Button>
+                        <Button onClick={() => {setEditUser({...emptyUser}); setIsUserData(true)}}>Neuen Benutzer Hinzufügen</Button>
                         <hr/>
                         <h4>Gruppen</h4>
                         <Table striped bordered hover size="sm">
@@ -236,6 +235,19 @@ const UserManagment = (props: any) => {
                     onCancel={() => setIsGroupEdit(false)} 
                     group={editGroup} 
                     handleOk={groupUpdate}
+                    />
+                <ConfirmModal show={showConfirm}
+                    message={confirmMessage}
+                    onCancel={() => {
+                        setConfirmHandle(undefined);
+                        setShowConfirm(false);
+                    }} 
+                    handleOk={() => {
+                        setShowConfirm(false);
+                        if (confirmHandle) {
+                            confirmHandle();
+                        }
+                    }}
                     />
                 </>);
         
