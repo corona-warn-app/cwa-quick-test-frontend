@@ -35,6 +35,7 @@ const GroupModal = (props: any) => {
     const [group, setGroup] = React.useState<IGroup>(props.group);
     const [data, setData] = React.useState('');
     const [isNew, setIsNew] = React.useState(true);
+    const [validated, setValidated] = React.useState(false);
 
     React.useEffect(() => {
         if (props.group.id !== group.id) {
@@ -80,8 +81,20 @@ const GroupModal = (props: any) => {
         setBtnOkDisabled(false);
     }
 
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        const form = event.currentTarget;
+        event.preventDefault();
+        event.stopPropagation();
+
+        setValidated(true);
+
+        if (form.checkValidity()) {
+            handleOk();
+        }
+    }
+
+
     return (
-        <>
             <Modal
                 contentClassName='data-modal'
                 show={props.show}
@@ -90,6 +103,7 @@ const GroupModal = (props: any) => {
                 centered
                 onEnter={handleEnter}
             >
+                <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
                 <Modal.Header id='data-header' className='pb-0' >
                     <Modal.Title>Gruppendaten</Modal.Title>
                 </Modal.Header>
@@ -109,43 +123,15 @@ const GroupModal = (props: any) => {
                                 />
                 </Modal.Body>
                 <Modal.Footer id='data-footer'>
-                    <Container className='p-0'>
-                        <Row>
-                            <Col xs='6' md='4' className='pl-0'>
-                                <Button
-                                    className='py-0'
-                                    block
-                                    variant='outline-primary'
-                                    onClick={handleCancel}
-                                >
-                                    {t('translation:cancel')}
-                                </Button>
-                            </Col>
-                            <Col xs='6' md='4' className='pr-0'>
-                                <Button
-                                    className='py-0'
-                                    block
-                                    onClick={handleOk}
-                                    disabled={btnOkDisabled}
-                                >
-                                    {t('translation:ok')}
-
-                                    <Spinner
-                                        as="span"
-                                        className='btn-spinner'
-                                        animation="border"
-                                        hidden={!btnOkDisabled}
-                                        size="sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                    />
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Container>
+                    <Button onClick={handleCancel}>
+                        {t('translation:cancel')}
+                    </Button>
+                    <Button type='submit'>
+                        {t('translation:ok')}
+                    </Button>
                 </Modal.Footer>
+                </Form>
             </Modal>
-        </>
     )
 }
 

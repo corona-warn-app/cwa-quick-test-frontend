@@ -29,11 +29,11 @@ import { IUser } from '../misc/user';
 
 const UserModal = (props: any) => {
 
-    const [btnOkDisabled, setBtnOkDisabled] = React.useState(false);
     const { t } = useTranslation();
 
     const [user, setUser] = React.useState<IUser>(props.user);
     const [isNew, setIsNew] = React.useState(true);
+    const [validated, setValidated] = React.useState(false);
 
     React.useEffect(() => {
         if (props.user.email !== user.email) {
@@ -53,18 +53,29 @@ const UserModal = (props: any) => {
     }
 
     const handleOk = () => {
-        setBtnOkDisabled(true);
         if (props.handleOk) {
             props.handleOk(user, setUser);
         }
     }
 
     const handleEnter = () => {
-        setBtnOkDisabled(false);
+        setValidated(false);
+    }
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        console.log("submit");
+        const form = event.currentTarget;
+        event.preventDefault();
+        event.stopPropagation();
+
+        setValidated(true);
+
+        if (form.checkValidity()) {
+            handleOk();
+        }
     }
 
     return (
-        <>
             <Modal
                 contentClassName='data-modal'
                 show={props.show}
@@ -73,6 +84,7 @@ const UserModal = (props: any) => {
                 centered
                 onEnter={handleEnter}
             >
+                <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
                 <Modal.Header id='data-header' className='pb-0' >
                     <Modal.Title>Benutzerdaten</Modal.Title>
                 </Modal.Header>
@@ -85,13 +97,13 @@ const UserModal = (props: any) => {
                                     onChange={(evt: any) => updateUserProp('email',evt.target.value)}
                                     maxLength={255}
                                 />
-                < FormGroupInput controlId='formFirstName' title="Fist Name"
+                < FormGroupInput controlId='formFirstName' title="Vorname"
                                     value={user.firstName}
                                     required
                                     onChange={(evt: any) => updateUserProp('firstName',evt.target.value)}
                                     maxLength={255}
                                 />
-                < FormGroupInput controlId='formLastName' title="Last Name"
+                < FormGroupInput controlId='formLastName' title="Nachname"
                                     value={user.lastName}
                                     onChange={(evt: any) => updateUserProp('lastName',evt.target.value)}
                                     required
@@ -120,52 +132,22 @@ const UserModal = (props: any) => {
                         className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
                         value={user.group}
                         onChange={(ent: any) => updateUserProp('group',ent.target.value)}
-                        required
                     >
                         {props.groups.map((g: string) => <option key={g} value={g}>{g}</option>)}
                     </Form.Control>
-            </Col>
-        </Form.Group>                                
-
+                    </Col>
+                </Form.Group>                                
                 </Modal.Body>
                 <Modal.Footer id='data-footer'>
-                    <Container className='p-0'>
-                        <Row>
-                            <Col xs='6' md='4' className='pl-0'>
-                                <Button
-                                    className='py-0'
-                                    block
-                                    variant='outline-primary'
-                                    onClick={handleCancel}
-                                >
+                                <Button onClick={handleCancel}>
                                     {t('translation:cancel')}
                                 </Button>
-                            </Col>
-                            <Col xs='6' md='4' className='pr-0'>
-                                <Button
-                                    className='py-0'
-                                    block
-                                    onClick={handleOk}
-                                    disabled={btnOkDisabled}
-                                >
+                                <Button type='submit'>
                                     {t('translation:ok')}
-
-                                    <Spinner
-                                        as="span"
-                                        className='btn-spinner'
-                                        animation="border"
-                                        hidden={!btnOkDisabled}
-                                        size="sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                    />
                                 </Button>
-                            </Col>
-                        </Row>
-                    </Container>
                 </Modal.Footer>
+                </Form>
             </Modal>
-        </>
     )
 }
 

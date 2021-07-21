@@ -222,6 +222,8 @@ const UserManagment = (props: any) => {
                             </tbody>
                         </Table>
                         <Button onClick={() => {setEditGroup(emptyGroup); setIsGroupEdit(true)}}>Neue Gruppe Hinzufügen</Button>
+                        <hr/>
+                        <Button onClick={() => context.navigation!.toLanding()}>Zurück zu Hauptmenü</Button>
                     </Card.Body>
                 </Card>
                 </Fade>
