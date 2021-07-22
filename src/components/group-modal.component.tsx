@@ -106,6 +106,7 @@ const GroupModal = (props: any) => {
         }
     }
 
+    const isNew = !(group && group.id);
 
     return (
             <Modal
@@ -118,7 +119,7 @@ const GroupModal = (props: any) => {
             >
                 <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
                 <Modal.Header id='data-header' className='pb-0' >
-                    <Modal.Title>Gruppendaten</Modal.Title>
+                    <Modal.Title>{isNew ? 'Neue Gruppe anlegen' : 'Gruppe bearbeiten'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='py-0 bg-light'>
                 < FormGroupInput controlId='formFirstName' title="Name"
@@ -145,7 +146,7 @@ const GroupModal = (props: any) => {
                         {t('translation:cancel')}
                     </Button>
                     <Button type='submit' disabled={btnOkDisabled}> 
-                        {t('translation:ok')}
+                        {isNew ? 'Erstellen' : 'Übernehmen'}
                     </Button>
                 </Modal.Footer>
                 </Form>

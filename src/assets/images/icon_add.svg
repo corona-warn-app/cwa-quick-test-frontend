@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="icon_add" transform="translate(-48 -416)">
+    <rect id="Rechteck_415" data-name="Rechteck 415" width="24" height="24" rx="4" transform="translate(48 416)" fill="#00739f"/>
+    <g id="icon_action_add_selected" data-name="icon/action/add/selected" transform="translate(48 416)">
+      <path id="Path" d="M16.25,7.5H10V1.25a1.25,1.25,0,0,0-2.5,0V7.5H1.25a1.25,1.25,0,0,0,0,2.5H7.5v6.25a1.25,1.25,0,0,0,2.5,0V10h6.25a1.25,1.25,0,0,0,0-2.5Z" transform="translate(3.25 3.25)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="icon_delete" transform="translate(-923 -336.154)">
+    <rect id="Rechteck_416" data-name="Rechteck 416" width="24" height="24" rx="4" transform="translate(923 336.154)" fill="#7e7e7e"/>
+    <g id="icon_action_remove_default" data-name="icon/action/remove/default" transform="translate(925 338.154)">
+      <path id="Combined_Shape" data-name="Combined Shape" d="M4.709,19.167a2.481,2.481,0,0,1-1.719-.688,2.541,2.541,0,0,1-.782-1.687L1.5,3.75H.625A.641.641,0,0,1,0,3.125.642.642,0,0,1,.625,2.5H5.208V0h6.667V2.5h4.583a.642.642,0,0,1,.625.625.642.642,0,0,1-.625.625h-.875l-.667,13.042a2.523,2.523,0,0,1-2.5,2.375ZM3.458,16.75a1.237,1.237,0,0,0,1.25,1.167h7.667a1.237,1.237,0,0,0,1.25-1.167l.708-13H2.75Zm3-14.25h4.167V1.25H6.458ZM10.833,15V6.667a.625.625,0,0,1,1.25,0V15a.625.625,0,0,1-1.25,0ZM7.917,15V6.667a.625.625,0,1,1,1.249,0V15a.625.625,0,1,1-1.249,0ZM5,15V6.667a.625.625,0,1,1,1.25,0V15A.625.625,0,1,1,5,15Z" transform="translate(1.458 0.417)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

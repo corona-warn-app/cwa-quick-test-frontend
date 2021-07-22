@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Card, Fade, Table, Button } from 'react-bootstrap';
+import { Card, Fade, Table, Button, Row, Col } from 'react-bootstrap';
 import CwaSpinner from './spinner/spinner.component';
 import CardHeader from './modules/card-header.component';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +32,10 @@ import AppContext from '../misc/appContext';
 import { IUser, IGroup, IGroupDetails, IGroupNode } from '../misc/user';
 import { useGetUsers, useGetGroups, createUser, createGroup, deleteUser, deleteGroup, updateGroup, addUserToGroup } from '../api';
 import { useKeycloak } from '@react-keycloak/web';
+
+import imageEdit from '../assets/images/icon_edit.svg'
+import imageDelete from '../assets/images/icon_delete.svg'
+import imageAdd from '../assets/images/icon_add.svg'
 
 const emptyUser: IUser = {
     id: '',
@@ -226,9 +230,9 @@ const UserManagement = (props: any) => {
     const groupNodes: IGroupNode[] = [];
     flattenGroups(groups, groupNodes, 0);
 
-    const groupRows = groupNodes.map(g => <tr><td>{nameWithIdent(g)}</td><td>
-        <Button size="sm" disabled={isUpdating} onClick={() => startEditGroup(g.group)}>Bearbeiten</Button>&nbsp;
-        <Button size="sm" disabled={isUpdating} onClick={() => handleDeleteGroup(g.group)}>Löschen</Button></td></tr>);
+    const groupRows = groupNodes.map(g => <tr><td width="90%">{nameWithIdent(g)}</td><td width="10%">
+        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditGroup(g.group)}><img src={imageEdit}/></Button>&nbsp;&nbsp;
+        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => handleDeleteGroup(g.group)}><img src={imageDelete}/></Button></td></tr>);
 
     const groupName = (groupId: string|null): string => {
         let groupName = ''
@@ -244,8 +248,8 @@ const UserManagement = (props: any) => {
 
     const userRows = users.map(u => <tr><td>{u.username}</td><td>{u.firstName}</td><td>{u.lastName}</td>
         <td>{groupName(u.subGroup)}</td><td>{rolesAsString(u)}</td>
-        <td><Button size="sm" disabled={isUpdating} onClick={() => startEditUser({...u})}>Bearbeiten</Button>&nbsp;
-        <Button size="sm" disabled={isUpdating} onClick={() => handleDeleteUser(u)}>Löschen</Button></td></tr>);
+        <td width="10%"><Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditUser({...u})}><img src={imageEdit}/></Button>&nbsp;&nbsp;
+        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => handleDeleteUser(u)}><img src={imageDelete}/></Button></td></tr>);
 
 
     return (!(isInit && context && context.valueSets)
@@ -259,7 +263,7 @@ const UserManagement = (props: any) => {
                         <Table striped bordered hover size="sm">
                             <thead>
                                 <tr>
-                                    <th>email</th>
+                                    <th>Benutzername</th>
                                     <th>Vorname</th>
                                     <th>Name</th>
                                     <th>Gruppe</th>
@@ -271,7 +275,8 @@ const UserManagement = (props: any) => {
                                 {userRows}
                             </tbody>
                         </Table>
-                        <Button disabled={isUpdating} onClick={() => {setEditUser({...emptyUser}); setIsUserData(true)}}>Neuen Benutzer Hinzufügen</Button>
+                        <Button size="sm" disabled={isUpdating} variant="light"
+                        onClick={() => {setEditUser({...emptyUser}); setIsUserData(true)}}><img src={imageAdd}/> Neuen Benutzer hinzufügen</Button>
                         <hr/>
                         <h4>Gruppen</h4>
                         <Table striped bordered hover size="sm">
@@ -285,13 +290,23 @@ const UserManagement = (props: any) => {
                                 {groupRows}
                             </tbody>
                         </Table>
-                        <Button 
+                        <Button size="sm" variant="light"
                             disabled={isUpdating}
-                            onClick={() => {setEditGroupId(''); setIsGroupEdit(true)}}>Neue Gruppe Hinzufügen</Button>
-                        <hr/>
-                        <Button onClick={() => context.navigation!.toLanding()}>Zurück zu Hauptmenü</Button>
+                            onClick={() => {setEditGroupId(''); setIsGroupEdit(true)}}><img src={imageAdd}/> Neue Gruppe hinzufügen</Button>
                         {isUpdating ? <CwaSpinner /> : null}
                     </Card.Body>
+                    <Card.Footer id='data-footer'>
+                        <Row>
+                            <Col sm='6' md='3' className=''>
+                                <Button
+                                    className='my-1 my-md-0 p-0'
+                                    variant='outline-primary'
+                                    block
+                                    onClick={() => context.navigation!.toLanding()}
+                                >Zurück</Button>
+                            </Col>
+                        </Row>
+                    </Card.Footer>
                 </Card>
                 </Fade>
                 <UserModal show={isUserData} 

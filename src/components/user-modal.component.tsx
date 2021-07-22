@@ -98,7 +98,7 @@ const UserModal = (props: any) => {
             >
                 <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
                 <Modal.Header id='data-header' className='pb-0' >
-                    <Modal.Title>Benutzerdaten</Modal.Title>
+                    <Modal.Title>{isNew ? 'Neuen Benutzer anlegen' : 'Benutzer bearbeiten'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='py-0 bg-light'>
                 < FormGroupInput controlId='formEmailInput' title="Benutzername"
@@ -122,7 +122,7 @@ const UserModal = (props: any) => {
                                     readOnly={!isNew}
                                     maxLength={30}
                                 />
-                < FormGroupInput controlId='formPassword' title="Password"
+                < FormGroupInput controlId='formPassword' title="Passwort"
                                     value={user.password}
                                     onChange={(evt: any) => updateUserProp('password',evt.target.value)}
                                     required
@@ -131,13 +131,13 @@ const UserModal = (props: any) => {
                                     minLength={8}
                                     maxLength={64}
                                 />
-                <FormGroupConsentCkb controlId='formDccConsentCheckbox' title="Role Lab"
+                <FormGroupConsentCkb controlId='formRoleLab' title="Role Lab"
                     onChange={(evt: any) => updateUserProp('roleLab',evt.currentTarget.checked)}
                     type='checkbox'
                     readOnly={!isNew}
                     checked={user.roleLab}
                 />                                
-                <FormGroupConsentCkb controlId='formDccConsentCheckbox' title="Role Counter"
+                <FormGroupConsentCkb controlId='formRoleCounter' title="Role Counter"
                     onChange={(evt: any) => updateUserProp('roleCounter',evt.currentTarget.checked)}
                     type='checkbox'
                     readOnly={!isNew}
@@ -162,7 +162,7 @@ const UserModal = (props: any) => {
                                     {t('translation:cancel')}
                                 </Button>
                                 <Button type='submit'>
-                                    {t('translation:ok')}
+                                    {isNew ? 'Erstellen' : 'Übernehmen'}
                                 </Button>
                 </Modal.Footer>
                 </Form>

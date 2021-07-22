@@ -37,7 +37,6 @@ const ConfirmModal = (props: any) => {
             centered
         >
             <Modal.Header id='data-header' className='pb-0' >
-                <Modal.Title>Gruppendaten</Modal.Title>
             </Modal.Header>
             <Modal.Body className='py-0 bg-light'>
             {props.message}

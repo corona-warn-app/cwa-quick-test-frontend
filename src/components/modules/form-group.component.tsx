@@ -23,6 +23,7 @@ export const FormGroupInput = (props: any) => {
                     type={props.type ? props.type : 'text'}
                     required={props.required}
                     maxLength={props.maxLength}
+                    minLength={props.minLength}
                     min={props.min}
                     max={props.max}
                     pattern={props.pattern}
