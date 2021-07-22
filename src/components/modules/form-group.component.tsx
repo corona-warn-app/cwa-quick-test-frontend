@@ -110,6 +110,7 @@ export const FormGroupConsentCkb = (props: any) => {
                         onChange={props.onChange}
                         type={props.type}
                         name={props.name}
+                        disabled={props.readOnly}
                         checked={props.checked}
                         required={props.required}
                         id={props.controlId}

@@ -171,7 +171,7 @@ const Routing = () => {
                     <PrivateRoute
                         exact
                         path={context.navigation.routes.userManagement}
-                        roles={['c19_quick_test_admin', 'c19_quick_test_lab']}
+                        roles={['c19_quick_test_admin']}
                         component={UserManagement}
                         render={(props) => <UserManagement {...props} setError={setError} />}
                     />

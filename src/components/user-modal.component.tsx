@@ -20,12 +20,12 @@
  */
 
 import React from 'react';
-import { Button, Col, Container, Modal, Row, Spinner, Form } from 'react-bootstrap'
+import { Button, Col, Modal, Row, Form } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 import { FormGroupConsentCkb, FormGroupInput } from './modules/form-group.component';
-import { IUser } from '../misc/user';
+import { IUser, IGroupNode, IGroup } from '../misc/user';
 
 const UserModal = (props: any) => {
 
@@ -36,9 +36,15 @@ const UserModal = (props: any) => {
     const [validated, setValidated] = React.useState(false);
 
     React.useEffect(() => {
-        if (props.user.email !== user.email) {
+        if (props.user.username !== user.username) {
+            if (!props.user.username 
+                && !props.user.subGroup
+                && props.groups
+                && props.groups.length>0) {
+                // props.user.subGroup = props.groups[0].group.id;
+            }
             setUser(props.user);
-            setIsNew(!!props.user.email);
+            setIsNew(!props.user.username);
         }
     },[props.user])
 
@@ -63,7 +69,6 @@ const UserModal = (props: any) => {
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        console.log("submit");
         const form = event.currentTarget;
         event.preventDefault();
         event.stopPropagation();
@@ -73,6 +78,13 @@ const UserModal = (props: any) => {
         if (form.checkValidity()) {
             handleOk();
         }
+    }
+
+    const groupOptions = props.groups.map((groupNode: IGroupNode) => 
+        <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level)+groupNode.group.name}</option>
+    )
+    if (!user.subGroup) {
+        groupOptions.push(<option key="empty" value="empty">-- leer --</option>);
     }
 
     return (
@@ -89,40 +101,46 @@ const UserModal = (props: any) => {
                     <Modal.Title>Benutzerdaten</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='py-0 bg-light'>
-                < FormGroupInput controlId='formEmailInput' title="Email"
-                                    value={user.email}
-                                    type='email'
+                < FormGroupInput controlId='formEmailInput' title="Benutzername"
+                                    value={user.username}
                                     required
-                                    readOnly={isNew}
-                                    onChange={(evt: any) => updateUserProp('email',evt.target.value)}
-                                    maxLength={255}
+                                    readOnly={!isNew}
+                                    onChange={(evt: any) => updateUserProp('username',evt.target.value)}
+                                    maxLength={50}
                                 />
                 < FormGroupInput controlId='formFirstName' title="Vorname"
                                     value={user.firstName}
                                     required
+                                    readOnly={!isNew}
                                     onChange={(evt: any) => updateUserProp('firstName',evt.target.value)}
-                                    maxLength={255}
+                                    maxLength={30}
                                 />
                 < FormGroupInput controlId='formLastName' title="Nachname"
                                     value={user.lastName}
                                     onChange={(evt: any) => updateUserProp('lastName',evt.target.value)}
                                     required
-                                    maxLength={255}
+                                    readOnly={!isNew}
+                                    maxLength={30}
                                 />
                 < FormGroupInput controlId='formPassword' title="Password"
                                     value={user.password}
                                     onChange={(evt: any) => updateUserProp('password',evt.target.value)}
                                     required
-                                    maxLength={255}
+                                    readOnly={!isNew}
+                                    type='password'
+                                    minLength={8}
+                                    maxLength={64}
                                 />
                 <FormGroupConsentCkb controlId='formDccConsentCheckbox' title="Role Lab"
                     onChange={(evt: any) => updateUserProp('roleLab',evt.currentTarget.checked)}
                     type='checkbox'
+                    readOnly={!isNew}
                     checked={user.roleLab}
                 />                                
                 <FormGroupConsentCkb controlId='formDccConsentCheckbox' title="Role Counter"
                     onChange={(evt: any) => updateUserProp('roleCounter',evt.currentTarget.checked)}
                     type='checkbox'
+                    readOnly={!isNew}
                     checked={user.roleCounter}
                 />
                 <Form.Group as={Row} className='mb-1'>
@@ -130,10 +148,11 @@ const UserModal = (props: any) => {
                     <Col xs='7' sm='9' className='d-flex'>
                     <Form.Control as="select"
                         className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
-                        value={user.group}
-                        onChange={(ent: any) => updateUserProp('group',ent.target.value)}
+                        value={user.subGroup ? user.subGroup: 'empty'}
+                        disabled={isNew}
+                        onChange={(ent: any) => updateUserProp('subGroup',ent.target.value)}
                     >
-                        {props.groups.map((g: string) => <option key={g} value={g}>{g}</option>)}
+                        {groupOptions}
                     </Form.Control>
                     </Col>
                 </Form.Group>                                

@@ -20,39 +20,47 @@
  */
 
 import React from 'react';
-import { Button, Col, Container, Modal, Row, Spinner, Form } from 'react-bootstrap'
+import { Button, Modal, Spinner, Form } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 import { FormGroupTextarea, FormGroupInput } from './modules/form-group.component';
-import { IGroup } from '../misc/user';
+import { IGroupDetails } from '../misc/user';
+import { useGetGroupDetails } from '../api';
+import CwaSpinner from './spinner/spinner.component';
+
+const emptyGroup: IGroupDetails = {
+    id: '',
+    pocId: '',
+    name: '',
+    pocDetails: '',
+}
 
 const GroupModal = (props: any) => {
 
-    const [btnOkDisabled, setBtnOkDisabled] = React.useState(false);
+    const [btnOkDisabled, setBtnOkDisabled] = React.useState(true);
     const { t } = useTranslation();
 
-    const [group, setGroup] = React.useState<IGroup>(props.group);
     const [data, setData] = React.useState('');
-    const [isNew, setIsNew] = React.useState(true);
     const [validated, setValidated] = React.useState(false);
+    const [group, updateGroup, setGroup] = useGetGroupDetails(props.handleError);
 
     React.useEffect(() => {
-        if (props.group.id !== group.id) {
-            setGroup(props.group);
-            setData(unpackData(props.group.data))
-            setIsNew(!!props.group.id);
+        if (group) {
+            setData(unpackData(group.pocDetails))
         }
-    },[props.group])
+        setBtnOkDisabled(false);
+    },[group])
 
     const handleCancel = () => {
         props.onCancel();
-        // props.onHide();
     }
 
     const unpackData = (data:string) => {
         if (data) {
             data = data.replaceAll(',','\n')
+        } else {
+            data = ''
         }
         return data;
     }
@@ -64,21 +72,26 @@ const GroupModal = (props: any) => {
         return data;
     }
 
-    const updateGroupProp = (name:string, value:any) => {
-        const ngroup = { ...group, [name]: value};
-        setGroup(ngroup);
-    }
-
     const handleOk = () => {
         setBtnOkDisabled(true);
         if (props.handleOk) {
-            group.data = packData(data);
-            props.handleOk(group, setGroup);
+            group.pocDetails = packData(data);
+            props.handleOk(group);
         }
     }
 
     const handleEnter = () => {
+        if (props.groupId) {
+            updateGroup(props.groupId);
+        } else {
+            setGroup({...emptyGroup});
+        }
         setBtnOkDisabled(false);
+    }
+
+    const updateGroupProp = (name:string, value:any) => {
+        const ngroup = { ...group, [name]: value};
+        setGroup(ngroup);
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -109,24 +122,29 @@ const GroupModal = (props: any) => {
                 </Modal.Header>
                 <Modal.Body className='py-0 bg-light'>
                 < FormGroupInput controlId='formFirstName' title="Name"
-                                    value={group.name}
+                                    value={group ? group.name : ''}
                                     required
                                     onChange={(evt: any) => updateGroupProp('name',evt.target.value)}
-                                    maxLength={255}
+                                    maxLength={50}
+                                />
+                < FormGroupInput controlId='formFirstName' title="POC Id"
+                                    value={group && group.pocId ? group.pocId : ''}
+                                    onChange={(evt: any) => updateGroupProp('pocId',evt.target.value)}
+                                    maxLength={50}
                                 />
                 < FormGroupTextarea controlId='formLastName' title="Data"
                                     value={data}
                                     onChange={(evt: any) => setData(evt.target.value)}
                                     type='textarea'
-                                    required
-                                    maxLength={255}
+                                    maxLength={300}
                                 />
                 </Modal.Body>
                 <Modal.Footer id='data-footer'>
+                    {btnOkDisabled ? <CwaSpinner/> : null}
                     <Button onClick={handleCancel}>
                         {t('translation:cancel')}
                     </Button>
-                    <Button type='submit'>
+                    <Button type='submit' disabled={btnOkDisabled}> 
                         {t('translation:ok')}
                     </Button>
                 </Modal.Footer>

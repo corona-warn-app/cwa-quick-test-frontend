@@ -19,18 +19,35 @@
  * under the License.
  */
 
+import InputGroupWithExtras from "react-bootstrap/esm/InputGroup"
+
 export interface IUser {
-    email: string,
+    id: string,
+    username: string,
     firstName: string,
     lastName: string,
     roleCounter: boolean,
     roleLab: boolean,
-    group: string,
-    password: string,
+    subGroup: string | null,
+    password?: string,
 }
 
 export interface IGroup {
     name: string,
     id: string,
-    data: string,
+    path: string,
+    children: IGroup[], 
 }
+
+export interface IGroupNode {
+    group: IGroup,
+    level: number,
+}
+
+export interface IGroupDetails {
+    id?: string,
+    name: string,
+    pocDetails: string,
+    pocId: string,
+}
+

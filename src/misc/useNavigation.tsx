@@ -21,7 +21,6 @@
 
 import React from 'react';
 import { useHistory } from 'react-router-dom'
-import UserManagment from '../components/user-management.component';
 import useLocalStorage from './useLocalStorage';
 
 export interface IRoute {
@@ -57,7 +56,7 @@ export const useRoutes = () => {
             qrScan: basePath + '/qr/scan',
             statistics: basePath + '/statistics',
             failedReport: basePath + '/failedreport',
-            userManagment: basePath + '/usermanagement'
+            userManagement: basePath + '/usermanagement'
         });
     }, [])
 
@@ -84,7 +83,7 @@ export const useNavigation = () => {
             c.qrScan = routes.qrScan.replace(':mandant', mandant as string);
             c.statistics = routes.statistics.replace(':mandant', mandant as string);
             c.failedReport = routes.failedReport.replace(':mandant', mandant as string);
-            c.userManagement = routes.userManagment.replace(':mandant', mandant as string);
+            c.userManagement = routes.userManagement.replace(':mandant', mandant as string);
 
             setCalculatedRoutes(c);
         }

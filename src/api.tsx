@@ -29,7 +29,7 @@ import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
 import { Sex, TestResult } from './misc/enum';
-import { IUser, IGroup } from './misc/user';
+import { IUser, IGroup, IGroupDetails } from './misc/user';
 
 export const api = axios.create({
     baseURL: ''
@@ -504,61 +504,138 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
     return result;
 }
 
-export const useGetUsers =  (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+export const useGetUsers =  (onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
-    const [result, setResult] = React.useState<IUser[]>();
+    const [result, setResult] = React.useState<any>();
 
-    React.useEffect(() => {
-        setTimeout(() => {
-            const fakeUsers: IUser[] = [
-                {
-                    firstName: 'Artur',
-                    lastName: 'Hochdahler',
-                    email: 'mail@domain.com',
-                    roleLab: true,
-                    roleCounter: true,
-                    group: '',
-                    password: ''
-                },
-                {
-                    firstName: 'Artur2',
-                    lastName: 'Hochdahler2',
-                    email: 'mail2@domain.com',
-                    roleCounter: true,
-                    roleLab: false,
-                    group: '',
-                    password: ''
+    const refreshUsers = () => {
+        const header = {
+            "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+            'Content-Type': 'application/json'
+        };   
+        const uri = '/api/usermanagement/users';
+    
+        api.get(uri, { headers: header })
+            .then(response => {
+                setResult(response.data);
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
                 }
-            ]
-            setResult(fakeUsers);
-        }, 500);
-    }, []);
+            });
+    }
 
-    return result;
+    React.useEffect(refreshUsers, []);
+
+    return [result, refreshUsers];
 }
 
-export const useGetGroups = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+export const createUser = (user: IUser, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/users';
+    return api.post(uri, JSON.stringify(user), { headers: header })
+}
+
+export const deleteUser = (userId: string, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/users/'+encodeURIComponent(userId);
+    return api.delete(uri, { headers: header })
+}
+
+export const useGetGroups = (onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
-    const [result, setResult] = React.useState<IGroup[]>();
+    const [result, setResult] = React.useState<any>();
 
-    React.useEffect(() => {
-        setTimeout(() => {
-            const fakeGroups: IGroup[] = [
-                {
-                    name: 'gruppe1',
-                    id: '0',
-                    data: 'Must-Apotheke,Sachsstr.4,54220 Oberfinken'
-                },
-                {
-                    name: 'gruppe2',
-                    id: '1',
-                    data: 'Must-Apotheke,Sachsstr.4,54220 Unterfinken'
-                },
-            ]
-            setResult(fakeGroups);
-        }, 500);
-    }, []);
+    const refreshGroups = () => {
+        const header = {
+            "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+            'Content-Type': 'application/json'
+        };   
+        const uri = '/api/usermanagement/groups';
+    
+        api.get(uri, { headers: header })
+            .then(response => {
+                setResult(response.data);
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
+                }
+            });
+    }
 
-    return result;
+    React.useEffect(refreshGroups, []);
 
+    return [result, refreshGroups];
+}
+
+export const useGetGroupDetails = (onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<any>();
+
+    const updateGroup = (groupId: string) => {
+        if (groupId) {
+            const header = {
+                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+                'Content-Type': 'application/json'
+            };
+            const uri = '/api/usermanagement/groups/' + groupId;
+
+            api.get(uri, { headers: header })
+                .then(response => {
+                    setResult(response.data);
+                })
+                .catch(error => {
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
+    
+    return [result, updateGroup, setResult];
+}
+
+export const createGroup = (group: IGroupDetails, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups';
+    return api.post(uri, JSON.stringify(group), { headers: header })
+}
+
+export const updateGroup = (group: IGroupDetails, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups/'+group.id;
+    return api.put(uri, JSON.stringify(group), { headers: header })
+}
+
+export const deleteGroup = (groupId: string, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups/'+encodeURIComponent(groupId);
+    return api.delete(uri, { headers: header })
+}
+
+export const addUserToGroup = (userId: string ,groupId: string, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups/'+encodeURIComponent(groupId)+'/users';
+    return api.post(uri,JSON.stringify({userId: userId}), { headers: header })
 }

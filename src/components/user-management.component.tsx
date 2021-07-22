@@ -29,26 +29,22 @@ import GroupModal from './group-modal.component';
 import ConfirmModal from './confirm-modal.component';
 
 import AppContext from '../misc/appContext';
-import { IUser, IGroup } from '../misc/user';
-import { useGetUsers, useGetGroups } from '../api';
+import { IUser, IGroup, IGroupDetails, IGroupNode } from '../misc/user';
+import { useGetUsers, useGetGroups, createUser, createGroup, deleteUser, deleteGroup, updateGroup, addUserToGroup } from '../api';
+import { useKeycloak } from '@react-keycloak/web';
 
 const emptyUser: IUser = {
+    id: '',
     firstName: '',
     lastName: '',
-    email: '',
+    username: '',
     password: '',
-    group: '',
+    subGroup: null,
     roleLab: false,
     roleCounter: false,
 }
 
-const emptyGroup: IGroup = {
-    id: '',
-    name: '',
-    data: '',
-}
-
-const UserManagment = (props: any) => {
+const UserManagement = (props: any) => {
     const context = React.useContext(AppContext);
     const { t } = useTranslation();
 
@@ -62,25 +58,28 @@ const UserManagment = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
-    const bUsers = useGetUsers(handleError);
-    const bGroups = useGetGroups(handleError);
+    const { keycloak, initialized } = useKeycloak();
+    const [bUsers, refreshUsers] = useGetUsers(handleError);
+    const [bGroups, refreshGroups] = useGetGroups(handleError);
     const [users, setUsers] = React.useState<IUser[]>([]);
     const [groups, setGroups] = React.useState<IGroup[]>([]);
     const [isInit, setIsInit] = React.useState(true);
     const [isUserData, setIsUserData] = React.useState(false);
     const [editUser, setEditUser] = React.useState<IUser>(emptyUser);
     const [isGroupEdit, setIsGroupEdit] = React.useState(false);
-    const [editGroup, setEditGroup] = React.useState<IGroup>(emptyGroup);
+    const [editGroupId, setEditGroupId] = React.useState<string>('');
 
     const [showConfirm, setShowConfirm] = React.useState(false);
     const [confirmMessage, setConfirmMessage] = React.useState('');
     const [confirmHandle, setConfirmHandle] = React.useState<() => void>();
+    const [isUpdating, setIsUpdating] = React.useState(false);
 
     React.useEffect(() => {
         if (bUsers) {
             setUsers(bUsers);
         }
         setIsInit(!!(bGroups && bUsers));
+        setIsUpdating(false);
     }, [bUsers]);
 
     React.useEffect(() => {
@@ -88,71 +87,105 @@ const UserManagment = (props: any) => {
             setGroups(bGroups);
         }
         setIsInit(!!(bGroups && bUsers));
+        setIsUpdating(false);
     }, [bGroups]);
 
 
     const userUpdate = (user:IUser) => {
-        if (editUser && editUser.email) {
-            const fuser = users.find(u => u.email === user.email);
-            if (fuser) {
-                fuser.firstName = user.firstName;
-                fuser.lastName = user.lastName;
-                fuser.group = user.group;
-                fuser.roleCounter = user.roleCounter;
-                fuser.roleLab = user.roleLab;
+        if (editUser && editUser.username) {
+            const fuser = users.find(u => u.username === user.username);
+            if (fuser && fuser.subGroup!==user.subGroup) {
+                if (keycloak.token && user.subGroup && user.subGroup!=='empty') {
+                    setIsUpdating(true);
+                    addUserToGroup(user.id, user.subGroup, keycloak.token).then(() => {
+                        refreshUsers();
+                    }).catch(e => {
+                        handleError(e);
+                    });
+                }
             }
         } else {
-            users.push(user);
+            const newUser: any = {...user};
+            delete newUser.subGroup;
+            if (keycloak.token) {
+                setIsUpdating(true);
+                createUser(newUser, keycloak.token).then(() => {
+                    if (newUser.subGroup && keycloak.token && newUser.subGroup!=='empty') {
+                        addUserToGroup(newUser.id, newUser.subGroup, keycloak.token).then(() => {
+                            refreshUsers();
+                        }).catch(e => {
+                            handleError(e);
+                        });
+                    } else {
+                        refreshUsers();
+                    }
+                }).catch(e => {
+                    handleError(e);
+                });
+            }
         }
-        setUsers(users);
         setIsUserData(false);
     }
 
-    const toBeDone = () => {
-        window.alert("TO BE DONE");
-    }
-
-    const groupUpdate = (group:IGroup) => {
+    const groupUpdate = (group:IGroupDetails) => {
         if (group.id) {
-            const fgroup = groups.find(g => g.id === group.id);
-            if (fgroup) {
-                fgroup.name = group.name;
-                fgroup.data = group.data;
+            if (keycloak.token) {
+                setIsUpdating(true);
+                updateGroup(group, keycloak.token).then(() => {
+                    refreshGroups();
+                }).catch(e => {
+                    handleError(e);
+                });
             }
         } else {
-            // TODO fake id
-            group.id = Math.floor(Math.random()*100000).toString();
-            groups.push(group)
+            if (keycloak.token) {
+                createGroup(group, keycloak.token).then(() => {
+                    refreshGroups();
+                }).catch(e => {
+                    handleError(e);
+                });
+            }
         }
-        setGroups(groups);
         setIsGroupEdit(false);
     }
 
     const startEditGroup = (group:IGroup) => {
-        setEditGroup(group);
+        setEditGroupId(group.id);
         setIsGroupEdit(true);
     }
 
-    const deleteGroup = (group:IGroup) => {
+    const handleDeleteGroup = (group:IGroup) => {
         setConfirmMessage("Wollen Sie wirklich die Gruppe "+group.name+ " löschen?")
         setShowConfirm(true);
         const handle = () => {
-            setGroups(groups.filter(g => g.id !== group.id));
+            if (keycloak.token && group.id) {
+                deleteGroup(group.id, keycloak.token).then(() => {
+                    refreshGroups();
+                }).catch(e => {
+                    handleError(e);
+                });
+            }
         };
         // need to wrap a function again because react apply each function passed to hook
         setConfirmHandle(() => handle);
     }
 
     const startEditUser = (user: IUser) => {
-        setEditUser(user);
+        setEditUser({...user});
         setIsUserData(true);
     }
 
-    const deleteUser = (user:IUser) => {
-        setConfirmMessage("Wollen Sie wirklich den User "+user.email+ " löschen?")
+    const handleDeleteUser = (user:IUser) => {
+        setConfirmMessage("Wollen Sie wirklich den User "+user.username+ " löschen?")
         setShowConfirm(true);
         const handle = () => {
-            setUsers(users.filter(u => u.email !== user.email));
+            if (keycloak.token && user.username) {
+                deleteUser(user.id, keycloak.token).then(() => {
+                    refreshUsers();
+                }).catch(e => {
+                    handleError(e);
+                });
+            }
         };
         // need to wrap a function again because react apply each function passed to hook
         setConfirmHandle(() => handle);
@@ -173,15 +206,47 @@ const UserManagment = (props: any) => {
     }
 
 
-    const userRows = users.map(u => <tr><td>{u.email}</td><td>{u.firstName}</td><td>{u.lastName}</td>
-        <td>{u.group}</td><td>{rolesAsString(u)}</td>
-        <td><Button size="sm" onClick={() => startEditUser({...u})}>Bearbeiten</Button>&nbsp;
-        <Button size="sm" onClick={() => deleteUser(u)}>Löschen</Button></td></tr>);
+    const flattenGroups = (groups: IGroup[], groupNodes: IGroupNode[], level: number): void => {
+        groups.forEach((group: IGroup) => {
+            const gNode: IGroupNode = {
+                group: group,
+                level: level,
+            };
+            groupNodes.push(gNode);
+            if (group.children) {
+                flattenGroups(group.children, groupNodes, level+1);
+            }
+        });
+    }
 
-    const groupRows = groups.map(g => <tr><td>{g.name}</td><td>{g.id}</td><td>
-        <Button size="sm" onClick={() => startEditGroup(g)}>Bearbeiten</Button>&nbsp;
-        <Button size="sm" onClick={() => deleteGroup(g)}>Löschen</Button>
-        &nbsp;<Button size="sm" onClick={toBeDone}>Neue Untergruppe</Button></td></tr>);
+    const nameWithIdent = (groupNode: IGroupNode) : string => {
+        return "\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level)+groupNode.group.name;
+    }
+
+    const groupNodes: IGroupNode[] = [];
+    flattenGroups(groups, groupNodes, 0);
+
+    const groupRows = groupNodes.map(g => <tr><td>{nameWithIdent(g)}</td><td>
+        <Button size="sm" disabled={isUpdating} onClick={() => startEditGroup(g.group)}>Bearbeiten</Button>&nbsp;
+        <Button size="sm" disabled={isUpdating} onClick={() => handleDeleteGroup(g.group)}>Löschen</Button></td></tr>);
+
+    const groupName = (groupId: string|null): string => {
+        let groupName = ''
+        if (groupId) {
+            const fNode = groupNodes.find(gnode => gnode.group.id == groupId);
+            if (fNode) {
+                groupName = fNode.group.path;
+            }
+        }
+        return groupName;
+    }
+
+
+    const userRows = users.map(u => <tr><td>{u.username}</td><td>{u.firstName}</td><td>{u.lastName}</td>
+        <td>{groupName(u.subGroup)}</td><td>{rolesAsString(u)}</td>
+        <td><Button size="sm" disabled={isUpdating} onClick={() => startEditUser({...u})}>Bearbeiten</Button>&nbsp;
+        <Button size="sm" disabled={isUpdating} onClick={() => handleDeleteUser(u)}>Löschen</Button></td></tr>);
+
 
     return (!(isInit && context && context.valueSets)
             ? <CwaSpinner />
@@ -206,14 +271,13 @@ const UserManagment = (props: any) => {
                                 {userRows}
                             </tbody>
                         </Table>
-                        <Button onClick={() => {setEditUser({...emptyUser}); setIsUserData(true)}}>Neuen Benutzer Hinzufügen</Button>
+                        <Button disabled={isUpdating} onClick={() => {setEditUser({...emptyUser}); setIsUserData(true)}}>Neuen Benutzer Hinzufügen</Button>
                         <hr/>
                         <h4>Gruppen</h4>
                         <Table striped bordered hover size="sm">
                             <thead>
                                 <tr>
                                     <th>Name</th>
-                                    <th>Id</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -221,22 +285,29 @@ const UserManagment = (props: any) => {
                                 {groupRows}
                             </tbody>
                         </Table>
-                        <Button onClick={() => {setEditGroup(emptyGroup); setIsGroupEdit(true)}}>Neue Gruppe Hinzufügen</Button>
+                        <Button 
+                            disabled={isUpdating}
+                            onClick={() => {setEditGroupId(''); setIsGroupEdit(true)}}>Neue Gruppe Hinzufügen</Button>
                         <hr/>
                         <Button onClick={() => context.navigation!.toLanding()}>Zurück zu Hauptmenü</Button>
+                        {isUpdating ? <CwaSpinner /> : null}
                     </Card.Body>
                 </Card>
                 </Fade>
                 <UserModal show={isUserData} 
                     onCancel={() => setIsUserData(false)} 
-                    groups={groups.map(g => g.name)} 
+                    groups={groupNodes} 
                     handleOk={userUpdate}
                     user={editUser}
                     />
                 <GroupModal show={isGroupEdit} 
-                    onCancel={() => setIsGroupEdit(false)} 
-                    group={editGroup} 
+                    onCancel={() => setIsGroupEdit(false)}
+                    groupId={editGroupId} 
                     handleOk={groupUpdate}
+                    handleError={(err: any) => {
+                        setIsGroupEdit(false);
+                        handleError(err);
+                    }}
                     />
                 <ConfirmModal show={showConfirm}
                     message={confirmMessage}
@@ -255,4 +326,4 @@ const UserManagment = (props: any) => {
         
 }
 
-export default UserManagment;
+export default UserManagement;
