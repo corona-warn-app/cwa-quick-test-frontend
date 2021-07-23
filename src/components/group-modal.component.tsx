@@ -146,7 +146,7 @@ const GroupModal = (props: any) => {
                 <Modal.Body className='py-0 bg-light'>
                 {!isNew ?
                     <Form.Group as={Row} className='mb-1'>
-                        <Form.Label className='input-label' column xs='5' sm='3'>Elterngruppe</Form.Label>
+                        <Form.Label className='input-label' column xs='5' sm='3'>Übergeordnete Gruppe</Form.Label>
                         <Col xs='7' sm='9' className='d-flex'>
                         <Form.Control as="select"
                             className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
