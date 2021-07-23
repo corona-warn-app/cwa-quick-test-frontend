@@ -20,12 +20,12 @@
  */
 
 import React from 'react';
-import { Button, Modal, Spinner, Form } from 'react-bootstrap'
+import { Button, Modal, Form, Col, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 import { FormGroupTextarea, FormGroupInput } from './modules/form-group.component';
-import { IGroupDetails } from '../misc/user';
+import { IGroupDetails, IGroupNode, IGroup } from '../misc/user';
 import { useGetGroupDetails } from '../api';
 import CwaSpinner from './spinner/spinner.component';
 
@@ -43,14 +43,16 @@ const GroupModal = (props: any) => {
 
     const [data, setData] = React.useState('');
     const [validated, setValidated] = React.useState(false);
-    const [group, updateGroup, setGroup] = useGetGroupDetails(props.handleError);
 
-    React.useEffect(() => {
+    const groupReloaded = (group: IGroupDetails) => {
         if (group) {
             setData(unpackData(group.pocDetails))
+            group.parentGroup = props.parentGroupId;
         }
         setBtnOkDisabled(false);
-    },[group])
+    }
+
+    const [group, updateGroup, setGroup] = useGetGroupDetails(groupReloaded, props.handleError);
 
     const handleCancel = () => {
         props.onCancel();
@@ -81,12 +83,13 @@ const GroupModal = (props: any) => {
     }
 
     const handleEnter = () => {
+        setBtnOkDisabled(false);
         if (props.groupId) {
             updateGroup(props.groupId);
         } else {
             setGroup({...emptyGroup});
+            setData('')
         }
-        setBtnOkDisabled(false);
     }
 
     const updateGroupProp = (name:string, value:any) => {
@@ -108,6 +111,25 @@ const GroupModal = (props: any) => {
 
     const isNew = !(group && group.id);
 
+    const selfIdOrChildren: string[] = [];
+    const collectChildren = (idlist: string[], parentNode: IGroup) => {
+        if (parentNode) {
+            idlist.push(parentNode.id);
+            parentNode.children.forEach(child => collectChildren(idlist, child as IGroup));
+        }
+    }
+    if (!isNew) {
+        const node = props.groups.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
+        if (node) {
+            collectChildren(selfIdOrChildren, node.group);
+        }
+    }
+    const fList = props.groups.filter((groupNode: IGroupNode) => selfIdOrChildren.indexOf(groupNode.group.id)<0)
+    const groupOptions = fList.map((groupNode: IGroupNode) => 
+        <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level)+groupNode.group.name}</option>
+    );
+    groupOptions.push(<option key="empty" value="empty">-- keine Elterngruppe --</option>);
+
     return (
             <Modal
                 contentClassName='data-modal'
@@ -122,6 +144,19 @@ const GroupModal = (props: any) => {
                     <Modal.Title>{isNew ? 'Neue Gruppe anlegen' : 'Gruppe bearbeiten'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className='py-0 bg-light'>
+                {!isNew ?
+                    <Form.Group as={Row} className='mb-1'>
+                        <Form.Label className='input-label' column xs='5' sm='3'>Elterngruppe</Form.Label>
+                        <Col xs='7' sm='9' className='d-flex'>
+                        <Form.Control as="select"
+                            className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
+                            value={group.parentGroup ? group.parentGroup : 'empty'}
+                            onChange={(ent: any) => updateGroupProp('parentGroup',ent.target.value)}
+                        >
+                            {groupOptions}
+                        </Form.Control>
+                        </Col>
+                    </Form.Group> : null} 
                 < FormGroupInput controlId='formFirstName' title="Name"
                                     value={group ? group.name : ''}
                                     required

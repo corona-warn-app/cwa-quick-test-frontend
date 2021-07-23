@@ -545,8 +545,17 @@ export const deleteUser = (userId: string, token: string) => {
         "Authorization": `Bearer ${token}`,
         'Content-Type': 'application/json'
     };   
-    const uri = '/api/usermanagement/users/'+encodeURIComponent(userId);
+    const uri = '/api/usermanagement/users/'+userId;
     return api.delete(uri, { headers: header })
+}
+
+export const updateUser = (user: IUser, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/users/'+user.id;
+    return api.patch(uri, JSON.stringify(user), { headers: header })
 }
 
 export const useGetGroups = (onError?: (error: any) => void) => {
@@ -576,7 +585,7 @@ export const useGetGroups = (onError?: (error: any) => void) => {
     return [result, refreshGroups];
 }
 
-export const useGetGroupDetails = (onError?: (error: any) => void) => {
+export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
     const [result, setResult] = React.useState<any>();
 
@@ -590,7 +599,9 @@ export const useGetGroupDetails = (onError?: (error: any) => void) => {
 
             api.get(uri, { headers: header })
                 .then(response => {
-                    setResult(response.data);
+                    const group = response.data
+                    groupReloaded(group);
+                    setResult(group);
                 })
                 .catch(error => {
                     if (onError) {
@@ -627,7 +638,7 @@ export const deleteGroup = (groupId: string, token: string) => {
         "Authorization": `Bearer ${token}`,
         'Content-Type': 'application/json'
     };   
-    const uri = '/api/usermanagement/groups/'+encodeURIComponent(groupId);
+    const uri = '/api/usermanagement/groups/'+groupId;
     return api.delete(uri, { headers: header })
 }
 
@@ -636,6 +647,15 @@ export const addUserToGroup = (userId: string ,groupId: string, token: string) =
         "Authorization": `Bearer ${token}`,
         'Content-Type': 'application/json'
     };   
-    const uri = '/api/usermanagement/groups/'+encodeURIComponent(groupId)+'/users';
+    const uri = '/api/usermanagement/groups/'+groupId+'/users';
     return api.post(uri,JSON.stringify({userId: userId}), { headers: header })
+}
+
+export const addGroupAsChild = (childGroupId: string, parentGroupId: string, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups/'+parentGroupId+'/subgroups';
+    return api.post(uri,JSON.stringify({groupId: childGroupId}), { headers: header })
 }

@@ -30,7 +30,7 @@ import ConfirmModal from './confirm-modal.component';
 
 import AppContext from '../misc/appContext';
 import { IUser, IGroup, IGroupDetails, IGroupNode } from '../misc/user';
-import { useGetUsers, useGetGroups, createUser, createGroup, deleteUser, deleteGroup, updateGroup, addUserToGroup } from '../api';
+import { useGetUsers, useGetGroups, createUser, createGroup, deleteUser, deleteGroup, updateGroup, addUserToGroup, updateUser, addGroupAsChild } from '../api';
 import { useKeycloak } from '@react-keycloak/web';
 
 import imageEdit from '../assets/images/icon_edit.svg'
@@ -72,6 +72,7 @@ const UserManagement = (props: any) => {
     const [editUser, setEditUser] = React.useState<IUser>(emptyUser);
     const [isGroupEdit, setIsGroupEdit] = React.useState(false);
     const [editGroupId, setEditGroupId] = React.useState<string>('');
+    const [editGroupParentId, setEditGroupParentId] = React.useState<string>('');
 
     const [showConfirm, setShowConfirm] = React.useState(false);
     const [confirmMessage, setConfirmMessage] = React.useState('');
@@ -98,33 +99,30 @@ const UserManagement = (props: any) => {
 
 
     const userUpdate = (user:IUser) => {
-        if (editUser && editUser.username) {
+        if (editUser && editUser.username && keycloak.token) {
             const fuser = users.find(u => u.username === user.username);
-            if (fuser && fuser.subGroup!==user.subGroup) {
-                if (keycloak.token && user.subGroup && user.subGroup!=='empty') {
-                    setIsUpdating(true);
-                    addUserToGroup(user.id, user.subGroup, keycloak.token).then(() => {
-                        refreshUsers();
-                    }).catch(e => {
-                        handleError(e);
-                    });
-                }
+            if (!user.password) {
+                user.password = undefined;
             }
-        } else {
-            const newUser: any = {...user};
-            delete newUser.subGroup;
-            if (keycloak.token) {
-                setIsUpdating(true);
-                createUser(newUser, keycloak.token).then(() => {
-                    if (newUser.subGroup && keycloak.token && newUser.subGroup!=='empty') {
-                        addUserToGroup(newUser.id, newUser.subGroup, keycloak.token).then(() => {
+            setIsUpdating(true);
+            updateUser(user, keycloak.token).then(() => {
+                if (fuser && fuser.subGroup!==user.subGroup 
+                    && keycloak.token && user.subGroup && user.subGroup!=='empty') {
+                        addUserToGroup(user.id, user.subGroup, keycloak.token).then(() => {
                             refreshUsers();
                         }).catch(e => {
                             handleError(e);
                         });
-                    } else {
-                        refreshUsers();
-                    }
+                } else {
+                    refreshUsers();
+                }
+            });
+        } else {
+            const newUser: any = {...user};
+            if (keycloak.token) {
+                setIsUpdating(true);
+                createUser(newUser, keycloak.token).then(() => {
+                    refreshUsers();
                 }).catch(e => {
                     handleError(e);
                 });
@@ -133,12 +131,41 @@ const UserManagement = (props: any) => {
         setIsUserData(false);
     }
 
+    const flattenGroups = (groups: IGroup[], groupNodes: IGroupNode[], level: number, parentGroup?: string): void => {
+        groups.forEach((group: IGroup) => {
+            const gNode: IGroupNode = {
+                group: group,
+                parentGroup: parentGroup,
+                level: level,
+            };
+            groupNodes.push(gNode);
+            if (group.children) {
+                flattenGroups(group.children, groupNodes, level+1, group.id);
+            }
+        });
+    }
+
+    const groupNodes: IGroupNode[] = [];
+    flattenGroups(groups, groupNodes, 0);
+
     const groupUpdate = (group:IGroupDetails) => {
         if (group.id) {
             if (keycloak.token) {
                 setIsUpdating(true);
-                updateGroup(group, keycloak.token).then(() => {
-                    refreshGroups();
+                const uGroup: any = {...group};
+                delete uGroup.parentGroup;
+                updateGroup(uGroup, keycloak.token).then(() => {
+                    console.log("update group finished");
+                    const fgroupNode = groupNodes.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
+                    if (keycloak.token && fgroupNode && group.id && group.parentGroup && group.parentGroup!=='empty' && fgroupNode.parentGroup !== group.parentGroup) {
+                        addGroupAsChild(group.id, group.parentGroup, keycloak.token).then(() => {
+                            refreshGroups();
+                        }).catch(e => {
+                            handleError(e);
+                        });
+                    } else {
+                        refreshGroups();
+                    }
                 }).catch(e => {
                     handleError(e);
                 });
@@ -155,8 +182,9 @@ const UserManagement = (props: any) => {
         setIsGroupEdit(false);
     }
 
-    const startEditGroup = (group:IGroup) => {
-        setEditGroupId(group.id);
+    const startEditGroup = (groupNode:IGroupNode) => {
+        setEditGroupId(groupNode.group.id);
+        setEditGroupParentId(groupNode.parentGroup ? groupNode.parentGroup : '');
         setIsGroupEdit(true);
     }
 
@@ -212,28 +240,12 @@ const UserManagement = (props: any) => {
     }
 
 
-    const flattenGroups = (groups: IGroup[], groupNodes: IGroupNode[], level: number): void => {
-        groups.forEach((group: IGroup) => {
-            const gNode: IGroupNode = {
-                group: group,
-                level: level,
-            };
-            groupNodes.push(gNode);
-            if (group.children) {
-                flattenGroups(group.children, groupNodes, level+1);
-            }
-        });
-    }
-
     const nameWithIdent = (groupNode: IGroupNode) : string => {
         return "\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level)+groupNode.group.name;
     }
 
-    const groupNodes: IGroupNode[] = [];
-    flattenGroups(groups, groupNodes, 0);
-
     const groupRows = groupNodes.map(g => <tr><td width="90%">{nameWithIdent(g)}</td><td width="10%">
-        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditGroup(g.group)}>
+        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditGroup(g)}>
             <img src={imageEdit} alt="Bearbeiten" title="Bearbeiten"/></Button>&nbsp;&nbsp;
         <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => handleDeleteGroup(g.group)}>
             <img src={imageDelete} alt="Löschen" title="Löschen"/></Button></td></tr>);
@@ -324,7 +336,9 @@ const UserManagement = (props: any) => {
                 <GroupModal show={isGroupEdit} 
                     onCancel={() => setIsGroupEdit(false)}
                     groupId={editGroupId} 
+                    parentGroupId={editGroupParentId}
                     handleOk={groupUpdate}
+                    groups={groupNodes}
                     handleError={(err: any) => {
                         setIsGroupEdit(false);
                         handleError(err);

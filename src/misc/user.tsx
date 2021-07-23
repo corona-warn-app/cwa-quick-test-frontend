@@ -41,6 +41,7 @@ export interface IGroup {
 
 export interface IGroupNode {
     group: IGroup,
+    parentGroup?: string,
     level: number,
 }
 
@@ -49,5 +50,6 @@ export interface IGroupDetails {
     name: string,
     pocDetails: string,
     pocId: string,
+    parentGroup?: string,
 }
 

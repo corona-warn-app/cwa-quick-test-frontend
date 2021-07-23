@@ -108,12 +108,12 @@ const UserModal = (props: any) => {
                                     required
                                     readOnly={!isNew}
                                     onChange={(evt: any) => updateUserProp('username',evt.target.value)}
+                                    minLength={3}
                                     maxLength={50}
                                 />
                 < FormGroupInput controlId='formFirstName' title="Vorname"
                                     value={user.firstName}
                                     required
-                                    readOnly={!isNew}
                                     onChange={(evt: any) => updateUserProp('firstName',evt.target.value)}
                                     maxLength={30}
                                 />
@@ -121,14 +121,12 @@ const UserModal = (props: any) => {
                                     value={user.lastName}
                                     onChange={(evt: any) => updateUserProp('lastName',evt.target.value)}
                                     required
-                                    readOnly={!isNew}
                                     maxLength={30}
                                 />
                 < FormGroupInput controlId='formPassword' title="Passwort"
                                     value={user.password}
                                     onChange={(evt: any) => updateUserProp('password',evt.target.value)}
-                                    required
-                                    readOnly={!isNew}
+                                    required={isNew}
                                     type='password'
                                     minLength={8}
                                     maxLength={64}
@@ -136,13 +134,11 @@ const UserModal = (props: any) => {
                 <FormGroupConsentCkb controlId='formRoleLab' title="Role Lab"
                     onChange={(evt: any) => updateUserProp('roleLab',evt.currentTarget.checked)}
                     type='checkbox'
-                    readOnly={!isNew}
                     checked={user.roleLab}
                 />                                
                 <FormGroupConsentCkb controlId='formRoleCounter' title="Role Counter"
                     onChange={(evt: any) => updateUserProp('roleCounter',evt.currentTarget.checked)}
                     type='checkbox'
-                    readOnly={!isNew}
                     checked={user.roleCounter}
                 />
                 <Form.Group as={Row} className='mb-1'>
@@ -151,7 +147,6 @@ const UserModal = (props: any) => {
                     <Form.Control as="select"
                         className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
                         value={user.subGroup ? user.subGroup: 'empty'}
-                        disabled={isNew}
                         onChange={(ent: any) => updateUserProp('subGroup',ent.target.value)}
                     >
                         {groupOptions}
