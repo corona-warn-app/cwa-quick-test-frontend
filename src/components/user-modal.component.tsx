@@ -25,7 +25,7 @@ import { Button, Col, Modal, Row, Form } from 'react-bootstrap'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 import { FormGroupConsentCkb, FormGroupInput } from './modules/form-group.component';
-import { IUser, IGroupNode, IGroup } from '../misc/user';
+import { IUser, IGroupNode } from '../misc/user';
 
 const UserModal = (props: any) => {
 
@@ -46,7 +46,7 @@ const UserModal = (props: any) => {
             setUser(props.user);
             setIsNew(!props.user.username);
         }
-    },[props.user])
+    },[props.user, user.username, props.groups]);
 
     const handleCancel = () => {
         props.onCancel();
@@ -82,8 +82,10 @@ const UserModal = (props: any) => {
 
     const groupOptions = props.groups.map((groupNode: IGroupNode) => 
         <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level)+groupNode.group.name}</option>
-    )
-    if (!user.subGroup) {
+    );
+
+    if (!user.subGroup || !props.groups.find((groupNode: IGroupNode) => groupNode.group.id === user.subGroup)) {
+        user.subGroup = null;
         groupOptions.push(<option key="empty" value="empty">-- leer --</option>);
     }
 

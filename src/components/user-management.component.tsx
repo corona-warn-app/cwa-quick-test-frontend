@@ -82,7 +82,6 @@ const UserManagement = (props: any) => {
         if (bUsers) {
             setUsers(bUsers);
         }
-        setIsInit(!!(bGroups && bUsers));
         setIsUpdating(false);
     }, [bUsers]);
 
@@ -90,9 +89,12 @@ const UserManagement = (props: any) => {
         if (bGroups) {
             setGroups(bGroups);
         }
-        setIsInit(!!(bGroups && bUsers));
         setIsUpdating(false);
     }, [bGroups]);
+
+    React.useEffect(() => {
+        setIsInit(!!(bGroups && bUsers));
+    }, [bUsers,bGroups]);
 
 
     const userUpdate = (user:IUser) => {
@@ -231,13 +233,15 @@ const UserManagement = (props: any) => {
     flattenGroups(groups, groupNodes, 0);
 
     const groupRows = groupNodes.map(g => <tr><td width="90%">{nameWithIdent(g)}</td><td width="10%">
-        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditGroup(g.group)}><img src={imageEdit}/></Button>&nbsp;&nbsp;
-        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => handleDeleteGroup(g.group)}><img src={imageDelete}/></Button></td></tr>);
+        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditGroup(g.group)}>
+            <img src={imageEdit} alt="Bearbeiten" title="Bearbeiten"/></Button>&nbsp;&nbsp;
+        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => handleDeleteGroup(g.group)}>
+            <img src={imageDelete} alt="Löschen" title="Löschen"/></Button></td></tr>);
 
     const groupName = (groupId: string|null): string => {
         let groupName = ''
         if (groupId) {
-            const fNode = groupNodes.find(gnode => gnode.group.id == groupId);
+            const fNode = groupNodes.find(gnode => gnode.group.id === groupId);
             if (fNode) {
                 groupName = fNode.group.path;
             }
@@ -248,8 +252,10 @@ const UserManagement = (props: any) => {
 
     const userRows = users.map(u => <tr><td>{u.username}</td><td>{u.firstName}</td><td>{u.lastName}</td>
         <td>{groupName(u.subGroup)}</td><td>{rolesAsString(u)}</td>
-        <td width="10%"><Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditUser({...u})}><img src={imageEdit}/></Button>&nbsp;&nbsp;
-        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => handleDeleteUser(u)}><img src={imageDelete}/></Button></td></tr>);
+        <td width="10%"><Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditUser({...u})}>
+            <img src={imageEdit} alt="Bearbeiten" title="Bearbeiten"/></Button>&nbsp;&nbsp;
+        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => handleDeleteUser(u)}>
+            <img src={imageDelete} alt="Löschen" title="Löschen"/></Button></td></tr>);
 
 
     return (!(isInit && context && context.valueSets)
@@ -276,7 +282,7 @@ const UserManagement = (props: any) => {
                             </tbody>
                         </Table>
                         <Button size="sm" disabled={isUpdating} variant="light"
-                        onClick={() => {setEditUser({...emptyUser}); setIsUserData(true)}}><img src={imageAdd}/> Neuen Benutzer hinzufügen</Button>
+                        onClick={() => {setEditUser({...emptyUser}); setIsUserData(true)}}><img src={imageAdd} alt="Hinzufügen"/> Neuen Benutzer hinzufügen</Button>
                         <hr/>
                         <h4>Gruppen</h4>
                         <Table striped bordered hover size="sm">
@@ -292,7 +298,7 @@ const UserManagement = (props: any) => {
                         </Table>
                         <Button size="sm" variant="light"
                             disabled={isUpdating}
-                            onClick={() => {setEditGroupId(''); setIsGroupEdit(true)}}><img src={imageAdd}/> Neue Gruppe hinzufügen</Button>
+                            onClick={() => {setEditGroupId(''); setIsGroupEdit(true)}}><img src={imageAdd}  alt="Hinzufügen"/> Neue Gruppe hinzufügen</Button>
                         {isUpdating ? <CwaSpinner /> : null}
                     </Card.Body>
                     <Card.Footer id='data-footer'>

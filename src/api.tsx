@@ -29,7 +29,7 @@ import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
 import { Sex, TestResult } from './misc/enum';
-import { IUser, IGroup, IGroupDetails } from './misc/user';
+import { IUser, IGroupDetails } from './misc/user';
 
 export const api = axios.create({
     baseURL: ''
