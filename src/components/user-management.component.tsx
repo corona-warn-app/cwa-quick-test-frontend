@@ -119,6 +119,11 @@ const UserManagement = (props: any) => {
             });
         } else {
             const newUser: any = {...user};
+            if (newUser.subGroup) {
+                // The attribute has different name in backend for create
+                newUser.subgroup = newUser.subGroup;
+                delete newUser.subGroup;
+            }
             if (keycloak.token) {
                 setIsUpdating(true);
                 createUser(newUser, keycloak.token).then(() => {

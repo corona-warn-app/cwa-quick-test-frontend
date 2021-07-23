@@ -46,7 +46,7 @@ const UserModal = (props: any) => {
             setUser(props.user);
             setIsNew(!props.user.username);
         }
-    },[props.user, user.username, props.groups]);
+    },[props.user]);
 
     const handleCancel = () => {
         props.onCancel();
