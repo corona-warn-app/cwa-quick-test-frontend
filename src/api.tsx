@@ -29,6 +29,7 @@ import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
 import { Sex, TestResult } from './misc/enum';
+import { IUser, IGroupDetails } from './misc/user';
 
 export const api = axios.create({
     baseURL: ''
@@ -501,4 +502,160 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
     }, [hash]);
 
     return result;
+}
+
+export const useGetUsers =  (onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<any>();
+
+    const refreshUsers = () => {
+        const header = {
+            "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+            'Content-Type': 'application/json'
+        };   
+        const uri = '/api/usermanagement/users';
+    
+        api.get(uri, { headers: header })
+            .then(response => {
+                setResult(response.data);
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
+                }
+            });
+    }
+
+    React.useEffect(refreshUsers, []);
+
+    return [result, refreshUsers];
+}
+
+export const createUser = (user: IUser, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/users';
+    return api.post(uri, JSON.stringify(user), { headers: header })
+}
+
+export const deleteUser = (userId: string, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/users/'+userId;
+    return api.delete(uri, { headers: header })
+}
+
+export const updateUser = (user: IUser, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/users/'+user.id;
+    return api.patch(uri, JSON.stringify(user), { headers: header })
+}
+
+export const useGetGroups = (onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<any>();
+
+    const refreshGroups = () => {
+        const header = {
+            "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+            'Content-Type': 'application/json'
+        };   
+        const uri = '/api/usermanagement/groups';
+    
+        api.get(uri, { headers: header })
+            .then(response => {
+                setResult(response.data);
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
+                }
+            });
+    }
+
+    React.useEffect(refreshGroups, []);
+
+    return [result, refreshGroups];
+}
+
+export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void, onError?: (error: any) => void) => {
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<any>();
+
+    const updateGroup = (groupId: string) => {
+        if (groupId) {
+            const header = {
+                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+                'Content-Type': 'application/json'
+            };
+            const uri = '/api/usermanagement/groups/' + groupId;
+
+            api.get(uri, { headers: header })
+                .then(response => {
+                    const group = response.data
+                    groupReloaded(group);
+                    setResult(group);
+                })
+                .catch(error => {
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
+    
+    return [result, updateGroup, setResult];
+}
+
+export const createGroup = (group: IGroupDetails, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups';
+    return api.post(uri, JSON.stringify(group), { headers: header })
+}
+
+export const updateGroup = (group: IGroupDetails, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups/'+group.id;
+    return api.put(uri, JSON.stringify(group), { headers: header })
+}
+
+export const deleteGroup = (groupId: string, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups/'+groupId;
+    return api.delete(uri, { headers: header })
+}
+
+export const addUserToGroup = (userId: string ,groupId: string, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups/'+groupId+'/users';
+    return api.post(uri,JSON.stringify({userId: userId}), { headers: header })
+}
+
+export const addGroupAsChild = (childGroupId: string, parentGroupId: string, token: string) => {
+    const header = {
+        "Authorization": `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };   
+    const uri = '/api/usermanagement/groups/'+parentGroupId+'/subgroups';
+    return api.post(uri,JSON.stringify({groupId: childGroupId}), { headers: header })
 }

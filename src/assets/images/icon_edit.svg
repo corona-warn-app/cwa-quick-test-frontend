@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="icon_edit" transform="translate(-877 -323.654)">
+    <rect id="Rechteck_415" data-name="Rechteck 415" width="24" height="24" rx="4" transform="translate(877 323.654)" fill="#7e7e7e"/>
+    <g id="icon_action_edit_default" data-name="icon/action/edit/default" transform="translate(879 325.654)">
+      <path id="Combined_Shape" data-name="Combined Shape" d="M4.208,16.4l.875-1.25H15.209a.625.625,0,0,1,0,1.25ZM.292,13.194l2.625,1.834L0,16.4ZM1,12.152,9.083.652A1.626,1.626,0,0,1,11.292.277a1.566,1.566,0,0,1,.416,2.209l-8.083,11.5Z" transform="translate(2.5 1.098)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

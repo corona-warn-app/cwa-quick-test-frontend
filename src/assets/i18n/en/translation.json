@@ -76,5 +76,6 @@
   "testId-input-header": "Process number input",
   "error-processId-data-load": "The entered sample ID is not known!",
   "ok":"OK",
-  "change-password":"Change Password"
+  "change-password":"Change Password",
+  "user-management":"User Management"
 }

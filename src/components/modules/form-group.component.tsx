@@ -23,6 +23,7 @@ export const FormGroupInput = (props: any) => {
                     type={props.type ? props.type : 'text'}
                     required={props.required}
                     maxLength={props.maxLength}
+                    minLength={props.minLength}
                     min={props.min}
                     max={props.max}
                     pattern={props.pattern}
@@ -37,6 +38,32 @@ export const FormGroupInput = (props: any) => {
         </Form.Group>
     )
 }
+
+export const FormGroupTextarea = (props: any) => {
+
+    return (!props ? <></> :
+        <Form.Group as={Row} controlId={props.controlId} hidden={props.hidden} className='mb-1'>
+            <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
+
+            <Col xs='7' sm='9' className='d-flex'>
+                <Form.Control
+                    className='qt-input'
+                    value={props.value}
+                    readOnly={props.readOnly}
+                    disabled={props.disabled}
+                    onClick={props.onClick}
+                    onChange={props.onChange}
+                    placeholder={props.placeholder ? props.placeholder : props.title}
+                    type={props.type ? props.type : 'text'}
+                    required={props.required}
+                    maxLength={props.maxLength}
+                    as='textarea'
+                />
+            </Col>
+        </Form.Group>
+    )
+}
+
 
 export const FormGroupAddressInput = (props: any) => {
 
@@ -84,6 +111,7 @@ export const FormGroupConsentCkb = (props: any) => {
                         onChange={props.onChange}
                         type={props.type}
                         name={props.name}
+                        disabled={props.readOnly}
                         checked={props.checked}
                         required={props.required}
                         id={props.controlId}

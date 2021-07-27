@@ -38,6 +38,7 @@ import RecordTestResult from './components/record-test-result.component';
 import QrScan from './components/qr-scan.component';
 import Statistics from './components/statistics.component';
 import FailedReport from './components/failed-report.component';
+import UserManagement from './components/user-management.component';
 
 import PrivateRoute from './components/private-route.component';
 import IError from './misc/error';
@@ -165,6 +166,14 @@ const Routing = () => {
                         roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
                         component={FailedReport}
                         render={(props) => <FailedReport {...props} setError={setError} />}
+                    />
+
+                    <PrivateRoute
+                        exact
+                        path={context.navigation.routes.userManagement}
+                        roles={['c19_quick_test_admin']}
+                        component={UserManagement}
+                        render={(props) => <UserManagement {...props} setError={setError} />}
                     />
 
                 </Container>
