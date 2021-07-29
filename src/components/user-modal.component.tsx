@@ -36,13 +36,7 @@ const UserModal = (props: any) => {
     const [validated, setValidated] = React.useState(false);
 
     React.useEffect(() => {
-        if (props.user.username !== user.username) {
-            if (!props.user.username 
-                && !props.user.subGroup
-                && props.groups
-                && props.groups.length>0) {
-                // props.user.subGroup = props.groups[0].group.id;
-            }
+        if (props.user.username !== user.username || !props.user.username) {
             setUser(props.user);
             setIsNew(!props.user.username);
         }
@@ -86,7 +80,7 @@ const UserModal = (props: any) => {
 
     if (!user.subGroup || !props.groups.find((groupNode: IGroupNode) => groupNode.group.id === user.subGroup)) {
         user.subGroup = null;
-        groupOptions.push(<option key="empty" value="empty">-- leer --</option>);
+        groupOptions.unshift(<option key={0} value="">-- leer --</option>);
     }
 
     return (
@@ -146,8 +140,10 @@ const UserModal = (props: any) => {
                     <Col xs='7' sm='9' className='d-flex'>
                     <Form.Control as="select"
                         className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
-                        value={user.subGroup ? user.subGroup: 'empty'}
+                        value={user.subGroup ? user.subGroup : ''}
+                        placeholder="Gruppe"
                         onChange={(ent: any) => updateUserProp('subGroup',ent.target.value)}
+                        required
                     >
                         {groupOptions}
                     </Form.Control>

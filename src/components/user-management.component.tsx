@@ -194,7 +194,7 @@ const UserManagement = (props: any) => {
     }
 
     const handleDeleteGroup = (group:IGroup) => {
-        setConfirmMessage("Wollen Sie wirklich die Gruppe "+group.name+ " löschen?")
+        setConfirmMessage("Wollen Sie wirklich die Gruppe \""+group.name+ "\" löschen?")
         setShowConfirm(true);
         const handle = () => {
             if (keycloak.token && group.id) {
@@ -215,7 +215,7 @@ const UserManagement = (props: any) => {
     }
 
     const handleDeleteUser = (user:IUser) => {
-        setConfirmMessage("Wollen Sie wirklich den User "+user.username+ " löschen?")
+        setConfirmMessage("Wollen Sie wirklich den User \""+user.username+ "\" löschen?")
         setShowConfirm(true);
         const handle = () => {
             if (keycloak.token && user.username) {
@@ -333,7 +333,10 @@ const UserManagement = (props: any) => {
                 </Card>
                 </Fade>
                 <UserModal show={isUserData} 
-                    onCancel={() => setIsUserData(false)} 
+                    onCancel={() => {
+                        setEditUser({...emptyUser});
+                        setIsUserData(false);
+                    }}
                     groups={groupNodes} 
                     handleOk={userUpdate}
                     user={editUser}
