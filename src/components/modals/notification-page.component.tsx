@@ -22,10 +22,10 @@
 import React from 'react';
 import { Alert, Modal, Image } from 'react-bootstrap'
 
-import '../i18n';
+import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
-import successIcon from '../assets/images/icon_success.svg';
+import successIcon from '../../assets/images/icon_success.svg';
 
 
 const NotificationPage = (props: any) => {

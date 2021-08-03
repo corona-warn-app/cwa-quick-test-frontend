@@ -22,7 +22,7 @@
 import React from 'react';
 import { Modal, Row, Col, Card, Button, Container } from 'react-bootstrap'
 
-import '../i18n';
+import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
 

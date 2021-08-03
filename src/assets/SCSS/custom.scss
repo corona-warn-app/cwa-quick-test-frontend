@@ -1,25 +1,25 @@
 //Font Definitions
 @font-face {
-    font-family: 'Telegrotesk Next Regular';
-    src: url(./fonts/telegrotesknext-regular.woff) format('woff');
+    font-family: "Telegrotesk Next Regular";
+    src: url(./fonts/telegrotesknext-regular.woff) format("woff");
 }
 @font-face {
-    font-family: 'Telegrotesk Next Bold';
-    src: url(./fonts/telegrotesknext-bold.woff) format('woff');
+    font-family: "Telegrotesk Next Bold";
+    src: url(./fonts/telegrotesknext-bold.woff) format("woff");
 }
 @font-face {
-    font-family: 'Telegrotesk Next Thin';
-    src: url(./fonts/telegrotesknext-thin.woff) format('woff');
+    font-family: "Telegrotesk Next Thin";
+    src: url(./fonts/telegrotesknext-thin.woff) format("woff");
 }
 @font-face {
-    font-family: 'TeleNeo';
-    src: url(./fonts/TeleNeoWeb-Regular.eot) format('eot'), url(./fonts/TeleNeoWeb-Regular.woff) format('woff'),
-        url(./fonts/TeleNeoWeb-Regular.woff2) format('woff2');
+    font-family: "TeleNeo";
+    src: url(./fonts/TeleNeoWeb-Regular.eot) format("eot"), url(./fonts/TeleNeoWeb-Regular.woff) format("woff"),
+        url(./fonts/TeleNeoWeb-Regular.woff2) format("woff2");
 }
 @font-face {
-    font-family: 'TeleNeo';
-    src: url(./fonts/TeleNeoWeb-Bold.eot) format('eot'), url(./fonts/TeleNeoWeb-Bold.woff) format('woff'),
-        url(./fonts/TeleNeoWeb-Bold.woff2) format('woff2');
+    font-family: "TeleNeo";
+    src: url(./fonts/TeleNeoWeb-Bold.eot) format("eot"), url(./fonts/TeleNeoWeb-Bold.woff) format("woff"),
+        url(./fonts/TeleNeoWeb-Bold.woff2) format("woff2");
     font-weight: bold;
 }
 
@@ -29,17 +29,18 @@
 $body-bg: white;
 $font-family-base: TeleNeo;
 $primary: #7e7e7e;
+$table-border-color: #7e7e7e44;
 $light: #eeeeee;
 
 // Import Bootstrap and its default variables
-@import '~bootstrap/scss/bootstrap.scss';
+@import "~bootstrap/scss/bootstrap.scss";
 
 $header-height: 120px;
 $menu-width: 120px;
 $menu-padding: 1rem;
 $data-card-border-radius: 10px;
 $input-border-radius: 4px;
-$user-image-width:39px;
+$user-image-width: 39px;
 
 select,
 option {
@@ -47,12 +48,12 @@ option {
 }
 body {
     overflow-y: scroll;
-  }
+}
 
 hr {
     margin-left: 0;
     margin-right: 0;
-  }
+}
 
 #qt-header {
     margin: 0;
@@ -70,12 +71,12 @@ hr {
     padding: 1rem 1rem 2rem 1rem;
 }
 
-.qt-IFrame{
+.qt-IFrame {
     height: 100%;
     width: inherit;
 }
 
-.qt-frame-card{
+.qt-frame-card {
     display: flex;
     flex-direction: column;
 }
@@ -101,7 +102,7 @@ hr {
     justify-content: center;
 
     // all greater than md
-    
+
     @include media-breakpoint-up(md) {
         position: absolute;
         right: 0;
@@ -109,7 +110,6 @@ hr {
         padding: 1rem;
         justify-content: flex-end;
     }
-    
 }
 
 #process-row {
@@ -124,7 +124,7 @@ hr {
     }
 }
 
-#data-card{
+#data-card {
     height: 100%;
     background-color: $light;
     border-radius: $data-card-border-radius;
@@ -136,7 +136,7 @@ hr {
     flex-direction: column;
     height: 100%;
 }
-.data-modal{
+.data-modal {
     background-color: $light;
     border-radius: $data-card-border-radius;
     box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.15);
@@ -169,7 +169,7 @@ hr {
 }
 
 #id-query-text {
-    font-family: 'TeleNeo';
+    font-family: "TeleNeo";
     font-weight: bold;
     font-size: 20px;
     align-self: center;
@@ -189,10 +189,13 @@ hr {
     width: 80%;
     height: 80%;
 }
-.qt-input{
+.qt-input {
     align-self: center;
     border-radius: $input-border-radius;
     border: 1px solid $primary;
+}
+.qt-input-area {
+    height: 150px !important;
 }
 .footer-font {
     font-size: 14px !important;
@@ -200,7 +203,7 @@ hr {
 }
 
 .header-font {
-    font-family: 'TeleNeo';
+    font-family: "TeleNeo";
     font-weight: bold;
     font-size: 26px;
     color: black;
@@ -221,7 +224,7 @@ hr {
 }
 
 .landing-btn {
-    font-family: 'TeleNeo';
+    font-family: "TeleNeo";
     font-weight: bold;
     color: white;
     max-width: 500px;
@@ -244,11 +247,10 @@ hr {
     font-size: 20px;
 }
 
-.txt-no-wrap{
+.txt-no-wrap {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-
 }
 .first-col-item {
     @include media-breakpoint-up(sm) {
@@ -290,7 +292,7 @@ hr {
 .dropdown-toggle::after {
     width: $user-image-width;
     height: $user-image-width;
-    background-image: url('../images/user.png') !important;
+    background-image: url("../images/user.png") !important;
     border: 0;
     align-self: center;
 }
@@ -300,7 +302,6 @@ hr {
     height: $user-image-width;
     line-height: $user-image-width;
     font-size: 20px;
-
 }
 .navbar-toggler {
     border: 0 !important;
@@ -328,48 +329,91 @@ hr {
     border: 0 !important;
 }
 
-.ckb-input{
+.ckb-input {
     position: inherit;
     width: 20px;
-    height:20px;
+    height: 20px;
     border-radius: $data-card-border-radius;
 }
-.rdb-input{ 
+.rdb-input {
     position: inherit;
     width: 20px;
-    height:20px;
+    height: 20px;
 }
-.rdb-label{
+.rdb-label {
     height: 20px;
     align-self: center;
     padding-left: 0.5rem;
-} 
-.qt-notification{
+}
+.qt-notification {
     margin-bottom: 20%;
     border-radius: 6px;
-    border-color: #46A800;
+    border-color: #46a800;
     color: black;
     display: flex;
 }
 
-.qt-notification-text{
+.qt-notification-text {
     font-size: 22px;
 }
 
 .success-icon {
-    background-image: url('../images/icon_success.svg') !important;
+    background-image: url("../images/icon_success.svg") !important;
     height: 40px;
     width: 40px;
-  }
+}
 
-  .modal-90w{
-      max-width: 90% !important;
-  }
-  .btn-spinner {
+.edit-icon {
+    background-image: url("../images/icon_edit.svg") !important;
+    height: 24px;
+    width: 24px;
+}
+
+.delete-icon {
+    background-image: url("../images/icon_delete.svg") !important;
+    height: 24px;
+    width: 24px;
+}
+
+.modal-90w {
+    max-width: 90% !important;
+}
+.btn-spinner {
     position: absolute;
     left: 30px;
     top: 6px;
 }
 .btn-icon {
     padding: 0px;
+    border:0px;
+    background: transparent;
+}
+.table{
+    margin-bottom: 0.25rem;
+}
+th{
+    background: white;
+    padding:0.1rem 0.25rem !important;
+    font-weight: normal;
+    font-size: 0.9rem;
+}
+td{
+    background: #f3f3f3;
+    vertical-align: middle !important;
+    padding:0.5rem 0.25rem !important;
+    line-height: 16px;
+    font-size: 0.8rem;
+}
+.td-btn{
+    min-width: 70px;
+    width:10%;
+}
+.intend{
+    margin-left: 2rem;
+}
+
+.btn-add{
+    padding-left: 0px;
+    display: flex;
+    vertical-align: middle;
 }

@@ -34,7 +34,7 @@ import CardHeader from './modules/card-header.component';
 import { FormGroupInput } from './modules/form-group.component';
 import TestResultInputs from './modules/test-result-inputs';
 import AppContext from '../misc/appContext';
-import ProcessIdInput from './process-input.component';
+import ProcessIdInput from './modals/process-input.component';
 
 const RecordTestResult = (props: any) => {
 

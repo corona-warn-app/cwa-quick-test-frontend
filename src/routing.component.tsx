@@ -29,8 +29,8 @@ import { useTranslation } from 'react-i18next';
 import useNavigation from './misc/useNavigation';
 import IQuickTest from './misc/quick-test';
 
-import Footer from './components/footer.component';
-import Header from './components/header.component';
+import Footer from './components/modules/footer.component';
+import Header from './components/modules/header.component';
 import LandingPage from './components/landing-page.component';
 import RecordPatientData from './components/record-patient-data.component';
 import ShowPatientData from './components/show-patient-data.component';
@@ -40,12 +40,12 @@ import Statistics from './components/statistics.component';
 import FailedReport from './components/failed-report.component';
 import UserManagement from './components/user-management.component';
 
-import PrivateRoute from './components/private-route.component';
+import PrivateRoute from './components/modules/private-route.component';
 import IError from './misc/error';
-import ErrorPage from './components/error-page.component';
-import NotificationPage from './components/notification-page.component';
-import DataprivacyPage from './components/dataprivacy.component';
-import ImprintPage from './components/imprint.component';
+import ErrorPage from './components/modals/error-page.component';
+import NotificationPage from './components/modals/notification-page.component';
+import DataprivacyPage from './components/modals/dataprivacy.component';
+import ImprintPage from './components/modals/imprint.component';
 import AppContext, { IAppContext } from './misc/appContext';
 import utils from './misc/utils';
 import CwaSpinner from './components/spinner/spinner.component';

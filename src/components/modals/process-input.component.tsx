@@ -22,11 +22,11 @@
 import React from 'react';
 import { Button, Card, Col, Container, Modal, Row, Spinner } from 'react-bootstrap'
 
-import '../i18n';
+import '../../i18n';
 import { useTranslation } from 'react-i18next';
-import { FormGroupInput } from './modules/form-group.component';
-import utils from '../misc/utils';
-import { IShortHashedGuid, useGetPendingProcessIds } from '../api';
+import { FormGroupInput } from '../modules/form-group.component';
+import utils from '../../misc/utils';
+import { IShortHashedGuid, useGetPendingProcessIds } from '../../api';
 
 const ProcessIdInput = (props: any) => {
 

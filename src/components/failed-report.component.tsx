@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 
 import DatePicker from 'react-datepicker';
 import CwaSpinner from './spinner/spinner.component';
-import PagedList from './paged-list.component';
+import PagedList from './modules/paged-list.component';
 
 import { useGetPDF, useGetPositiveForTimeRange } from '../api';
 import { TestResult } from '../misc/enum';

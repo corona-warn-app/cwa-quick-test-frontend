@@ -34,7 +34,7 @@ const LandingPage = (props: any) => {
     const navigation = useNavigation();
     const { t } = useTranslation();
 
-    const { keycloak, initialized } = useKeycloak();
+    const { keycloak } = useKeycloak();
 
     const [isInit, setIsInit] = React.useState(false)
 
