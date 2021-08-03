@@ -22,13 +22,13 @@
 import React from 'react';
 import { Row, Image, Container, Navbar, NavDropdown, Nav } from 'react-bootstrap'
 
-import '../i18n';
+import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
 import { useKeycloak } from '@react-keycloak/web';
 
-import useNavigation from '../misc/useNavigation';
-import C19Logo from '../assets/images/c-19_logo.png'
+import useNavigation from '../../misc/useNavigation';
+import C19Logo from '../../assets/images/c-19_logo.png'
 
 const Header = (props: any) => {
 

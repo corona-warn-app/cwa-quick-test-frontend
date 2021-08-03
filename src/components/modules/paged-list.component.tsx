@@ -22,12 +22,12 @@
 import React from 'react';
 import { Form, ListGroup, ListGroupItem, Pagination } from 'react-bootstrap'
 
-import '../i18n';
+import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
-import CwaSpinner from './spinner/spinner.component';
-import IQTArchiv from '../misc/qt-archiv';
-import utils from '../misc/utils';
+import CwaSpinner from '../spinner/spinner.component';
+import IQTArchiv from '../../misc/qt-archiv';
+import utils from '../../misc/utils';
 
 const PagedList = (props: any) => {
 

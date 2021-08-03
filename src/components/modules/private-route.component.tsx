@@ -23,7 +23,7 @@ import React from 'react';
 import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
 
 import { useKeycloak } from '@react-keycloak/web';
-import useNavigation from '../misc/useNavigation';
+import useNavigation from '../../misc/useNavigation';
 
 interface PrivateRouteParams extends RouteProps {
   component:

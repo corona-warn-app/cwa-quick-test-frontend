@@ -47,7 +47,7 @@ export const FormGroupTextarea = (props: any) => {
 
             <Col xs='7' sm='9' className='d-flex'>
                 <Form.Control
-                    className='qt-input'
+                    className='qt-input qt-input-area'
                     value={props.value}
                     readOnly={props.readOnly}
                     disabled={props.disabled}
@@ -165,6 +165,28 @@ export const FormGroupRadio = (props: any) => {
     )
 }
 
+export const FormGroupSelect = (props: any) => {
+    return (!(props && props.options)
+        ? <></>
+        : <Form.Group as={Row} hidden={props.hidden} controlId={props.controlId} className='mb-1'>
+            <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
+
+            <Col xs='7' sm='9' className='d-flex'>
+                <Form.Control as="select"
+                    className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
+                    value={props.value}
+                    onChange={props.onChange}
+                    placeholder={props.placeholder ? props.placeholder : props.title}
+                    required={props.required}
+                >
+                    <option disabled={props.required} key={0} value=''>{props.placeholder ? props.placeholder : props.title}</option>
+                    {props.options}
+                </Form.Control>
+            </Col>
+        </Form.Group>
+    )
+}
+
 export const FormGroupValueSetSelect = (props: any) => {
 
     const valueSet = props.valueSet;
@@ -189,23 +211,16 @@ export const FormGroupValueSetSelect = (props: any) => {
         return result;
     }
 
-    return (!(props && options) ? <></> :
-        <Form.Group as={Row} hidden={props.hidden} controlId={props.controlId} className='mb-1'>
-            <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
-
-            <Col xs='7' sm='9' className='d-flex'>
-                <Form.Control as="select"
-                    className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
-                    value={props.value}
-                    onChange={props.onChange}
-                    placeholder={props.placeholder ? props.placeholder : props.title}
-                    required={props.required}
-                >
-                    <option disabled={props.required} key={0} value=''>{props.placeholder ? props.placeholder : props.title}</option>
-                    {options}
-                </Form.Control>
-            </Col>
-        </Form.Group>
+    return (!(props && options)
+        ? <></>
+        : <FormGroupSelect controlId={props.controlId}
+            title={props.title}
+            value={props.value}
+            hidden={props.hidden}
+            required={props.required}
+            onChange={props.onChange}
+            options={options}
+        />
     )
 }
 

@@ -24,17 +24,15 @@ import { Card, Fade, Table, Button, Row, Col } from 'react-bootstrap';
 import CwaSpinner from './spinner/spinner.component';
 import CardHeader from './modules/card-header.component';
 import { useTranslation } from 'react-i18next';
-import UserModal from './user-modal.component';
-import GroupModal from './group-modal.component';
-import ConfirmModal from './confirm-modal.component';
+import UserModal from './modals/user-modal.component';
+import GroupModal from './modals/group-modal.component';
+import ConfirmModal from './modals/confirm-modal.component';
 
 import AppContext from '../misc/appContext';
 import { IUser, IGroup, IGroupDetails, IGroupNode } from '../misc/user';
 import { useGetUsers, useGetGroups, createUser, createGroup, deleteUser, deleteGroup, updateGroup, addUserToGroup, updateUser, addGroupAsChild } from '../api';
 import { useKeycloak } from '@react-keycloak/web';
 
-import imageEdit from '../assets/images/icon_edit.svg'
-import imageDelete from '../assets/images/icon_delete.svg'
 import imageAdd from '../assets/images/icon_add.svg'
 
 const emptyUser: IUser = {
@@ -62,7 +60,7 @@ const UserManagement = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
-    const { keycloak, initialized } = useKeycloak();
+    const { keycloak } = useKeycloak();
     const [bUsers, refreshUsers] = useGetUsers(handleError);
     const [bGroups, refreshGroups] = useGetGroups(handleError);
     const [users, setUsers] = React.useState<IUser[]>([]);
@@ -71,6 +69,7 @@ const UserManagement = (props: any) => {
     const [isUserData, setIsUserData] = React.useState(false);
     const [editUser, setEditUser] = React.useState<IUser>(emptyUser);
     const [isGroupEdit, setIsGroupEdit] = React.useState(false);
+    const [showGroupEdit, setShowGroupEdit] = React.useState(false);
     const [editGroupId, setEditGroupId] = React.useState<string>('');
     const [editGroupParentId, setEditGroupParentId] = React.useState<string>('');
 
@@ -95,35 +94,44 @@ const UserManagement = (props: any) => {
 
     React.useEffect(() => {
         setIsInit(!!(bGroups && bUsers));
-    }, [bUsers,bGroups]);
+    }, [bUsers, bGroups]);
 
 
-    const userUpdate = (user:IUser) => {
+    const userUpdate = (user: IUser) => {
         if (editUser && editUser.username && keycloak.token) {
             const fuser = users.find(u => u.username === user.username);
+
             if (!user.password) {
                 user.password = undefined;
             }
+
             setIsUpdating(true);
-            updateUser(user, keycloak.token).then(() => {
-                if (fuser && fuser.subGroup!==user.subGroup 
-                    && keycloak.token && user.subGroup && user.subGroup!=='empty') {
-                        addUserToGroup(user.id, user.subGroup, keycloak.token).then(() => {
-                            refreshUsers();
-                        }).catch(e => {
-                            handleError(e);
-                        });
-                } else {
-                    refreshUsers();
-                }
-            });
+
+            updateUser(user, keycloak.token)
+                .then(() => {
+                    if (fuser && fuser.subGroup !== user.subGroup
+                        && keycloak.token && user.subGroup && user.subGroup !== 'empty') {
+                        addUserToGroup(user.id, user.subGroup, keycloak.token)
+                            .then(() => {
+                                refreshUsers();
+                            })
+                            .catch(e => {
+                                handleError(e);
+                            });
+                    } else {
+                        refreshUsers();
+                    }
+                });
+
         } else {
-            const newUser: any = {...user};
+            const newUser: any = { ...user };
+
             if (newUser.subGroup) {
                 // The attribute has different name in backend for create
                 newUser.subgroup = newUser.subGroup;
                 delete newUser.subGroup;
             }
+
             if (keycloak.token) {
                 setIsUpdating(true);
                 createUser(newUser, keycloak.token).then(() => {
@@ -133,19 +141,23 @@ const UserManagement = (props: any) => {
                 });
             }
         }
+
         setIsUserData(false);
     }
 
     const flattenGroups = (groups: IGroup[], groupNodes: IGroupNode[], level: number, parentGroup?: string): void => {
         groups.forEach((group: IGroup) => {
+
             const gNode: IGroupNode = {
                 group: group,
                 parentGroup: parentGroup,
                 level: level,
             };
+
             groupNodes.push(gNode);
+
             if (group.children) {
-                flattenGroups(group.children, groupNodes, level+1, group.id);
+                flattenGroups(group.children, groupNodes, level + 1, group.id);
             }
         });
     }
@@ -153,56 +165,70 @@ const UserManagement = (props: any) => {
     const groupNodes: IGroupNode[] = [];
     flattenGroups(groups, groupNodes, 0);
 
-    const groupUpdate = (group:IGroupDetails) => {
+    const groupUpdate = (group: IGroupDetails) => {
         if (group.id) {
+
             if (keycloak.token) {
                 setIsUpdating(true);
-                const uGroup: any = {...group};
+
+                const uGroup: any = { ...group };
                 delete uGroup.parentGroup;
-                updateGroup(uGroup, keycloak.token).then(() => {
-                    console.log("update group finished");
-                    const fgroupNode = groupNodes.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
-                    if (keycloak.token && fgroupNode && group.id && group.parentGroup && group.parentGroup!=='empty' && fgroupNode.parentGroup !== group.parentGroup) {
-                        addGroupAsChild(group.id, group.parentGroup, keycloak.token).then(() => {
+
+                updateGroup(uGroup, keycloak.token)
+                    .then(() => {
+                        console.log("update group finished");
+                        const fgroupNode = groupNodes.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
+
+                        if (keycloak.token && fgroupNode && group.id && group.parentGroup && group.parentGroup !== 'empty' && fgroupNode.parentGroup !== group.parentGroup) {
+                            addGroupAsChild(group.id, group.parentGroup, keycloak.token)
+                                .then(() => {
+                                    refreshGroups();
+                                })
+                                .catch(e => {
+                                    handleError(e);
+                                });
+                        } else {
                             refreshGroups();
-                        }).catch(e => {
-                            handleError(e);
-                        });
-                    } else {
-                        refreshGroups();
-                    }
-                }).catch(e => {
-                    handleError(e);
-                });
+                        }
+                    })
+                    .catch(e => {
+                        handleError(e);
+                    });
             }
         } else {
             if (keycloak.token) {
-                createGroup(group, keycloak.token).then(() => {
-                    refreshGroups();
-                }).catch(e => {
-                    handleError(e);
-                });
+                createGroup(group, keycloak.token)
+                    .then(() => {
+                        refreshGroups();
+                    })
+                    .catch(e => {
+                        handleError(e);
+                    });
             }
         }
+
         setIsGroupEdit(false);
     }
 
-    const startEditGroup = (groupNode:IGroupNode) => {
+    const startEditGroup = (groupNode: IGroupNode) => {
         setEditGroupId(groupNode.group.id);
         setEditGroupParentId(groupNode.parentGroup ? groupNode.parentGroup : '');
         setIsGroupEdit(true);
     }
 
-    const handleDeleteGroup = (group:IGroup) => {
-        setConfirmMessage("Wollen Sie wirklich die Gruppe \""+group.name+ "\" löschen?")
+    const handleDeleteGroup = (group: IGroup) => {
+        setConfirmMessage("Wollen Sie wirklich die Gruppe \"" + group.name + "\" löschen?")
         setShowConfirm(true);
+
         const handle = () => {
             if (keycloak.token && group.id) {
-                deleteGroup(group.id, keycloak.token).then(() => {
-                    refreshGroups();
-                }).catch(e => {
-                    handleError(e);
-                });
+                deleteGroup(group.id, keycloak.token)
+                    .then(() => {
+                        refreshGroups();
+                    })
+                    .catch(e => {
+                        handleError(e);
+                    });
             }
         };
         // need to wrap a function again because react apply each function passed to hook
@@ -210,163 +236,239 @@ const UserManagement = (props: any) => {
     }
 
     const startEditUser = (user: IUser) => {
-        setEditUser({...user});
+        setEditUser({ ...user });
         setIsUserData(true);
     }
 
-    const handleDeleteUser = (user:IUser) => {
-        setConfirmMessage("Wollen Sie wirklich den User \""+user.username+ "\" löschen?")
+    const handleDeleteUser = (user: IUser) => {
+        setConfirmMessage("Wollen Sie wirklich den User \"" + user.username + "\" löschen?")
         setShowConfirm(true);
+
         const handle = () => {
             if (keycloak.token && user.username) {
-                deleteUser(user.id, keycloak.token).then(() => {
-                    refreshUsers();
-                }).catch(e => {
-                    handleError(e);
-                });
+                deleteUser(user.id, keycloak.token)
+                    .then(() => {
+                        refreshUsers();
+                    })
+                    .catch(e => {
+                        handleError(e);
+                    });
             }
         };
         // need to wrap a function again because react apply each function passed to hook
         setConfirmHandle(() => handle);
     }
 
-    const rolesAsString = (user:IUser) => {
+    const rolesAsString = (user: IUser) => {
         let roleString = '';
+
         if (user.roleLab) {
             roleString = 'lab'
         }
+
         if (user.roleCounter) {
             if (roleString) {
                 roleString += ' ';
             }
             roleString += 'counter';
         }
+
         return roleString;
     }
 
 
-    const nameWithIdent = (groupNode: IGroupNode) : string => {
-        return "\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level)+groupNode.group.name;
+    const getIndent = (level: number): JSX.Element[] => {
+        const indent: JSX.Element[] = [];
+
+        for (let index = 0; index < level; index++) {
+            indent.push(<span className='intend' />);
+        }
+
+        return indent;
     }
 
-    const groupRows = groupNodes.map(g => <tr><td width="90%">{nameWithIdent(g)}</td><td width="10%">
-        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditGroup(g)}>
-            <img src={imageEdit} alt="Bearbeiten" title="Bearbeiten"/></Button>&nbsp;&nbsp;
-        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => handleDeleteGroup(g.group)}>
-            <img src={imageDelete} alt="Löschen" title="Löschen"/></Button></td></tr>);
-
-    const groupName = (groupId: string|null): string => {
+    const groupName = (groupId: string | null): string => {
         let groupName = ''
+
         if (groupId) {
             const fNode = groupNodes.find(gnode => gnode.group.id === groupId);
+
             if (fNode) {
                 groupName = fNode.group.path;
             }
         }
+
         return groupName;
     }
 
-
-    const userRows = users.map(u => <tr><td>{u.username}</td><td>{u.firstName}</td><td>{u.lastName}</td>
-        <td>{groupName(u.subGroup)}</td><td>{rolesAsString(u)}</td>
-        <td width="10%"><Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => startEditUser({...u})}>
-            <img src={imageEdit} alt="Bearbeiten" title="Bearbeiten"/></Button>&nbsp;&nbsp;
-        <Button className="btn-icon" size="sm" disabled={isUpdating} onClick={() => handleDeleteUser(u)}>
-            <img src={imageDelete} alt="Löschen" title="Löschen"/></Button></td></tr>);
-
-
     return (!(isInit && context && context.valueSets)
-            ? <CwaSpinner />
-            : <>
-                <Fade appear={true} in={true} >
+        ? <CwaSpinner />
+        : <>
+            <Fade appear={true} in={true} >
                 <Card id='data-card'>
+
                     <CardHeader title={t('translation:user-management')} />
-                    <Card.Body id='data-header'>
-                        <h4>Benutzer</h4>
-                        <Table striped bordered hover size="sm">
+
+                    <Card.Body id='data-body' className='pt-0' >
+
+                        <h4>{t('translation:groups')}</h4>
+
+                        <Table bordered hover>
                             <thead>
                                 <tr>
-                                    <th>Benutzername</th>
-                                    <th>Vorname</th>
-                                    <th>Name</th>
-                                    <th>Gruppe</th>
-                                    <th>Rollen</th>
+                                    <th>{t('translation:name')}</th>
                                     <th></th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {userRows}
+                            <tbody>{
+                                groupNodes.map((g, i) =>
+                                    <tr key={i}>
+                                        <td width="90%">{getIndent(g.level)}{g.group.name}</td>
+                                        <td className='td-btn'>
+                                            <Row className='m-0 justify-content-around'>
+                                                <Button
+                                                    className="btn-icon edit-icon"
+                                                    disabled={isUpdating}
+                                                    onClick={() => startEditGroup(g)}
+                                                >
+                                                </Button>
+                                                <Button className="btn-icon delete-icon"
+                                                    disabled={isUpdating}
+                                                    onClick={() => handleDeleteGroup(g.group)}
+                                                />
+                                            </Row>
+                                        </td>
+                                    </tr>
+                                )
+                            }
                             </tbody>
                         </Table>
-                        <Button size="sm" disabled={isUpdating} variant="light"
-                        onClick={() => {setEditUser({...emptyUser}); setIsUserData(true)}}><img src={imageAdd} alt="Hinzufügen"/> Neuen Benutzer hinzufügen</Button>
-                        <hr/>
-                        <h4>Gruppen</h4>
-                        <Table striped bordered hover size="sm">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {groupRows}
-                            </tbody>
-                        </Table>
-                        <Button size="sm" variant="light"
+
+                        <Button
+                            className='btn-add'
+                            size="sm"
+                            variant="light"
                             disabled={isUpdating}
-                            onClick={() => {setEditGroupId(''); setIsGroupEdit(true)}}><img src={imageAdd}  alt="Hinzufügen"/> Neue Gruppe hinzufügen</Button>
+                            onClick={() => { setEditGroupId(''); setIsGroupEdit(true) }}
+                        >
+                            <img className='mr-2' src={imageAdd} alt="Hinzufügen" />
+                            {t('translation:add-group')}
+                        </Button>
+
+                        <hr />
+
+                        <h4>{t('translation:user')}</h4>
+
+                        <Table bordered hover responsive>
+                            <thead>
+                                <tr>
+                                    <th>{t('translation:user-name')}</th>
+                                    <th>{t('translation:first-name')}</th>
+                                    <th>{t('translation:name')}</th>
+                                    <th>{t('translation:group')}</th>
+                                    <th>{t('translation:roles')}</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody> {
+                                users.map((u, i) =>
+                                    <tr key={i}>
+                                        <td>{u.username}</td>
+                                        <td>{u.firstName}</td>
+                                        <td>{u.lastName}</td>
+                                        <td>{groupName(u.subGroup)}</td>
+                                        <td>{rolesAsString(u)}</td>
+                                        <td className='td-btn'>
+                                            <Row className='m-0 justify-content-around'>
+                                                <Button
+                                                    className="btn-icon edit-icon"
+                                                    disabled={isUpdating}
+                                                    onClick={() => startEditUser({ ...u })}
+                                                >
+                                                </Button>
+                                                <Button className="btn-icon delete-icon"
+                                                    disabled={isUpdating}
+                                                    onClick={() => handleDeleteUser(u)}
+                                                />
+                                            </Row>
+                                        </td>
+                                    </tr>
+                                )
+                            }
+                            </tbody>
+                        </Table>
+
+                        <Button
+                            className='btn-add'
+                            size="sm"
+                            disabled={isUpdating}
+                            variant="light"
+                            onClick={() => { setEditUser({ ...emptyUser }); setIsUserData(true) }}>
+                            <img className='mr-2' src={imageAdd} alt="Hinzufügen" />
+                            {t('translation:add-user')}
+                        </Button>
+
                         {isUpdating ? <CwaSpinner /> : null}
+
                     </Card.Body>
+
                     <Card.Footer id='data-footer'>
-                        <Row>
-                            <Col sm='6' md='3' className=''>
+                        <Row className='justify-content-end'>
+                            <Col sm='6' md='3' className='p-0'>
                                 <Button
-                                    className='my-1 my-md-0 p-0'
-                                    variant='outline-primary'
+                                    className='my-md-0 p-0'
+                                    variant='primary'
                                     block
                                     onClick={() => context.navigation!.toLanding()}
-                                >Zurück</Button>
+                                >
+                                    {t('translation:back')}
+                                </Button>
                             </Col>
                         </Row>
                     </Card.Footer>
                 </Card>
-                </Fade>
-                <UserModal show={isUserData} 
-                    onCancel={() => {
-                        setEditUser({...emptyUser});
-                        setIsUserData(false);
-                    }}
-                    groups={groupNodes} 
-                    handleOk={userUpdate}
-                    user={editUser}
-                    />
-                <GroupModal show={isGroupEdit} 
-                    onCancel={() => setIsGroupEdit(false)}
-                    groupId={editGroupId} 
-                    parentGroupId={editGroupParentId}
-                    handleOk={groupUpdate}
-                    groups={groupNodes}
-                    handleError={(err: any) => {
-                        setIsGroupEdit(false);
-                        handleError(err);
-                    }}
-                    />
-                <ConfirmModal show={showConfirm}
-                    message={confirmMessage}
-                    onCancel={() => {
-                        setConfirmHandle(undefined);
-                        setShowConfirm(false);
-                    }} 
-                    handleOk={() => {
-                        setShowConfirm(false);
-                        if (confirmHandle) {
-                            confirmHandle();
-                        }
-                    }}
-                    />
-                </>);
-        
+            </Fade>
+
+            <UserModal
+                show={isUserData}
+                onCancel={() => {
+                    setEditUser({ ...emptyUser });
+                    setIsUserData(false);
+                }}
+                groups={groupNodes}
+                handleOk={userUpdate}
+                user={editUser}
+            />
+            <GroupModal
+                show={isGroupEdit}
+                onCancel={() => {setIsGroupEdit(false); }}
+                groupId={editGroupId}
+                parentGroupId={editGroupParentId}
+                handleOk={groupUpdate}
+                groups={groupNodes}
+                handleError={(err: any) => {
+                    setIsGroupEdit(false);
+                    handleError(err);
+                }
+                }
+            />
+
+            <ConfirmModal
+                show={showConfirm}
+                message={confirmMessage}
+                onCancel={() => {
+                    setConfirmHandle(undefined);
+                    setShowConfirm(false);
+                }}
+                handleOk={() => {
+                    setShowConfirm(false);
+                    if (confirmHandle) {
+                        confirmHandle();
+                    }
+                }}
+            />
+        </>);
+
 }
 
 export default UserManagement;
