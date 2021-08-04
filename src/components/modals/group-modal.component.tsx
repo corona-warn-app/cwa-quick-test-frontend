@@ -66,6 +66,7 @@ const GroupModal = (props: any) => {
         }
 
         setIsNew(!(group && group.id));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [group])
 
     const handleCancel = () => {

@@ -80,7 +80,10 @@
   "error-processId-data-load": "Die eingegebene Proben-ID ist uns nicht bekannt!",
   "ok": "OK",
   "change-password": "Passwort ändern",
-  "dccConsent": "Patient wünscht ein offizielles COVID-Testzertifikat der EU (DCC).",
+  "testZertifikat": "COVID-Testzertifikat",
+  "dccConsent": "Patient wünscht ein offizielles COVID-Testzertifikat der EU (DCC)?",
+  "ja": "Ja",
+  "nein": "Nein",
   "user-management": "Benutzerverwaltung",
   "user": "Benutzer",
   "user-name": "Benutzername",
@@ -106,5 +109,7 @@
   "password": "Passwort",
   "permission": "Berechtigung",
   "for-lab": "für Testerfassung",
-  "for-counter": "für Patientendatenerfassung"
+  "for-counter": "für Patientendatenerfassung",
+  "lab": "Testerfassung",
+  "counter": "Patientendatenerfassung"
 }

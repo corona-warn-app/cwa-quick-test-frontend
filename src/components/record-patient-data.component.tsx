@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Card, Container, Fade, Form, Row } from 'react-bootstrap';
+import { Card, Col, Container, Fade, Form, Image, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -36,9 +36,9 @@ import CardFooter from './modules/card-footer.component';
 import CardHeader from './modules/card-header.component';
 import { IAddressData, IPersonData } from '../misc/quick-test';
 import AddressInputs from './modules/address-inputs';
-import { FormGroupConsentCkb, FormGroupInput } from './modules/form-group.component';
+import { FormGroupConsentCkb, FormGroupDccConsentRadio, FormGroupInput } from './modules/form-group.component';
 import AppContext from '../misc/appContext';
-
+import eu_logo from "../assets/images/eu_logo.png";
 
 const RecordPatientData = (props: any) => {
 
@@ -56,6 +56,7 @@ const RecordPatientData = (props: any) => {
     const [emailAddress, setEmailAddress] = React.useState('');
     const [consent, setConsent] = React.useState(false);
     const [dccConsent, setDccConsent] = React.useState(false);
+    const [dccNoConsent, setDccNoConsent] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [privacyAgreement, setPrivacyAgreement] = React.useState(false)
     const [validated, setValidated] = React.useState(false);
@@ -85,6 +86,7 @@ const RecordPatientData = (props: any) => {
                 setEmailAddress(p.emailAddress);
             }
             setDccConsent(p.dccConsent);
+            setDccNoConsent(!p.dccConsent);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -108,6 +110,15 @@ const RecordPatientData = (props: any) => {
             setIsInit(true);
     }, [processId, context.navigation, context.valueSets])
 
+    const handleDccConsentChange = (evt: any) => {
+        setDccConsent(true)
+        setDccNoConsent(false);
+    }
+    
+    const handleDccNoConsentChange = (evt: any) => {
+        setDccConsent(false)
+        setDccNoConsent(true);
+    }
 
     const handleConsentChange = (evt: any) => {
         setConsent(!consent)
@@ -163,16 +174,42 @@ const RecordPatientData = (props: any) => {
                         <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
 
                             {/*
-    header with title and id card query
-    */}
+                            header with title and id card query
+                            */}
                             <CardHeader idCard={true} title={t('translation:record-result2')} />
 
                             {/*
-    content area with patient inputs and check box
-    */}
+                            content area with patient inputs and check box
+                            */}
                             <Card.Body id='data-body' className='pt-0'>
 
-                                <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} />
+                                {/* dccConsent */}
+                                <Row className='yellow'>
+                                    <Form.Label className='input-label pl-1' column xs='5' sm='3'>
+                                        {t('translation:testZertifikat')}*
+                                        <Image className="eu-flag ml-1" src={eu_logo} />
+                                    </Form.Label>
+                                    <Form.Label className='input-label' column xs='7' sm='9'>{t('translation:dccConsent')}</Form.Label>
+
+                                    <Form.Label className='input-label' column xs='5' sm='3'></Form.Label>
+                                    <Col xs='6' sm='4' className='d-flex pr-10 pb-2'>
+                                        <FormGroupDccConsentRadio controlId='dccConsent-radio1' name="dccConsent-radios" title={t('translation:ja')}
+                                            checked={dccConsent}
+                                            onChange={handleDccConsentChange}
+                                            required={true}
+                                        />
+
+                                        <FormGroupDccConsentRadio controlId='dccConsent-radio2' name="dccConsent-radios" title={t('translation:nein')}
+                                            checked={dccNoConsent}
+                                            onChange={handleDccNoConsentChange}
+                                            required={true}
+                                        />
+                                    </Col>
+                                </Row>
+
+                                <hr />
+
+                                <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} onDccChanged={setDccConsent} />
 
                                 <hr />
 
@@ -202,7 +239,6 @@ const RecordPatientData = (props: any) => {
                                 />
 
                                 <hr />
-
                                 {/* processing consent check box */}
                                 <FormGroupConsentCkb controlId='formConsentCheckbox' title={t('translation:processing-consent-title')}
                                     accordion={t('translation:processing-consent')}
@@ -225,11 +261,6 @@ const RecordPatientData = (props: any) => {
                                     type='checkbox'
                                     checked={privacyAgreement}
                                     required
-                                />
-                                <FormGroupConsentCkb controlId='formDccConsentCheckbox' title={t('translation:dccConsent')}
-                                    onChange={(evt: any) => setDccConsent(evt.currentTarget.checked)}
-                                    type='checkbox'
-                                    checked={dccConsent}
                                 />
                             </Card.Body>
 

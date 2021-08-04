@@ -29,7 +29,6 @@ const PersonInputs = (props: any) => {
     const [dateOfBirth, setDateOfBirth] = React.useState<Date>();
     const [sex, setSex] = React.useState<Sex>();
 
-
     React.useEffect(() => {
         if (props && props.quickTest && props.quickTest.personData) {
             const personData = props.quickTest.personData;
