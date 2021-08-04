@@ -36,7 +36,7 @@ import CardFooter from './modules/card-footer.component';
 import CardHeader from './modules/card-header.component';
 import { IAddressData, IPersonData } from '../misc/quick-test';
 import AddressInputs from './modules/address-inputs';
-import { FormGroupConsentCkb, FormGroupInput } from './modules/form-group.component';
+import { FormGroupConsentCkb, FormGroupInput, FormGroupSexRadio } from './modules/form-group.component';
 import AppContext from '../misc/appContext';
 
 
@@ -171,7 +171,29 @@ const RecordPatientData = (props: any) => {
     */}
                             <Card.Body id='data-body' className='pt-0'>
 
-                                <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} onDccChanged={setDccConsent}/>
+                                {/* dccConsent */}
+                                <Form.Group as={Row} controlId='formDccConsent' className='mb-1'>
+                                    <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:testZertifikat')}*</Form.Label>
+                                    <Form.Label className='input-label' column xs='7' sm='9'>{t('translation:dccConsent')}</Form.Label>
+                                    <Form.Label className='input-label' column xs='5' sm='3'></Form.Label>
+                                    <Row>
+                                        <FormGroupSexRadio controlId='dccConsent-radio1' name="dccConsent-radios" title={t('translation:ja')}
+                                            checked={dccConsent}
+                                            onChange={() => setDccConsent(true)}
+                                            required={true}
+                                        />
+
+                                        <FormGroupSexRadio controlId='dccConsent-radio2' name="dccConsent-radios" title={t('translation:nein')}
+                                            checked={!dccConsent}
+                                            onChange={(evt: any) => setDccConsent(false)}
+                                            required={true}
+                                        />
+                                    </Row>
+                                </Form.Group>
+
+                                <hr />
+
+                                <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} onDccChanged={setDccConsent} />
 
                                 <hr />
 
@@ -202,15 +224,6 @@ const RecordPatientData = (props: any) => {
 
                                 <hr />
 
-                                {/* processing consent check box */}
-                                <FormGroupConsentCkb controlId='formConsentCheckbox' title={t('translation:processing-consent-title')}
-                                    accordion={t('translation:processing-consent')}
-                                    onClick={handleConsentChange}
-                                    onChange={handleConsentChange}
-                                    type='radio'
-                                    name="check-radios"
-                                    checked={consent}
-                                />
                                 <FormGroupConsentCkb controlId='formKeepPrivateCheckbox' title={t('translation:patientdata-exclude-title')}
                                     accordion={t('translation:patientdata-exclude')}
                                     onClick={handlePersDataInQRChange}

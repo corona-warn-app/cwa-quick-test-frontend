@@ -101,13 +101,6 @@ const PersonInputs = (props: any) => {
 
     return (
         <>
-            {/* dccConsent */}
-            <FormGroupConsentCkb controlId='formDccConsentCheckbox' title={t('translation:dccConsent')}
-                onChange={(evt: any) => props.onDccChanged(evt.currentTarget.checked)}
-                type='checkbox'
-                checked={props.dccConsent}
-            />
-
             {/* first name input */}
             < FormGroupInput controlId='formGivenNameInput' title={t('translation:first-name')}
                 value={givenName}
