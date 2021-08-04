@@ -122,6 +122,31 @@ export const FormGroupConsentCkb = (props: any) => {
     )
 }
 
+export const FormGroupPermissionCkb = (props: any) => {
+
+    return (!props ? <></> :
+        <Form.Group as={Row} controlId='props.controlId' className='mb-1'>
+            <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
+            <Col xs='7' sm='9' className='jcc-xs-jcfs-md '>
+                <Form.Check className='d-flex align-self-center'>
+                    <Form.Check.Input
+                        className={(props.type === 'radio' ? 'rdb-input' : 'ckb-input') + ' mt-0'}
+                        onClick={props.onClick}
+                        onChange={props.onChange}
+                        type={props.type}
+                        name={props.name}
+                        disabled={props.readOnly}
+                        checked={props.checked}
+                        required={props.required}
+                        id={props.controlId}
+                    />
+                    <Form.Label className='rdb-label mb-0'>{props.label}</Form.Label>
+                </Form.Check>
+            </Col>
+        </Form.Group>
+    )
+}
+
 export const FormGroupSexRadio = (props: any) => {
 
     return (!props ? <></> :
