@@ -17,7 +17,7 @@ const CardHeader = (props: any) => {
                 {!props.idCard
                     ? <></>
                     :
-                    <Col md='6' className='d-flex px-0 jcc-xs-jcfs-md'>
+                    <Col md='6' className='d-flex pl-md-0 jcc-xs-jcfe-md'>
                         <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
                     </Col>
                 }

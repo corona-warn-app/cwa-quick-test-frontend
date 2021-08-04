@@ -56,6 +56,7 @@ const RecordPatientData = (props: any) => {
     const [emailAddress, setEmailAddress] = React.useState('');
     const [consent, setConsent] = React.useState(false);
     const [dccConsent, setDccConsent] = React.useState(false);
+    const [dccNoConsent, setDccNoConsent] = React.useState(false);
     const [persDataInQR, setIncludePersData] = React.useState(false)
     const [privacyAgreement, setPrivacyAgreement] = React.useState(false)
     const [validated, setValidated] = React.useState(false);
@@ -84,6 +85,8 @@ const RecordPatientData = (props: any) => {
             if (p.emailAddress) {
                 setEmailAddress(p.emailAddress);
             }
+            setDccConsent(p.dccConsent);
+            setDccNoConsent(!p.dccConsent);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,6 +110,15 @@ const RecordPatientData = (props: any) => {
             setIsInit(true);
     }, [processId, context.navigation, context.valueSets])
 
+    const handleDccConsentChange = (evt: any) => {
+        setDccConsent(true)
+        setDccNoConsent(false);
+    }
+    
+    const handleDccNoConsentChange = (evt: any) => {
+        setDccConsent(false)
+        setDccNoConsent(true);
+    }
 
     const handleConsentChange = (evt: any) => {
         setConsent(!consent)
@@ -173,9 +185,9 @@ const RecordPatientData = (props: any) => {
 
                                 {/* dccConsent */}
                                 <Row className='yellow'>
-                                    <Form.Label className='input-label' column xs='5' sm='3'>
+                                    <Form.Label className='input-label pl-1' column xs='5' sm='3'>
                                         {t('translation:testZertifikat')}*
-                                        <Image className="eu-flag" src={eu_logo} />
+                                        <Image className="eu-flag ml-1" src={eu_logo} />
                                     </Form.Label>
                                     <Form.Label className='input-label' column xs='7' sm='9'>{t('translation:dccConsent')}</Form.Label>
 
@@ -183,13 +195,13 @@ const RecordPatientData = (props: any) => {
                                     <Col xs='6' sm='4' className='d-flex pr-10 pb-2'>
                                         <FormGroupDccConsentRadio controlId='dccConsent-radio1' name="dccConsent-radios" title={t('translation:ja')}
                                             checked={dccConsent}
-                                            onChange={() => setDccConsent(true)}
+                                            onChange={handleDccConsentChange}
                                             required={true}
                                         />
 
                                         <FormGroupDccConsentRadio controlId='dccConsent-radio2' name="dccConsent-radios" title={t('translation:nein')}
-                                            checked={!dccConsent}
-                                            onChange={(evt: any) => setDccConsent(false)}
+                                            checked={dccNoConsent}
+                                            onChange={handleDccNoConsentChange}
                                             required={true}
                                         />
                                     </Col>
@@ -227,7 +239,15 @@ const RecordPatientData = (props: any) => {
                                 />
 
                                 <hr />
-
+                                {/* processing consent check box */}
+                                <FormGroupConsentCkb controlId='formConsentCheckbox' title={t('translation:processing-consent-title')}
+                                    accordion={t('translation:processing-consent')}
+                                    onClick={handleConsentChange}
+                                    onChange={handleConsentChange}
+                                    type='radio'
+                                    name="check-radios"
+                                    checked={consent}
+                                />
                                 <FormGroupConsentCkb controlId='formKeepPrivateCheckbox' title={t('translation:patientdata-exclude-title')}
                                     accordion={t('translation:patientdata-exclude')}
                                     onClick={handlePersDataInQRChange}
