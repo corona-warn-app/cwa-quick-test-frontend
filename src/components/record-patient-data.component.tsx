@@ -84,7 +84,6 @@ const RecordPatientData = (props: any) => {
             if (p.emailAddress) {
                 setEmailAddress(p.emailAddress);
             }
-            setDccConsent(p.dccConsent);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -172,7 +171,7 @@ const RecordPatientData = (props: any) => {
     */}
                             <Card.Body id='data-body' className='pt-0'>
 
-                                <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} />
+                                <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} onDccChanged={setDccConsent}/>
 
                                 <hr />
 
@@ -225,11 +224,6 @@ const RecordPatientData = (props: any) => {
                                     type='checkbox'
                                     checked={privacyAgreement}
                                     required
-                                />
-                                <FormGroupConsentCkb controlId='formDccConsentCheckbox' title={t('translation:dccConsent')}
-                                    onChange={(evt: any) => setDccConsent(evt.currentTarget.checked)}
-                                    type='checkbox'
-                                    checked={dccConsent}
                                 />
                             </Card.Body>
 

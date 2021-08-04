@@ -12,7 +12,7 @@ import de from 'date-fns/locale/de';
 
 import { Sex } from "../../misc/enum";
 import { IPersonData } from "../../misc/quick-test";
-import { FormGroupInput, FormGroupSexRadio } from "./form-group.component";
+import { FormGroupConsentCkb, FormGroupInput, FormGroupSexRadio } from "./form-group.component";
 
 registerLocale('de', de)
 
@@ -28,7 +28,6 @@ const PersonInputs = (props: any) => {
 
     const [dateOfBirth, setDateOfBirth] = React.useState<Date>();
     const [sex, setSex] = React.useState<Sex>();
-
 
     React.useEffect(() => {
         if (props && props.quickTest && props.quickTest.personData) {
@@ -102,6 +101,13 @@ const PersonInputs = (props: any) => {
 
     return (
         <>
+            {/* dccConsent */}
+            <FormGroupConsentCkb controlId='formDccConsentCheckbox' title={t('translation:dccConsent')}
+                onChange={(evt: any) => props.onDccChanged(evt.currentTarget.checked)}
+                type='checkbox'
+                checked={props.dccConsent}
+            />
+
             {/* first name input */}
             < FormGroupInput controlId='formGivenNameInput' title={t('translation:first-name')}
                 value={givenName}
