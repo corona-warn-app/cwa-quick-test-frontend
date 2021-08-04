@@ -24,7 +24,7 @@ import { Button, Col, Modal, Row, Form, Spinner, Container } from 'react-bootstr
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
-import { FormGroupConsentCkb, FormGroupInput, FormGroupPermissionCkb, FormGroupSelect } from '../modules/form-group.component';
+import { FormGroupInput, FormGroupPermissionCkb, FormGroupSelect } from '../modules/form-group.component';
 import { IUser, IGroupNode } from '../../misc/user';
 
 const UserModal = (props: any) => {
@@ -41,11 +41,13 @@ const UserModal = (props: any) => {
         if (props.user.username !== user.username || !props.user.username) {
             setUser(props.user);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.user]);
 
     React.useEffect(() => {
         const options = getOptions();
         setOptions(options);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     const handleCancel = () => {

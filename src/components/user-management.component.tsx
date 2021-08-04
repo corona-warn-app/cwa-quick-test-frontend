@@ -269,14 +269,14 @@ const UserManagement = (props: any) => {
         let roleString = '';
 
         if (user.roleLab) {
-            roleString = 'lab'
+            roleString = t('translation:lab');
         }
 
         if (user.roleCounter) {
             if (roleString) {
-                roleString += ' ';
+                roleString += ', ';
             }
-            roleString += 'counter';
+            roleString += t('translation:counter');
         }
 
         return roleString;
@@ -358,7 +358,7 @@ const UserManagement = (props: any) => {
                                     <th>{t('translation:first-name')}</th>
                                     <th>{t('translation:name')}</th>
                                     <th>{t('translation:group')}</th>
-                                    <th>{t('translation:roles')}</th>
+                                    <th>{t('translation:permission')}</th>
                                     <th></th>
                                 </tr>
                             </thead>

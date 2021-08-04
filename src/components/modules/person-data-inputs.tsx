@@ -12,7 +12,7 @@ import de from 'date-fns/locale/de';
 
 import { Sex } from "../../misc/enum";
 import { IPersonData } from "../../misc/quick-test";
-import { FormGroupConsentCkb, FormGroupInput, FormGroupSexRadio } from "./form-group.component";
+import { FormGroupInput, FormGroupSexRadio } from "./form-group.component";
 
 registerLocale('de', de)
 

@@ -109,5 +109,7 @@
   "password": "Passwort",
   "permission": "Berechtigung",
   "for-lab": "für Testerfassung",
-  "for-counter": "für Patientendatenerfassung"
+  "for-counter": "für Patientendatenerfassung",
+  "lab": "Testerfassung",
+  "counter": "Patientendatenerfassung"
 }

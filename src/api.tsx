@@ -526,7 +526,9 @@ export const useGetUsers =  (onError?: (error: any) => void) => {
             });
     }
 
-    React.useEffect(refreshUsers, []);
+    React.useEffect(refreshUsers
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        , []);
 
     return [result, refreshUsers];
 }
@@ -580,7 +582,9 @@ export const useGetGroups = (onError?: (error: any) => void) => {
             });
     }
 
-    React.useEffect(refreshGroups, []);
+    React.useEffect(refreshGroups
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        , []);
 
     return [result, refreshGroups];
 }

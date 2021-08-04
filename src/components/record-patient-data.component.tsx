@@ -36,7 +36,7 @@ import CardFooter from './modules/card-footer.component';
 import CardHeader from './modules/card-header.component';
 import { IAddressData, IPersonData } from '../misc/quick-test';
 import AddressInputs from './modules/address-inputs';
-import { FormGroupConsentCkb, FormGroupDccConsentRadio, FormGroupInput, FormGroupRadio, FormGroupSexRadio } from './modules/form-group.component';
+import { FormGroupConsentCkb, FormGroupDccConsentRadio, FormGroupInput } from './modules/form-group.component';
 import AppContext from '../misc/appContext';
 import eu_logo from "../assets/images/eu_logo.png";
 
