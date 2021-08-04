@@ -20,11 +20,11 @@
  */
 
 import React from 'react';
-import { Button, Col, Modal, Row, Form } from 'react-bootstrap'
+import { Button, Col, Modal, Row, Form, Spinner, Container } from 'react-bootstrap'
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
-import { FormGroupConsentCkb, FormGroupInput } from '../modules/form-group.component';
+import { FormGroupConsentCkb, FormGroupInput, FormGroupPermissionCkb, FormGroupSelect } from '../modules/form-group.component';
 import { IUser, IGroupNode } from '../../misc/user';
 
 const UserModal = (props: any) => {
@@ -34,31 +34,39 @@ const UserModal = (props: any) => {
     const [user, setUser] = React.useState<IUser>(props.user);
     const [isNew, setIsNew] = React.useState(true);
     const [validated, setValidated] = React.useState(false);
+    const [btnOkDisabled, setBtnOkDisabled] = React.useState(true);
+    const [options, setOptions] = React.useState<JSX.Element[]>();
 
     React.useEffect(() => {
         if (props.user.username !== user.username || !props.user.username) {
             setUser(props.user);
-            setIsNew(!props.user.username);
         }
-    },[props.user]);
+    }, [props.user]);
+
+    React.useEffect(() => {
+        const options = getOptions();
+        setOptions(options);
+    }, [user]);
 
     const handleCancel = () => {
         props.onCancel();
-        // props.onHide();
     }
 
-    const updateUserProp = (name:string, value:any) => {
-        const nuser = { ...user, [name]: value};
+    const updateUserProp = (name: string, value: any) => {
+        const nuser = { ...user, [name]: value };
         setUser(nuser);
     }
 
     const handleOk = () => {
         if (props.handleOk) {
+            setBtnOkDisabled(true);
             props.handleOk(user, setUser);
         }
     }
 
     const handleEnter = () => {
+        setIsNew(!props.user.username);
+        setBtnOkDisabled(false);
         setValidated(false);
     }
 
@@ -74,92 +82,132 @@ const UserModal = (props: any) => {
         }
     }
 
-    const groupOptions = props.groups.map((groupNode: IGroupNode) => 
-        <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level)+groupNode.group.name}</option>
-    );
+    const getOptions = () => {
+        let result: JSX.Element[] = [];
 
-    if (!user.subGroup || !props.groups.find((groupNode: IGroupNode) => groupNode.group.id === user.subGroup)) {
-        user.subGroup = null;
-        groupOptions.unshift(<option key={0} value="">-- leer --</option>);
+        result = props.groups.map((groupNode: IGroupNode) =>
+            <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level) + groupNode.group.name}</option>
+        )
+
+        if (!user.subGroup || !props.groups.find((groupNode: IGroupNode) => groupNode.group.id === user.subGroup)) {
+            user.subGroup = null;
+            result.unshift(<option key={0} value='empty'>{t('translation:no-group-option')}</option>);
+        }
+
+        return result;
     }
 
     return (
-            <Modal
-                contentClassName='data-modal'
-                show={props.show}
-                backdrop="static"
-                keyboard={false}
-                centered
-                onEnter={handleEnter}
-            >
-                <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
+        <Modal
+            contentClassName='data-modal'
+            show={props.show}
+            backdrop="static"
+            keyboard={false}
+            centered
+            onEnter={handleEnter}
+        >
+            <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
+
                 <Modal.Header id='data-header' className='pb-0' >
-                    <Modal.Title>{isNew ? 'Neuen Benutzer anlegen' : 'Benutzer bearbeiten'}</Modal.Title>
+                    <Modal.Title>{isNew ? t('translation:add-user') : t('translation:edit-user')}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body className='py-0 bg-light'>
-                < FormGroupInput controlId='formEmailInput' title="Benutzername"
-                                    value={user.username}
-                                    required
-                                    readOnly={!isNew}
-                                    onChange={(evt: any) => updateUserProp('username',evt.target.value)}
-                                    minLength={3}
-                                    maxLength={50}
-                                />
-                < FormGroupInput controlId='formFirstName' title="Vorname"
-                                    value={user.firstName}
-                                    required
-                                    onChange={(evt: any) => updateUserProp('firstName',evt.target.value)}
-                                    maxLength={30}
-                                />
-                < FormGroupInput controlId='formLastName' title="Nachname"
-                                    value={user.lastName}
-                                    onChange={(evt: any) => updateUserProp('lastName',evt.target.value)}
-                                    required
-                                    maxLength={30}
-                                />
-                < FormGroupInput controlId='formPassword' title="Passwort"
-                                    value={user.password}
-                                    onChange={(evt: any) => updateUserProp('password',evt.target.value)}
-                                    required={isNew}
-                                    type='password'
-                                    minLength={8}
-                                    maxLength={64}
-                                />
-                <FormGroupConsentCkb controlId='formRoleLab' title="Role Lab"
-                    onChange={(evt: any) => updateUserProp('roleLab',evt.currentTarget.checked)}
-                    type='checkbox'
-                    checked={user.roleLab}
-                />                                
-                <FormGroupConsentCkb controlId='formRoleCounter' title="Role Counter"
-                    onChange={(evt: any) => updateUserProp('roleCounter',evt.currentTarget.checked)}
-                    type='checkbox'
-                    checked={user.roleCounter}
-                />
-                <Form.Group as={Row} className='mb-1'>
-                    <Form.Label className='input-label' column xs='5' sm='3'>Gruppe</Form.Label>
-                    <Col xs='7' sm='9' className='d-flex'>
-                    <Form.Control as="select"
-                        className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
-                        value={user.subGroup ? user.subGroup : ''}
-                        placeholder="Gruppe"
-                        onChange={(ent: any) => updateUserProp('subGroup',ent.target.value)}
+
+                <Modal.Body className='bg-light'>
+                    < FormGroupInput controlId='formEmailInput' title={t('translation:user-name')}
+                        value={user.username}
                         required
-                    >
-                        {groupOptions}
-                    </Form.Control>
-                    </Col>
-                </Form.Group>                                
+                        readOnly={!isNew}
+                        onChange={(evt: any) => updateUserProp('username', evt.target.value)}
+                        minLength={3}
+                        maxLength={50}
+                    />
+
+                    < FormGroupInput controlId='formFirstName' title={t('translation:first-name')}
+                        value={user.firstName}
+                        required
+                        onChange={(evt: any) => updateUserProp('firstName', evt.target.value)}
+                        maxLength={30}
+                    />
+
+                    < FormGroupInput controlId='formLastName' title={t('translation:name')}
+                        value={user.lastName}
+                        onChange={(evt: any) => updateUserProp('lastName', evt.target.value)}
+                        required
+                        maxLength={30}
+                    />
+
+                    < FormGroupInput controlId='formPassword' title={t('translation:password')}
+                        value={user.password}
+                        onChange={(evt: any) => updateUserProp('password', evt.target.value)}
+                        required={isNew}
+                        type='password'
+                        minLength={8}
+                        maxLength={64}
+                    />
+
+                    <hr />
+
+                    <FormGroupPermissionCkb controlId='formRoleLab' title={t('translation:permission')} label={t('translation:for-lab')}
+                        onChange={(evt: any) => updateUserProp('roleLab', evt.currentTarget.checked)}
+                        type='checkbox'
+                        checked={user.roleLab}
+                    />
+
+                    <FormGroupPermissionCkb controlId='formRoleCounter' title={t('translation:permission')} label={t('translation:for-counter')}
+                        onChange={(evt: any) => updateUserProp('roleCounter', evt.currentTarget.checked)}
+                        type='checkbox'
+                        checked={user.roleCounter}
+                    />
+
+                    <hr />
+
+                    <FormGroupSelect controlId='formGroupSelect'
+                        title={t('translation:group')}
+                        value={user.subGroup ? user.subGroup : 'empty'}
+                        onChange={(ent: any) => updateUserProp('subGroup', ent.target.value)}
+                        options={options}
+                        required
+                    />
+
                 </Modal.Body>
                 <Modal.Footer id='data-footer'>
-                                <Button onClick={handleCancel}>
+                    <Container className='p-0'>
+                        <Row>
+                            <Col sm='6' lg='4' className='mb-2 mb-sm-0 p-0 pr-sm-2'>
+                                <Button
+                                    className='p-0'
+                                    block
+                                    variant='outline-primary'
+                                    onClick={handleCancel}
+                                >
                                     {t('translation:cancel')}
                                 </Button>
-                                <Button type='submit'>
-                                    {isNew ? 'Erstellen' : 'Übernehmen'}
+                            </Col>
+                            <Col sm='6' lg='4' className='p-0 pl-sm-2'>
+                                <Button
+                                    className='p-0'
+                                    block
+                                    type='submit'
+                                    disabled={btnOkDisabled}
+                                >
+                                    {isNew ? t('translation:add') : t('translation:edit')}
+
+                                    <Spinner
+                                        as="span"
+                                        className='btn-spinner'
+                                        animation="border"
+                                        hidden={!btnOkDisabled}
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                    />
                                 </Button>
+                            </Col>
+                        </Row>
+                    </Container>
                 </Modal.Footer>
-                </Form>
-            </Modal>
+            </Form>
+        </Modal>
     )
 }
 

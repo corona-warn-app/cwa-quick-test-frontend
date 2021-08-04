@@ -45,6 +45,8 @@ const GroupModal = (props: any) => {
     const [data, setData] = React.useState('');
     const [validated, setValidated] = React.useState(false);
     const [isReady, setIsReady] = React.useState(false);
+    const [isNew, setIsNew] = React.useState(true);
+    const [options, setOptions] = React.useState<JSX.Element[]>();
 
     const groupReloaded = (group: IGroupDetails) => {
         if (group) {
@@ -57,23 +59,14 @@ const GroupModal = (props: any) => {
     const [group, updateGroup, setGroup] = useGetGroupDetails(groupReloaded, props.handleError);
 
     React.useEffect(() => {
-        setBtnOkDisabled(false);
-        if (props.groupId) {
-            updateGroup(props.groupId);
-        } else {
-            setGroup({ ...emptyGroup });
-            setData('')
-        }
-    }, [])
-
-    React.useEffect(() => {
         if (group) {
-            console.log('möp');
-
             setIsReady(true);
+            const options = getOptions();
+            setOptions(options);
         }
-    }, [group])
 
+        setIsNew(!(group && group.id));
+    }, [group])
 
     const handleCancel = () => {
         props.onCancel();
@@ -96,8 +89,8 @@ const GroupModal = (props: any) => {
     }
 
     const handleOk = () => {
-        setBtnOkDisabled(true);
         if (props.handleOk) {
+            setBtnOkDisabled(true);
             group.pocDetails = packData(data);
 
             if (!group.pocId) {
@@ -110,9 +103,12 @@ const GroupModal = (props: any) => {
 
     const handleEnter = () => {
         setBtnOkDisabled(false);
+        setValidated(false);
+
         if (props.groupId) {
             updateGroup(props.groupId);
-        } else {
+        }
+        else {
             setGroup({ ...emptyGroup });
             setData('')
         }
@@ -120,11 +116,6 @@ const GroupModal = (props: any) => {
 
     const handleExited = () => {
         setIsReady(false);
-    }
-
-    const updateGroupProp = (name: string, value: any) => {
-        const ngroup = { ...group, [name]: value };
-        setGroup(ngroup);
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -139,30 +130,49 @@ const GroupModal = (props: any) => {
         }
     }
 
-    const isNew = !(group && group.id);
+    const updateGroupProp = (name: string, value: any) => {
+        const ngroup = { ...group, [name]: value };
+        setGroup(ngroup);
+    }
 
-    const selfIdOrChildren: string[] = [];
     const collectChildren = (idlist: string[], parentNode: IGroup) => {
         if (parentNode) {
             idlist.push(parentNode.id);
             parentNode.children.forEach(child => collectChildren(idlist, child as IGroup));
         }
     }
-    if (!isNew) {
-        const node = props.groups.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
-        if (node) {
-            collectChildren(selfIdOrChildren, node.group);
+
+    const getOptions = () => {
+        let result: JSX.Element[] = [];
+
+        if (group && group.id) {
+            
+            const node = props.groups.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
+            const selfIdOrChildren: string[] = [];
+
+            if (node) {
+                collectChildren(selfIdOrChildren, node.group);
+            }
+
+            const fList = props.groups.filter((groupNode: IGroupNode) => selfIdOrChildren.indexOf(groupNode.group.id) < 0)
+
+            result = fList.map((groupNode: IGroupNode) =>
+                <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level) + groupNode.group.name}</option>
+            );
+
+            result.push(<option key="empty" value="empty">{t('translation:no-parentgroup-option')}</option>);
         }
+
+
+        return result;
     }
-    const fList = props.groups.filter((groupNode: IGroupNode) => selfIdOrChildren.indexOf(groupNode.group.id) < 0)
-    const groupOptions = fList.map((groupNode: IGroupNode) =>
-        <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level) + groupNode.group.name}</option>
-    );
-    groupOptions.push(<option key="empty" value="empty">-- keine Elterngruppe --</option>);
+
+
 
     return (
         <Modal
             contentClassName='data-modal'
+            size="lg"
             show={props.show}
             backdrop="static"
             keyboard={false}
@@ -171,7 +181,7 @@ const GroupModal = (props: any) => {
             onExited={handleExited}
         >
             {!isReady
-                ? <CwaSpinner />
+                ? <CwaSpinner background='#eeeeee' />
                 : <Fade appear={true} in={true} >
                     <Form
                         className='form-flex'
@@ -179,32 +189,32 @@ const GroupModal = (props: any) => {
                         validated={validated}
                     >
                         <Modal.Header id='data-header' className='pb-0' >
-                            <Modal.Title>{isNew ? 'Neue Gruppe anlegen' : 'Gruppe bearbeiten'}</Modal.Title>
+                            <Modal.Title>{isNew ? t('translation:add-group') : t('translation:edit-group')}</Modal.Title>
                         </Modal.Header>
 
-                        <Modal.Body className='py-0 bg-light'>
+                        <Modal.Body className='bg-light'>
                             {isNew
                                 ? <></>
                                 : <>
                                     <FormGroupSelect controlId='formGroupSelect'
-                                        title={'Übergeordnete Gruppe'}
+                                        title={t('translation:parentgroup')}
                                         value={group.parentGroup ? group.parentGroup : 'empty'}
                                         onChange={(ent: any) => updateGroupProp('parentGroup', ent.target.value)}
-                                        options={groupOptions}
+                                        options={options}
                                     />
 
                                     <hr />
                                 </>
                             }
 
-                            < FormGroupInput controlId='formFirstName' title="Name"
+                            < FormGroupInput controlId='formFirstName' title={t('translation:name')}
                                 value={group ? group.name : ''}
                                 required
                                 onChange={(evt: any) => updateGroupProp('name', evt.target.value)}
                                 maxLength={50}
                             />
 
-                            < FormGroupTextarea controlId='formLastName' title="Data"
+                            < FormGroupTextarea controlId='formAdressData' title={t('translation:address-doctor')} placeholder={t('translation:address-doctor-placeholder')}
                                 value={data}
                                 onChange={(evt: any) => setData(evt.target.value)}
                                 type='textarea'
@@ -215,7 +225,7 @@ const GroupModal = (props: any) => {
                                 ? <></>
                                 : <>
                                     <hr />
-                                    < FormGroupInput controlId='formPocId' title="POC Id"
+                                    < FormGroupInput controlId='formPocId' title={t('translation:poc-id')}
                                         value={group && group.pocId ? group.pocId : ''}
                                         readOnly
                                     />
@@ -227,7 +237,7 @@ const GroupModal = (props: any) => {
                         <Modal.Footer id='data-footer'>
                             <Container className='p-0'>
                                 <Row>
-                                    <Col sm='6' className='mb-2 mb-sm-0 pl-sm-0'>
+                                    <Col sm='6' lg='4' className='mb-2 mb-sm-0 p-0 pr-sm-2'>
                                         <Button
                                             className='p-0'
                                             block
@@ -237,14 +247,14 @@ const GroupModal = (props: any) => {
                                             {t('translation:cancel')}
                                         </Button>
                                     </Col>
-                                    <Col sm='6' className='pr-sm-0'>
+                                    <Col sm='6' lg='4' className='p-0 pl-sm-2'>
                                         <Button
                                             className='p-0'
                                             block
                                             type='submit'
                                             disabled={btnOkDisabled}
                                         >
-                                            {isNew ? 'Erstellen' : 'Übernehmen'}
+                                            {isNew ? t('translation:add') : t('translation:edit')}
 
                                             <Spinner
                                                 as="span"

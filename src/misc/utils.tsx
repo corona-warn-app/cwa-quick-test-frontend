@@ -28,6 +28,7 @@ export interface IUtils {
     isTelValid: (value: string) => boolean,
     isEMailValid: (value: string) => boolean,
     isStandardisedNameValid: (value: string) => boolean,
+    getIndent: (level: number) => JSX.Element[],
     pickerDateFormat: string,
     pickerDateTimeFormat: string,
     momentDateFormat: string,
@@ -51,6 +52,16 @@ const telRegExp = new RegExp(pattern.tel);
 const eMailRegExp = new RegExp(pattern.eMail);
 const standardisedNameRegExp = new RegExp(pattern.standardisedName);
 
+const getIndent = (level: number): JSX.Element[] => {
+    const indent: JSX.Element[] = [];
+
+    for (let index = 0; index < level; index++) {
+        indent.push(<span key={index} className='intend' />);
+    }
+
+    return indent;
+}
+
 const utils: IUtils = {
     shortHashLen: shortHashLen,
     pattern: pattern,
@@ -60,6 +71,7 @@ const utils: IUtils = {
     isTelValid: (tel: string) => telRegExp.test(tel),
     isEMailValid: (eMail: string) => eMailRegExp.test(eMail),
     isStandardisedNameValid: (value: string) => standardisedNameRegExp.test(value),
+    getIndent: getIndent,
     pickerDateFormat: 'dd.MM.yyyy',
     pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',
     momentDateFormat: 'DD.MM.yyyy',
