@@ -142,6 +142,26 @@ export const FormGroupSexRadio = (props: any) => {
     )
 }
 
+export const FormGroupDccConsentRadio = (props: any) => {
+
+    return (!props ? <></> :
+        <Form.Group as={Col} xs='6' sm='2' className='d-flex mb-0 mr-2 ml-0 pl-0' controlId={props.controlId}>
+            <Form.Check className='d-flex align-self-center'>
+                <Form.Check.Input
+                    className='rdb-input'
+                    type='radio'
+                    name={props.name}
+                    id={props.controlId}
+                    checked={props.checked}
+                    onChange={props.onChange}
+                    required={props.required}
+                />
+                <Form.Label className='rdb-label mb-0 pl-2'>{props.title}</Form.Label>
+            </Form.Check>
+        </Form.Group>
+    )
+}
+
 export const FormGroupRadio = (props: any) => {
 
     return (!props ? <></> :

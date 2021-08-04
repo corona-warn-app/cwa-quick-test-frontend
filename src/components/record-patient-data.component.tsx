@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Card, Container, Fade, Form, Row } from 'react-bootstrap';
+import { Card, Col, Container, Fade, Form, Image, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -36,9 +36,9 @@ import CardFooter from './modules/card-footer.component';
 import CardHeader from './modules/card-header.component';
 import { IAddressData, IPersonData } from '../misc/quick-test';
 import AddressInputs from './modules/address-inputs';
-import { FormGroupConsentCkb, FormGroupInput, FormGroupSexRadio } from './modules/form-group.component';
+import { FormGroupConsentCkb, FormGroupDccConsentRadio, FormGroupInput, FormGroupRadio, FormGroupSexRadio } from './modules/form-group.component';
 import AppContext from '../misc/appContext';
-
+import eu_logo from "../assets/images/eu_logo.png";
 
 const RecordPatientData = (props: any) => {
 
@@ -162,34 +162,38 @@ const RecordPatientData = (props: any) => {
                         <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
 
                             {/*
-    header with title and id card query
-    */}
+                            header with title and id card query
+                            */}
                             <CardHeader idCard={true} title={t('translation:record-result2')} />
 
                             {/*
-    content area with patient inputs and check box
-    */}
+                            content area with patient inputs and check box
+                            */}
                             <Card.Body id='data-body' className='pt-0'>
 
                                 {/* dccConsent */}
-                                <Form.Group as={Row} controlId='formDccConsent' className='mb-1'>
-                                    <Form.Label className='input-label' column xs='5' sm='3'>{t('translation:testZertifikat')}*</Form.Label>
+                                <Row className='yellow'>
+                                    <Form.Label className='input-label' column xs='5' sm='3'>
+                                        {t('translation:testZertifikat')}*
+                                        <Image className="eu-flag" src={eu_logo} />
+                                    </Form.Label>
                                     <Form.Label className='input-label' column xs='7' sm='9'>{t('translation:dccConsent')}</Form.Label>
+
                                     <Form.Label className='input-label' column xs='5' sm='3'></Form.Label>
-                                    <Row>
-                                        <FormGroupSexRadio controlId='dccConsent-radio1' name="dccConsent-radios" title={t('translation:ja')}
+                                    <Col xs='6' sm='4' className='d-flex pr-10 pb-2'>
+                                        <FormGroupDccConsentRadio controlId='dccConsent-radio1' name="dccConsent-radios" title={t('translation:ja')}
                                             checked={dccConsent}
                                             onChange={() => setDccConsent(true)}
                                             required={true}
                                         />
 
-                                        <FormGroupSexRadio controlId='dccConsent-radio2' name="dccConsent-radios" title={t('translation:nein')}
+                                        <FormGroupDccConsentRadio controlId='dccConsent-radio2' name="dccConsent-radios" title={t('translation:nein')}
                                             checked={!dccConsent}
                                             onChange={(evt: any) => setDccConsent(false)}
                                             required={true}
                                         />
-                                    </Row>
-                                </Form.Group>
+                                    </Col>
+                                </Row>
 
                                 <hr />
 
