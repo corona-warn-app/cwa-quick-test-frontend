@@ -1,4 +1,5 @@
 import React from "react";
+import { AriaAttributes } from "react";
 import { Form, Row, Col, Accordion } from "react-bootstrap";
 
 import { IValueSet } from "../../api";
@@ -168,7 +169,7 @@ export const FormGroupSexRadio = (props: any) => {
 }
 
 export const FormGroupDccConsentRadio = (props: any) => {
-
+    
     return (!props ? <></> :
         <Form.Group as={Col} xs='6' sm='2' className='d-flex mb-0 mr-2 ml-0 pl-0' controlId={props.controlId}>
             <Form.Check className='d-flex align-self-center'>
@@ -180,6 +181,8 @@ export const FormGroupDccConsentRadio = (props: any) => {
                     checked={props.checked}
                     onChange={props.onChange}
                     required={props.required}
+                    aria-controls="collapseIcao"
+                    aria-expanded={props.dccConsent}
                 />
                 <Form.Label className='rdb-label mb-0 pl-2'>{props.title}</Form.Label>
             </Form.Check>

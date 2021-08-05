@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Row, Col } from "react-bootstrap";
+import { Form, Row, Col, Collapse } from "react-bootstrap";
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -119,27 +119,29 @@ const PersonInputs = (props: any) => {
 
             <hr />
 
-            {/* standardised first name input */}
-            <FormGroupInput controlId='formStandadisedGivenNameInput' title={t('translation:standardised-first-name')}
-                value={standardisedGivenName}
-                onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedGivenName)}
-                required={props.dccConsent}
-                pattern={utils.pattern.standardisedName}
-                hidden={!props.dccConsent}
-                maxLength={50}
-            />
+            <Collapse in={props.dccConsent}>
+                <div>
+                    {/* standardised first name input */}
+                    <FormGroupInput controlId='formStandadisedGivenNameInput' title={t('translation:standardised-first-name')}
+                        value={standardisedGivenName}
+                        onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedGivenName)}
+                        required={props.dccConsent}
+                        pattern={utils.pattern.standardisedName}
+                        maxLength={50}
+                    />
 
-            {/*standardised name input */}
-            <FormGroupInput controlId='formStandadisedNameInput' title={t('translation:standardised-name')}
-                value={standardisedFamilyName}
-                onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedFamilyName)}
-                required={props.dccConsent}
-                pattern={utils.pattern.standardisedName}
-                hidden={!props.dccConsent}
-                maxLength={50}
-            />
+                    {/*standardised name input */}
+                    <FormGroupInput controlId='formStandadisedNameInput' title={t('translation:standardised-name')}
+                        value={standardisedFamilyName}
+                        onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedFamilyName)}
+                        required={props.dccConsent}
+                        pattern={utils.pattern.standardisedName}
+                        maxLength={50}
+                    />
 
-            <hr hidden={!props.dccConsent} />
+                    <hr/>
+                </div>
+            </Collapse>
 
             {/* date of birth input */}
             <Form.Group as={Row} controlId='formDateOfBirthInput' className='pb-3 mb-0'>
