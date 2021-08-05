@@ -217,6 +217,7 @@ const GroupModal = (props: any) => {
 
                             < FormGroupTextarea controlId='formAdressData' title={t('translation:address-testcenter')} placeholder={t('translation:address-testcenter-placeholder')}
                                 value={data}
+                                required
                                 onChange={(evt: any) => setData(evt.target.value)}
                                 type='textarea'
                                 maxLength={300}
