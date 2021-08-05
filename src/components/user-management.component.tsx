@@ -42,7 +42,7 @@ const emptyUser: IUser = {
     lastName: '',
     username: '',
     password: '',
-    subGroup: 'empty',
+    subGroup: '',
     roleLab: false,
     roleCounter: false,
 }
@@ -105,8 +105,12 @@ const UserManagement = (props: any) => {
 
             updateUser(user, keycloak.token)
                 .then(() => {
-                    if (fuser && fuser.subGroup !== user.subGroup
-                        && keycloak.token && user.subGroup && user.subGroup !== 'empty') {
+                    if (
+                        fuser
+                        && fuser.subGroup !== user.subGroup
+                        && keycloak.token
+                        && user.subGroup
+                    ) {
                         addUserToGroup(user.id, user.subGroup, keycloak.token)
                             .then(() => {
                                 refreshUsers();
@@ -171,14 +175,12 @@ const UserManagement = (props: any) => {
 
                 updateGroup(uGroup, keycloak.token)
                     .then(() => {
-                        console.log("update group finished");
                         const fgroupNode = groupNodes.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
 
                         if (keycloak.token
                             && fgroupNode
                             && group.id
                             && group.parentGroup
-                            && group.parentGroup !== 'empty'
                             && fgroupNode.parentGroup !== group.parentGroup) {
                             addGroupAsChild(group.id, group.parentGroup, keycloak.token)
                                 .then(() => {

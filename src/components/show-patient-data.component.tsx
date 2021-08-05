@@ -54,7 +54,6 @@ const ShowPatientData = (props: any) => {
 
     // set quickTest data on mount and set hash from uuid
     React.useEffect(() => {
-        // console.log(JSON.stringify(props));
         if (isInit) {
             if (props.quickTest) {
                 setQuickTest(props.quickTest)

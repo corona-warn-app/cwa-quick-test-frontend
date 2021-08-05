@@ -35,6 +35,7 @@ const emptyGroup: IGroupDetails = {
     pocId: '',
     name: '',
     pocDetails: '',
+    parentGroup: ''
 }
 
 const GroupModal = (props: any) => {
@@ -161,7 +162,7 @@ const GroupModal = (props: any) => {
                 <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level) + groupNode.group.name}</option>
             );
 
-            result.push(<option key="empty" value="empty">{t('translation:no-parentgroup-option')}</option>);
+            // result.push(<option key="empty" value="empty">{t('translation:no-parentgroup-option')}</option>);
         }
 
 
@@ -199,7 +200,8 @@ const GroupModal = (props: any) => {
                                 : <>
                                     <FormGroupSelect controlId='formGroupSelect'
                                         title={t('translation:parentgroup')}
-                                        value={group.parentGroup ? group.parentGroup : 'empty'}
+                                        placeholder={t('translation:no-parentgroup-option')}
+                                        value={group.parentGroup}
                                         onChange={(ent: any) => updateGroupProp('parentGroup', ent.target.value)}
                                         options={options}
                                     />
