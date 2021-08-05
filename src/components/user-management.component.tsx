@@ -175,7 +175,6 @@ const UserManagement = (props: any) => {
 
                 updateGroup(uGroup, keycloak.token)
                     .then(() => {
-                        console.log("update group finished");
                         const fgroupNode = groupNodes.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
 
                         if (keycloak.token

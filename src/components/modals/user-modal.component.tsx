@@ -40,8 +40,6 @@ const UserModal = (props: any) => {
     React.useEffect(() => {
         if (props.user.username !== user.username || !props.user.username) {
             setUser(props.user);
-            console.log(props.user);
-            
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.user]);

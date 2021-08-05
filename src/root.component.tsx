@@ -62,7 +62,6 @@ const Root = (props: any) => {
 
   React.useEffect(() => {
     if (contextConfig && contextConfig['rules-server-url']) {
-      console.log(contextConfig);
       setDccRulesServices(contextConfig['rules-server-url'])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
