@@ -40,6 +40,8 @@ const UserModal = (props: any) => {
     React.useEffect(() => {
         if (props.user.username !== user.username || !props.user.username) {
             setUser(props.user);
+            console.log(props.user);
+            
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.user]);
@@ -91,10 +93,10 @@ const UserModal = (props: any) => {
             <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level) + groupNode.group.name}</option>
         )
 
-        if (!user.subGroup || !props.groups.find((groupNode: IGroupNode) => groupNode.group.id === user.subGroup)) {
-            user.subGroup = null;
-            result.unshift(<option key={0} value='empty'>{t('translation:no-group-option')}</option>);
-        }
+        // if (!user.subGroup || !props.groups.find((groupNode: IGroupNode) => groupNode.group.id === user.subGroup)) {
+        //     user.subGroup = null;
+        //     result.unshift(<option key={0} value='empty'>{t('translation:no-group-option')}</option>);
+        // }
 
         return result;
     }
@@ -139,7 +141,7 @@ const UserModal = (props: any) => {
                     />
 
                     < FormGroupInput controlId='formPassword' title={t('translation:password')}
-                        value={user.password}
+                        value={user.password ? user.password : ''}
                         onChange={(evt: any) => updateUserProp('password', evt.target.value)}
                         required={isNew}
                         type='password'
@@ -165,7 +167,8 @@ const UserModal = (props: any) => {
 
                     <FormGroupSelect controlId='formGroupSelect'
                         title={t('translation:group')}
-                        value={user.subGroup ? user.subGroup : 'empty'}
+                        placeholder={t('translation:no-group-option')}
+                        value={user.subGroup ? user.subGroup : ''}
                         onChange={(ent: any) => updateUserProp('subGroup', ent.target.value)}
                         options={options}
                         required

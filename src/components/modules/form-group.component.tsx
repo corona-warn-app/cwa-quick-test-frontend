@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Row, Col, Accordion } from "react-bootstrap";
+import { Form, Row, Col, Accordion, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import { IValueSet } from "../../api";
 
@@ -12,28 +12,45 @@ export const FormGroupInput = (props: any) => {
             <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
 
             <Col xs='7' sm='9' className='d-flex'>
-                <Form.Control
-                    className='qt-input'
-                    value={props.value}
-                    readOnly={props.readOnly}
-                    disabled={props.disabled}
-                    onClick={props.onClick}
-                    onChange={props.onChange}
-                    placeholder={props.placeholder ? props.placeholder : props.title}
-                    type={props.type ? props.type : 'text'}
-                    required={props.required}
-                    maxLength={props.maxLength}
-                    minLength={props.minLength}
-                    min={props.min}
-                    max={props.max}
-                    pattern={props.pattern}
-                    list={props.datalistId}
-                />
-                {!(props.datalist && props.datalistId)
-                    ? <></>
-                    : <datalist id={props.datalistId}>
-                        {props.datalist}
-                    </datalist>}
+                <InputGroup >
+                    <Form.Control
+                        className='qt-input'
+                        value={props.value}
+                        readOnly={props.readOnly}
+                        disabled={props.disabled}
+                        onClick={props.onClick}
+                        onChange={props.onChange}
+                        placeholder={props.placeholder ? props.placeholder : props.title}
+                        type={props.type ? props.type : 'text'}
+                        required={props.required}
+                        maxLength={props.maxLength}
+                        minLength={props.minLength}
+                        min={props.min}
+                        max={props.max}
+                        pattern={props.pattern}
+                        list={props.datalistId}
+                    />
+                    {
+                        !(props.datalist && props.datalistId)
+                            ? <></>
+                            : <datalist id={props.datalistId}>
+                                {props.datalist}
+                            </datalist>
+                    }
+                    {
+                        !props.prepend
+                            ? <></>
+                            : <OverlayTrigger
+                                placement='top-end'
+                                overlay={
+                                    <Tooltip id='prepend-tooltip'>
+                                        {props.tooltip}
+                                    </Tooltip>
+                                }
+                            ><InputGroup.Text className='prepend px-3' >{props.prepend}</InputGroup.Text>
+                            </OverlayTrigger>
+                    }
+                </InputGroup>
             </Col>
         </Form.Group>
     )
@@ -170,7 +187,7 @@ export const FormGroupSexRadio = (props: any) => {
 export const FormGroupDccConsentRadio = (props: any) => {
 
     return (!props ? <></> :
-        <Form.Group as={Col} xs='6' sm='2' className='d-flex mb-0 mr-2 ml-0 pl-0' controlId={props.controlId}>
+        <Form.Group as={Col} xs='5' sm='3' md='2' lg='1' className='d-flex mb-0 mr-2 ml-0 pl-0' controlId={props.controlId}>
             <Form.Check className='d-flex align-self-center'>
                 <Form.Check.Input
                     className='rdb-input'

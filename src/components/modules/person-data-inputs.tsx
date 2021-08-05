@@ -127,6 +127,8 @@ const PersonInputs = (props: any) => {
                 pattern={utils.pattern.standardisedName}
                 hidden={!props.dccConsent}
                 maxLength={50}
+                prepend='i'
+                tooltip={t('translation:standardised-first-name-tooltip')}
             />
 
             {/*standardised name input */}
@@ -137,6 +139,8 @@ const PersonInputs = (props: any) => {
                 pattern={utils.pattern.standardisedName}
                 hidden={!props.dccConsent}
                 maxLength={50}
+                prepend='i'
+                tooltip={t('translation:standardised-name-tooltip')}
             />
 
             <hr hidden={!props.dccConsent} />

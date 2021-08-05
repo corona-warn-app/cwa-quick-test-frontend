@@ -57,7 +57,7 @@ const Header = (props: any) => {
         keycloak.logout({ redirectUri: window.location.origin + navigation!.calculatedRoutes.landing });
     }
 
-    const changePasswordUrl = keycloak.authServerUrl+'realms/'+keycloak.realm+'/account/password';
+    const changePasswordUrl = keycloak.authServerUrl + 'realms/' + keycloak.realm + '/account/password';
 
     return (!isInit ? <></> :
         <Container className='position-relative'>
@@ -80,7 +80,7 @@ const Header = (props: any) => {
                     >
                         {t('translation:logout')}
                     </Nav.Link>
-                    <NavDropdown.Divider/>
+                    <NavDropdown.Divider className='m-0' />
                     <Nav.Link className='mx-0 dropdown-item' href={changePasswordUrl} target='passwordchange'>
                         {t('translation:change-password')}
                     </Nav.Link>

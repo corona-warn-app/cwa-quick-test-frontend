@@ -114,7 +114,7 @@ const RecordPatientData = (props: any) => {
         setDccConsent(true)
         setDccNoConsent(false);
     }
-    
+
     const handleDccNoConsentChange = (evt: any) => {
         setDccConsent(false)
         setDccNoConsent(true);
@@ -185,25 +185,33 @@ const RecordPatientData = (props: any) => {
 
                                 {/* dccConsent */}
                                 <Row className='yellow'>
-                                    <Form.Label className='input-label pl-1' column xs='5' sm='3'>
-                                        {t('translation:testZertifikat')}*
-                                        <Image className="eu-flag ml-1" src={eu_logo} />
-                                    </Form.Label>
-                                    <Form.Label className='input-label' column xs='7' sm='9'>{t('translation:dccConsent')}</Form.Label>
+                                    <Col className='p-0' xs='5' sm='3'>
+                                        <Row className='m-0 mb-2'>
+                                            <Col className='p-0' xs='auto'>
+                                                <Form.Label className='input-label pl-1'>
+                                                    {t('translation:testZertifikat')}*
+                                                </Form.Label>
+                                            </Col>
+                                            <Col className='p-0 jcc-xs-jcfs-lg ml-lg-2 d-flex'>
+                                                <Image className="eu-flag" src={eu_logo} />
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                    <Col xs='7' sm='9'>
+                                        <Form.Label className='input-label m-0'>{t('translation:dccConsent')}</Form.Label>
+                                        <Row className='m-0 mb-2'>
+                                            <FormGroupDccConsentRadio controlId='dccConsent-radio1' name="dccConsent-radios" title={t('translation:ja')}
+                                                checked={dccConsent}
+                                                onChange={handleDccConsentChange}
+                                                required={true}
+                                            />
 
-                                    <Form.Label className='input-label' column xs='5' sm='3'></Form.Label>
-                                    <Col xs='6' sm='4' className='d-flex pr-10 pb-2'>
-                                        <FormGroupDccConsentRadio controlId='dccConsent-radio1' name="dccConsent-radios" title={t('translation:ja')}
-                                            checked={dccConsent}
-                                            onChange={handleDccConsentChange}
-                                            required={true}
-                                        />
-
-                                        <FormGroupDccConsentRadio controlId='dccConsent-radio2' name="dccConsent-radios" title={t('translation:nein')}
-                                            checked={dccNoConsent}
-                                            onChange={handleDccNoConsentChange}
-                                            required={true}
-                                        />
+                                            <FormGroupDccConsentRadio controlId='dccConsent-radio2' name="dccConsent-radios" title={t('translation:nein')}
+                                                checked={dccNoConsent}
+                                                onChange={handleDccNoConsentChange}
+                                                required={true}
+                                            />
+                                        </Row>
                                     </Col>
                                 </Row>
 
