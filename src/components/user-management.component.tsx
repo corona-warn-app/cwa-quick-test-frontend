@@ -70,6 +70,7 @@ const UserManagement = (props: any) => {
     const [isUserData, setIsUserData] = React.useState(false);
     const [editUser, setEditUser] = React.useState<IUser>(emptyUser);
     const [isGroupEdit, setIsGroupEdit] = React.useState(false);
+    const [ownUserId, setOwnUserId] = React.useState<string>('');
     const [editGroupId, setEditGroupId] = React.useState<string>('');
     const [editGroupParentId, setEditGroupParentId] = React.useState<string>('');
 
@@ -77,6 +78,15 @@ const UserManagement = (props: any) => {
     const [confirmMessage, setConfirmMessage] = React.useState('');
     const [confirmTitle, setConfirmTitle] = React.useState('');
     const [confirmHandle, setConfirmHandle] = React.useState<() => void>();
+
+    // set user name from keycloak
+    React.useEffect(() => {
+
+        if (keycloak.idTokenParsed) {
+            setOwnUserId((keycloak.idTokenParsed as any).sub ?? '');
+        }
+
+    }, [keycloak])
 
     React.useEffect(() => {
         if (bUsers) {
@@ -381,6 +391,7 @@ const UserManagement = (props: any) => {
                                                 </Button>
                                                 <Button className="btn-icon delete-icon"
                                                     onClick={() => handleDeleteUser(u)}
+                                                    disabled={!(ownUserId && u.id !== ownUserId)}
                                                 />
                                             </Row>
                                         </td>
