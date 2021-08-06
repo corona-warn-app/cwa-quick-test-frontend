@@ -197,6 +197,8 @@ export const FormGroupDccConsentRadio = (props: any) => {
                     checked={props.checked}
                     onChange={props.onChange}
                     required={props.required}
+                    aria-controls="collapseIcao"
+                    aria-expanded={props.dccConsent}
                 />
                 <Form.Label className='rdb-label mb-0 pl-2'>{props.title}</Form.Label>
             </Form.Check>
