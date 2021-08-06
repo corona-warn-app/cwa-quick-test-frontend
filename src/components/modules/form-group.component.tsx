@@ -185,7 +185,7 @@ export const FormGroupSexRadio = (props: any) => {
 }
 
 export const FormGroupDccConsentRadio = (props: any) => {
-    
+
     return (!props ? <></> :
         <Form.Group as={Col} xs='5' sm='3' md='2' lg='1' className='d-flex mb-0 mr-2 ml-0 pl-0' controlId={props.controlId}>
             <Form.Check className='d-flex align-self-center'>
