@@ -128,6 +128,8 @@ const PersonInputs = (props: any) => {
                         required={props.dccConsent}
                         pattern={utils.pattern.standardisedName}
                         maxLength={50}
+                        prepend='i'
+                        tooltip={t('translation:standardised-first-name-tooltip')}
                     />
 
                     {/*standardised name input */}
@@ -137,9 +139,10 @@ const PersonInputs = (props: any) => {
                         required={props.dccConsent}
                         pattern={utils.pattern.standardisedName}
                         maxLength={50}
+                        prepend='i'
+                        tooltip={t('translation:standardised-name-tooltip')}
                     />
-
-                    <hr/>
+                    <hr />
                 </div>
             </Collapse>
 

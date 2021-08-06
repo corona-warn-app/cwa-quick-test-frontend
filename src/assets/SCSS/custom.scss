@@ -36,8 +36,8 @@ $light: #eeeeee;
 @import "~bootstrap/scss/bootstrap.scss";
 
 $header-height: 120px;
-$menu-width: 120px;
-$menu-padding: 1rem;
+$menu-width: 140px;
+$menu-padding: 0rem;
 $data-card-border-radius: 10px;
 $input-border-radius: 4px;
 $user-image-width: 39px;
@@ -276,6 +276,15 @@ hr {
     }
 }
 
+.jcc-xs-jcfs-lg {
+    display: flex;
+    justify-content: center;
+
+    @include media-breakpoint-up(lg) {
+        justify-content: flex-start;
+    }
+}
+
 .jcc-xs-jcfe-md {
     display: flex;
     justify-content: center;
@@ -312,7 +321,6 @@ hr {
     }
 }
 .dropdown-menu {
-    min-width: $menu-width;
     padding-left: $menu-padding;
     padding-right: $menu-padding;
     padding-top: 0px;
@@ -324,6 +332,7 @@ hr {
 
 .dropdown-item {
     text-align: center;
+    justify-content: center;
 }
 .react-date-picker__wrapper {
     border: 0 !important;
@@ -385,48 +394,62 @@ hr {
 }
 .btn-icon {
     padding: 0px;
-    border:0px;
+    border: 0px;
     background: transparent;
 }
-.table{
+.table {
     margin-bottom: 0.25rem;
 }
-th{
+th {
     background: white;
-    padding:0.1rem 0.25rem !important;
+    padding: 0.1rem 0.25rem !important;
     font-weight: normal;
     font-size: 0.9rem;
 }
-td{
+td {
     background: #f3f3f3;
     vertical-align: middle !important;
-    padding:0.5rem 0.25rem !important;
+    padding: 0.5rem 0.25rem !important;
     line-height: 16px;
     font-size: 0.8rem;
 }
-.td-btn{
+.td-btn {
     min-width: 70px;
-    width:10%;
+    width: 10%;
 }
-.intend{
+.intend {
     margin-left: 2rem;
 }
 
-.btn-add{
+.btn-add {
     padding-left: 0px;
     display: flex;
     vertical-align: middle;
 }
 
 .yellow {
-    background: #FFD617;
+    background: #ffd617;
+    padding-top: 0.5rem;
     margin-left: -0.25rem;
     margin-right: -0.25rem;
 }
 
 .eu-flag {
-    
-    vertical-align: middle !important;
-    width: 39px;
-    height: 26px;
+    width: 51px;
+    height: 34px;
+
+    @include media-breakpoint-up(lg) {
+        width: 39px;
+        height: 26px;
+    }
+}
+
+.prepend {
+    align-self: center;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: $input-border-radius;
+    border-bottom-right-radius: $input-border-radius;
+    border: 1px solid #7e7e7e;
+    margin-left: -1px;
 }
