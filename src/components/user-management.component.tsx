@@ -383,7 +383,7 @@ const UserManagement = (props: any) => {
                                         <td>{groupName(u.subGroup)}</td>
                                         <td>{rolesAsString(u)}</td>
                                         <td className='td-btn'>
-                                            <Row className='m-0  justify-content-around'>
+                                            <Row className='m-0 justify-content-around'>
                                                 <Button
                                                     className="btn-icon edit-icon"
                                                     onClick={() => startEditUser({ ...u })}
