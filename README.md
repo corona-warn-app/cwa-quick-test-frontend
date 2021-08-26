@@ -45,7 +45,7 @@ afterwards depending on the way you choose.
 
 #### yarn based build  
 Using the package dependency mananger yarn with:  
-````yarn install ```` will install all modules necessary for running the client on your local desktop.
+````yarn install```` will install all modules necessary for running the client on your local desktop.
 ````yarn start```` will start the development server on port 3000 and open up your standard browser pointing to the application.
 
 The webapplication relies on an Identity and Access Management (IAM) Component used to manage the user accounts and to authorize the login. This has currently not been configured to run on local environment.
