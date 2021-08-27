@@ -504,20 +504,24 @@ export const useGetPDF = (hash: string | undefined, onSuccess?: (status: number)
     return result;
 }
 
-export const useGetUsers =  (onError?: (error: any) => void) => {
+export const useGetUsers = (onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
-    const [result, setResult] = React.useState<any>();
+    const [result, setResult] = React.useState<IUser[]>();
+
+    const baseUri = '/api/usermanagement/users';
+
+    const header = {
+        "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+        'Content-Type': 'application/json'
+    };
 
     const refreshUsers = () => {
-        const header = {
-            "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
-            'Content-Type': 'application/json'
-        };   
-        const uri = '/api/usermanagement/users';
-    
-        api.get(uri, { headers: header })
+        api.get(baseUri, { headers: header })
             .then(response => {
                 setResult(response.data);
+                if (onSuccess) {
+                    onSuccess();
+                }
             })
             .catch(error => {
                 if (onError) {
@@ -530,50 +534,66 @@ export const useGetUsers =  (onError?: (error: any) => void) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         , []);
 
-    return [result, refreshUsers];
+    const createUser = (user: IUser) => {
+        return api.post(
+            baseUri,
+            JSON.stringify(user),
+            { headers: header }
+        )
+    }
+
+    const readUser = (user: IUser) => {
+        const uri = baseUri + '/' + user.id;
+        return api.get(
+            uri,
+            { headers: header }
+        )
+    }
+
+    const updateUser = (user: IUser) => {
+        const uri = baseUri + '/' + user.id;
+
+        return api.patch(
+            uri,
+            JSON.stringify(user),
+            { headers: header }
+        )
+    }
+
+    const deleteUser = (userId: string) => {
+        const uri = baseUri + '/' + userId;
+
+        return api.delete(uri, { headers: header })
+    }
+
+    return [
+        result,
+        refreshUsers,
+        createUser,
+        readUser,
+        updateUser,
+        deleteUser
+    ] as const;
 }
 
-export const createUser = (user: IUser, token: string) => {
-    const header = {
-        "Authorization": `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    };   
-    const uri = '/api/usermanagement/users';
-    return api.post(uri, JSON.stringify(user), { headers: header })
-}
-
-export const deleteUser = (userId: string, token: string) => {
-    const header = {
-        "Authorization": `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    };   
-    const uri = '/api/usermanagement/users/'+userId;
-    return api.delete(uri, { headers: header })
-}
-
-export const updateUser = (user: IUser, token: string) => {
-    const header = {
-        "Authorization": `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    };   
-    const uri = '/api/usermanagement/users/'+user.id;
-    return api.patch(uri, JSON.stringify(user), { headers: header })
-}
-
-export const useGetGroups = (onError?: (error: any) => void) => {
+export const useGetGroups = (onSuccess?: () => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
     const [result, setResult] = React.useState<any>();
 
-    const refreshGroups = () => {
-        const header = {
-            "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
-            'Content-Type': 'application/json'
-        };   
-        const uri = '/api/usermanagement/groups';
-    
-        api.get(uri, { headers: header })
+    const baseUri = '/api/usermanagement/groups';
+
+    const header = {
+        "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+        'Content-Type': 'application/json'
+    };
+
+    const refreshGroups = (onSuccess?: () => void) => {
+        api.get(baseUri, { headers: header })
             .then(response => {
                 setResult(response.data);
+                if (onSuccess) {
+                    onSuccess();
+                }
             })
             .catch(error => {
                 if (onError) {
@@ -582,11 +602,41 @@ export const useGetGroups = (onError?: (error: any) => void) => {
             });
     }
 
-    React.useEffect(refreshGroups
+
+    const createGroup = (group: IGroupDetails) => {
+        return api.post(
+            baseUri,
+            JSON.stringify(group),
+            { headers: header }
+        )
+    }
+
+    const updateGroup = (group: IGroupDetails) => {
+        const uri = baseUri + '/' + group.id;
+
+        return api.put(uri,
+            JSON.stringify(group),
+            { headers: header }
+        )
+    }
+
+    const deleteGroup = (groupId: string) => {
+        const uri = baseUri + '/' + groupId;
+
+        return api.delete(uri, { headers: header })
+    }
+
+    React.useEffect(()=>{refreshGroups(onSuccess)}
         // eslint-disable-next-line react-hooks/exhaustive-deps
         , []);
 
-    return [result, refreshGroups];
+    return [
+        result,
+        refreshGroups,
+        createGroup,
+        updateGroup,
+        deleteGroup
+    ] as const;
 }
 
 export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void, onError?: (error: any) => void) => {
@@ -615,51 +665,24 @@ export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }
-    
+
     return [result, updateGroup, setResult];
 }
 
-export const createGroup = (group: IGroupDetails, token: string) => {
+export const addUserToGroup = (userId: string, groupId: string, token: string) => {
     const header = {
         "Authorization": `Bearer ${token}`,
         'Content-Type': 'application/json'
-    };   
-    const uri = '/api/usermanagement/groups';
-    return api.post(uri, JSON.stringify(group), { headers: header })
-}
-
-export const updateGroup = (group: IGroupDetails, token: string) => {
-    const header = {
-        "Authorization": `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    };   
-    const uri = '/api/usermanagement/groups/'+group.id;
-    return api.put(uri, JSON.stringify(group), { headers: header })
-}
-
-export const deleteGroup = (groupId: string, token: string) => {
-    const header = {
-        "Authorization": `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    };   
-    const uri = '/api/usermanagement/groups/'+groupId;
-    return api.delete(uri, { headers: header })
-}
-
-export const addUserToGroup = (userId: string ,groupId: string, token: string) => {
-    const header = {
-        "Authorization": `Bearer ${token}`,
-        'Content-Type': 'application/json'
-    };   
-    const uri = '/api/usermanagement/groups/'+groupId+'/users';
-    return api.post(uri,JSON.stringify({userId: userId}), { headers: header })
+    };
+    const uri = '/api/usermanagement/groups/' + groupId + '/users';
+    return api.post(uri, JSON.stringify({ userId: userId }), { headers: header })
 }
 
 export const addGroupAsChild = (childGroupId: string, parentGroupId: string, token: string) => {
     const header = {
         "Authorization": `Bearer ${token}`,
         'Content-Type': 'application/json'
-    };   
-    const uri = '/api/usermanagement/groups/'+parentGroupId+'/subgroups';
-    return api.post(uri,JSON.stringify({groupId: childGroupId}), { headers: header })
+    };
+    const uri = '/api/usermanagement/groups/' + parentGroupId + '/subgroups';
+    return api.post(uri, JSON.stringify({ groupId: childGroupId }), { headers: header })
 }

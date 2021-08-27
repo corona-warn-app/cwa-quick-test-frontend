@@ -32,6 +32,11 @@ export interface IUser {
     password?: string,
 }
 
+export interface IDisplayUser extends IUser{
+    displayGroup?: string | null
+    displayRole?: string | null
+}
+
 export interface IGroup {
     name: string,
     id: string,

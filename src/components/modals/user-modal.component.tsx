@@ -45,13 +45,18 @@ const UserModal = (props: any) => {
     }, [props.user]);
 
     React.useEffect(() => {
-        const options = getOptions();
-        setOptions(options);
+        if (user && props.groups) {
+            const options = getOptions();
+            setOptions(options);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [user]);
+    }, [user, props.groups]);
 
     const handleCancel = () => {
         props.onCancel();
+    }
+    const handleExit = () => {
+        props.onExit();
     }
 
     const updateUserProp = (name: string, value: any) => {
@@ -107,6 +112,7 @@ const UserModal = (props: any) => {
             keyboard={false}
             centered
             onEnter={handleEnter}
+            onExited={handleExit}
         >
             <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
 
