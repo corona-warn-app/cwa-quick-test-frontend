@@ -102,5 +102,5 @@
   "permission": "Permission",
   "for-lab": "for test data acquisition",
   "for-counter": "für patient data acquisition",
-  "user-conflict-error": "Username is already taken!"
+  "user-conflict-error": "Username is already in use!"
 }
