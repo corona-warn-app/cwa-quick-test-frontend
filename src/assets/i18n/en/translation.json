@@ -97,9 +97,10 @@
   "delete-group-title": "Do you want to delete the group \"{{groupName}}\"?",
   "delete-group-msg": "This group and all subgroups will be deleted. Users who are assigned to these groups lose their group membership and can no longer use the quick test portal until they have been assigned to a group again.",
   "delete-user-title": "Do you want to delete the user \"{{userName}}\"?",
-    "no-group-option": "-- empty --",
-    "password": "Password",
-    "permission": "Permission",
-    "for-lab": "for test data acquisition",
-    "for-counter": "für patient data acquisition"
+  "no-group-option": "-- empty --",
+  "password": "Password",
+  "permission": "Permission",
+  "for-lab": "for test data acquisition",
+  "for-counter": "für patient data acquisition",
+  "user-conflict-error": "Username is already taken!"
 }

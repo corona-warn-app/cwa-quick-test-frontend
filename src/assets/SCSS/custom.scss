@@ -191,6 +191,11 @@ hr {
 }
 .qt-input {
     align-self: center;
+    border-radius: $input-border-radius !important;
+    border: 1px solid $primary;
+}
+.qt-input-prepend {
+    align-self: center;
     border-radius: $input-border-radius;
     border: 1px solid $primary;
 }

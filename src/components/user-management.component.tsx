@@ -42,13 +42,17 @@ const UserManagement = (props: any) => {
     const [userReload, setUserReload] = React.useState(false);
 
 
-    const handleError = (error: any) => {
+    const handleError = (error: any, message?: string, onCancel?: () => void) => {
         let msg = '';
 
         if (error) {
-            msg = error.message
+            msg = error.message;
         }
-        props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
+        if (message) {
+            msg = message;
+        }
+
+        props.setError({ error: error, message: msg, onCancel: onCancel ?? context.navigation!.toLanding });
     }
 
     React.useEffect(() => {

@@ -113,5 +113,6 @@
   "for-lab": "für Testerfassung",
   "for-counter": "für Patientendatenerfassung",
   "lab": "Testerfassung",
-  "counter": "Patientendatenerfassung"
+  "counter": "Patientendatenerfassung",
+  "user-conflict-error": "Der Benutzername ist bereits vergeben!"
 }

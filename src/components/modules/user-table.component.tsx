@@ -25,18 +25,7 @@ const emptyUser: IDisplayUser = {
     roleCounter: false,
 }
 
-interface IGroupName {
-    [key: string]: string
-}
-
-interface IUserTableProps {
-    groupNodes?: IGroupNode[]
-    handleError: (error: any) => void
-    userReload: boolean
-    setUserReload: (value: boolean) => void
-}
-
-const UserTable = (props: IUserTableProps) => {
+const UserTable = (props: any) => {
 
     const context = React.useContext(AppContext);
 
@@ -44,8 +33,10 @@ const UserTable = (props: IUserTableProps) => {
     const { keycloak } = useKeycloak();
 
     const handleSuccess = () => {
-        setIsUserData(false);
+        setShowUserModal(false);
         setShowConfirm(false);
+        setIsUserSuccessfullUpdated(true);
+        setIsUserCreationError(false);
     }
 
     const [bUsers,
@@ -57,7 +48,10 @@ const UserTable = (props: IUserTableProps) => {
 
     const [users, setUsers] = React.useState<IDisplayUser[]>([]);
     const [reload, setReload] = React.useState(true);
-    const [isUserData, setIsUserData] = React.useState(false);
+
+    const [showUserModal, setShowUserModal] = React.useState(false);
+    const [isUserSuccessfullUpdated, setIsUserSuccessfullUpdated] = React.useState(false);
+    const [isUserCreationError, setIsUserCreationError] = React.useState(false);
     const [editUser, setEditUser] = React.useState<IDisplayUser>(emptyUser);
     const [ownUserId, setOwnUserId] = React.useState<string>('');
 
@@ -196,14 +190,19 @@ const UserTable = (props: IUserTableProps) => {
                     handleSuccess();
                 })
                 .catch(e => {
-                    props.handleError(e);
+                    if (e && e.message && (e.message as string).includes('409')) {
+                        setIsUserCreationError(true);
+                    }
+                    else {
+                        props.handleError(e);
+                    }
                 })
         }
     }
 
     const startEditUser = (user: IUser) => {
         setEditUser({ ...user });
-        setIsUserData(true);
+        setShowUserModal(true);
     }
 
     const handleDeleteUser = (user: IDisplayUser) => {
@@ -265,7 +264,7 @@ const UserTable = (props: IUserTableProps) => {
         let groupName = ''
 
         if (props.groupNodes && groupId) {
-            const fNode = props.groupNodes.find(gnode => gnode.group.id === groupId);
+            const fNode = (props.groupNodes as IGroupNode[]).find(gnode => gnode.group.id === groupId);
 
             if (fNode) {
                 groupName = fNode.group.path;
@@ -349,7 +348,7 @@ const UserTable = (props: IUserTableProps) => {
                             className='btn-add'
                             size="sm"
                             variant="light"
-                            onClick={() => { setEditUser({ ...emptyUser }); setIsUserData(true) }}>
+                            onClick={() => { setEditUser({ ...emptyUser }); setShowUserModal(true) }}>
                             <img className='mr-2' src={imageAdd} alt="Hinzufügen" />
                             {t('translation:add-user')}
                         </Button>
@@ -359,16 +358,21 @@ const UserTable = (props: IUserTableProps) => {
 
 
         <UserModal
-            show={isUserData}
+            show={showUserModal}
             onCancel={() => {
-                setIsUserData(false);
+                setShowUserModal(false);
             }}
             onExit={() => {
                 setEditUser({ ...emptyUser });
+                setIsUserSuccessfullUpdated(false);
+                setIsUserCreationError(false);
             }}
             groups={props.groupNodes}
             handleOk={userUpdate}
             user={editUser}
+            isSuccess={isUserSuccessfullUpdated}
+            isCreationError={isUserCreationError}
+            resetError={() => setIsUserCreationError(false)}
         />
         <ConfirmModal
             show={showConfirm}
