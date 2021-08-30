@@ -12,9 +12,9 @@ export const FormGroupInput = (props: any) => {
             <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
 
             <Col xs='7' sm='9' className='d-flex'>
-                <InputGroup >
+                <InputGroup>
                     <Form.Control
-                        className='qt-input'
+                        className={!props.prepend ? 'qt-input' : 'qt-input-prepend'}
                         value={props.value}
                         readOnly={props.readOnly}
                         disabled={props.disabled}
@@ -29,6 +29,7 @@ export const FormGroupInput = (props: any) => {
                         max={props.max}
                         pattern={props.pattern}
                         list={props.datalistId}
+                        isInvalid={props.isInvalid}
                     />
                     {
                         !(props.datalist && props.datalistId)
@@ -50,6 +51,9 @@ export const FormGroupInput = (props: any) => {
                             ><InputGroup.Text className='prepend px-3' >{props.prepend}</InputGroup.Text>
                             </OverlayTrigger>
                     }
+                    <Form.Control.Feedback type="invalid">
+                        {props.InvalidText}
+                    </Form.Control.Feedback>
                 </InputGroup>
             </Col>
         </Form.Group>

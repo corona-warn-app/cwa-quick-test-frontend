@@ -52,6 +52,20 @@ const UserModal = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user, props.groups]);
 
+    React.useEffect(() => {
+        if (props.isSuccess) {
+            setValidated(true)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.isSuccess]);
+
+    React.useEffect(() => {
+        if (props.isCreationError) {
+            setBtnOkDisabled(false)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.isCreationError]);
+
     const handleCancel = () => {
         props.onCancel();
     }
@@ -67,6 +81,7 @@ const UserModal = (props: any) => {
     const handleOk = () => {
         if (props.handleOk) {
             setBtnOkDisabled(true);
+            props.resetError();
             props.handleOk(user, setUser);
         }
     }
@@ -81,8 +96,6 @@ const UserModal = (props: any) => {
         const form = event.currentTarget;
         event.preventDefault();
         event.stopPropagation();
-
-        setValidated(true);
 
         if (form.checkValidity()) {
             handleOk();
@@ -121,13 +134,15 @@ const UserModal = (props: any) => {
                 </Modal.Header>
 
                 <Modal.Body className='bg-light'>
-                    < FormGroupInput controlId='formEmailInput' title={t('translation:user-name')}
+                    < FormGroupInput controlId='formUserNameInput' title={t('translation:user-name')}
                         value={user.username}
                         required
                         readOnly={!isNew}
                         onChange={(evt: any) => updateUserProp('username', evt.target.value)}
                         minLength={3}
                         maxLength={50}
+                        isInvalid={props.isCreationError}
+                        InvalidText={t('translation:user-conflict-error')}
                     />
 
                     < FormGroupInput controlId='formFirstName' title={t('translation:first-name')}
