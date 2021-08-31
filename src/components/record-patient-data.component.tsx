@@ -54,6 +54,7 @@ const RecordPatientData = (props: any) => {
 
     const [phoneNumber, setPhoneNumber] = React.useState('');
     const [emailAddress, setEmailAddress] = React.useState('');
+    const [additionalInfo, setAdditionalInfo] = React.useState('');
     const [consent, setConsent] = React.useState(false);
     const [dccConsent, setDccConsent] = React.useState(false);
     const [dccNoConsent, setDccNoConsent] = React.useState(false);
@@ -84,6 +85,9 @@ const RecordPatientData = (props: any) => {
             setPhoneNumber(p.phoneNumber);
             if (p.emailAddress) {
                 setEmailAddress(p.emailAddress);
+            }
+            if (p.additionalInfo) {
+                setAdditionalInfo(p.additionalInfo);
             }
             setDccConsent(p.dccConsent);
             setDccNoConsent(!p.dccConsent);
@@ -153,7 +157,8 @@ const RecordPatientData = (props: any) => {
                 privacyAgreement: privacyAgreement,
                 phoneNumber: phoneNumber,
                 emailAddress: emailAddress ? emailAddress : undefined,
-                dccConsent: dccConsent
+                dccConsent: dccConsent,
+                additionalInfo: additionalInfo
             })
             setTimeout(context.navigation!.toShowRecordPatient, 200);
         }
@@ -256,6 +261,16 @@ const RecordPatientData = (props: any) => {
                                     pattern={utils.pattern.eMail}
                                     minLength={5}
                                     maxLength={255}
+                                />
+                                
+                                < FormGroupInput controlId='formAdditionalInfo' title={t('translation:additional-info')}
+                                    value={additionalInfo}
+                                    onChange={(evt: any) => setAdditionalInfo(evt.target.value)}
+                                    type='text'
+                                    minLength={1}
+                                    maxLength={255}
+                                    prepend='i'
+                                    tooltip={t('translation:additional-info-tooltip')}
                                 />
 
                                 <hr />

@@ -52,4 +52,5 @@ export default interface IQuickTest {
     testId?: string;
     testResultHash?: string;
     dccConsent?: boolean;
+    additionalInfo?: string;
 }

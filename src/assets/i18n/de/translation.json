@@ -115,5 +115,7 @@
   "for-counter": "für Patientendatenerfassung",
   "lab": "Testerfassung",
   "counter": "Patientendatenerfassung",
-  "user-conflict-error": "Der Benutzername ist bereits vergeben!"
+  "user-conflict-error": "Der Benutzername ist bereits vergeben!",
+  "additional-info": "Zusätzliche Informationen",
+  "additional-info-tooltip": "Hier kann man zum Beispiel eine Personalausweisnummer eintragen. Die Daten werden auf dem Testbeleg ausgegeben."
 }
