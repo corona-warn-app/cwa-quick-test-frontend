@@ -120,7 +120,7 @@ export const FormGroupConsentCkb = (props: any) => {
                     </Accordion.Toggle>
 
                     <Accordion.Collapse className='px-3' eventKey='0' >
-                        <span className='input-label text-justify'>{props.accordion}</span>
+                        <span className='d-flex input-label text-justify'>{props.accordion}</span>
                     </Accordion.Collapse>
                 </Accordion>
             </Col>
