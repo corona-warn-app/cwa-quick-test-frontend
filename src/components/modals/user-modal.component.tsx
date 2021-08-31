@@ -138,7 +138,10 @@ const UserModal = (props: any) => {
                         value={user.username}
                         required
                         readOnly={!isNew}
-                        onChange={(evt: any) => updateUserProp('username', evt.target.value)}
+                        onChange={(evt: any) => {
+                            updateUserProp('username', evt.target.value);
+                            props.resetError();
+                        }}
                         minLength={3}
                         maxLength={50}
                         isInvalid={props.isCreationError}
