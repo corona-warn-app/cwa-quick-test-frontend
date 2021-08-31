@@ -84,6 +84,7 @@
   "change-password": "Passwort ändern",
   "testZertifikat": "COVID-Testzertifikat",
   "dccConsent": "Patient wünscht ein offizielles COVID-Testzertifikat der EU (DCC)?",
+  "dccConsent-cwa-only": "Das Ausstellen eines offiziellen COVID-Testzertifikats der EU (DCC) ist aktuell nur mit dem Einverständnis der getesteten Person zum Übermitteln des Testergebnisses an die Corona-Warn-App möglich. Bitte wählen Sie unten eine der beiden Optionen zur Übertragung aus.",
   "ja": "Ja",
   "nein": "Nein",
   "user-management": "Benutzerverwaltung",

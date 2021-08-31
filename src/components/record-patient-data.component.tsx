@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Card, Col, Container, Fade, Form, Image, Row } from 'react-bootstrap';
+import { Card, Col, Collapse, Container, Fade, Form, Image, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -198,7 +198,19 @@ const RecordPatientData = (props: any) => {
                                         </Row>
                                     </Col>
                                     <Col xs='7' sm='9'>
-                                        <Form.Label className='input-label m-0'>{t('translation:dccConsent')}</Form.Label>
+                                        <Row className='m-0'>
+                                            <Form.Label className='input-label m-0'>{t('translation:dccConsent')}</Form.Label>
+                                        </Row>
+                                        <Collapse in={dccConsent}>
+                                            <Row className='m-0 my-1'>
+                                                <Form.Label className='input-label text-justify m-0'>
+                                                    <Form.Label className='input-label mb-0 mr-2'>
+                                                        &#xf071;
+                                                    </Form.Label>
+                                                    {t('translation:dccConsent-cwa-only')}
+                                                </Form.Label>
+                                            </Row>
+                                        </Collapse>
                                         <Row className='m-0 mb-2'>
                                             <FormGroupDccConsentRadio controlId='dccConsent-radio1' name="dccConsent-radios" title={t('translation:ja')}
                                                 checked={dccConsent}
@@ -255,6 +267,7 @@ const RecordPatientData = (props: any) => {
                                     type='radio'
                                     name="check-radios"
                                     checked={consent}
+                                    required={dccConsent}
                                 />
                                 <FormGroupConsentCkb controlId='formKeepPrivateCheckbox' title={t('translation:patientdata-exclude-title')}
                                     accordion={t('translation:patientdata-exclude')}
@@ -263,6 +276,7 @@ const RecordPatientData = (props: any) => {
                                     type='radio'
                                     name="check-radios"
                                     checked={persDataInQR}
+                                    required={dccConsent}
                                 />
                                 <FormGroupConsentCkb controlId='formDataPrivacyCheckbox' title={t('translation:data-privacy-approve')}
                                     onChange={(evt: any) => setPrivacyAgreement(evt.currentTarget.checked)}
