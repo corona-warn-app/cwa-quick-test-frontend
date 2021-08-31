@@ -268,7 +268,7 @@ const RecordPatientData = (props: any) => {
                                     onChange={(evt: any) => setAdditionalInfo(evt.target.value)}
                                     type='text'
                                     minLength={1}
-                                    maxLength={255}
+                                    maxLength={250}
                                     prepend='i'
                                     tooltip={t('translation:additional-info-tooltip')}
                                 />
