@@ -29,6 +29,7 @@ import { useKeycloak } from '@react-keycloak/web';
 
 import useNavigation from '../../misc/useNavigation';
 import C19Logo from '../../assets/images/c-19_logo.png'
+import useLocalStorage from '../../misc/useLocalStorage';
 
 const Header = (props: any) => {
 
@@ -38,6 +39,8 @@ const Header = (props: any) => {
 
     const [userName, setUserName] = React.useState('');
     const [isInit, setIsInit] = React.useState(false)
+    
+    const [environmentName] = useLocalStorage('environmentName', '');
 
     React.useEffect(() => {
         if (navigation)
@@ -66,7 +69,7 @@ const Header = (props: any) => {
             {/* user icon and user name */}
             <Row id='qt-header'>
                 <Image src={C19Logo} onClick={navigation!.toLanding} />
-                <span className='header-font my-auto mx-1'>{t('translation:title')}</span>
+                <span className='header-font my-auto mx-1'>{t('translation:title') + ' ' + environmentName}</span>
             </Row>
             <Navbar id='user-container' >
                 <NavDropdown
