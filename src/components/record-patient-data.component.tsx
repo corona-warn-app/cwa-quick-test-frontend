@@ -156,9 +156,9 @@ const RecordPatientData = (props: any) => {
                 includePersData: persDataInQR,
                 privacyAgreement: privacyAgreement,
                 phoneNumber: phoneNumber,
-                emailAddress: emailAddress ? emailAddress : undefined,
+                emailAddress: emailAddress || undefined,
                 dccConsent: dccConsent,
-                additionalInfo: additionalInfo
+                additionalInfo: additionalInfo || undefined
             })
             setTimeout(context.navigation!.toShowRecordPatient, 200);
         }
@@ -262,7 +262,7 @@ const RecordPatientData = (props: any) => {
                                     minLength={5}
                                     maxLength={255}
                                 />
-                                
+
                                 < FormGroupInput controlId='formAdditionalInfo' title={t('translation:additional-info')}
                                     value={additionalInfo}
                                     onChange={(evt: any) => setAdditionalInfo(evt.target.value)}
