@@ -39,7 +39,7 @@ const Header = (props: any) => {
 
     const [userName, setUserName] = React.useState('');
     const [isInit, setIsInit] = React.useState(false)
-    
+
     const [environmentName] = useLocalStorage('environmentName', '');
 
     React.useEffect(() => {
@@ -68,8 +68,10 @@ const Header = (props: any) => {
 
             {/* user icon and user name */}
             <Row id='qt-header'>
-                <Image src={C19Logo} onClick={navigation!.toLanding} />
-                <span className='header-font my-auto mx-1'>{t('translation:title') + ' ' + environmentName}</span>
+                <span className='header-font my-auto mx-1'>
+                    <Image src={C19Logo} onClick={navigation!.toLanding} />
+                    {t('translation:title')}{environmentName ? ' - ' + environmentName : ''}
+                </span>
             </Row>
             <Navbar id='user-container' >
                 <NavDropdown
