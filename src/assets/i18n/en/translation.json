@@ -102,5 +102,7 @@
   "permission": "Permission",
   "for-lab": "for test data acquisition",
   "for-counter": "für patient data acquisition",
-  "user-conflict-error": "Username is already in use!"
+  "user-conflict-error": "Username is already in use!",
+  "additional-info": "Additional Information",
+  "additional-info-tooltip": "E.G. for ID-Card No."
 }

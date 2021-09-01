@@ -220,7 +220,9 @@ export const usePostQuickTest = (quickTest: IQuickTest | undefined, processId: s
                 diseaseAgentTargeted: '840539006',
                 testType: "LP217198-3",
 
-                dccConsent: quickTest.dccConsent
+                dccConsent: quickTest.dccConsent,
+
+                additionalInfo: quickTest.additionalInfo
             });
 
             const header = {
@@ -626,7 +628,7 @@ export const useGetGroups = (onSuccess?: () => void, onError?: (error: any) => v
         return api.delete(uri, { headers: header })
     }
 
-    React.useEffect(()=>{refreshGroups(onSuccess)}
+    React.useEffect(() => { refreshGroups(onSuccess) }
         // eslint-disable-next-line react-hooks/exhaustive-deps
         , []);
 
