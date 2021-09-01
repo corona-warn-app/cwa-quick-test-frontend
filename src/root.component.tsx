@@ -45,6 +45,8 @@ const Root = (props: any) => {
   const [storedMandant, setStoredMandant] = useLocalStorage('mandant', '');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [dccRulesService, setDccRulesServices] = useLocalStorage('dccRulesService', '');
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [environmentName, setEnvironmentName] = useLocalStorage('environmentName', '');
 
   const [keycloak, setKeycloak] = React.useState<Keycloak.KeycloakInstance>();
 
@@ -61,8 +63,15 @@ const Root = (props: any) => {
   }, [mandant, keycloakConfig]);
 
   React.useEffect(() => {
-    if (contextConfig && contextConfig['rules-server-url']) {
-      setDccRulesServices(contextConfig['rules-server-url'])
+    if (contextConfig) {
+
+      if (contextConfig['rules-server-url']) {
+        setDccRulesServices(contextConfig['rules-server-url']);
+      }
+
+      if (contextConfig['environment-name']) {
+        setEnvironmentName(contextConfig['environment-name']);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contextConfig])
