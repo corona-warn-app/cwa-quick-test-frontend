@@ -37,14 +37,20 @@ const Statistics = (props: any) => {
 
     const handleError = (error: any) => {
         let msg = '';
+        //TODO: muss weg!
+        console.log("error: " + JSON.stringify(error));
 
         if (error) {
             msg = error.message
         }
-        props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
+        //TODO: muss wieder rein!
+        //props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
-    const statisticData = useStatistics(undefined, handleError);
+    const [statisticData,
+        todayStatisticData,
+        thisWeekStatisticData,
+        thisMonthStatisticData] = useStatistics(undefined, handleError);
     const [isInit, setIsInit] = React.useState(false)
 
     React.useEffect(() => {
@@ -53,7 +59,7 @@ const Statistics = (props: any) => {
     }, [context.navigation, context.valueSets, statisticData])
 
     return (
-        !(isInit && context && context.valueSets)
+        !(isInit && context && context.valueSets && statisticData && todayStatisticData && thisWeekStatisticData && thisMonthStatisticData)
             ? <CwaSpinner />
             : <Fade appear={true} in={true} >
                 <Card id='data-card'>
@@ -82,6 +88,40 @@ const Statistics = (props: any) => {
                                 {statisticData!.totalTestCount > 0 ? (100 * statisticData!.positiveTestCount / statisticData!.totalTestCount).toFixed(2) : undefined} %
                             </Col>
                         </Row>
+                        <Row>
+                            <Col md='6'>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:today')}</Card.Text>
+                            </Col>
+                            <Col md='3'>
+                                {todayStatisticData!.totalTestCount}
+                            </Col>
+                            <Col md='3'>
+                                {todayStatisticData!.totalTestCount > 0 ? (100 * todayStatisticData!.positiveTestCount / todayStatisticData!.totalTestCount).toFixed(2) : undefined} %
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md='6'>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:thisWeek')}</Card.Text>
+                            </Col>
+                            <Col md='3'>
+                                {thisWeekStatisticData!.totalTestCount}
+                            </Col>
+                            <Col md='3'>
+                                {thisWeekStatisticData!.totalTestCount > 0 ? (100 * thisWeekStatisticData!.positiveTestCount / thisWeekStatisticData!.totalTestCount).toFixed(2) : undefined} %
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col md='6'>
+                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:thisMonth')}</Card.Text>
+                            </Col>
+                            <Col md='3'>
+                                {thisMonthStatisticData!.totalTestCount}
+                            </Col>
+                            <Col md='3'>
+                                {thisMonthStatisticData!.totalTestCount > 0 ? (100 * thisMonthStatisticData!.positiveTestCount / thisMonthStatisticData!.totalTestCount).toFixed(2) : undefined} %
+                            </Col>
+                        </Row>
+
                     </Card.Body>
 
                     {/*
