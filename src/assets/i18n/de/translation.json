@@ -59,7 +59,7 @@
   "error-message": "Fehlermeldung",
   "serverError": "Es ist ein Fehler aufgetreten: ",
   "error-patient-data-load": "Patientendaten konnten nicht geladen werden.",
-  "statistics": "Auswertungen für den ",
+  "statistics": "Auswertungen",
   "statistics-menu-item": "Auswertungen",
   "failed-report": "Testergebnisse",
   "totalTestCount": "Gesamtanzahl der Tests",

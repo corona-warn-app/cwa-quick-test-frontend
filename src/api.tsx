@@ -336,7 +336,7 @@ export const useGetTests = (onError?: (error: any) => void) => {
     return result;
 }
 
-export const useStatistics = (result: StatisticData | undefined, onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+export const useStatistics = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
     const [statisticData, setStatisticData] = React.useState<StatisticData>();
     const [todayStatisticData, setTodayStaticData] = React.useState<StatisticData>();

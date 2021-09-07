@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Fade, Row } from 'react-bootstrap'
+import { Button, Card, Col, Fade, Form, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -37,14 +37,11 @@ const Statistics = (props: any) => {
 
     const handleError = (error: any) => {
         let msg = '';
-        //TODO: muss weg!
-        console.log("error: " + JSON.stringify(error));
 
         if (error) {
             msg = error.message
         }
-        //TODO: muss wieder rein!
-        //props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
+        props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
     const [statisticData,
@@ -63,65 +60,84 @@ const Statistics = (props: any) => {
             ? <CwaSpinner />
             : <Fade appear={true} in={true} >
                 <Card id='data-card'>
-                    <CardHeader title={t('translation:statistics') + new Date().toLocaleDateString()} />
+                    <CardHeader title={t('translation:statistics')} />
 
                     {/*
     content area with patient inputs and check box
     */}
                     <Card.Body id='data-header'>
                         <Row>
-                            <Col md='6'>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:totalTestCount')}</Card.Text>
+                            <Col xs='12' md='3'>
+                                <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0'>{t('translation:today')}</Form.Label>
                             </Col>
-                            <Col md='6'>
-                                {statisticData!.totalTestCount}
+                            <Col md='9'>
+                                <Row className='text-center'>
+                                    <Col >
+                                        {t('translation:totalTestCount')}
+                                    </Col>
+                                    <Col>
+                                        {t('translation:positiveTestCount')}
+                                    </Col>
+                                </Row>
+                                <Row className='text-center'>
+                                    <Col>
+                                        {statisticData!.totalTestCount}
+                                    </Col>
+                                    <Col>
+                                        {statisticData!.totalTestCount > 0 ? statisticData!.positiveTestCount + ' ( ' + (100 * statisticData!.positiveTestCount / statisticData!.totalTestCount).toFixed(2) + "% )" : undefined}
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
+                        <hr />
                         <Row>
-                            <Col md='6'>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:positiveTestCount')}</Card.Text>
+                            <Col xs='12' md='3'>
+                                <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0'>{t('translation:thisWeek')}</Form.Label>
                             </Col>
-                            <Col md='3'>
-                                {statisticData!.positiveTestCount}
-                            </Col>
-                            <Col md='3'>
-                                {statisticData!.totalTestCount > 0 ? (100 * statisticData!.positiveTestCount / statisticData!.totalTestCount).toFixed(2) : undefined} %
+                            <Col md='9'>
+                                <Row className='text-center'>
+                                    <Col >
+                                        {t('translation:totalTestCount')}
+                                    </Col>
+                                    <Col>
+                                        {t('translation:positiveTestCount')}
+                                    </Col>
+                                </Row>
+                                <Row className='text-center'>
+                                    <Col>
+                                        {thisWeekStatisticData!.totalTestCount}
+                                    </Col>
+                                    <Col>
+                                        {thisWeekStatisticData!.totalTestCount > 0 ? thisWeekStatisticData!.positiveTestCount + ' ( ' + (100 * thisWeekStatisticData!.positiveTestCount / thisWeekStatisticData!.totalTestCount).toFixed(2) + "% )" : undefined}
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
+                        <hr />
                         <Row>
-                            <Col md='6'>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:today')}</Card.Text>
+                            <Col xs='12' md='3'>
+                                <Card.Text className='input-label jcc-xs-jcfs-md mb-2 mb-md-0' >{t('translation:thisMonth')}</Card.Text>
                             </Col>
-                            <Col md='3'>
-                                {todayStatisticData!.totalTestCount}
-                            </Col>
-                            <Col md='3'>
-                                {todayStatisticData!.totalTestCount > 0 ? (100 * todayStatisticData!.positiveTestCount / todayStatisticData!.totalTestCount).toFixed(2) : undefined} %
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md='6'>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:thisWeek')}</Card.Text>
-                            </Col>
-                            <Col md='3'>
-                                {thisWeekStatisticData!.totalTestCount}
-                            </Col>
-                            <Col md='3'>
-                                {thisWeekStatisticData!.totalTestCount > 0 ? (100 * thisWeekStatisticData!.positiveTestCount / thisWeekStatisticData!.totalTestCount).toFixed(2) : undefined} %
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col md='6'>
-                                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{t('translation:thisMonth')}</Card.Text>
-                            </Col>
-                            <Col md='3'>
-                                {thisMonthStatisticData!.totalTestCount}
-                            </Col>
-                            <Col md='3'>
-                                {thisMonthStatisticData!.totalTestCount > 0 ? (100 * thisMonthStatisticData!.positiveTestCount / thisMonthStatisticData!.totalTestCount).toFixed(2) : undefined} %
+                            <Col md='9'>
+                                <Row className='text-center'>
+                                    <Col >
+                                        {t('translation:totalTestCount')}
+                                    </Col>
+                                    <Col>
+                                        {t('translation:positiveTestCount')}
+                                    </Col>
+                                </Row>
+                                <Row className='text-center'>
+                                    <Col>
+                                        {thisMonthStatisticData!.totalTestCount}
+                                    </Col>
+                                    <Col>
+                                        {thisMonthStatisticData!.totalTestCount > 0 ? thisMonthStatisticData!.positiveTestCount + ' ( ' + (100 * thisMonthStatisticData!.positiveTestCount / thisMonthStatisticData!.totalTestCount).toFixed(2) + "% )" : undefined}
+                                    </Col>
+                                </Row>
                             </Col>
                         </Row>
-
+                        <hr />
                     </Card.Body>
 
                     {/*
