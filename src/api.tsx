@@ -339,6 +339,10 @@ export const useGetTests = (onError?: (error: any) => void) => {
 export const useStatistics = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
     const [statisticData, setStatisticData] = React.useState<StatisticData>();
+    const [thisWeekStatisticData, setThisWeekStaticData] = React.useState<StatisticData>();
+    const [thisMonthStatisticData, setThisMonthStatisticData] = React.useState<StatisticData>()
+
+    let uri = '/api/quickteststatistics';
 
     const header = {
         "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
@@ -362,8 +366,65 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+    
+    React.useEffect(() => {
+        if (!thisWeekStatisticData) {
+            let today = new Date();
+            today.setUTCHours(0, 0, 0, 0);
+            let startDay = today.getDate() - today.getDay() + 1;
 
-    return statisticData;
+            let start = new Date(today.setDate(startDay));
+            let end = new Date();
+
+            let thisWeekUri = uri + '?dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString(); 
+
+            api.get(thisWeekUri, { headers: header })
+                .then(response => {
+                    setThisWeekStaticData(response.data);
+                    if (onSuccess) {
+                        onSuccess(response?.status);
+                    }
+                })
+                .catch(error => {
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    
+    React.useEffect(() => {
+        if (!thisMonthStatisticData) {
+            let start = new Date();
+            start.setDate(1);
+            start.setUTCHours(0, 0, 0, 0);
+            let end = new Date();
+
+            let thisMonthUri = uri + '?dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString(); 
+
+            api.get(thisMonthUri, { headers: header })
+                .then(response => {
+                    setThisMonthStatisticData(response.data);
+                    if (onSuccess) {
+                        onSuccess(response?.status);
+                    }
+                })
+                .catch(error => {
+                    if (onError) {
+                        onError(error);
+                    }
+                });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return [
+        statisticData,
+        thisWeekStatisticData,
+        thisMonthStatisticData
+    ] as const;
+
 }
 
 export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
@@ -688,3 +749,5 @@ export const addGroupAsChild = (childGroupId: string, parentGroupId: string, tok
     const uri = '/api/usermanagement/groups/' + parentGroupId + '/subgroups';
     return api.post(uri, JSON.stringify({ groupId: childGroupId }), { headers: header })
 }
+
+
