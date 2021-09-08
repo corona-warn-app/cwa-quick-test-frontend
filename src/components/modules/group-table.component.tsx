@@ -9,7 +9,7 @@ import GroupModal from "../modals/group-modal.component";
 import ConfirmModal from "../modals/confirm-modal.component";
 
 import imageAdd from '../../assets/images/icon_add.svg'
-import AppContext from "../../misc/appContext";
+// import AppContext from "../../misc/appContext";
 import utils from "../../misc/utils";
 import { IGroup, IGroupDetails, IGroupNode } from "../../misc/user";
 import { addGroupAsChild, useGetGroups } from "../../api";
@@ -17,31 +17,36 @@ import { useKeycloak } from "@react-keycloak/web";
 
 const GroupTable = (props: any) => {
 
-    const context = React.useContext(AppContext);
+    // const context = React.useContext(AppContext);
 
     const { t } = useTranslation();
     const { keycloak } = useKeycloak();
 
     const handleSuccess = () => {
-        setIsGroupEdit(false);
+        setIsGroupCreationError(false);
+        setIsGroupSuccessfullUpdated(true);
+        setTimeout(setIsGroupEdit, 300, false);
         setShowConfirm(false);
     }
 
+    const [isGroupEdit, setIsGroupEdit] = React.useState(false);
+    const [editGroupId, setEditGroupId] = React.useState<string>('');
+    const [editGroupParentId, setEditGroupParentId] = React.useState<string>('');
+    const [showConfirm, setShowConfirm] = React.useState(false);
+    const [isGroupSuccessfullUpdated, setIsGroupSuccessfullUpdated] = React.useState(false);
+    const [isGroupCreationError, setIsGroupCreationError] = React.useState(false);
+    const [confirmMessage, setConfirmMessage] = React.useState('');
+    const [confirmTitle, setConfirmTitle] = React.useState('');
+    const [confirmHandle, setConfirmHandle] = React.useState<() => void>();
+    const [groupIsReady, setGroupIsReady] = React.useState(false);
+    
     const [
         bGroups,
         refreshGroups,
         createGroup,
         updateGroup,
         deleteGroup
-    ] = useGetGroups(handleSuccess, props.handleError);
-
-    const [isGroupEdit, setIsGroupEdit] = React.useState(false);
-    const [editGroupId, setEditGroupId] = React.useState<string>('');
-    const [editGroupParentId, setEditGroupParentId] = React.useState<string>('');
-    const [showConfirm, setShowConfirm] = React.useState(false);
-    const [confirmMessage, setConfirmMessage] = React.useState('');
-    const [confirmTitle, setConfirmTitle] = React.useState('');
-    const [confirmHandle, setConfirmHandle] = React.useState<() => void>();
+    ] = useGetGroups(()=> setGroupIsReady(true), props.handleError);
 
 
     React.useEffect(() => {
@@ -53,6 +58,7 @@ const GroupTable = (props: any) => {
         else {
             props.setGroupNodes([]);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bGroups]);
 
     const flattenGroups = (groups: IGroup[], groupNodes: IGroupNode[], level: number, parentGroup?: string): void => {
@@ -101,19 +107,27 @@ const GroupTable = (props: any) => {
                         }
                     })
                     .catch(e => {
-                        props.handleError(e);
+                        if (e && e.message && (e.message as string).includes('409')) {
+                            setIsGroupCreationError(true);
+                        }
+                        else {
+                            props.handleError(e);
+                        }
                     })
             }
         } else {
-            if (keycloak.token) {
-                createGroup(group)
-                    .then(() => {
-                        refreshGroups(handleSuccess);
-                    })
-                    .catch(e => {
+            createGroup(group)
+                .then(() => {
+                    refreshGroups(handleSuccess);
+                })
+                .catch(e => {
+                    if (e && e.message && (e.message as string).includes('409')) {
+                        setIsGroupCreationError(true);
+                    }
+                    else {
                         props.handleError(e);
-                    })
-            }
+                    }
+                })
         }
 
         // setIsGroupEdit(false);
@@ -138,7 +152,13 @@ const GroupTable = (props: any) => {
 
                     })
                     .catch(e => {
-                        props.handleError(e);
+                        if (e && e.message && (e.message as string).includes('412')) {
+                            setShowConfirm(false);
+                            props.handleError(e, t('translation:delete-group-error'), () => { });
+                        }
+                        else {
+                            props.handleError(e);
+                        }
                     })
             }
         };
@@ -148,7 +168,7 @@ const GroupTable = (props: any) => {
 
     return (<>
         {
-            !(props.groupNodes)
+            !(props.groupNodes && groupIsReady)
                 ? <CwaSpinner background='#eeeeee' />
                 : <Collapse appear={true} in={true}>
                     <Container className='p-0 '>
@@ -196,15 +216,28 @@ const GroupTable = (props: any) => {
 
         <GroupModal
             show={isGroupEdit}
-            onCancel={() => { setIsGroupEdit(false); }}
             groupId={editGroupId}
             parentGroupId={editGroupParentId}
             handleOk={groupUpdate}
             groups={props.groupNodes}
-            handleError={(err: any) => {
-                setIsGroupEdit(false);
-                props.handleError(err);
+            isSuccess={isGroupSuccessfullUpdated}
+            isCreationError={isGroupCreationError}
+            onEnter={() => setIsGroupSuccessfullUpdated(false)}
+            resetError={() => setIsGroupCreationError(false)}
+            handleError={
+                (err: any) => {
+                    setIsGroupEdit(false);
+                    props.handleError(err);
+                }
             }
+            onCancel={
+                () => { setIsGroupEdit(false); }
+            }
+            onExit={
+                () => {
+                    setIsGroupSuccessfullUpdated(false);
+                    setIsGroupCreationError(false);
+                }
             }
         />
         <ConfirmModal

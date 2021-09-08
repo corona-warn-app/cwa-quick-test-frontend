@@ -9,7 +9,7 @@ import ConfirmModal from "../modals/confirm-modal.component";
 import UserModal from "../modals/user-modal.component";
 
 import imageAdd from '../../assets/images/icon_add.svg'
-import AppContext from "../../misc/appContext";
+// import AppContext from "../../misc/appContext";
 import { IDisplayUser, IGroupNode, IUser } from "../../misc/user";
 import { addUserToGroup, useGetUsers } from "../../api";
 import { useKeycloak } from "@react-keycloak/web";
@@ -27,20 +27,20 @@ const emptyUser: IDisplayUser = {
 
 const UserTable = (props: any) => {
 
-    const context = React.useContext(AppContext);
+    // const context = React.useContext(AppContext);
 
     const { t } = useTranslation();
     const { keycloak } = useKeycloak();
 
     const handleSuccess = () => {
-        setShowUserModal(false);
-        setShowConfirm(false);
         setIsUserSuccessfullUpdated(true);
         setIsUserCreationError(false);
+        setTimeout(setShowUserModal, 300, false);
+        setShowConfirm(false);
     }
 
     const [bUsers,
-        refreshUsers,
+        // refreshUsers,
         createUser,
         readUser,
         updateUser,
@@ -81,6 +81,7 @@ const UserTable = (props: any) => {
             users.forEach((user => updateDisplayUser(user, false)));
             props.setUserReload(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.userReload]);
 
     React.useEffect(() => {
@@ -88,6 +89,7 @@ const UserTable = (props: any) => {
             setReload(false);
             users.forEach((user => updateDisplayUser(user, true)));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(props.groupNodes), users, reload]);
 
     const sortUsers = () => {
@@ -359,20 +361,21 @@ const UserTable = (props: any) => {
 
         <UserModal
             show={showUserModal}
-            onCancel={() => {
-                setShowUserModal(false);
-            }}
-            onExit={() => {
-                setEditUser({ ...emptyUser });
-                setIsUserSuccessfullUpdated(false);
-                setIsUserCreationError(false);
-            }}
             groups={props.groupNodes}
             handleOk={userUpdate}
             user={editUser}
+            onEnter={() => setIsUserSuccessfullUpdated(false)}
             isSuccess={isUserSuccessfullUpdated}
             isCreationError={isUserCreationError}
             resetError={() => setIsUserCreationError(false)}
+            onCancel={() => setShowUserModal(false)}
+            onExit={
+                () => {
+                    setEditUser({ ...emptyUser });
+                    setIsUserSuccessfullUpdated(false);
+                    setIsUserCreationError(false);
+                }
+            }
         />
         <ConfirmModal
             show={showConfirm}

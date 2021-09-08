@@ -53,9 +53,7 @@ const UserModal = (props: any) => {
     }, [user, props.groups]);
 
     React.useEffect(() => {
-        if (props.isSuccess) {
-            setValidated(true)
-        }
+        setValidated(props.isSuccess)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.isSuccess]);
 
@@ -87,9 +85,12 @@ const UserModal = (props: any) => {
     }
 
     const handleEnter = () => {
+        if (props.onEnter) {
+            props.onEnter();
+        }
+
         setIsNew(!props.user.username);
         setBtnOkDisabled(false);
-        setValidated(false);
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

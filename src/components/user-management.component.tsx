@@ -58,6 +58,7 @@ const UserManagement = (props: any) => {
     React.useEffect(() => {
         //setIsInit(!!(bGroups && bUsers));
         setIsInit(!!(context && context.navigation, context.valueSets));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [context.navigation, context.valueSets]);
 
 

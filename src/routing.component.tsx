@@ -78,11 +78,9 @@ const Routing = () => {
         }
     }, [error])
 
-    React.useEffect(() => {
-        if (!errorShow) {
-            setError(undefined);
-        }
-    }, [errorShow])
+    const errorOnExit = () => {
+        setError(undefined);
+    }
 
     React.useEffect(() => {
         if (context.valueSets && Object.entries(context.valueSets).length > 0 && context.navigation)
@@ -98,7 +96,7 @@ const Routing = () => {
     */}
                 <Route path={context.navigation.routes.root}>
                     <Header />
-                    <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} />
+                    <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} onExit={errorOnExit} />
                     <NotificationPage show={notificationShow} setNotificationShow={setNotificationShow} />
                     <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
                     <ImprintPage show={imprintShow} setShow={setImprintShow} />
