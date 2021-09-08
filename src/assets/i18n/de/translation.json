@@ -110,6 +110,7 @@
   "edit": "Übernehmen",
   "delete-group-title": "Möchten Sie die Gruppe \"{{groupName}}\" löschen?",
   "delete-group-msg": "Diese Gruppe und alle Untergruppen werden gelöscht. Benutzer*innen, die diesen Gruppen zugeordnet sind, verlieren ihre Gruppenzugehörigkeit und können das Schnelltest-Portal nicht mehr nutzen bis ihnen wieder eine Gruppe zugewiesen wurde.",
+  "delete-group-error": "Diese Gruppe hat noch offene Testfälle und kann erst gelöscht werden, wenn diese abgearbeitet wurden.",
   "delete-user-title": "Möchten Sie den Benutzer \"{{userName}}\" löschen?",
   "no-group-option": "-- leer --",
   "password": "Passwort",
@@ -119,6 +120,7 @@
   "lab": "Testerfassung",
   "counter": "Patientendatenerfassung",
   "user-conflict-error": "Der Benutzername ist bereits vergeben!",
+  "group-conflict-error": "Der Gruppenname ist bereits vergeben!",
   "additional-info": "Zusätzliche Informationen",
   "additional-info-tooltip": "Hier kann man zum Beispiel eine Personalausweisnummer eintragen. Die Daten werden auf dem Testbeleg ausgegeben."
 }

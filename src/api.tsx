@@ -631,7 +631,7 @@ export const useGetUsers = (onSuccess?: () => void, onError?: (error: any) => vo
 
     return [
         result,
-        refreshUsers,
+        // refreshUsers,
         createUser,
         readUser,
         updateUser,

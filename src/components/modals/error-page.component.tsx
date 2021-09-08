@@ -43,6 +43,7 @@ const ErrorPage = (props: any) => {
                 show={show}
                 backdrop="static"
                 keyboard={false}
+                onExited={props.onExit}
                 centered
             >
                 <Modal.Header id='data-header' className='pb-0' >
