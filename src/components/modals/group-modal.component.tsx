@@ -27,7 +27,6 @@ import { useTranslation } from 'react-i18next';
 import { FormGroupTextarea, FormGroupInput, FormGroupSelect } from '../modules/form-group.component';
 import { IGroupDetails, IGroupNode, IGroup } from '../../misc/user';
 import { useGetGroupDetails } from '../../api';
-import { v4 as newUuid } from 'uuid';
 import CwaSpinner from '../spinner/spinner.component';
 
 const emptyGroup: IGroupDetails = {
@@ -70,6 +69,18 @@ const GroupModal = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [group])
 
+    React.useEffect(() => {
+        setValidated(props.isSuccess)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.isSuccess]);
+
+    React.useEffect(() => {
+        if (props.isCreationError) {
+            setBtnOkDisabled(false)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.isCreationError]);
+
     const handleCancel = () => {
         props.onCancel();
     }
@@ -95,17 +106,16 @@ const GroupModal = (props: any) => {
             setBtnOkDisabled(true);
             group.pocDetails = packData(data);
 
-            if (!group.pocId) {
-                group.pocId = newUuid();
-            }
-
             props.handleOk(group);
         }
     }
 
     const handleEnter = () => {
+        if (props.onEnter) {
+            props.onEnter();
+        }
+
         setBtnOkDisabled(false);
-        setValidated(false);
 
         if (props.groupId) {
             updateGroup(props.groupId);
@@ -118,14 +128,13 @@ const GroupModal = (props: any) => {
 
     const handleExited = () => {
         setIsReady(false);
+        props.onExit();
     }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         const form = event.currentTarget;
         event.preventDefault();
         event.stopPropagation();
-
-        setValidated(true);
 
         if (form.checkValidity()) {
             handleOk();
@@ -148,7 +157,7 @@ const GroupModal = (props: any) => {
         let result: JSX.Element[] = [];
 
         if (group && group.id) {
-            
+
             const node = props.groups.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
             const selfIdOrChildren: string[] = [];
 
@@ -213,8 +222,13 @@ const GroupModal = (props: any) => {
                             < FormGroupInput controlId='formFirstName' title={t('translation:name')}
                                 value={group ? group.name : ''}
                                 required
-                                onChange={(evt: any) => updateGroupProp('name', evt.target.value)}
+                                onChange={(evt: any) => {
+                                    updateGroupProp('name', evt.target.value);
+                                    props.resetError();
+                                }}
                                 maxLength={50}
+                                isInvalid={props.isCreationError}
+                                InvalidText={t('translation:group-conflict-error')}
                             />
 
                             < FormGroupTextarea controlId='formAdressData' title={t('translation:address-testcenter')} placeholder={t('translation:address-testcenter-placeholder')}
