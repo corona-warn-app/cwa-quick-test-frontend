@@ -339,7 +339,6 @@ export const useGetTests = (onError?: (error: any) => void) => {
 export const useStatistics = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
     const { keycloak, initialized } = useKeycloak();
     const [statisticData, setStatisticData] = React.useState<StatisticData>();
-    const [todayStatisticData, setTodayStaticData] = React.useState<StatisticData>();
     const [thisWeekStatisticData, setThisWeekStaticData] = React.useState<StatisticData>();
     const [thisMonthStatisticData, setThisMonthStatisticData] = React.useState<StatisticData>()
 
@@ -367,31 +366,6 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    React.useEffect(() => {
-        if (!todayStatisticData) {
-            let start = new Date();
-            start.setUTCHours(0,0,0,0);
-            let end = new Date();
-
-            let todayUri = uri + '?dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString(); 
-
-            api.get(todayUri, { headers: header })
-                .then(response => {
-                    setTodayStaticData(response.data);
-                    if (onSuccess) {
-                        onSuccess(response?.status);
-                    }
-                })
-                .catch(error => {
-                    if (onError) {
-                        onError(error);
-                    }
-                });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     
     React.useEffect(() => {
         if (!thisWeekStatisticData) {
@@ -447,7 +421,6 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
 
     return [
         statisticData,
-        todayStatisticData,
         thisWeekStatisticData,
         thisMonthStatisticData
     ] as const;

@@ -45,7 +45,6 @@ const Statistics = (props: any) => {
     }
 
     const [statisticData,
-        todayStatisticData,
         thisWeekStatisticData,
         thisMonthStatisticData] = useStatistics(undefined, handleError);
     const [isInit, setIsInit] = React.useState(false)
@@ -56,7 +55,7 @@ const Statistics = (props: any) => {
     }, [context.navigation, context.valueSets, statisticData])
 
     return (
-        !(isInit && context && context.valueSets && statisticData && todayStatisticData && thisWeekStatisticData && thisMonthStatisticData)
+        !(isInit && context && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData)
             ? <CwaSpinner />
             : <Fade appear={true} in={true} >
                 <Card id='data-card'>
