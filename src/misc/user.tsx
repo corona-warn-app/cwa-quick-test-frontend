@@ -55,6 +55,7 @@ export interface IGroupDetails {
     name: string,
     pocDetails: string,
     pocId: string,
+    searchPortalConsent: boolean,
     parentGroup?: string,
 }
 

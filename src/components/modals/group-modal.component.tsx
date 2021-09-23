@@ -24,7 +24,7 @@ import { Button, Modal, Form, Col, Row, Spinner, Fade, Container } from 'react-b
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
-import { FormGroupTextarea, FormGroupInput, FormGroupSelect } from '../modules/form-group.component';
+import { FormGroupTextarea, FormGroupInput, FormGroupSelect, FormGroupPermissionCkb } from '../modules/form-group.component';
 import { IGroupDetails, IGroupNode, IGroup } from '../../misc/user';
 import { useGetGroupDetails } from '../../api';
 import CwaSpinner from '../spinner/spinner.component';
@@ -34,6 +34,7 @@ const emptyGroup: IGroupDetails = {
     pocId: '',
     name: '',
     pocDetails: '',
+    searchPortalConsent: false,
     parentGroup: ''
 }
 
@@ -231,12 +232,21 @@ const GroupModal = (props: any) => {
                                 InvalidText={t('translation:group-conflict-error')}
                             />
 
+                            {/* <hr /> */}
+
                             < FormGroupTextarea controlId='formAdressData' title={t('translation:address-testcenter')} placeholder={t('translation:address-testcenter-placeholder')}
                                 value={data}
                                 required
                                 onChange={(evt: any) => setData(evt.target.value)}
                                 type='textarea'
                                 maxLength={300}
+                            />
+
+                            <FormGroupPermissionCkb controlId='formRoleCounter' title={t('translation:searchPortalConsent')}
+                                //label={t('translation:for-counter')}
+                                onChange={(evt: any) => updateGroupProp('searchPortalConsent', evt.currentTarget.checked)}
+                                type='checkbox'
+                                checked={group.searchPortalConsent}
                             />
 
                             {!(group && group.pocId)
