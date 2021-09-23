@@ -34,6 +34,7 @@ const emptyGroup: IGroupDetails = {
     pocId: '',
     name: '',
     pocDetails: '',
+    mapExported: true,
     parentGroup: ''
 }
 
