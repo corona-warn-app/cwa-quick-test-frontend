@@ -56,6 +56,9 @@ export interface IGroupDetails {
     pocDetails: string,
     pocId: string,
     searchPortalConsent: boolean,
+    website: string,
+    openingHours: string,
+    appointmentRequired: boolean,
     parentGroup?: string,
 }
 
