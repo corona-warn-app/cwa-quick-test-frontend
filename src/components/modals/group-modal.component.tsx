@@ -35,7 +35,10 @@ const emptyGroup: IGroupDetails = {
     name: '',
     pocDetails: '',
     searchPortalConsent: false,
-    parentGroup: ''
+    parentGroup: '',
+    website: '',
+    appointmentRequired: false,
+    openingHours: ''
 }
 
 const GroupModal = (props: any) => {
@@ -247,6 +250,34 @@ const GroupModal = (props: any) => {
                                 onChange={(evt: any) => updateGroupProp('searchPortalConsent', evt.currentTarget.checked)}
                                 type='checkbox'
                                 checked={group.searchPortalConsent}
+                            />
+
+                            < FormGroupInput controlId='formPocWebsite' title={t('translation:searchPortalWebsite')}
+                                             value={group ? group.searchPortalWebsite : ''}
+                                             onChange={(evt: any) => {
+                                                 updateGroupProp('website', evt.target.value);
+                                                 props.resetError();
+                                             }}
+                                             maxLength={100}
+                                             isInvalid={props.isCreationError}
+                                             InvalidText={t('translation:group-conflict-error')}
+                            />
+
+                            < FormGroupInput controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
+                                             value={group ? group.searchPortalOpeningHours : ''}
+                                             onChange={(evt: any) => {
+                                                 updateGroupProp('openingHours', evt.target.value);
+                                                 props.resetError();
+                                             }}
+                                             maxLength={100}
+                                             isInvalid={props.isCreationError}
+                                             InvalidText={t('translation:group-conflict-error')}
+                            />
+
+                            <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
+                                                    onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
+                                                    type='checkbox'
+                                                    checked={group.searchPortalAppointmentRequired}
                             />
 
                             {!(group && group.pocId)

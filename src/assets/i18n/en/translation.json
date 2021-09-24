@@ -108,5 +108,8 @@
   "user-conflict-error": "Username is already in use!",
   "additional-info": "Additional Information",
   "additional-info-tooltip": "E.G. for ID-Card No.",
-  "searchPortalConsent": "Show in quick test search portal"
+  "searchPortalConsent": "Show in quick test search portal",
+  "searchPortalWebsite": "Website",
+  "searchPortalOpeningHours": "Opening Hours",
+  "searchPortalAppointmentRequired": "Appointment Required"
 }
