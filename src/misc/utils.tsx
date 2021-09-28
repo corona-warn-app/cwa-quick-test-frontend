@@ -28,6 +28,7 @@ export interface IUtils {
     isTelValid: (value: string) => boolean,
     isEMailValid: (value: string) => boolean,
     isStandardisedNameValid: (value: string) => boolean,
+    isUrlValid: (value: string) => boolean,
     getIndent: (level: number) => JSX.Element[],
     pickerDateFormat: string,
     pickerDateTimeFormat: string,
@@ -43,7 +44,8 @@ const pattern = {
     houseNo: '^([1-9]{1}[0-9a-zA-Z-\\s/]{0,14})$',
     tel: '^([+]{1}[1-9]{1,2}|[0]{1}[1-9]{1})[0-9]{5,}$',
     eMail: '^[\\w\\d\\.-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
-    standardisedName: '^[A-Z<]*$'
+    standardisedName: '^[A-Z<]*$',
+    url: '^(http:\\/\\/www\.|https:\\/\\/www\\.|http:\\/\\/|https:\\/\\/)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?$'
 }
 
 const processNoRegExp = new RegExp(pattern.processNo);
@@ -51,6 +53,7 @@ const zipRegExp = new RegExp(pattern.zip);
 const telRegExp = new RegExp(pattern.tel);
 const eMailRegExp = new RegExp(pattern.eMail);
 const standardisedNameRegExp = new RegExp(pattern.standardisedName);
+const urlRegExp = new RegExp(pattern.url);
 
 const getIndent = (level: number): JSX.Element[] => {
     const indent: JSX.Element[] = [];
@@ -71,6 +74,7 @@ const utils: IUtils = {
     isTelValid: (tel: string) => telRegExp.test(tel),
     isEMailValid: (eMail: string) => eMailRegExp.test(eMail),
     isStandardisedNameValid: (value: string) => standardisedNameRegExp.test(value),
+    isUrlValid: (url: string) => urlRegExp.test(url),
     getIndent: getIndent,
     pickerDateFormat: 'dd.MM.yyyy',
     pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',

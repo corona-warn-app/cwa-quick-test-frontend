@@ -28,6 +28,7 @@ import { FormGroupTextarea, FormGroupInput, FormGroupSelect, FormGroupPermission
 import { IGroupDetails, IGroupNode, IGroup } from '../../misc/user';
 import { useGetGroupDetails } from '../../api';
 import CwaSpinner from '../spinner/spinner.component';
+import utils from '../../misc/utils';
 
 const emptyGroup: IGroupDetails = {
     id: '',
@@ -257,8 +258,7 @@ const GroupModal = (props: any) => {
                                                  props.resetError();
                                              }}
                                              maxLength={100}
-                                             isInvalid={props.isCreationError}
-                                             InvalidText={t('translation:group-conflict-error')}
+                                             pattern={utils.pattern.url}
                             />
 
                             < FormGroupInput controlId='formPocOpeningHours' hidden={!group.searchPortalConsent} title={t('translation:searchPortalOpeningHours')}
@@ -268,8 +268,6 @@ const GroupModal = (props: any) => {
                                                  props.resetError();
                                              }}
                                              maxLength={100}
-                                             isInvalid={props.isCreationError}
-                                             InvalidText={t('translation:group-conflict-error')}
                             />
 
                             <FormGroupPermissionCkb controlId='formAppointmentRequired' hidden={!group.searchPortalConsent} title={t('translation:searchPortalAppointmentRequired')}
