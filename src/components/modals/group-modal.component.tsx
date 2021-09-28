@@ -252,7 +252,7 @@ const GroupModal = (props: any) => {
                                 checked={group.searchPortalConsent}
                             />
 
-                            < FormGroupInput controlId='formPocWebsite' title={t('translation:searchPortalWebsite')}
+                            < FormGroupInput controlId='formPocWebsite' hidden={!group.searchPortalConsent} title={t('translation:searchPortalWebsite')}
                                              value={group ? group.searchPortalWebsite : ''}
                                              onChange={(evt: any) => {
                                                  updateGroupProp('website', evt.target.value);
@@ -263,7 +263,7 @@ const GroupModal = (props: any) => {
                                              InvalidText={t('translation:group-conflict-error')}
                             />
 
-                            < FormGroupInput controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
+                            < FormGroupInput controlId='formPocOpeningHours' hidden={!group.searchPortalConsent} title={t('translation:searchPortalOpeningHours')}
                                              value={group ? group.searchPortalOpeningHours : ''}
                                              onChange={(evt: any) => {
                                                  updateGroupProp('openingHours', evt.target.value);
@@ -274,7 +274,7 @@ const GroupModal = (props: any) => {
                                              InvalidText={t('translation:group-conflict-error')}
                             />
 
-                            <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
+                            <FormGroupPermissionCkb controlId='formAppointmentRequired' hidden={!group.searchPortalConsent} title={t('translation:searchPortalAppointmentRequired')}
                                                     onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
                                                     type='checkbox'
                                                     checked={group.searchPortalAppointmentRequired}
