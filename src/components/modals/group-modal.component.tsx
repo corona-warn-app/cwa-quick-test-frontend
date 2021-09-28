@@ -182,8 +182,6 @@ const GroupModal = (props: any) => {
         return result;
     }
 
-
-
     return (
         <Modal
             contentClassName='data-modal'
@@ -253,7 +251,7 @@ const GroupModal = (props: any) => {
                             />
 
                             < FormGroupInput controlId='formPocWebsite' hidden={!group.searchPortalConsent} title={t('translation:searchPortalWebsite')}
-                                             value={group ? group.searchPortalWebsite : ''}
+                                             value={group ? group.website : ''}
                                              onChange={(evt: any) => {
                                                  updateGroupProp('website', evt.target.value);
                                                  props.resetError();
@@ -264,7 +262,7 @@ const GroupModal = (props: any) => {
                             />
 
                             < FormGroupInput controlId='formPocOpeningHours' hidden={!group.searchPortalConsent} title={t('translation:searchPortalOpeningHours')}
-                                             value={group ? group.searchPortalOpeningHours : ''}
+                                             value={group ? group.openingHours : ''}
                                              onChange={(evt: any) => {
                                                  updateGroupProp('openingHours', evt.target.value);
                                                  props.resetError();
@@ -277,7 +275,7 @@ const GroupModal = (props: any) => {
                             <FormGroupPermissionCkb controlId='formAppointmentRequired' hidden={!group.searchPortalConsent} title={t('translation:searchPortalAppointmentRequired')}
                                                     onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
                                                     type='checkbox'
-                                                    checked={group.searchPortalAppointmentRequired}
+                                                    checked={group.appointmentRequired}
                             />
 
                             {!(group && group.pocId)
