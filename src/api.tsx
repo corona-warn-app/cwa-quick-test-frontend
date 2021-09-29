@@ -366,7 +366,7 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
     React.useEffect(() => {
         if (!thisWeekStatisticData) {
             let today = new Date();
@@ -376,7 +376,7 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
             let start = new Date(today.setDate(startDay));
             let end = new Date();
 
-            let thisWeekUri = uri + '?dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString(); 
+            let thisWeekUri = uri + '?dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
 
             api.get(thisWeekUri, { headers: header })
                 .then(response => {
@@ -393,7 +393,7 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    
+
     React.useEffect(() => {
         if (!thisMonthStatisticData) {
             let start = new Date();
@@ -401,7 +401,7 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
             start.setUTCHours(0, 0, 0, 0);
             let end = new Date();
 
-            let thisMonthUri = uri + '?dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString(); 
+            let thisMonthUri = uri + '?dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
 
             api.get(thisMonthUri, { headers: header })
                 .then(response => {
@@ -669,16 +669,19 @@ export const useGetGroups = (onSuccess?: () => void, onError?: (error: any) => v
     const createGroup = (group: IGroupDetails) => {
         return api.post(
             baseUri,
-            JSON.stringify(group),
+            JSON.stringify(removeEmpty(group)),
             { headers: header }
         )
     }
 
     const updateGroup = (group: IGroupDetails) => {
         const uri = baseUri + '/' + group.id;
+        console.log(JSON.stringify(group));
+        console.log(JSON.stringify(removeEmpty(group)));
+
 
         return api.put(uri,
-            JSON.stringify(group),
+            JSON.stringify(removeEmpty(group)),
             { headers: header }
         )
     }
@@ -687,6 +690,16 @@ export const useGetGroups = (onSuccess?: () => void, onError?: (error: any) => v
         const uri = baseUri + '/' + groupId;
 
         return api.delete(uri, { headers: header })
+    }
+
+    const removeEmpty = (group: IGroupDetails): IGroupDetails => {
+        if (group) {
+            group.website = group.website || undefined;
+            group.openingHours = group.openingHours || undefined;
+            group.appointmentRequired = group.appointmentRequired || undefined;
+        }
+
+        return group;
     }
 
     React.useEffect(() => { refreshGroups(onSuccess) }
@@ -716,7 +729,9 @@ export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void
 
             api.get(uri, { headers: header })
                 .then(response => {
-                    const group = response.data
+                    const group = response.data;
+                    console.log(group);
+
                     groupReloaded(group);
                     setResult(group);
                 })

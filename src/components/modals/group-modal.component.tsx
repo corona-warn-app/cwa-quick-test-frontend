@@ -264,8 +264,8 @@ const GroupModal = (props: any) => {
 
                             <Collapse in={group.searchPortalConsent}>
                                 <div>
-                                    < FormGroupInput controlId='formPocWebsite' hidden={!group.searchPortalConsent} title={t('translation:searchPortalWebsite')}
-                                        value={group ? group.website : ''}
+                                    < FormGroupInput controlId='formPocWebsite' title={t('translation:searchPortalWebsite')}
+                                        value={group?.website ? group.website : ''}
                                         onChange={(evt: any) => {
                                             updateGroupProp('website', evt.target.value);
                                             props.resetError();
@@ -274,8 +274,8 @@ const GroupModal = (props: any) => {
                                         pattern={utils.pattern.url}
                                     />
 
-                                    < FormGroupInput controlId='formPocOpeningHours' hidden={!group.searchPortalConsent} title={t('translation:searchPortalOpeningHours')}
-                                        value={group ? group.openingHours : ''}
+                                    < FormGroupInput controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
+                                        value={group?.openingHours ? group.openingHours : ''}
                                         onChange={(evt: any) => {
                                             updateGroupProp('openingHours', evt.target.value);
                                             props.resetError();
@@ -283,10 +283,10 @@ const GroupModal = (props: any) => {
                                         maxLength={100}
                                     />
 
-                                    <FormGroupPermissionCkb controlId='formAppointmentRequired' hidden={!group.searchPortalConsent} title={t('translation:searchPortalAppointmentRequired')}
+                                    <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
                                         onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
                                         type='checkbox'
-                                        checked={group.appointmentRequired}
+                                        checked={group?.appointmentRequired ? group.appointmentRequired : false}
                                     />
                                 </div>
                             </Collapse>
