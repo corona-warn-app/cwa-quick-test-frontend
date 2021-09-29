@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Modal, Form, Col, Row, Spinner, Fade, Container } from 'react-bootstrap'
+import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse } from 'react-bootstrap'
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +28,7 @@ import { FormGroupTextarea, FormGroupInput, FormGroupSelect, FormGroupPermission
 import { IGroupDetails, IGroupNode, IGroup } from '../../misc/user';
 import { useGetGroupDetails } from '../../api';
 import CwaSpinner from '../spinner/spinner.component';
+import utils from '../../misc/utils';
 
 const emptyGroup: IGroupDetails = {
     id: '',
@@ -150,6 +151,17 @@ const GroupModal = (props: any) => {
         setGroup(ngroup);
     }
 
+    const updateSearchPortalConsent = (name: string, value: any) => {
+        const ngroup: IGroupDetails = { ...group, [name]: value };
+
+        if (value === false) {
+            ngroup.website = '';
+            ngroup.openingHours = '';
+            ngroup.appointmentRequired = false;
+        }
+        setGroup(ngroup);
+    }
+
     const collectChildren = (idlist: string[], parentNode: IGroup) => {
         if (parentNode) {
             idlist.push(parentNode.id);
@@ -181,8 +193,6 @@ const GroupModal = (props: any) => {
 
         return result;
     }
-
-
 
     return (
         <Modal
@@ -247,38 +257,39 @@ const GroupModal = (props: any) => {
 
                             <FormGroupPermissionCkb controlId='formRoleCounter' title={t('translation:searchPortalConsent')}
                                 //label={t('translation:for-counter')}
-                                onChange={(evt: any) => updateGroupProp('searchPortalConsent', evt.currentTarget.checked)}
+                                onChange={(evt: any) => updateSearchPortalConsent('searchPortalConsent', evt.currentTarget.checked)}
                                 type='checkbox'
                                 checked={group.searchPortalConsent}
                             />
 
-                            < FormGroupInput controlId='formPocWebsite' title={t('translation:searchPortalWebsite')}
-                                             value={group ? group.searchPortalWebsite : ''}
-                                             onChange={(evt: any) => {
-                                                 updateGroupProp('website', evt.target.value);
-                                                 props.resetError();
-                                             }}
-                                             maxLength={100}
-                                             isInvalid={props.isCreationError}
-                                             InvalidText={t('translation:group-conflict-error')}
-                            />
+                            <Collapse in={group.searchPortalConsent}>
+                                <div>
+                                    < FormGroupInput controlId='formPocWebsite' title={t('translation:searchPortalWebsite')}
+                                        value={group?.website ? group.website : ''}
+                                        onChange={(evt: any) => {
+                                            updateGroupProp('website', evt.target.value);
+                                            props.resetError();
+                                        }}
+                                        maxLength={100}
+                                        pattern={utils.pattern.url}
+                                    />
 
-                            < FormGroupInput controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
-                                             value={group ? group.searchPortalOpeningHours : ''}
-                                             onChange={(evt: any) => {
-                                                 updateGroupProp('openingHours', evt.target.value);
-                                                 props.resetError();
-                                             }}
-                                             maxLength={100}
-                                             isInvalid={props.isCreationError}
-                                             InvalidText={t('translation:group-conflict-error')}
-                            />
+                                    < FormGroupInput controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
+                                        value={group?.openingHours ? group.openingHours : ''}
+                                        onChange={(evt: any) => {
+                                            updateGroupProp('openingHours', evt.target.value);
+                                            props.resetError();
+                                        }}
+                                        maxLength={100}
+                                    />
 
-                            <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
-                                                    onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
-                                                    type='checkbox'
-                                                    checked={group.searchPortalAppointmentRequired}
-                            />
+                                    <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
+                                        onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
+                                        type='checkbox'
+                                        checked={group?.appointmentRequired ? group.appointmentRequired : false}
+                                    />
+                                </div>
+                            </Collapse>
 
                             {!(group && group.pocId)
                                 ? <></>
