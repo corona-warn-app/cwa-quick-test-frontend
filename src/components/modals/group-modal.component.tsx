@@ -151,6 +151,17 @@ const GroupModal = (props: any) => {
         setGroup(ngroup);
     }
 
+    const updateSearchPortalConsent = (name: string, value: any) => {
+        const ngroup: IGroupDetails = { ...group, [name]: value };
+        
+        if (value === false) {
+            ngroup.website = '';
+            ngroup.openingHours = '';
+            ngroup.appointmentRequired = false;
+        }
+        setGroup(ngroup);
+    }
+
     const collectChildren = (idlist: string[], parentNode: IGroup) => {
         if (parentNode) {
             idlist.push(parentNode.id);
@@ -246,34 +257,34 @@ const GroupModal = (props: any) => {
 
                             <FormGroupPermissionCkb controlId='formRoleCounter' title={t('translation:searchPortalConsent')}
                                 //label={t('translation:for-counter')}
-                                onChange={(evt: any) => updateGroupProp('searchPortalConsent', evt.currentTarget.checked)}
+                                onChange={(evt: any) => updateSearchPortalConsent('searchPortalConsent', evt.currentTarget.checked)}
                                 type='checkbox'
                                 checked={group.searchPortalConsent}
                             />
 
                             < FormGroupInput controlId='formPocWebsite' hidden={!group.searchPortalConsent} title={t('translation:searchPortalWebsite')}
-                                             value={group ? group.website : ''}
-                                             onChange={(evt: any) => {
-                                                 updateGroupProp('website', evt.target.value);
-                                                 props.resetError();
-                                             }}
-                                             maxLength={100}
-                                             pattern={utils.pattern.url}
+                                value={group ? group.website : ''}
+                                onChange={(evt: any) => {
+                                    updateGroupProp('website', evt.target.value);
+                                    props.resetError();
+                                }}
+                                maxLength={100}
+                                pattern={utils.pattern.url}
                             />
 
                             < FormGroupInput controlId='formPocOpeningHours' hidden={!group.searchPortalConsent} title={t('translation:searchPortalOpeningHours')}
-                                             value={group ? group.openingHours : ''}
-                                             onChange={(evt: any) => {
-                                                 updateGroupProp('openingHours', evt.target.value);
-                                                 props.resetError();
-                                             }}
-                                             maxLength={100}
+                                value={group ? group.openingHours : ''}
+                                onChange={(evt: any) => {
+                                    updateGroupProp('openingHours', evt.target.value);
+                                    props.resetError();
+                                }}
+                                maxLength={100}
                             />
 
                             <FormGroupPermissionCkb controlId='formAppointmentRequired' hidden={!group.searchPortalConsent} title={t('translation:searchPortalAppointmentRequired')}
-                                                    onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
-                                                    type='checkbox'
-                                                    checked={group.appointmentRequired}
+                                onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
+                                type='checkbox'
+                                checked={group.appointmentRequired}
                             />
 
                             {!(group && group.pocId)
