@@ -696,7 +696,7 @@ export const useGetGroups = (onSuccess?: () => void, onError?: (error: any) => v
         if (group) {
             group.website = group.website || undefined;
             group.openingHours = group.openingHours || undefined;
-            group.appointmentRequired = group.appointmentRequired || undefined;
+            group.appointmentRequired = group.appointmentRequired || false;
         }
 
         return group;
