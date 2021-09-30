@@ -82,6 +82,7 @@ const GroupModal = (props: any) => {
 
     React.useEffect(() => {
         getDropdownItems();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     React.useEffect(() => {

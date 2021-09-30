@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Row, Col, Accordion, InputGroup, OverlayTrigger, Tooltip, DropdownButton, Dropdown } from "react-bootstrap";
+import { Form, Row, Col, Accordion, InputGroup, OverlayTrigger, Tooltip, DropdownButton } from "react-bootstrap";
 
 import { IValueSet } from "../../api";
 
