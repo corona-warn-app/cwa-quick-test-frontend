@@ -125,6 +125,8 @@
   "additional-info-tooltip": "Hier kann man zum Beispiel eine Personalausweisnummer eintragen. Die Daten werden auf dem Testbeleg ausgegeben.",
   "searchPortalConsent": "Im Schnelltestsuch- portal anzeigen",
   "searchPortalWebsite": "Webseite",
+  "searchPortalWebsitePlaceholder": "www.example.de",
+  "searchPortalWebsiteTooltip": "Bitte wählen Sie zwischen 'https://' oder 'http://' und tragen sie anschließend hier ihre Website ein. Z. B.: www.example.de",
   "searchPortalOpeningHours": "Öffnungszeiten",
   "searchPortalAppointmentRequired": "Terminvereinbarung notwendig"
 }

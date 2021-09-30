@@ -744,7 +744,7 @@ export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }
 
-    return [result, updateGroup, setResult];
+    return [result, updateGroup, setResult] as const;
 }
 
 export const addUserToGroup = (userId: string, groupId: string, token: string) => {

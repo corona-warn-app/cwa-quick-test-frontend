@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse } from 'react-bootstrap'
+import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse, Dropdown } from 'react-bootstrap'
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -52,16 +52,37 @@ const GroupModal = (props: any) => {
     const [isReady, setIsReady] = React.useState(false);
     const [isNew, setIsNew] = React.useState(true);
     const [options, setOptions] = React.useState<JSX.Element[]>();
+    const [dropdownItems, setDropdownItems] = React.useState<JSX.Element[]>();
+    const [dropdownList] = React.useState<string[]>(['https://', 'http://']);
+    const [selectedDropdownValue, setSelectedDropdownValue] = React.useState<string>(dropdownList[0]);
+    const [websiteValue, setWebsiteValue] = React.useState('');
 
     const groupReloaded = (group: IGroupDetails) => {
         if (group) {
             setData(unpackData(group.pocDetails))
             group.parentGroup = props.parentGroupId;
+
+            if (group.website) {
+                let website = '';
+
+                for (const item of dropdownList) {
+                    if (group.website.startsWith(item)) {
+                        website = group.website.slice(item.length, group.website.length);
+                    }
+                }
+
+                setWebsiteValue(website);
+            }
         }
         setBtnOkDisabled(false);
     }
 
     const [group, updateGroup, setGroup] = useGetGroupDetails(groupReloaded, props.handleError);
+
+
+    React.useEffect(() => {
+        getDropdownItems();
+    }, [])
 
     React.useEffect(() => {
         if (group) {
@@ -110,6 +131,19 @@ const GroupModal = (props: any) => {
         if (props.handleOk) {
             setBtnOkDisabled(true);
             group.pocDetails = packData(data);
+            if (websiteValue
+                && (
+                    websiteValue.startsWith('www.')
+                    || !(
+                        websiteValue.startsWith(dropdownList[0])
+                        || websiteValue.startsWith(dropdownList[1])
+                    )
+                )) {
+                group.website = selectedDropdownValue + websiteValue;
+            }
+            else {
+                group.website = websiteValue;
+            }
 
             props.handleOk(group);
         }
@@ -148,7 +182,7 @@ const GroupModal = (props: any) => {
 
     const updateGroupProp = (name: string, value: any) => {
         const ngroup = { ...group, [name]: value };
-        setGroup(ngroup);
+        setGroup({ ...ngroup });
     }
 
     const updateSearchPortalConsent = (name: string, value: any) => {
@@ -169,7 +203,7 @@ const GroupModal = (props: any) => {
         }
     }
 
-    const getOptions = () => {
+    const getOptions = (): JSX.Element[] => {
         let result: JSX.Element[] = [];
 
         if (group && group.id) {
@@ -192,6 +226,11 @@ const GroupModal = (props: any) => {
 
 
         return result;
+    }
+
+    const getDropdownItems = () => {
+        setDropdownItems(dropdownList.map((item: string) => <Dropdown.Item onSelect={(eventKey: any) => setSelectedDropdownValue(eventKey)}
+            eventKey={item}>{item}</Dropdown.Item>));
     }
 
     return (
@@ -264,10 +303,14 @@ const GroupModal = (props: any) => {
 
                             <Collapse in={group.searchPortalConsent}>
                                 <div>
-                                    < FormGroupInput controlId='formPocWebsite' title={t('translation:searchPortalWebsite')}
-                                        value={group?.website ? group.website : ''}
+                                    < FormGroupInput controlId='formPocWebsite' title={t('translation:searchPortalWebsite')} placeholder={t('translation:searchPortalWebsitePlaceholder')}
+                                        value={websiteValue}
+                                        dropdown={dropdownItems}
+                                        dropdownTitle={selectedDropdownValue}
+                                        prepend='i'
+                                        tooltip={t('translation:searchPortalWebsiteTooltip')}
                                         onChange={(evt: any) => {
-                                            updateGroupProp('website', evt.target.value);
+                                            setWebsiteValue(evt.target.value);
                                             props.resetError();
                                         }}
                                         maxLength={100}
@@ -281,6 +324,7 @@ const GroupModal = (props: any) => {
                                             props.resetError();
                                         }}
                                         maxLength={100}
+                                        required
                                     />
 
                                     <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
