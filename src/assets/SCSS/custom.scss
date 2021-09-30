@@ -304,7 +304,7 @@ hr {
     position: inherit;
 }
 
-.dropdown-toggle::after {
+#responsive-navbar-nav::after {
     width: $user-image-width;
     height: $user-image-width;
     background-image: url("../images/user.png") !important;
@@ -458,4 +458,11 @@ td {
     border-bottom-right-radius: $input-border-radius;
     border: 1px solid #7e7e7e;
     margin-left: -1px;
+}
+#input-group-dropdown-1 {
+    align-self: center;
+    border-top-left-radius: $input-border-radius;
+    border-bottom-left-radius: $input-border-radius;
+    border: 1px solid #7e7e7e;
+    font-size: 1rem;
 }

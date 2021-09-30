@@ -110,6 +110,8 @@
   "additional-info-tooltip": "E.G. for ID-Card No.",
   "searchPortalConsent": "Show in quick test search portal",
   "searchPortalWebsite": "Website",
+  "searchPortalWebsitePlaceholder": "www.example.de",
+  "searchPortalWebsiteTooltip": "tooltip",
   "searchPortalOpeningHours": "Opening Hours",
   "searchPortalAppointmentRequired": "Appointment Required"
 }

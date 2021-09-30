@@ -676,9 +676,6 @@ export const useGetGroups = (onSuccess?: () => void, onError?: (error: any) => v
 
     const updateGroup = (group: IGroupDetails) => {
         const uri = baseUri + '/' + group.id;
-        console.log(JSON.stringify(group));
-        console.log(JSON.stringify(removeEmpty(group)));
-
 
         return api.put(uri,
             JSON.stringify(removeEmpty(group)),
@@ -730,7 +727,6 @@ export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void
             api.get(uri, { headers: header })
                 .then(response => {
                     const group = response.data;
-                    console.log(group);
 
                     groupReloaded(group);
                     setResult(group);
@@ -744,7 +740,7 @@ export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }
 
-    return [result, updateGroup, setResult];
+    return [result, updateGroup, setResult] as const;
 }
 
 export const addUserToGroup = (userId: string, groupId: string, token: string) => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Row, Col, Accordion, InputGroup, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Form, Row, Col, Accordion, InputGroup, OverlayTrigger, Tooltip, DropdownButton } from "react-bootstrap";
 
 import { IValueSet } from "../../api";
 
@@ -13,6 +13,17 @@ export const FormGroupInput = (props: any) => {
 
             <Col xs='7' sm='9' className='d-flex'>
                 <InputGroup>
+                    {!props.dropdown
+                        ? <></>
+                        : <DropdownButton
+                            as={InputGroup.Prepend}
+                            variant="outline-secondary"
+                            title={props.dropdownTitle}
+                            id="input-group-dropdown-1"
+                        >
+                            {props.dropdown}
+                        </DropdownButton>
+                    }
                     <Form.Control
                         className={!props.prepend ? 'qt-input' : 'qt-input-prepend'}
                         value={props.value}
