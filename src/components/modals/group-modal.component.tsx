@@ -325,7 +325,6 @@ const GroupModal = (props: any) => {
                                             props.resetError();
                                         }}
                                         maxLength={100}
-                                        required
                                     />
 
                                     <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
