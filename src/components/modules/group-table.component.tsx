@@ -39,14 +39,14 @@ const GroupTable = (props: any) => {
     const [confirmTitle, setConfirmTitle] = React.useState('');
     const [confirmHandle, setConfirmHandle] = React.useState<() => void>();
     const [groupIsReady, setGroupIsReady] = React.useState(false);
-    
+
     const [
         bGroups,
         refreshGroups,
         createGroup,
         updateGroup,
         deleteGroup
-    ] = useGetGroups(()=> setGroupIsReady(true), props.handleError);
+    ] = useGetGroups(() => setGroupIsReady(true), props.handleError);
 
 
     React.useEffect(() => {

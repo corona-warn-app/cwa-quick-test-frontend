@@ -38,6 +38,7 @@ const emptyGroup: IGroupDetails = {
     searchPortalConsent: false,
     parentGroup: '',
     website: '',
+    email: '',
     appointmentRequired: false,
     openingHours: ''
 }
@@ -190,6 +191,7 @@ const GroupModal = (props: any) => {
         const ngroup: IGroupDetails = { ...group, [name]: value };
 
         if (value === false) {
+            ngroup.email = '';
             ngroup.website = '';
             ngroup.openingHours = '';
             ngroup.appointmentRequired = false;
@@ -304,6 +306,17 @@ const GroupModal = (props: any) => {
 
                             <Collapse in={group.searchPortalConsent}>
                                 <div>
+                                    < FormGroupInput controlId='formEmailInput' title={t('translation:email-address')}
+                                        value={group?.email ? group.email : ''}
+                                        onChange={(evt: any) => {
+                                            updateGroupProp('email', evt.target.value);
+                                            props.resetError();
+                                        }}
+                                        type='email'
+                                        pattern={utils.pattern.eMail}
+                                        minLength={5}
+                                        maxLength={255}
+                                    />
                                     < FormGroupInput controlId='formPocWebsite' title={t('translation:searchPortalWebsite')} placeholder={t('translation:searchPortalWebsitePlaceholder')}
                                         value={websiteValue}
                                         dropdown={dropdownItems}
