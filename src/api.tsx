@@ -691,6 +691,7 @@ export const useGetGroups = (onSuccess?: () => void, onError?: (error: any) => v
 
     const removeEmpty = (group: IGroupDetails): IGroupDetails => {
         if (group) {
+            group.email = group.email || undefined;
             group.website = group.website || undefined;
             group.openingHours = group.openingHours || undefined;
             group.appointmentRequired = group.appointmentRequired || false;
