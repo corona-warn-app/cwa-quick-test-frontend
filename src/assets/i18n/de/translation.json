@@ -128,5 +128,6 @@
   "searchPortalWebsitePlaceholder": "www.example.de",
   "searchPortalWebsiteTooltip": "Bitte wählen Sie zwischen 'https://' oder 'http://' und tragen sie anschließend hier ihre Website ein. Z. B.: www.example.de",
   "searchPortalOpeningHours": "Öffnungszeiten",
-  "searchPortalAppointmentRequired": "Terminvereinbarung notwendig"
+  "searchPortalAppointmentRequired": "Terminvereinbarung notwendig",
+  "no-group-tooltip": "Dieser Benutzer*in kann das Schnelltestportal nicht mehr verwenden bis ein neues Testcenter zugewiesen wurde."
 }

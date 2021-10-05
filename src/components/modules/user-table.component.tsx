@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Table, Button, Collapse, Container, Spinner } from "react-bootstrap";
+import { Row, Table, Button, Collapse, Container, Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -296,7 +296,19 @@ const UserTable = (props: any) => {
                             <tbody>{
                                 users.map((u, i) =>
                                     <tr key={i}>
-                                        <td>{u.username}</td>
+                                        <td>{u.subGroup || ownUserId && u.id === ownUserId
+                                            ? <></>
+                                            : <OverlayTrigger
+                                                placement='top-end'
+                                                overlay={
+                                                    <Tooltip id='no-group-tooltip'>
+                                                        {t('translation:no-group-tooltip')}
+                                                    </Tooltip>
+                                                }
+                                            >
+                                                <span className='ff-fa px-1'>&#xf071; </span>
+                                            </OverlayTrigger>}
+                                            {u.username}</td>
                                         <td>{u.firstName}</td>
                                         <td>{u.lastName}</td>
                                         <td>
