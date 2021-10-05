@@ -296,7 +296,7 @@ const UserTable = (props: any) => {
                             <tbody>{
                                 users.map((u, i) =>
                                     <tr key={i}>
-                                        <td>{u.subGroup || ownUserId && u.id === ownUserId
+                                        <td>{u.subGroup || (ownUserId && u.id === ownUserId)
                                             ? <></>
                                             : <OverlayTrigger
                                                 placement='top-end'
