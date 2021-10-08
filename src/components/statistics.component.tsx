@@ -41,6 +41,10 @@ const Statistics = (props: any) => {
         if (error) {
             msg = error.message
         }
+
+        if (error && error.message && (error.message as string).includes('412')) {
+            msg = t('translation:no-group-error');
+        }
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 

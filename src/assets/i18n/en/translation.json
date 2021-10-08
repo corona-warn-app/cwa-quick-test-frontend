@@ -114,5 +114,6 @@
   "searchPortalWebsiteTooltip": "tooltip",
   "searchPortalOpeningHours": "Opening Hours",
   "searchPortalAppointmentRequired": "Appointment Required",
-  "no-group-tooltip": "This user can no longer use Schnelltestportal until a new test center has been assigned."
+  "no-group-tooltip": "This user can no longer use Schnelltestportal until a new test center has been assigned.",
+  "no-group-error": "User has no Group assigned"
 }

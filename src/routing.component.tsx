@@ -37,7 +37,7 @@ import ShowPatientData from './components/show-patient-data.component';
 import RecordTestResult from './components/record-test-result.component';
 import QrScan from './components/qr-scan.component';
 import Statistics from './components/statistics.component';
-import FailedReport from './components/failed-report.component';
+import Reports from './components/reports';
 import UserManagement from './components/user-management.component';
 
 import PrivateRoute from './components/modules/private-route.component';
@@ -160,10 +160,10 @@ const Routing = () => {
 
                     <PrivateRoute
                         exact
-                        path={context.navigation.routes.failedReport}
+                        path={context.navigation.routes.reports}
                         roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
-                        component={FailedReport}
-                        render={(props) => <FailedReport {...props} setError={setError} />}
+                        component={Reports}
+                        render={(props) => <Reports {...props} setError={setError} />}
                     />
 
                     <PrivateRoute

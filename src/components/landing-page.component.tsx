@@ -58,7 +58,7 @@ const LandingPage = (props: any) => {
                 {hasRole('c19_quick_test_counter') ?
                     <Button block className='landing-btn' onClick={navigation!.toQRScan}>{t('translation:record-qr-scan')}</Button> : null}
                 {hasRole('c19_quick_test_lab') ?
-                    <><Button block className='landing-btn' onClick={navigation!.toFailedReport}>{t('translation:failed-report')}</Button>
+                    <><Button block className='landing-btn' onClick={navigation!.toReports}>{t('translation:failed-report')}</Button>
                     <Button block className='landing-btn' onClick={navigation!.toStatistics}>{t('translation:statistics-menu-item')}</Button></> : null}
                 {hasRole('c19_quick_test_admin') ?
                     <Button block className='landing-btn' onClick={navigation!.toUserManagement}>{t('translation:user-management')}</Button> : null}
