@@ -33,7 +33,7 @@ const ProcessIdInput = (props: any) => {
     const { t } = useTranslation();
     const [processNo, setProcessNo] = React.useState('');
     const [btnOkDisabled, setBtnOkDisabled] = React.useState(false);
-    const processIds = useGetPendingProcessIds();
+    const processIds = useGetPendingProcessIds(undefined, props.handleError);
 
     const handleCancel = () => {
         props.onCancel();

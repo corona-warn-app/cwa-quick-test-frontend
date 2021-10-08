@@ -35,7 +35,7 @@ import CardHeader from './modules/card-header.component';
 import AppContext from '../misc/appContext';
 
 
-const FailedReport = (props: any) => {
+const Reports = (props: any) => {
 
     const context = React.useContext(AppContext);
     const { t } = useTranslation();
@@ -54,7 +54,20 @@ const FailedReport = (props: any) => {
             setIsInit(true);
     }, [context.navigation, context.valueSets])
 
-    const qtArchive = useGetPositiveForTimeRange(filterTestResult, startDate, endDate);
+    const handleError = (error: any) => {
+        let msg = '';
+
+        if (error) {
+            msg = error.message
+        }
+
+        if (error && error.message && (error.message as string).includes('412')) {
+            msg = t('translation:no-group-error');
+        }
+        props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
+    }
+    
+    const qtArchive = useGetPositiveForTimeRange(filterTestResult, startDate, endDate, undefined, handleError);
     const pdf = useGetPDF(selectedHash);
 
     const handleDateChange = (evt: Date | [Date, Date] | null, change: (date: Date | undefined) => void, hour: number) => {
@@ -76,6 +89,7 @@ const FailedReport = (props: any) => {
         change(date);
 
     }
+
     const handleStartDateChange = (evt: Date | [Date, Date] | null) => {
         handleDateChange(evt, setStartDate, 0);
         handleDateChange(evt, setEndDate, 24);
@@ -238,4 +252,4 @@ const FailedReport = (props: any) => {
     )
 }
 
-export default FailedReport;
+export default Reports;

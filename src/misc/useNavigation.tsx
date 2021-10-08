@@ -36,7 +36,7 @@ export interface INavigation {
     toRecordTestResult: () => void,
     toQRScan: () => void,
     toStatistics: () => void,
-    toFailedReport: () => void,
+    toReports: () => void,
     toUserManagement: () => void,
 }
 
@@ -55,7 +55,7 @@ export const useRoutes = () => {
             recordTestResult: basePath + '/record/result',
             qrScan: basePath + '/qr/scan',
             statistics: basePath + '/statistics',
-            failedReport: basePath + '/failedreport',
+            reports: basePath + '/reports',
             userManagement: basePath + '/usermanagement'
         });
     }, [])
@@ -82,7 +82,7 @@ export const useNavigation = () => {
             c.recordTestResult = routes.recordTestResult.replace(':mandant', mandant as string);
             c.qrScan = routes.qrScan.replace(':mandant', mandant as string);
             c.statistics = routes.statistics.replace(':mandant', mandant as string);
-            c.failedReport = routes.failedReport.replace(':mandant', mandant as string);
+            c.reports = routes.reports.replace(':mandant', mandant as string);
             c.userManagement = routes.userManagement.replace(':mandant', mandant as string);
 
             setCalculatedRoutes(c);
@@ -102,7 +102,7 @@ export const useNavigation = () => {
                 toRecordTestResult: () => { history.push(calculatedRoutes.recordTestResult); },
                 toQRScan: () => { history.push(calculatedRoutes.qrScan); },
                 toStatistics: () => { history.push(calculatedRoutes.statistics); },
-                toFailedReport: () => { history.push(calculatedRoutes.failedReport); },
+                toReports: () => { history.push(calculatedRoutes.reports); },
                 toUserManagement: () => { history.push(calculatedRoutes.userManagement); },
             });
         }
