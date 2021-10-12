@@ -39,6 +39,8 @@ import AddressInputs from './modules/address-inputs';
 import { FormGroupConsentCkb, FormGroupDccConsentRadio, FormGroupInput } from './modules/form-group.component';
 import AppContext from '../misc/appContext';
 import eu_logo from "../assets/images/eu_logo.png";
+import useOnUnload from '../misc/useOnUnload';
+
 
 const RecordPatientData = (props: any) => {
 
@@ -47,7 +49,14 @@ const RecordPatientData = (props: any) => {
 
     const [isInit, setIsInit] = React.useState(false)
     const [uuIdHash, setUuIdHash] = React.useState('');
+
+    const [isBack, setIsBack] = React.useState(true);
+    const isBackRef = React.useRef(isBack);
+    isBackRef.current = isBack;
+
     const [processId, setProcessId] = React.useState('');
+    const processIdRef = React.useRef(processId);
+    processIdRef.current = processId;
 
     const [person, setPerson] = React.useState<IPersonData>();
     const [address, setAddress] = React.useState<IAddressData>();
@@ -63,6 +72,7 @@ const RecordPatientData = (props: any) => {
     const [validated, setValidated] = React.useState(false);
 
 
+
     const handleError = (error: any) => {
         let msg = '';
 
@@ -76,7 +86,19 @@ const RecordPatientData = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
-    const uuid = useGetUuid(props?.quickTest?.uuId, undefined, handleError);
+    const handleDelete = () => { deleteQuicktest(processIdRef.current); }
+    const [uuid, deleteQuicktest] = useGetUuid(props?.quickTest?.uuId, undefined, handleError);
+    useOnUnload(() => handleDelete);
+
+
+    React.useEffect(() => {
+        return () => {
+            if (isBackRef.current) {
+                handleDelete();
+            }
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     // set values from props or new uuid on mount
     React.useEffect(() => {
@@ -114,8 +136,9 @@ const RecordPatientData = (props: any) => {
 
     // set ready state for spinner
     React.useEffect(() => {
-        if (processId && context.navigation && context.valueSets)
+        if (processId && context.navigation && context.valueSets) {
             setIsInit(true);
+        }
     }, [processId, context.navigation, context.valueSets])
 
     const handleDccConsentChange = (evt: any) => {
@@ -150,6 +173,7 @@ const RecordPatientData = (props: any) => {
         event.stopPropagation();
 
         setValidated(true);
+        setIsBack(false);
 
         if (form.checkValidity() && person) {
             props.setQuickTest({

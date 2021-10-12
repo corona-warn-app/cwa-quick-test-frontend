@@ -69,7 +69,7 @@ const Header = (props: any) => {
             {/* user icon and user name */}
             <Row id='qt-header'>
                 <span className='header-font my-auto mx-1'>
-                    <Image src={C19Logo} onClick={navigation!.toLanding} />
+                    <Image src={C19Logo} />
                     {t('translation:title')}{environmentName ? ' - ' + environmentName : ''}
                 </span>
             </Row>
