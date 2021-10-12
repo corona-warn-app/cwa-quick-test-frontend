@@ -69,10 +69,15 @@ const GroupModal = (props: any) => {
                 for (const item of dropdownList) {
                     if (group.website.startsWith(item)) {
                         website = group.website.slice(item.length, group.website.length);
+                        setSelectedDropdownValue(item);
                     }
                 }
 
                 setWebsiteValue(website);
+            }
+            else {
+                setWebsiteValue('');
+                setSelectedDropdownValue(dropdownList[0]);
             }
         }
         setBtnOkDisabled(false);
@@ -163,7 +168,9 @@ const GroupModal = (props: any) => {
         }
         else {
             setGroup({ ...emptyGroup });
-            setData('')
+            setSelectedDropdownValue(dropdownList[0]);
+            setData('');
+            setWebsiteValue('');
         }
     }
 
@@ -232,8 +239,16 @@ const GroupModal = (props: any) => {
     }
 
     const getDropdownItems = () => {
-        setDropdownItems(dropdownList.map((item: string) => <Dropdown.Item onSelect={(eventKey: any) => setSelectedDropdownValue(eventKey)}
-            eventKey={item}>{item}</Dropdown.Item>));
+        setDropdownItems(
+            dropdownList.map(
+                (item: string) =>
+                    <Dropdown.Item
+                        onSelect={(eventKey: any) => setSelectedDropdownValue(eventKey)}
+                        eventKey={item}
+                        key={item}
+                    >
+                        {item}
+                    </Dropdown.Item>));
     }
 
     return (
