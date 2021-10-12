@@ -308,7 +308,19 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uuidHash]);
 
-    return result;
+    const deleteQuicktest = (processId: string) => {
+        
+        if (processId) {
+            const uri = '/api/quicktest/' + processId;
+            const header = {
+                "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+                'Content-Type': 'application/json'
+            };
+            api.delete(uri, { headers: header });
+        }
+    }
+
+    return [result, deleteQuicktest] as const;
 }
 
 export const useGetTests = (onError?: (error: any) => void) => {
