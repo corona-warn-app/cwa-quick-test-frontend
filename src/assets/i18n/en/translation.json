@@ -115,5 +115,8 @@
   "searchPortalOpeningHours": "Opening Hours",
   "searchPortalAppointmentRequired": "Appointment Required",
   "no-group-tooltip": "This user can no longer use Schnelltestportal until a new test center has been assigned.",
-  "no-group-error": "User has no Group assigned"
+  "no-group-error": "User has no Group assigned",
+  "RAT-list-info": "The tests listed in the DCC selection are based on a list agreed at EU level and also include tests that are not reimbursable in Germany. The operator himself has to check the eligibility for reimbursement. Comparison with ",
+  "RAT-list-info-link": "https://antigentest.bfarm.de/ords/f?p=110:100:12807215185840:::::&tz=2:00",
+  "RAT-list-info-link-text":"BfArM list"
 }

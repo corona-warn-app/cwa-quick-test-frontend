@@ -31,11 +31,11 @@ const TestResultInputs = (props: any) => {
     React.useEffect(() => {
         if (testResult) {
             const result: ITestResult = {
-                testBrandId: dccConsent ? undefined :testId,
-                testBrandName: dccConsent ? undefined: testName,
+                testBrandId: dccConsent ? undefined : testId,
+                testBrandName: dccConsent ? undefined : testName,
                 result: testResult,
                 dccTestManufacturerId: dccConsent ? testManufacturerId : undefined,
-                dccTestManufacturerDescription:  dccConsent ?testManufacturerDescription : undefined
+                dccTestManufacturerDescription: dccConsent ? testManufacturerDescription : undefined
             }
 
             props.onChange(result);
@@ -123,6 +123,7 @@ const TestResultInputs = (props: any) => {
 
                 {/* combobox testManufacturers */}
                 <FormGroupValueSetSelect controlId='formTestManufactorersInput' title={t('translation:testManufacturers')}
+                    infoText={<>{t('translation:RAT-list-info')}  <a className='rat-list-info-link' href={t('translation:RAT-list-info-link')} target='blank'>{t('translation:RAT-list-info-link-text')}</a></>}
                     value={testManufacturerId}
                     required={dccConsent}
                     hidden={!dccConsent}
