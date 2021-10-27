@@ -118,5 +118,8 @@
   "RAT-list-info-link": "https://antigentest.bfarm.de/ords/f?p=110:100:12807215185840:::::&tz=2:00",
   "RAT-list-info-link-text":"BfArM list",
   "no-group-tooltip": "This user can no longer use Schnelltestportal until a new testing facility has been assigned.",
-  "no-group-error": "User has no testing facility assigned"
+  "no-group-error": "User has no testing facility assigned",
+  "bsnr": "Permanent establishment number",
+  "bsnr-tooltip": "The permanent establishment number, or BSNR for short, is a nine-digit number that uniquely identifies the place where the service is provided (permanent establishment) within the framework of contractual medical or contractual psychotherapeutic care.",
+  "bsnr-placeholder": "Permanent establishment number"
 }
