@@ -69,8 +69,6 @@ const Root = (props: any) => {
         setDccRulesServices(contextConfig['rules-server-url']);
       }
 
-      console.log(contextConfig['environment-name']);
-      
       setEnvironmentName(contextConfig['environment-name'] ?? '');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
