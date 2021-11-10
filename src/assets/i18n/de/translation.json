@@ -133,5 +133,8 @@
   "RAT-list-info-link": "https://antigentest.bfarm.de/ords/f?p=110:100:12807215185840:::::&tz=2:00",
   "RAT-list-info-link-text":"BfArM-Liste",
   "no-group-tooltip": "Dieser Benutzer*in kann das Schnelltestportal nicht mehr verwenden, da diesem Benutzer*in keine Teststelle zugewiesen wurde.",
-  "no-group-error": "Sie sind keiner Teststelle zugeordnet. Bitte kontaktieren Sie ihren Teststellen Administrator."
+  "no-group-error": "Sie sind keiner Teststelle zugeordnet. Bitte kontaktieren Sie ihren Teststellen Administrator.",
+  "bsnr": "Betriebsstätten- nummer",
+  "bsnr-tooltip": "Die Betriebsstättennummer, kurz BSNR, ist eine neunstellige Nummer, die im Rahmen der vertragsärztlichen bzw. vertragspsychotherapeutischen Versorgung den Ort der Leistungserbringung (Betriebsstätte) eindeutig identifiziert.",
+  "bsnr-placeholder": "Betriebsstättennummer"
 }
