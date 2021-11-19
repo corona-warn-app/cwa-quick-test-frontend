@@ -36,7 +36,7 @@ const emptyGroup: IGroupDetails = {
     pocId: '',
     name: '',
     pocDetails: '',
-    searchPortalConsent: false,
+    searchPortalConsent: true,
     parentGroup: '',
     website: '',
     email: '',
