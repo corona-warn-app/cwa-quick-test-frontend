@@ -52,7 +52,7 @@ export interface IGroupNode {
 
 export interface IGroupDetails {
     id?: string,
-    bsnr?: string,
+    // bsnr?: string,
     name: string,
     pocDetails: string,
     pocId: string,
