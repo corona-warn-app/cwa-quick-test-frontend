@@ -43,13 +43,13 @@ import UserManagement from './components/user-management.component';
 import PrivateRoute from './components/modules/private-route.component';
 import IError from './misc/error';
 import ErrorPage from './components/modals/error-page.component';
-import NotificationPage from './components/modals/notification-page.component';
 import DataprivacyPage from './components/modals/dataprivacy.component';
 import ImprintPage from './components/modals/imprint.component';
 import AppContext, { IAppContext } from './misc/appContext';
 import utils from './misc/utils';
 import CwaSpinner from './components/spinner/spinner.component';
 import { useGetValueSets } from './misc/useValueSet';
+import NotificationToast from './components/modals/notification-toast.component';
 
 
 const Routing = () => {
@@ -97,7 +97,7 @@ const Routing = () => {
                 <Route path={context.navigation.routes.root}>
                     <Header />
                     <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} onExit={errorOnExit} />
-                    <NotificationPage show={notificationShow} setNotificationShow={setNotificationShow} />
+                    <NotificationToast show={notificationShow} setNotificationShow={setNotificationShow} />
                     <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
                     <ImprintPage show={imprintShow} setShow={setImprintShow} />
                 </Route>
