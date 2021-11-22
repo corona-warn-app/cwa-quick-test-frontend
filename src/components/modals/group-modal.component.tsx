@@ -32,7 +32,7 @@ import utils from '../../misc/utils';
 
 const emptyGroup: IGroupDetails = {
     id: '',
-    bsnr: '',
+    // bsnr: '',
     pocId: '',
     name: '',
     pocDetails: '',
@@ -313,7 +313,7 @@ const GroupModal = (props: any) => {
                                 maxLength={300}
                             />
 
-                            < FormGroupInput controlId='formBSNRInput' title={t('translation:bsnr')} placeholder={t('translation:bsnr-placeholder')}
+                            {/* < FormGroupInput controlId='formBSNRInput' title={t('translation:bsnr')} placeholder={t('translation:bsnr-placeholder')}
                                 value={group ? group.bsnr : ''}
                                 onChange={(evt: any) => {
                                     updateGroupProp('bsnr', evt.target.value);
@@ -323,7 +323,7 @@ const GroupModal = (props: any) => {
                                 prepend='i'
                                 tooltip={t('translation:bsnr-tooltip')}
                                 pattern={utils.pattern.BSNR}
-                            />
+                            /> */}
 
                             <FormGroupPermissionCkb controlId='formRoleCounter' title={t('translation:searchPortalConsent')}
                                 //label={t('translation:for-counter')}
