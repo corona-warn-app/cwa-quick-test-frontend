@@ -116,10 +116,17 @@
   "searchPortalAppointmentRequired": "Appointment Required",
   "RAT-list-info": "The tests listed in the DCC selection are based on a list agreed at EU level and also include tests that are not reimbursable in Germany. The operator himself has to check the eligibility for reimbursement. Comparison with ",
   "RAT-list-info-link": "https://antigentest.bfarm.de/ords/f?p=110:100:12807215185840:::::&tz=2:00",
-  "RAT-list-info-link-text":"BfArM list",
+  "RAT-list-info-link-text": "BfArM list",
   "no-group-tooltip": "This user can no longer use Schnelltestportal until a new testing facility has been assigned.",
   "no-group-error": "User has no testing facility assigned",
   "bsnr": "Permanent establishment number",
   "bsnr-tooltip": "The permanent establishment number, or BSNR for short, is a nine-digit number that uniquely identifies the place where the service is provided (permanent establishment) within the framework of contractual medical or contractual psychotherapeutic care.",
-  "bsnr-placeholder": "Permanent establishment number"
+  "bsnr-placeholder": "Permanent establishment number",
+  "disclaimer-title": "Notification",
+  "disclaimer-text1-part1": "Please activate your test sites in the user administration area for our quick test search portal.\n\nThis enables your customers to easily find the test site at ",
+  "disclaimer-text1-part2": ".",
+  "disclaimer-link": "https://map.schnelltestportal.de",
+  "disclaimer-text2-part1": "To activate a test site for our rapid test search portal, click on the edit icon and activate the Show in the rapid test search portal box\n\nThis enables your customers to easily find the test site at ",
+  "disclaimer-text2-part2":".\n\nYou can also store additional information such as opening times or your website.",
+  "disclaimer-do-not-show": "Don't show notification again."
 }

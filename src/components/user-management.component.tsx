@@ -31,6 +31,7 @@ import CardHeader from './modules/card-header.component';
 import GroupTable from './modules/group-table.component';
 import UserTable from './modules/user-table.component';
 import { IGroupNode } from '../misc/user';
+import useLocalStorage from '../misc/useLocalStorage';
 
 
 const UserManagement = (props: any) => {
@@ -40,6 +41,7 @@ const UserManagement = (props: any) => {
     const [isInit, setIsInit] = React.useState(true);
     const [groupNodes, setGroupNodes] = React.useState<IGroupNode[]>();
     const [userReload, setUserReload] = React.useState(false);
+    const [storedUserManagementDisclaimerShow, setStoredUserManagementDisclaimerShow] = useLocalStorage('userManagementDisclaimerShow', true);
 
 
     const handleError = (error: any, message?: string, onCancel?: () => void) => {
@@ -68,7 +70,25 @@ const UserManagement = (props: any) => {
             : <Fade appear={true} in={true} >
                 <Card id='data-card'>
 
-                    <CardHeader title={t('translation:user-management')} />
+                    <CardHeader
+                        title={t('translation:user-management')}
+                        firstTimeShow={props.disclaimerShow}
+                        checked={!storedUserManagementDisclaimerShow}
+                        onInit={() => { props.setDisclaimerShow(false) }}
+                        onCheckChange={(checked: boolean) => { setStoredUserManagementDisclaimerShow(!checked) }}
+                        disclaimerText={
+                            <>
+                                {t('translation:disclaimer-text2-part1')}
+                                <a
+                                    href={t('translation:disclaimer-link')}
+                                    target='blank'
+                                >
+                                    {t('translation:disclaimer-link')}
+                                </a>
+                                {t('translation:disclaimer-text2-part2')}
+                            </>
+                        }
+                    />
 
                     <Card.Body id='data-body' className='pt-0' >
 

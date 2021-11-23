@@ -131,10 +131,17 @@
   "searchPortalAppointmentRequired": "Terminvereinbarung notwendig",
   "RAT-list-info": "Die in der DCC-Auswahl gelisteten Tests beruhen auf einer auf EU-Ebene abgestimmten Liste und beinhalten auch Tests, die in Deutschland nicht erstattungsfähig sind. Die Erstattungsfähigkeit muss vom Betreiber selbst geprüft werden. Abgleich mit ",
   "RAT-list-info-link": "https://antigentest.bfarm.de/ords/f?p=110:100:12807215185840:::::&tz=2:00",
-  "RAT-list-info-link-text":"BfArM-Liste",
+  "RAT-list-info-link-text": "BfArM-Liste",
   "no-group-tooltip": "Dieser Benutzer*in kann das Schnelltestportal nicht mehr verwenden, da diesem Benutzer*in keine Teststelle zugewiesen wurde.",
   "no-group-error": "Sie sind keiner Teststelle zugeordnet. Bitte kontaktieren Sie ihren Teststellen Administrator.",
   "bsnr": "Betriebsstätten- nummer",
   "bsnr-tooltip": "Die Betriebsstättennummer, kurz BSNR, ist eine neunstellige Nummer, die im Rahmen der vertragsärztlichen bzw. vertragspsychotherapeutischen Versorgung den Ort der Leistungserbringung (Betriebsstätte) eindeutig identifiziert.",
-  "bsnr-placeholder": "Betriebsstättennummer"
+  "bsnr-placeholder": "Betriebsstättennummer",
+  "disclaimer-title": "Benachrichtigung",
+  "disclaimer-text1-part1": "Bitte schalten Sie Ihre Teststellen im Bereich Benutzerverwaltung für unser Schnelltestsuchportal frei.\n\nSo ermöglichen Sie Ihren Kunden, die Teststelle einfach unter ",
+  "disclaimer-text1-part2": " zu finden.",
+  "disclaimer-link": "https://map.schnelltestportal.de",
+  "disclaimer-text2-part1": "Um eine Teststelle für unser Schnelltestsuchportal freizuschalten, klicken Sie auf das Bearbeiten-Icon und aktivieren Sie das Kästchen <strong>Im Schnelltestsuchportal anzeigen</strong>.\n\nSo ermöglichen Sie Ihren Kunden, die Teststelle einfach unter ",
+  "disclaimer-text2-part2": " zu finden.\n\nSie können auch zusätzliche Informationen wie Öffnungszeiten oder Ihre Website hinterlegen.",
+  "disclaimer-do-not-show": "Benachrichtigung nicht mehr anzeigen."
 }
