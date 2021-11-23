@@ -50,6 +50,7 @@ import utils from './misc/utils';
 import CwaSpinner from './components/spinner/spinner.component';
 import { useGetValueSets } from './misc/useValueSet';
 import NotificationToast from './components/modals/notification-toast.component';
+import useLocalStorage from './misc/useLocalStorage';
 
 
 const Routing = () => {
@@ -62,6 +63,10 @@ const Routing = () => {
     const [dataPrivacyShow, setDataPrivacyShow] = React.useState(false);
     const [imprintShow, setImprintShow] = React.useState(false);
     const [isInit, setIsInit] = React.useState(false);
+    const [storedLandingDisclaimerShow] = useLocalStorage('landingDisclaimerShow', true);
+    const [storedUserManagementDisclaimerShow] = useLocalStorage('userManagementDisclaimerShow', true);
+    const [landingDisclaimerShow, setLandingDisclaimerShow] = React.useState(storedLandingDisclaimerShow);
+    const [userManagementDisclaimerShow, setUserManagementDisclaimerShow] = React.useState(storedUserManagementDisclaimerShow);
 
 
     const context: IAppContext = {
@@ -112,7 +117,10 @@ const Routing = () => {
                         exact
                         path={context.navigation.routes.landing}
                     >
-                        <LandingPage setNotificationShow={setNotificationShow} />
+                        <LandingPage
+                            disclaimerShow={landingDisclaimerShow}
+                            setDisclaimerShow={(show: boolean) => { setLandingDisclaimerShow(show) }}
+                            setNotificationShow={setNotificationShow} />
                     </Route>
 
 
@@ -171,7 +179,13 @@ const Routing = () => {
                         path={context.navigation.routes.userManagement}
                         roles={['c19_quick_test_admin']}
                         component={UserManagement}
-                        render={(props) => <UserManagement {...props} setError={setError} />}
+                        render={(props) =>
+                            <UserManagement
+                                {...props}
+                                setError={setError}
+                                disclaimerShow={userManagementDisclaimerShow}
+                                setDisclaimerShow={(show: boolean) => { setUserManagementDisclaimerShow(show) }}
+                            />}
                     />
 
                 </Container>

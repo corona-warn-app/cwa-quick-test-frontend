@@ -25,45 +25,72 @@ import { Button, Container, Fade } from 'react-bootstrap'
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from '../misc/useNavigation';
 import CwaSpinner from './spinner/spinner.component';
 import { useKeycloak } from '@react-keycloak/web';
+import DisclamerButton from './modules/disclamer-btn.component';
+import AppContext from '../misc/appContext';
+import useLocalStorage from '../misc/useLocalStorage';
 
 const LandingPage = (props: any) => {
 
-    const navigation = useNavigation();
+    const context = React.useContext(AppContext);
     const { t } = useTranslation();
 
     const { keycloak } = useKeycloak();
 
     const [isInit, setIsInit] = React.useState(false)
+    const [storedLandingDisclaimerShow, setStoredLandingDisclaimerShow] = useLocalStorage('landingDisclaimerShow', true);
 
     React.useEffect(() => {
-        if (navigation)
+        if (context) {
             setIsInit(true);
-    }, [navigation])
+        }
+    }, [context])
 
     const hasRole = (role: string) => keycloak && (keycloak.hasRealmRole(role) || keycloak.hasRealmRole(role));
 
-    return (!isInit ? <CwaSpinner /> :
+    return (!(isInit && context && context.navigation) ? <CwaSpinner /> :
         <Fade appear={true} in={true} >
             <Container className='center-content'>
 
-                <h1 className='mx-auto mb-5'>{t('translation:welcome')}</h1>
+                <h1 className='mx-auto mb-5 d-flex'>
+                    {t('translation:welcome')}
+                    {hasRole('c19_quick_test_admin')
+                        ? <DisclamerButton
+                            firstTimeShow={props.disclaimerShow}
+                            checked={!storedLandingDisclaimerShow}
+                            onInit={() => { props.setDisclaimerShow(false) }}
+                            onCheckChange={(checked: boolean) => { setStoredLandingDisclaimerShow(!checked) }}
+                            disclaimerText={
+                                <>
+                                    {t('translation:disclaimer-text1-part1')}
+                                    <a
+                                        href={t('translation:disclaimer-link')}
+                                        target='blank'
+                                    >
+                                        {t('translation:disclaimer-link')}
+                                    </a>
+                                    {t('translation:disclaimer-text1-part2')}
+                                </>
+                            }
+                        />
+                        : <></>
+                    }
+                </h1>
 
                 {hasRole('c19_quick_test_counter') ?
-                    <Button block className='landing-btn' onClick={navigation!.toRecordPatient}>{t('translation:record-patient-data')}</Button> : null}
+                    <Button block className='landing-btn' onClick={context.navigation.toRecordPatient}>{t('translation:record-patient-data')}</Button> : null}
                 {hasRole('c19_quick_test_lab') ?
-                    <Button block className='landing-btn' onClick={navigation!.toRecordTestResult}>{t('translation:record-result')}</Button> : null}
+                    <Button block className='landing-btn' onClick={context.navigation.toRecordTestResult}>{t('translation:record-result')}</Button> : null}
                 {hasRole('c19_quick_test_counter') ?
-                    <Button block className='landing-btn' onClick={navigation!.toQRScan}>{t('translation:record-qr-scan')}</Button> : null}
+                    <Button block className='landing-btn' onClick={context.navigation.toQRScan}>{t('translation:record-qr-scan')}</Button> : null}
                 {hasRole('c19_quick_test_lab') ?
-                    <><Button block className='landing-btn' onClick={navigation!.toReports}>{t('translation:failed-report')}</Button>
-                    <Button block className='landing-btn' onClick={navigation!.toStatistics}>{t('translation:statistics-menu-item')}</Button></> : null}
+                    <><Button block className='landing-btn' onClick={context.navigation.toReports}>{t('translation:failed-report')}</Button>
+                        <Button block className='landing-btn' onClick={context.navigation.toStatistics}>{t('translation:statistics-menu-item')}</Button></> : null}
                 {hasRole('c19_quick_test_admin') ?
-                    <Button block className='landing-btn' onClick={navigation!.toUserManagement}>{t('translation:user-management')}</Button> : null}
+                    <Button block className='landing-btn' onClick={context.navigation.toUserManagement}>{t('translation:user-management')}</Button> : null}
             </Container>
-        </Fade>
+        </Fade >
     )
 }
 

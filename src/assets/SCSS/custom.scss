@@ -492,3 +492,13 @@ td {
     text-decoration: underline !important;
     font-weight: bolder;
 }
+.disclaimer-text{
+    text-align: justify;
+    white-space: pre-line;
+    margin: 0%;
+}
+.speech-bubble{
+    display: flex;
+    align-self: baseline;
+    margin-left: 0.1rem;
+}
