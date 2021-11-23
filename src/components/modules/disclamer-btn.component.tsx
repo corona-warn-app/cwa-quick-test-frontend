@@ -30,7 +30,7 @@ const DisclamerButton = (props: any) => {
             <Modal
                 contentClassName='data-modal'
                 show={show}
-                backdrop="true"
+                backdrop={true}
                 onHide={() => { setShow(false) }}
                 keyboard={false}
                 centered
