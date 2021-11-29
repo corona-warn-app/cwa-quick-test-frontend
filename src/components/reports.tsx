@@ -47,7 +47,7 @@ const Reports = (props: any) => {
     const [selectedHash, setSelectedHash] = React.useState<string>();
     const [filterTestResult, setFilterTestResult] = React.useState<TestResult>();
 
-    const parentRef = React.useRef<HTMLDivElement>(null);
+    const pdfRef = React.useRef<HTMLIFrameElement>(null);
 
     React.useEffect(() => {
         if (context.navigation && context.valueSets)
@@ -66,7 +66,7 @@ const Reports = (props: any) => {
         }
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
-    
+
     const qtArchive = useGetPositiveForTimeRange(filterTestResult, startDate, endDate, undefined, handleError);
     const pdf = useGetPDF(selectedHash);
 
@@ -111,6 +111,9 @@ const Reports = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filterTestResult])
 
+    const printPDF = (htmlPage: string) => {
+        pdfRef.current?.contentWindow?.print();
+    }
 
     return (
         !(isInit && context && context.valueSets)
@@ -222,9 +225,13 @@ const Reports = (props: any) => {
                                     <Col md='3'>
                                         <PagedList data={qtArchive} onSelected={setSelectedHash} />
                                     </Col>
-                                    <Col md='9' ref={parentRef}>
-                                        {!pdf ? <></> : <>
-                                            <iframe title='qt-IFrame' src={pdf} className='qt-IFrame' /></>
+                                    <Col md='9'>
+                                        {!pdf
+                                            ? <></>
+                                            : <>
+                                                <iframe ref={pdfRef} title='qt-IFrame' src={pdf} className='qt-IFrame' />
+                                                <Button onClick={() => { printPDF(pdf) }}>Print</Button>
+                                            </>
                                         }
                                     </Col>
                                 </Row>
