@@ -11,7 +11,7 @@ const CardFooter = (props: any) => {
     return (!props ? <></> :
         <Card.Footer id='data-footer'>
             <Row>
-                <Col sm='6' md='3' className=''>
+                <Col sm='6' md='3' className='p-0 pr-sm-2'>
                     <Button
                         className='my-1 my-md-0 p-0'
                         variant='outline-primary'
@@ -23,7 +23,7 @@ const CardFooter = (props: any) => {
                             : t('translation:cancel')}
                     </Button>
                 </Col>
-                <Col sm='6' md='3' className='pr-md-0'>
+                <Col sm='6' md='3' className='p-0 pl-sm-2'>
                     <Button
                         className='my-1 my-md-0 p-0'
                         block
@@ -33,7 +33,7 @@ const CardFooter = (props: any) => {
                     >
                         {props.okText
                             ? props.okText
-                            :t('translation:next')}
+                            : t('translation:next')}
                     </Button>
                 </Col>
             </Row>

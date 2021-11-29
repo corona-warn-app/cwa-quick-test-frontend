@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Fade, Form, Row } from 'react-bootstrap'
+import { Card, Col, Fade, Form, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +33,7 @@ import { useGetPDF, useGetPositiveForTimeRange } from '../api';
 import { TestResult } from '../misc/enum';
 import CardHeader from './modules/card-header.component';
 import AppContext from '../misc/appContext';
+import CardFooter from './modules/card-footer.component';
 
 
 const Reports = (props: any) => {
@@ -46,6 +47,7 @@ const Reports = (props: any) => {
     const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
     const [selectedHash, setSelectedHash] = React.useState<string>();
     const [filterTestResult, setFilterTestResult] = React.useState<TestResult>();
+    const [printBtnDisabled, setPrintBtnDisabled] = React.useState(true);
 
     const pdfRef = React.useRef<HTMLIFrameElement>(null);
 
@@ -111,8 +113,14 @@ const Reports = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filterTestResult])
 
-    const printPDF = (htmlPage: string) => {
-        pdfRef.current?.contentWindow?.print();
+    const printPDF = () => {
+        if (pdfRef.current?.contentWindow) {
+            pdfRef.current.contentWindow.print();
+        }
+    }
+
+    const handleLoad = () => {
+        setPrintBtnDisabled(!!!pdfRef.current?.contentWindow?.document.body.childElementCount)
     }
 
     return (
@@ -229,8 +237,13 @@ const Reports = (props: any) => {
                                         {!pdf
                                             ? <></>
                                             : <>
-                                                <iframe ref={pdfRef} title='qt-IFrame' src={pdf} className='qt-IFrame' />
-                                                <Button onClick={() => { printPDF(pdf) }}>Print</Button>
+                                                <iframe
+                                                    ref={pdfRef}
+                                                    title='qt-IFrame'
+                                                    src={pdf}
+                                                    className='qt-IFrame'
+                                                    onLoad={handleLoad}
+                                                />
                                             </>
                                         }
                                     </Col>
@@ -241,19 +254,12 @@ const Reports = (props: any) => {
                     {/*
     footer
     */}
-                    <Card.Footer id='data-footer'>
-                        <Row>
-                            <Col sm='6' md='3' className='pr-md-0'>
-                                <Button
-                                    className='my-1 my-md-0 p-0'
-                                    block
-                                    onClick={context.navigation!.toLanding}
-                                >
-                                    {t('translation:cancel')}
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Card.Footer>
+                    <CardFooter
+                        okText={t('translation:print')}
+                        disabled={printBtnDisabled}
+                        handleOk={printPDF}
+                        handleCancel={context.navigation!.toLanding}
+                    />
                 </Card>
             </Fade>
     )
