@@ -341,6 +341,7 @@ const GroupModal = (props: any) => {
                                             props.resetError();
                                         }}
                                         type='email'
+                                        required={group.searchPortalConsent}
                                         pattern={utils.pattern.eMail}
                                         minLength={5}
                                         maxLength={255}
