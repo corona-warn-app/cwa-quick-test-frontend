@@ -50,7 +50,7 @@ body {
     overflow-y: scroll;
 }
 
-.ff-fa{
+.ff-fa {
     font-family: "Font Awesome 5 Free", "TeleNeo";
 }
 
@@ -364,12 +364,30 @@ hr {
     align-self: center;
     padding-left: 0.5rem;
 }
+.toast-container{
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    z-index: 99999;
+    bottom: 0px;
+    width: 100%;
+}
 .qt-notification {
+    padding: 0.75rem 1.25rem;
     margin-bottom: 20%;
     border-radius: 6px;
-    border-color: #46a800;
-    color: black;
-    display: flex;
+    border: #46a800 1px solid;
+    background: #d4edda;
+    display: inline-flex !important;
+    flex-basis: auto;
+    max-width: none;
+}
+.qt-notification-header {
+    border: none;
+    background: #d4edda;
+    padding: 0%;
+    color: #155724;
+    
 }
 
 .qt-notification-text {
@@ -470,7 +488,17 @@ td {
     border: 1px solid #7e7e7e;
     font-size: 1rem;
 }
-.rat-list-info-link{
+.rat-list-info-link {
     text-decoration: underline !important;
     font-weight: bolder;
+}
+.disclaimer-text{
+    text-align: justify;
+    white-space: pre-line;
+    margin: 0%;
+}
+.speech-bubble{
+    display: flex;
+    align-self: baseline;
+    margin-left: 0.1rem;
 }

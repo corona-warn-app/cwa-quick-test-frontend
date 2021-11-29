@@ -36,7 +36,7 @@ const emptyGroup: IGroupDetails = {
     pocId: '',
     name: '',
     pocDetails: '',
-    searchPortalConsent: false,
+    searchPortalConsent: true,
     parentGroup: '',
     website: '',
     email: '',
@@ -341,6 +341,7 @@ const GroupModal = (props: any) => {
                                             props.resetError();
                                         }}
                                         type='email'
+                                        required={group.searchPortalConsent}
                                         pattern={utils.pattern.eMail}
                                         minLength={5}
                                         maxLength={255}
