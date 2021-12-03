@@ -3,7 +3,7 @@ import React from "react";
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
-import { TestResult } from "../../misc/enum";
+import { TestResult, TestType } from "../../misc/enum";
 import { FormGroupInput, FormGroupRadio, FormGroupValueSetSelect } from "./form-group.component";
 import useLocalStorage from "../../misc/useLocalStorage";
 import ITestResult from "../../misc/test-result";
@@ -22,27 +22,39 @@ const TestResultInputs = (props: any) => {
 
     const [testId, setTestId] = useLocalStorage('testId', '');
     const [testName, setTestName] = useLocalStorage('testName', '');
+    const [pcrTestName, setPcrTestName] = useLocalStorage('pcrTestName', '');
     const [testManufacturerId, setTestManufacturerId] = useLocalStorage('testManufacturers', '');
     const [testManufacturerDescription, setTestManufacturerDescription] = React.useState('');
     const [dccConsent, setDccConsent] = React.useState<boolean>();
+    const [testType, setTestType] = React.useState<TestType>();
 
     const tests = useGetTests();
 
     React.useEffect(() => {
         if (testResult) {
-            const result: ITestResult = {
-                testBrandId: dccConsent ? undefined : testId,
-                testBrandName: dccConsent ? undefined : testName,
-                result: testResult,
-                dccTestManufacturerId: dccConsent ? testManufacturerId : undefined,
-                dccTestManufacturerDescription: dccConsent ? testManufacturerDescription : undefined
+            let result: ITestResult;
+
+            if (testType === TestType.PCR) {
+                result = {
+                    pcrTestName: pcrTestName,
+                    result: testResult
+                }
+            }
+            else {
+                result = {
+                    testBrandId: dccConsent ? undefined : testId,
+                    testBrandName: dccConsent ? undefined : testName,
+                    result: testResult,
+                    dccTestManufacturerId: dccConsent ? testManufacturerId : undefined,
+                    dccTestManufacturerDescription: dccConsent ? testManufacturerDescription : undefined
+                }
             }
 
             props.onChange(result);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [testId, testName, testResult, testManufacturerId, testManufacturerDescription])
+    }, [testId, testName, testResult, testManufacturerId, testManufacturerDescription, pcrTestName])
 
     React.useEffect(() => {
         if (testManufacturerId) {
@@ -60,6 +72,7 @@ const TestResultInputs = (props: any) => {
     React.useEffect(() => {
         if (props.quickTest) {
             setDccConsent(props.quickTest.dccConsent === true);
+            setTestType(props.quickTest.testType ?? TestType.PCR);
         }
     }, [props.quickTest])
 
@@ -95,43 +108,50 @@ const TestResultInputs = (props: any) => {
     return (
         <Fade appear={true} in={dccConsent !== undefined}>
             <Container className='form-flex p-0 '>
-                {/* test-ID input */}
-                < FormGroupInput controlId='formTestIdInput' title={t('translation:test-id')}
-                    value={testId}
-                    onChange={handleTestIdChange}
-                    required={!dccConsent}
-                    hidden={dccConsent}
-                    maxLength={15}
-                    datalistId='testid-list'
-                    datalist={tests ? tests.map((i: ITests) => <option key={i.testBrandId} value={i.testBrandId + ' - ' + i.testBrandName} />) : undefined}
-                />
+                {testType === TestType.RAT
+                    ? <>
+                        {/* test-ID input */}
+                        < FormGroupInput controlId='formTestIdInput' title={t('translation:test-id')}
+                            value={testId}
+                            onChange={handleTestIdChange}
+                            required={!dccConsent}
+                            hidden={dccConsent}
+                            maxLength={15}
+                            datalistId='testid-list'
+                            datalist={tests ? tests.map((i: ITests) => <option key={i.testBrandId} value={i.testBrandId + ' - ' + i.testBrandName} />) : undefined}
+                        />
 
-                {/* <hr hidden={dccConsent} /> */}
+                        {/* test-name input */}
+                        < FormGroupInput controlId='formTestNameInput' title={t('translation:test-name')}
+                            value={testName}
+                            onChange={handleTestNameChange}
+                            required={!dccConsent}
+                            hidden={dccConsent}
+                            maxLength={200}
+                            datalistId='testname-list'
+                            datalist={tests ? tests.map((i: ITests) => <option key={i.testBrandId} value={i.testBrandId + ' - ' + i.testBrandName} />) : undefined}
+                        />
 
-                {/* test-name input */}
-                < FormGroupInput controlId='formTestNameInput' title={t('translation:test-name')}
-                    value={testName}
-                    onChange={handleTestNameChange}
-                    required={!dccConsent}
-                    hidden={dccConsent}
-                    maxLength={200}
-                    datalistId='testname-list'
-                    datalist={tests ? tests.map((i: ITests) => <option key={i.testBrandId} value={i.testBrandId + ' - ' + i.testBrandName} />) : undefined}
-                />
+                        {/* combobox testManufacturers */}
+                        <FormGroupValueSetSelect controlId='formTestManufactorersInput' title={t('translation:testManufacturers')}
+                            infoText={<>{t('translation:RAT-list-info')}  <a className='rat-list-info-link' href={t('translation:RAT-list-info-link')} target='blank'>{t('translation:RAT-list-info-link-text')}</a></>}
+                            value={testManufacturerId}
+                            required={dccConsent}
+                            hidden={!dccConsent}
+                            onChange={(evt: any) => setTestManufacturerId(evt.target.value)}
+                            valueSet={context!.valueSets![Value_Sets.TestManufacturer]}
+                        />
+                    </>
 
-                <hr hidden={dccConsent} />
+                    : < FormGroupInput controlId='formpcrTestNameInput' title={t('translation:pcrTestManufacturers')}
+                        value={pcrTestName}
+                        required
+                        maxLength={80}
+                        onChange={(evt: any) => setPcrTestName(evt.target.value)}
+                    />
+                }
 
-                {/* combobox testManufacturers */}
-                <FormGroupValueSetSelect controlId='formTestManufactorersInput' title={t('translation:testManufacturers')}
-                    infoText={<>{t('translation:RAT-list-info')}  <a className='rat-list-info-link' href={t('translation:RAT-list-info-link')} target='blank'>{t('translation:RAT-list-info-link-text')}</a></>}
-                    value={testManufacturerId}
-                    required={dccConsent}
-                    hidden={!dccConsent}
-                    onChange={(evt: any) => setTestManufacturerId(evt.target.value)}
-                    valueSet={context!.valueSets![Value_Sets.TestManufacturer]}
-                />
-
-                <hr hidden={!dccConsent} />
+                <hr />
 
                 {/* test result radio */}
                 < FormGroupRadio controlId='result-radio1' title={t('translation:result-positive')}

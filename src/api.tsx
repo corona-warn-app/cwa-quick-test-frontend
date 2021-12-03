@@ -28,7 +28,7 @@ import IQuickTest from './misc/quick-test';
 import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
-import { Sex, TestResult } from './misc/enum';
+import { Sex, TestResult, TestType } from './misc/enum';
 import { IUser, IGroupDetails } from './misc/user';
 
 export const api = axios.create({
@@ -61,7 +61,8 @@ export interface IShortHashedGuid {
 
 export interface IQuickTestDccAPIResponseModel {
     dccConsent: boolean,
-    testResult: number
+    testResult: number,
+    testType: TestType
 }
 
 export interface IQuickTestAPIModel {
@@ -309,7 +310,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
     }, [uuidHash]);
 
     const deleteQuicktest = (processId: string) => {
-        
+
         if (processId) {
             const uri = '/api/quicktest/' + processId;
             const header = {
