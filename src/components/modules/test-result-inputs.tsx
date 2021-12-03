@@ -72,7 +72,7 @@ const TestResultInputs = (props: any) => {
     React.useEffect(() => {
         if (props.quickTest) {
             setDccConsent(props.quickTest.dccConsent === true);
-            setTestType(props.quickTest.testType ?? TestType.PCR);
+            setTestType(props.quickTest.testType ?? TestType.RAT);
         }
     }, [props.quickTest])
 
@@ -155,24 +155,24 @@ const TestResultInputs = (props: any) => {
 
                 {/* test result radio */}
                 < FormGroupRadio controlId='result-radio1' title={t('translation:result-positive')}
-                    checked={testResult === TestResult.POSITIVE}
-                    onChange={() => setTestResult(TestResult.POSITIVE)}
+                    checked={testResult === TestResult.POSITIVE || testResult === TestResult.PCR_POSITIVE}
+                    onChange={() => { testType === TestType.RAT ? setTestResult(TestResult.POSITIVE) : setTestResult(TestResult.PCR_POSITIVE) }}
                     name="result-radios"
                     required
                 />
                 <hr />
                 {/* test result radio */}
                 < FormGroupRadio controlId='result-radio2' title={t('translation:result-negative')}
-                    checked={testResult === TestResult.NEGATIVE}
-                    onChange={() => setTestResult(TestResult.NEGATIVE)}
+                    checked={testResult === TestResult.NEGATIVE || testResult === TestResult.PCR_NEGATIVE}
+                    onChange={() => { testType === TestType.RAT ? setTestResult(TestResult.NEGATIVE) : setTestResult(TestResult.PCR_NEGATIVE) }}
                     name="result-radios"
                     required
                 />
                 <hr />
                 {/* test result radio */}
                 < FormGroupRadio controlId='result-radio3' title={t('translation:result-failed')}
-                    checked={testResult === TestResult.INVALID}
-                    onChange={() => setTestResult(TestResult.INVALID)}
+                    checked={testResult === TestResult.INVALID || testResult === TestResult.PCR_INVALID}
+                    onChange={() => { testType === TestType.RAT ? setTestResult(TestResult.INVALID) : setTestResult(TestResult.PCR_INVALID) }}
                     name="result-radios"
                     required
                 />
