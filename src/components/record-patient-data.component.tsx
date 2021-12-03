@@ -40,6 +40,7 @@ import { FormGroupConsentCkb, FormGroupDccConsentRadio, FormGroupInlineRadio, Fo
 import AppContext from '../misc/appContext';
 import eu_logo from "../assets/images/eu_logo.png";
 import useOnUnload from '../misc/useOnUnload';
+import { TestType } from '../misc/enum';
 
 
 const RecordPatientData = (props: any) => {
@@ -60,7 +61,7 @@ const RecordPatientData = (props: any) => {
 
     const [person, setPerson] = React.useState<IPersonData>();
     const [address, setAddress] = React.useState<IAddressData>();
-    const [testType, setTestType] = React.useState('LP217198-3');
+    const [testType, setTestType] = React.useState(TestType.RAT);
 
     const [phoneNumber, setPhoneNumber] = React.useState('');
     const [emailAddress, setEmailAddress] = React.useState('');
@@ -270,14 +271,14 @@ const RecordPatientData = (props: any) => {
 
                                     <Col xs='7' sm='9' className='d-flex'>
                                         <Row>
-                                            <FormGroupInlineRadio controlId='test-type1' name="test-type-radios" title={t('translation:LP217198-3')} sm='6'
-                                                checked={testType === 'LP217198-3'}
-                                                onChange={() => setTestType('LP217198-3')}
+                                            <FormGroupInlineRadio controlId='test-type1' name="test-type-radios" title={t(`translation:${TestType.RAT}`)} sm='6'
+                                                checked={testType === TestType.RAT}
+                                                onChange={() => setTestType(TestType.RAT)}
                                             />
 
-                                            <FormGroupInlineRadio controlId='test-type2' name="test-type-radios" title={t('translation:LP6464-4')} sm='6'
-                                                checked={testType === 'LP6464-4'}
-                                                onChange={() => setTestType('LP6464-4')}
+                                            <FormGroupInlineRadio controlId='test-type2' name="test-type-radios" title={t(`translation:${TestType.PCR}`)} sm='6'
+                                                checked={testType === TestType.PCR}
+                                                onChange={() => setTestType(TestType.PCR)}
                                                 required={true}
                                             />
                                         </Row>
