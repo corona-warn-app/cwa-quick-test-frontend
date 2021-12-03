@@ -143,5 +143,6 @@
   "disclaimer-link": "https://map.schnelltestportal.de",
   "disclaimer-text2-part1": "Um eine Teststelle für unser Schnelltestsuchportal freizuschalten, klicken Sie auf das Bearbeiten-Icon und aktivieren Sie das Kästchen <strong>Im Schnelltestsuchportal anzeigen</strong>.\n\nSo ermöglichen Sie Ihren Kunden, die Teststelle einfach unter ",
   "disclaimer-text2-part2": " zu finden.\n\nSie können auch zusätzliche Informationen wie Öffnungszeiten oder Ihre Website hinterlegen.",
-  "disclaimer-do-not-show": "Benachrichtigung nicht mehr anzeigen."
+  "disclaimer-do-not-show": "Benachrichtigung nicht mehr anzeigen.",
+  "enablePcr": "PCR Tests erlauben"
 }
