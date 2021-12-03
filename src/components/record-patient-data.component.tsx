@@ -36,7 +36,7 @@ import CardFooter from './modules/card-footer.component';
 import CardHeader from './modules/card-header.component';
 import { IAddressData, IPersonData } from '../misc/quick-test';
 import AddressInputs from './modules/address-inputs';
-import { FormGroupConsentCkb, FormGroupDccConsentRadio, FormGroupInput } from './modules/form-group.component';
+import { FormGroupConsentCkb, FormGroupDccConsentRadio, FormGroupInlineRadio, FormGroupInput } from './modules/form-group.component';
 import AppContext from '../misc/appContext';
 import eu_logo from "../assets/images/eu_logo.png";
 import useOnUnload from '../misc/useOnUnload';
@@ -60,6 +60,7 @@ const RecordPatientData = (props: any) => {
 
     const [person, setPerson] = React.useState<IPersonData>();
     const [address, setAddress] = React.useState<IAddressData>();
+    const [testType, setTestType] = React.useState('LP217198-3');
 
     const [phoneNumber, setPhoneNumber] = React.useState('');
     const [emailAddress, setEmailAddress] = React.useState('');
@@ -117,6 +118,7 @@ const RecordPatientData = (props: any) => {
             }
             setDccConsent(p.dccConsent);
             setDccNoConsent(!p.dccConsent);
+            setTestType(p.testType);
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -186,7 +188,8 @@ const RecordPatientData = (props: any) => {
                 phoneNumber: phoneNumber,
                 emailAddress: emailAddress || undefined,
                 dccConsent: dccConsent,
-                additionalInfo: additionalInfo || undefined
+                additionalInfo: additionalInfo || undefined,
+                testType: testType
             })
             setTimeout(context.navigation!.toShowRecordPatient, 200);
         }
@@ -260,6 +263,26 @@ const RecordPatientData = (props: any) => {
                                     </Col>
                                 </Row>
 
+                                <hr />
+                                {/* TODO: show when enabled type choose input */}
+                                <Row>
+                                    <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:test-type') + '*'}</Form.Label>
+
+                                    <Col xs='7' sm='9' className='d-flex'>
+                                        <Row>
+                                            <FormGroupInlineRadio controlId='test-type1' name="test-type-radios" title={t('translation:LP217198-3')} sm='6'
+                                                checked={testType === 'LP217198-3'}
+                                                onChange={() => setTestType('LP217198-3')}
+                                            />
+
+                                            <FormGroupInlineRadio controlId='test-type2' name="test-type-radios" title={t('translation:LP6464-4')} sm='6'
+                                                checked={testType === 'LP6464-4'}
+                                                onChange={() => setTestType('LP6464-4')}
+                                                required={true}
+                                            />
+                                        </Row>
+                                    </Col>
+                                </Row>
                                 <hr />
 
                                 <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} onDccChanged={setDccConsent} />

@@ -218,7 +218,7 @@ export const usePostQuickTest = (quickTest: IQuickTest | undefined, processId: s
                 testResultServerHash: quickTest.testResultHash ? quickTest.testResultHash : '0000000000000000000000000000000000000000000000000000000000000000',
 
                 diseaseAgentTargeted: '840539006',
-                testType: "LP217198-3",
+                testType: quickTest.testType,
 
                 dccConsent: quickTest.dccConsent,
 
