@@ -81,6 +81,7 @@
   "standardised-name": "Standardisierter Name",
   "standardised-name-tooltip": "Der standardisierte Name befindet sich in der untersten Zeile auf der Rückseite des Personalausweises. Es dürfen nur Großbuchstaben und \"<\" verwendet werden. Sonderzeichen, Umlaute und Zahlen sind nicht erlaubt.",
   "testManufacturers": "Testhersteller und -name",
+  "pcrTestManufacturers": "PCR Testhersteller und -name",
   "testId-input-header": "Eingabe Proben-ID",
   "error-processId-data-load": "Die eingegebene Proben-ID ist uns nicht bekannt!",
   "ok": "OK",
@@ -143,5 +144,9 @@
   "disclaimer-link": "https://map.schnelltestportal.de",
   "disclaimer-text2-part1": "Um eine Teststelle für unser Schnelltestsuchportal freizuschalten, klicken Sie auf das Bearbeiten-Icon und aktivieren Sie das Kästchen <strong>Im Schnelltestsuchportal anzeigen</strong>.\n\nSo ermöglichen Sie Ihren Kunden, die Teststelle einfach unter ",
   "disclaimer-text2-part2": " zu finden.\n\nSie können auch zusätzliche Informationen wie Öffnungszeiten oder Ihre Website hinterlegen.",
-  "disclaimer-do-not-show": "Benachrichtigung nicht mehr anzeigen."
+  "disclaimer-do-not-show": "Benachrichtigung nicht mehr anzeigen.",
+  "enablePcr": "PCR Tests erlauben",
+  "LP217198-3": "Schnelltest",
+  "LP6464-4": "PCR",
+  "test-type": "Testtyp"
 }

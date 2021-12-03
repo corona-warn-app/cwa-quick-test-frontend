@@ -21,6 +21,9 @@
 
 
 export enum TestResult {
+    PCR_NEGATIVE = 1,
+    PCR_POSITIVE = 2,
+    PCR_INVALID = 3,
     NEGATIVE = 6,
     POSITIVE = 7,
     INVALID = 8,
@@ -30,4 +33,9 @@ export enum Sex {
     MALE = 'MALE',
     FEMALE = 'FEMALE',
     DIVERSE = 'DIVERSE',
+}
+
+export enum TestType {
+    RAT = 'LP217198-3',
+    PCR = 'LP6464-4'
 }

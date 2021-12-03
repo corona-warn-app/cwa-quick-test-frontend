@@ -12,7 +12,7 @@ import de from 'date-fns/locale/de';
 
 import { Sex } from "../../misc/enum";
 import { IPersonData } from "../../misc/quick-test";
-import { FormGroupInput, FormGroupSexRadio } from "./form-group.component";
+import { FormGroupInput, FormGroupInlineRadio } from "./form-group.component";
 
 registerLocale('de', de)
 
@@ -177,18 +177,18 @@ const PersonInputs = (props: any) => {
 
                 <Col xs='7' sm='9' className='d-flex'>
                     <Row>
-                        <FormGroupSexRadio controlId='sex-radio1' name="sex-radios" title={t('translation:male')}
+                        <FormGroupInlineRadio controlId='sex-radio1' name="sex-radios" title={t('translation:male')}
                             checked={sex === Sex.MALE}
                             onChange={() => setSex(Sex.MALE)}
                         />
 
-                        <FormGroupSexRadio controlId='sex-radio2' name="sex-radios" title={t('translation:female')}
+                        <FormGroupInlineRadio controlId='sex-radio2' name="sex-radios" title={t('translation:female')}
                             checked={sex === Sex.FEMALE}
                             onChange={() => setSex(Sex.FEMALE)}
                             required={true}
                         />
 
-                        <FormGroupSexRadio controlId='sex-radio3' name="sex-radios" title={t('translation:diverse')}
+                        <FormGroupInlineRadio controlId='sex-radio3' name="sex-radios" title={t('translation:diverse')}
                             checked={sex === Sex.DIVERSE}
                             onChange={() => setSex(Sex.DIVERSE)}
                         />
