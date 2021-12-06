@@ -27,9 +27,10 @@ import { useTranslation } from 'react-i18next';
 
 import StatisticData from "../../misc/statistic-data";
 
-const StatisticData = (props: any) => {
+const StatisticDataRow = (props: any) => {
     const { t } = useTranslation();
 
+    const [label, setLabel] = React.useState<String>('');
     const [totalTestCount, setTotalTestCount] = React.useState<number>(0);
     const [positiveTestCount, setPositiveTestCount] = React.useState<number>(0);
     const [pcrTotalTestCount, setPcrTotalTestCount] = React.useState<number>(0);
@@ -38,22 +39,22 @@ const StatisticData = (props: any) => {
     React.useEffect(() => {
         if (props && props.statisticData) {
             const statisticData : StatisticData = props.statisticData;
+            console.log("Bin im useEffect: " + JSON.stringify(statisticData));
 
             setTotalTestCount(statisticData.totalTestCount);
             setPositiveTestCount(statisticData.positiveTestCount);
             setPcrTotalTestCount(statisticData.pcrTotalTestCount);
-            setPositiveTestCount(statisticData.pcrPositiveTestCount);
+            setPcrPositiveTestCount(statisticData.pcrPositiveTestCount);
+
+            setLabel(props.label);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    //TODO
-    const statisticData : StatisticData = props.statisticData;
-
     return (
         <Row>
             <Col xs='12' md='3'>
-                <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0'>{t('translation:today')}</Form.Label>
+                <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0'>{t('translation:' + label)}</Form.Label>
             </Col>
             <Col md='9'>
                 <Row className='text-center'>
@@ -66,11 +67,9 @@ const StatisticData = (props: any) => {
                 </Row>
                 <Row className='text-center'>
                     <Col>
-                        //TODO
                         {totalTestCount}
                     </Col>
                     <Col>
-                        //TODO
                         {totalTestCount > 0 ? positiveTestCount + ' ( ' + (100 * positiveTestCount / totalTestCount).toFixed(2) + "% )" : undefined}
                     </Col>
                 </Row>
@@ -78,3 +77,5 @@ const StatisticData = (props: any) => {
         </Row>
     )
 }
+
+export default StatisticDataRow;
