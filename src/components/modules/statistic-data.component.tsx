@@ -58,19 +58,31 @@ const StatisticDataRow = (props: any) => {
             </Col>
             <Col md='9'>
                 <Row className='text-center'>
-                    <Col >
+                    <Col xs='3'>
                         {t('translation:totalTestCount')}
                     </Col>
-                    <Col>
+                    <Col xs='3'>
                         {t('translation:positiveTestCount')}
+                    </Col>
+                    <Col xs='3'>
+                        {t('translation:pcrTotalTestCount')}
+                    </Col>
+                    <Col xs='3'>
+                        {t('translation:pcrPositiveTestCount')}
                     </Col>
                 </Row>
                 <Row className='text-center'>
-                    <Col>
+                    <Col xs='3'>
                         {totalTestCount}
                     </Col>
-                    <Col>
+                    <Col xs='3'>
                         {totalTestCount > 0 ? positiveTestCount + ' ( ' + (100 * positiveTestCount / totalTestCount).toFixed(2) + "% )" : undefined}
+                    </Col>
+                    <Col xs='3'>
+                        {pcrTotalTestCount}
+                    </Col>
+                    <Col xs='3'>
+                        {pcrTotalTestCount > 0 ? pcrPositiveTestCount + ' ( ' + (100 * pcrPositiveTestCount / pcrTotalTestCount).toFixed(2) + "% )" : undefined}
                     </Col>
                 </Row>
             </Col>
