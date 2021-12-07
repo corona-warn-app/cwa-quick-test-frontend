@@ -58,10 +58,10 @@ const StatisticDataRow = (props: any) => {
             <Col md='9'>
                 <Row className='text-center'>
                     <Col xs='6' md='3'>
-                        <Row className='text-center'>
+                        <Row className='text-center row-height-half'>
                             <Col>{t('translation:totalTestCount')}</Col>
                         </Row>
-                        <Row className='text-center'>
+                        <Row className='text-center align-items-end row-height-half'>
                             <Col>{totalTestCount}</Col>
                         </Row>
                     </Col>
@@ -76,10 +76,10 @@ const StatisticDataRow = (props: any) => {
                         </Row>
                     </Col>
                     <Col xs='6' md='3'>
-                        <Row className='text-center'>
+                        <Row className='text-center row-height-half'>
                             <Col>{t('translation:pcrTotalTestCount')}</Col>
                         </Row>
-                        <Row className='text-center'>
+                        <Row className='text-center align-items-end row-height-half'>
                             <Col>{pcrTotalTestCount}</Col>
                         </Row>
                     </Col>
