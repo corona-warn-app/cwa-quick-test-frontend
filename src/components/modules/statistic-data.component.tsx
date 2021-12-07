@@ -38,8 +38,7 @@ const StatisticDataRow = (props: any) => {
 
     React.useEffect(() => {
         if (props && props.statisticData) {
-            const statisticData : StatisticData = props.statisticData;
-            console.log("Bin im useEffect: " + JSON.stringify(statisticData));
+            const statisticData: StatisticData = props.statisticData;
 
             setTotalTestCount(statisticData.totalTestCount);
             setPositiveTestCount(statisticData.positiveTestCount);
@@ -58,31 +57,41 @@ const StatisticDataRow = (props: any) => {
             </Col>
             <Col md='9'>
                 <Row className='text-center'>
-                    <Col xs='3'>
-                        {t('translation:totalTestCount')}
+                    <Col xs='6' md='3'>
+                        <Row className='text-center'>
+                            <Col>{t('translation:totalTestCount')}</Col>
+                        </Row>
+                        <Row className='text-center'>
+                            <Col>{totalTestCount}</Col>
+                        </Row>
                     </Col>
-                    <Col xs='3'>
-                        {t('translation:positiveTestCount')}
+                    <Col xs='6' md='3'>
+                        <Row className='text-center'>
+                            <Col>{t('translation:positiveTestCount')}</Col>
+                        </Row>
+                        <Row className='text-center'>
+                            <Col>{totalTestCount > 0 ? positiveTestCount +
+                                ' ( ' + (100 * positiveTestCount / totalTestCount).toFixed(2) + "% )" : undefined}
+                            </Col>
+                        </Row>
                     </Col>
-                    <Col xs='3'>
-                        {t('translation:pcrTotalTestCount')}
+                    <Col xs='6' md='3'>
+                        <Row className='text-center'>
+                            <Col>{t('translation:pcrTotalTestCount')}</Col>
+                        </Row>
+                        <Row className='text-center'>
+                            <Col>{pcrTotalTestCount}</Col>
+                        </Row>
                     </Col>
-                    <Col xs='3'>
-                        {t('translation:pcrPositiveTestCount')}
-                    </Col>
-                </Row>
-                <Row className='text-center'>
-                    <Col xs='3'>
-                        {totalTestCount}
-                    </Col>
-                    <Col xs='3'>
-                        {totalTestCount > 0 ? positiveTestCount + ' ( ' + (100 * positiveTestCount / totalTestCount).toFixed(2) + "% )" : undefined}
-                    </Col>
-                    <Col xs='3'>
-                        {pcrTotalTestCount}
-                    </Col>
-                    <Col xs='3'>
-                        {pcrTotalTestCount > 0 ? pcrPositiveTestCount + ' ( ' + (100 * pcrPositiveTestCount / pcrTotalTestCount).toFixed(2) + "% )" : undefined}
+                    <Col xs='6' md='3'>
+                        <Row className='text-center'>
+                            <Col>{t('translation:pcrPositiveTestCount')}</Col>
+                        </Row>
+                        <Row className='text-center'>
+                            <Col>{pcrTotalTestCount > 0 ? pcrPositiveTestCount +
+                                ' ( ' + (100 * pcrPositiveTestCount / pcrTotalTestCount).toFixed(2) + "% )" : undefined}
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
             </Col>
