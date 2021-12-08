@@ -36,7 +36,6 @@ const emptyGroup: IGroupDetails = {
     pocId: '',
     name: '',
     pocDetails: '',
-    enablePcr: false,
     searchPortalConsent: true,
     parentGroup: '',
     website: '',
@@ -314,15 +313,6 @@ const GroupModal = (props: any) => {
                                 maxLength={300}
                             />
 
-                            <FormGroupPermissionCkb controlId='formenablePcr' title={t('translation:enablePcr')}
-                                //label={t('translation:for-counter')}
-                                onChange={(evt: any) => updateSearchPortalConsent('enablePcr', evt.currentTarget.checked)}
-                                type='checkbox'
-                                checked={group.enablePcr}
-                            />
-
-                            <hr />
-
                             {/* < FormGroupInput controlId='formBSNRInput' title={t('translation:bsnr')} placeholder={t('translation:bsnr-placeholder')}
                                 value={group ? group.bsnr : ''}
                                 onChange={(evt: any) => {
@@ -335,7 +325,7 @@ const GroupModal = (props: any) => {
                                 pattern={utils.pattern.BSNR}
                             /> */}
 
-                            <FormGroupPermissionCkb controlId='formsearchPortalConsent' title={t('translation:searchPortalConsent')}
+                            <FormGroupPermissionCkb controlId='formRoleCounter' title={t('translation:searchPortalConsent')}
                                 //label={t('translation:for-counter')}
                                 onChange={(evt: any) => updateSearchPortalConsent('searchPortalConsent', evt.currentTarget.checked)}
                                 type='checkbox'

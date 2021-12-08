@@ -25,7 +25,6 @@ export default interface ITestResult {
     result: TestResult;
     testBrandId?: string;
     testBrandName?: string;
-    pcrTestName?: string;
     dccTestManufacturerId?: string;
     dccTestManufacturerDescription?: string;
 }
