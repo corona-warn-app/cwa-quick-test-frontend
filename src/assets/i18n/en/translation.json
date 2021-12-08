@@ -76,7 +76,6 @@
   "standardised-first-name": "Standardised Given name",
   "standardised-name": "Standardised Family name",
   "testManufacturers": "Test manufacturers and names",
-  "pcrTestManufacturers": "NAT Test manufacturers and names",
   "testId-input-header": "Process number input",
   "error-processId-data-load": "The entered sample ID is not known!",
   "ok": "OK",
@@ -128,10 +127,6 @@
   "disclaimer-text1-part2": ".",
   "disclaimer-link": "https://map.schnelltestportal.de",
   "disclaimer-text2-part1": "To activate a test site for our rapid test search portal, click on the edit icon and activate the Show in the rapid test search portal box\n\nThis enables your customers to easily find the test site at ",
-  "disclaimer-text2-part2": ".\n\nYou can also store additional information such as opening times or your website.",
-  "disclaimer-do-not-show": "Don't show notification again.",
-  "enablePcr": "enable PCR Tests",
-  "LP217198-3": "RAT",
-  "LP6464-4": "NAT",
-  "test-type": "Test type"
+  "disclaimer-text2-part2":".\n\nYou can also store additional information such as opening times or your website.",
+  "disclaimer-do-not-show": "Don't show notification again."
 }
