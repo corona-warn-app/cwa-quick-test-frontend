@@ -29,7 +29,10 @@ import CwaSpinner from './spinner/spinner.component';
 import { useStatistics } from '../api';
 import CardHeader from './modules/card-header.component';
 import AppContext from '../misc/appContext';
-import StatisticDataRow from './modules/statistic-data.component';
+import StatisticDataRow, { StatisticDateSelectionRow, StatisticHeaderRow } from './modules/statistic-data.component';
+import StatisticData from '../misc/statistic-data';
+import utils from '../misc/utils';
+import { format } from "date-fns";
 
 const Statistics = (props: any) => {
 
@@ -52,12 +55,31 @@ const Statistics = (props: any) => {
     const [statisticData,
         thisWeekStatisticData,
         thisMonthStatisticData] = useStatistics(undefined, handleError);
-    const [isInit, setIsInit] = React.useState(false)
+    const [isInit, setIsInit] = React.useState(false);
+    const [statisticRows, setStatisticRows] = React.useState<any[]>([]);
 
     React.useEffect(() => {
         if (context.navigation && context.valueSets && statisticData)
             setIsInit(true);
     }, [context.navigation, context.valueSets, statisticData])
+
+    //TODO API Abfrage
+    const handleNewStatisticRow = (dateValidFrom: Date, dateValidTo: Date) => {
+        let newLabel: string | undefined = dateValidFrom ? format(dateValidFrom, utils.pickerDateFormat) : undefined;
+        if(newLabel && dateValidTo){
+            newLabel += ' - ' + format(dateValidTo, utils.pickerDateFormat);
+        }
+
+        const newStatisticData: StatisticData = {
+            totalTestCount: 0,
+            positiveTestCount: 0,
+            pcrTotalTestCount: 0,
+            pcrPositiveTestCount: 0
+        }
+        let tmpStatisticRows: JSX.Element[] = [...statisticRows];
+        tmpStatisticRows.push(<StatisticDataRow statisticData={newStatisticData} label={newLabel} key={statisticRows.length}/>);
+        setStatisticRows(tmpStatisticRows);
+    }
 
     return (
         !(isInit && context && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData)
@@ -70,11 +92,13 @@ const Statistics = (props: any) => {
     content area with patient inputs and check box
     */}
                     <Card.Body id='data-header'>
-                        <StatisticDataRow statisticData={statisticData} label={'today'}/>
+                        <StatisticHeaderRow />
                         <hr />
-                        <StatisticDataRow statisticData={thisWeekStatisticData} label={'thisWeek'}/>
-                        <hr />
-                        <StatisticDataRow statisticData={thisMonthStatisticData} label={'thisMonth'}/>
+                        <StatisticDataRow statisticData={statisticData} label={t('translation:today')} />
+                        <StatisticDataRow statisticData={thisWeekStatisticData} label={t('translation:thisWeek')} />
+                        <StatisticDataRow statisticData={thisMonthStatisticData} label={t('translation:thisMonth')} />
+                        {statisticRows}
+                        <StatisticDateSelectionRow addRow={handleNewStatisticRow}/>
                         <hr />
                     </Card.Body>
 

@@ -19,13 +19,15 @@
  * under the License.
  */
 
-import React from "react";
-import { Col, Form, Row } from 'react-bootstrap';
+import React, { Fragment } from "react";
+import { Button, Col, Form, Row } from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
+import DatePicker from 'react-datepicker';
 
 import StatisticData from "../../misc/statistic-data";
+import utils from "../../misc/utils";
 
 const StatisticDataRow = (props: any) => {
     const { t } = useTranslation();
@@ -50,53 +52,152 @@ const StatisticDataRow = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+
+
     return (
-        <Row>
-            <Col xs='12' md='3'>
-                <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0'>{t('translation:' + label)}</Form.Label>
-            </Col>
-            <Col md='9'>
-                <Row className='text-center'>
-                    <Col xs='6' md='3'>
-                        <Row className='text-center row-height-half'>
-                            <Col>{t('translation:totalTestCount')}</Col>
-                        </Row>
-                        <Row className='text-center align-items-end row-height-half'>
-                            <Col>{totalTestCount}</Col>
-                        </Row>
-                    </Col>
-                    <Col xs='6' md='3'>
-                        <Row className='text-center'>
-                            <Col>{t('translation:positiveTestCount')}</Col>
-                        </Row>
-                        <Row className='text-center'>
-                            <Col>{totalTestCount > 0 ? positiveTestCount +
+        <Fragment>
+            <Row>
+                <Col xs='12' md='3'>
+                    <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0'>{label}</Form.Label>
+                </Col>
+
+                <Col md='9'>
+                    <Row className='text-center'>
+                        <Col xs='6' md='3'>
+                            {totalTestCount}
+                        </Col>
+                        <Col xs='6' md='3'>
+                            {totalTestCount > 0 ? positiveTestCount +
                                 ' ( ' + (100 * positiveTestCount / totalTestCount).toFixed(2) + "% )" : undefined}
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col xs='6' md='3'>
-                        <Row className='text-center row-height-half'>
-                            <Col>{t('translation:pcrTotalTestCount')}</Col>
-                        </Row>
-                        <Row className='text-center align-items-end row-height-half'>
-                            <Col>{pcrTotalTestCount}</Col>
-                        </Row>
-                    </Col>
-                    <Col xs='6' md='3'>
-                        <Row className='text-center'>
-                            <Col>{t('translation:pcrPositiveTestCount')}</Col>
-                        </Row>
-                        <Row className='text-center'>
-                            <Col>{pcrTotalTestCount > 0 ? pcrPositiveTestCount +
+                        </Col>
+                        <Col xs='6' md='3'>
+                            {pcrTotalTestCount}
+                        </Col>
+                        <Col xs='6' md='3'>
+                            {pcrTotalTestCount > 0 ? pcrPositiveTestCount +
                                 ' ( ' + (100 * pcrPositiveTestCount / pcrTotalTestCount).toFixed(2) + "% )" : undefined}
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-            </Col>
-        </Row>
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
+            <hr />
+        </Fragment>
     )
 }
 
 export default StatisticDataRow;
+
+export const StatisticHeaderRow = (props: any) => {
+    const { t } = useTranslation();
+
+    return (
+        <Row className='text-center'>
+            <Col xs='12' md='3'>
+                &nbsp;
+            </Col>
+            <Col md='9'>
+                <Row className='text-center'>
+                    <Col xs='6' md='3'>
+                        {t('translation:totalTestCount')}
+                    </Col>
+                    <Col xs='6' md='3'>
+                        {t('translation:positiveTestCount')}
+                    </Col>
+                    <Col xs='6' md='3'>
+                        {t('translation:pcrTotalTestCount')}
+                    </Col>
+                    <Col xs='6' md='3'>
+                        {t('translation:pcrPositiveTestCount')}
+                    </Col>
+                </Row>
+            </Col>
+        </Row>)
+}
+
+export const StatisticDateSelectionRow = (props: any) => {
+    const { t } = useTranslation();
+
+    const [dateValidFrom, setDateValidFrom] = React.useState<Date>();
+    const [dateValidTo, setDateValidTo] = React.useState<Date>();
+
+    const handleDateValidFrom = (evt: Date | [Date, Date] | null) => {
+        const date = handleDateChange(evt);
+        setDateValidFrom(date);
+        if(date === null) {
+            setDateValidTo(undefined);
+        }
+    }
+
+    const handleDateValidTo = (evt: Date | [Date, Date] | null) => {
+        const date = handleDateChange(evt);
+        setDateValidTo(date);
+    }
+
+    const handleDateChange = (evt: Date | [Date, Date] | null) => {
+        let date: Date;
+
+        if (Array.isArray(evt))
+            date = evt[0];
+        else
+            date = evt as Date;
+
+        if (date) {
+            date.setHours(12);
+        }
+
+        return date;
+    }
+
+    return (
+        <Form.Group as={Row} controlId='formDateValidFromToInput' className='pb-3 mb-0'>
+            <Form.Label className='input-label ' column xs='12' sm='3'>{t('translation:timerange')}</Form.Label>
+
+            <Col xs='9' md='6' className='d-flex'>
+                <DatePicker
+                    selected={dateValidFrom}
+                    onChange={handleDateValidFrom}
+                    dateFormat={utils.pickerDateFormat}
+                    isClearable
+                    placeholderText={t('translation:from')}
+                    className='qt-input form-control'
+                    wrapperClassName='align-self-center'
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    maxDate={new Date()}
+                    minDate={new Date(2020, 0, 1, 12)}
+                    openToDate={dateValidFrom ? dateValidFrom : new Date()}
+                />
+                <span className='space-five'>{'-'}</span>
+                <DatePicker
+                    selected={dateValidTo}
+                    onChange={handleDateValidTo}
+                    dateFormat={utils.pickerDateFormat}
+                    isClearable
+                    placeholderText={t('translation:to')}
+                    className='qt-input form-control'
+                    wrapperClassName='align-self-center'
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    maxDate={new Date()}
+                    minDate={dateValidFrom}
+                    openToDate={dateValidTo ? dateValidTo : new Date()}
+                    disabled={dateValidFrom === undefined}
+                />
+            </Col>
+            <Col xs='3' md='3' className='d-flex'>
+                <Button
+                    className='my-1 my-md-0 p-0'
+                    block
+                    onClick={() => {props.addRow(dateValidFrom, dateValidTo)}}
+                    disabled={!dateValidFrom}
+                >
+                    {t('translation:addStatisticRow')}
+                </Button>
+            </Col>
+        </Form.Group>
+    )
+}
+
+

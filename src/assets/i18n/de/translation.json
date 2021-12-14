@@ -66,6 +66,7 @@
   "positiveTestCount": "Anzahl der positiven Schnelltests",
   "pcrTotalTestCount": "Gesamtanzahl der PCR-Tests",
   "pcrPositiveTestCount": "Anzahl der positiven PCR-Tests",
+  "addStatisticRow": "Auswertung hinzufügen",
   "today": "Heute",
   "thisWeek": "Diese Woche",
   "thisMonth": "Dieser Monat",
