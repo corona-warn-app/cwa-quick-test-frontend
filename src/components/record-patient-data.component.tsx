@@ -25,6 +25,8 @@ import { Card, Col, Collapse, Container, Fade, Form, Image, Row } from 'react-bo
 import '../i18n';
 import { useTranslation } from 'react-i18next';
 
+import { useKeycloak } from '@react-keycloak/web';
+
 import sha256 from 'crypto-js/sha256';
 
 import CwaSpinner from './spinner/spinner.component';
@@ -48,6 +50,8 @@ const RecordPatientData = (props: any) => {
     const context = React.useContext(AppContext);
     const { t } = useTranslation();
 
+    const { keycloak } = useKeycloak();
+
     const [isInit, setIsInit] = React.useState(false)
     const [uuIdHash, setUuIdHash] = React.useState('');
 
@@ -61,6 +65,8 @@ const RecordPatientData = (props: any) => {
 
     const [person, setPerson] = React.useState<IPersonData>();
     const [address, setAddress] = React.useState<IAddressData>();
+
+    const [pcrEnabled, setPcrEnabled] = React.useState(false);
     const [testType, setTestType] = React.useState(TestType.RAT);
 
     const [phoneNumber, setPhoneNumber] = React.useState('');
@@ -101,6 +107,14 @@ const RecordPatientData = (props: any) => {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    React.useEffect(() => {
+
+        if (keycloak.idTokenParsed) {
+            setPcrEnabled(!!(keycloak.idTokenParsed as any).pcr_enabled);
+        }
+
+    }, [keycloak])
 
     // set values from props or new uuid on mount
     React.useEffect(() => {
@@ -265,26 +279,30 @@ const RecordPatientData = (props: any) => {
                                 </Row>
 
                                 <hr />
-                                {/* TODO: show when enabled type choose input */}
-                                <Row>
-                                    <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:test-type') + '*'}</Form.Label>
-
-                                    <Col xs='7' sm='9' className='d-flex'>
+                                {!pcrEnabled
+                                    ? <></>
+                                    : <>
                                         <Row>
-                                            <FormGroupInlineRadio controlId='test-type1' name="test-type-radios" title={t(`translation:${TestType.RAT}`)} sm='6'
-                                                checked={testType === TestType.RAT}
-                                                onChange={() => setTestType(TestType.RAT)}
-                                            />
+                                            <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:test-type') + '*'}</Form.Label>
 
-                                            <FormGroupInlineRadio controlId='test-type2' name="test-type-radios" title={t(`translation:${TestType.PCR}`)} sm='6'
-                                                checked={testType === TestType.PCR}
-                                                onChange={() => setTestType(TestType.PCR)}
-                                                required={true}
-                                            />
+                                            <Col xs='7' sm='9' className='d-flex'>
+                                                <Row>
+                                                    <FormGroupInlineRadio controlId='test-type1' name="test-type-radios" title={t(`translation:${TestType.RAT}`)} sm='6'
+                                                        checked={testType === TestType.RAT}
+                                                        onChange={() => setTestType(TestType.RAT)}
+                                                    />
+
+                                                    <FormGroupInlineRadio controlId='test-type2' name="test-type-radios" title={t(`translation:${TestType.PCR}`)} sm='6'
+                                                        checked={testType === TestType.PCR}
+                                                        onChange={() => setTestType(TestType.PCR)}
+                                                        required={true}
+                                                    />
+                                                </Row>
+                                            </Col>
                                         </Row>
-                                    </Col>
-                                </Row>
-                                <hr />
+                                        <hr />
+                                    </>
+                                }
 
                                 <PersonInputs quickTest={props.quickTest} onChange={setPerson} dccConsent={dccConsent} onDccChanged={setDccConsent} />
 
