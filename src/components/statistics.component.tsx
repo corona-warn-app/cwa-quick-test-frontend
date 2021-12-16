@@ -26,7 +26,7 @@ import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import CwaSpinner from './spinner/spinner.component';
-import { useStatistics } from '../api';
+import { useGetStatisticsFromTo, useStatistics } from '../api';
 import CardHeader from './modules/card-header.component';
 import AppContext from '../misc/appContext';
 import StatisticDataRow, { StatisticDateSelectionRow, StatisticHeaderRow } from './modules/statistic-data.component';
@@ -55,30 +55,76 @@ const Statistics = (props: any) => {
     const [statisticData,
         thisWeekStatisticData,
         thisMonthStatisticData] = useStatistics(undefined, handleError);
+    const [statisticsResult,
+        getStatisticsFromTo] = useGetStatisticsFromTo(undefined, handleError);
     const [isInit, setIsInit] = React.useState(false);
     const [statisticRows, setStatisticRows] = React.useState<any[]>([]);
+    const [dateValidFrom, setDateValidFrom] = React.useState<Date>();
+    const [dateValidTo, setDateValidTo] = React.useState<Date>();
 
     React.useEffect(() => {
         if (context.navigation && context.valueSets && statisticData)
             setIsInit(true);
     }, [context.navigation, context.valueSets, statisticData])
 
-    //TODO API Abfrage
-    const handleNewStatisticRow = (dateValidFrom: Date, dateValidTo: Date) => {
-        let newLabel: string | undefined = dateValidFrom ? format(dateValidFrom, utils.pickerDateFormat) : undefined;
-        if(newLabel && dateValidTo){
-            newLabel += ' - ' + format(dateValidTo, utils.pickerDateFormat);
-        }
+    // React.useEffect(() => {
+    //     if (isInit) {
+    //         let now = new Date();
 
-        const newStatisticData: StatisticData = {
-            totalTestCount: 0,
-            positiveTestCount: 0,
-            pcrTotalTestCount: 0,
-            pcrPositiveTestCount: 0
+    //         //heute
+    //         let today = new Date();
+    //         today.setUTCHours(0, 0, 0, 0);
+    //         setTimeout(() => {
+    //             handleNewStatisticRow(today, now);
+    //         }, 10000);
+
+    //         //diese Woche
+    //         let startDay = today.getDate() - today.getDay() + 1;
+    //         let start = new Date(today.setDate(startDay));
+    //         setTimeout(() => {
+    //             handleNewStatisticRow(start, now);
+    //         }, 30000);
+
+    //         //dieser Monat
+    //         start = new Date();
+    //         start.setDate(1);
+    //         start.setUTCHours(0, 0, 0, 0);
+    //         setTimeout(function () {
+    //             handleNewStatisticRow(start, now);
+    //         }, 40000);
+    //     }
+    // }, [isInit])
+
+    // React.useEffect(() => {
+    //     if (dateValidFrom && dateValidTo) {
+    //         getStatisticsFromTo(dateValidFrom, dateValidTo!);
+    //     }
+    // }, [dateValidFrom, dateValidTo])
+
+    React.useEffect(() => {
+        if (statisticsResult) {
+
+            let newLabel: string | undefined = dateValidFrom ? format(dateValidFrom, utils.pickerDateFormat) : undefined;
+            if (newLabel && dateValidTo) {
+                newLabel += ' - ' + format(dateValidTo, utils.pickerDateFormat);
+            }
+
+            const newStatisticData: StatisticData = statisticsResult;
+
+            let tmpStatisticRows: JSX.Element[] = [...statisticRows];
+            tmpStatisticRows.push(<StatisticDataRow statisticData={newStatisticData} label={newLabel} key={statisticRows.length} />);
+            setStatisticRows(tmpStatisticRows);
         }
-        let tmpStatisticRows: JSX.Element[] = [...statisticRows];
-        tmpStatisticRows.push(<StatisticDataRow statisticData={newStatisticData} label={newLabel} key={statisticRows.length}/>);
-        setStatisticRows(tmpStatisticRows);
+    }, [statisticsResult])
+
+    const handleNewStatisticRow = (dateValidFrom: Date, dateValidTo: Date) => {
+        setDateValidFrom(dateValidFrom);
+
+        if (dateValidTo) {
+            setDateValidTo(dateValidTo);
+        } else {
+            setDateValidTo(dateValidFrom);
+        }
     }
 
     return (
@@ -98,7 +144,7 @@ const Statistics = (props: any) => {
                         <StatisticDataRow statisticData={thisWeekStatisticData} label={t('translation:thisWeek')} />
                         <StatisticDataRow statisticData={thisMonthStatisticData} label={t('translation:thisMonth')} />
                         {statisticRows}
-                        <StatisticDateSelectionRow addRow={handleNewStatisticRow}/>
+                        <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
                         <hr />
                     </Card.Body>
 
