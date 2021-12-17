@@ -95,11 +95,11 @@ const Statistics = (props: any) => {
     //     }
     // }, [isInit])
 
-    // React.useEffect(() => {
-    //     if (dateValidFrom && dateValidTo) {
-    //         getStatisticsFromTo(dateValidFrom, dateValidTo!);
-    //     }
-    // }, [dateValidFrom, dateValidTo])
+    React.useEffect(() => {
+        if (dateValidFrom && dateValidTo) {
+            getStatisticsFromTo(dateValidFrom, dateValidTo!);
+        }
+    }, [dateValidFrom, dateValidTo])
 
     React.useEffect(() => {
         if (statisticsResult) {
