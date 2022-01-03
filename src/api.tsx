@@ -440,6 +440,47 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
 
 }
 
+export const useGetStatisticsFromTo = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<StatisticData>();
+
+    let balseUri = '/api/quickteststatistics';
+
+    const header = {
+        "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+        'Content-Type': 'application/json'
+    };
+
+
+    const getStatisticsFromTo = (dateFrom: Date, dateTo: Date) => {
+
+        if(!dateFrom) {
+            return;
+        }
+
+        let requestUri = balseUri + '?dateFrom=' + dateFrom.toISOString() + '&dateTo=' + dateTo.toISOString();
+
+        api.get(requestUri, { headers: header })
+            .then(response => {
+                setResult(response.data);
+                if (onSuccess) {
+                    onSuccess(response?.status);
+                }
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
+                }
+            });
+    }
+
+    return [
+        result,
+        getStatisticsFromTo
+    ] as const;
+}
+
 export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
 
     const [result, setResult] = React.useState<Keycloak.KeycloakConfig>();
