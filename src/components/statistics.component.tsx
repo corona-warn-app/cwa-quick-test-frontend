@@ -63,37 +63,18 @@ const Statistics = (props: any) => {
     const [dateValidTo, setDateValidTo] = React.useState<Date>();
 
     React.useEffect(() => {
-        if (context.navigation && context.valueSets && statisticData)
+        if (context.navigation && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData) {
+            let tmpStatisticRows: JSX.Element[] = [];
+            let row = <StatisticDataRow statisticData={statisticData} label={t('translation:today')} key={tmpStatisticRows.length} />;
+            tmpStatisticRows.push(row);
+            row = <StatisticDataRow statisticData={thisWeekStatisticData} label={t('translation:thisWeek')} key={tmpStatisticRows.length} />;
+            tmpStatisticRows.push(row);
+            row = <StatisticDataRow statisticData={thisMonthStatisticData} label={t('translation:thisMonth')} key={tmpStatisticRows.length} />;
+            tmpStatisticRows.push(row);
+            setStatisticRows(tmpStatisticRows);
             setIsInit(true);
-    }, [context.navigation, context.valueSets, statisticData])
-
-    // React.useEffect(() => {
-    //     if (isInit) {
-    //         let now = new Date();
-
-    //         //heute
-    //         let today = new Date();
-    //         today.setUTCHours(0, 0, 0, 0);
-    //         setTimeout(() => {
-    //             handleNewStatisticRow(today, now);
-    //         }, 10000);
-
-    //         //diese Woche
-    //         let startDay = today.getDate() - today.getDay() + 1;
-    //         let start = new Date(today.setDate(startDay));
-    //         setTimeout(() => {
-    //             handleNewStatisticRow(start, now);
-    //         }, 30000);
-
-    //         //dieser Monat
-    //         start = new Date();
-    //         start.setDate(1);
-    //         start.setUTCHours(0, 0, 0, 0);
-    //         setTimeout(function () {
-    //             handleNewStatisticRow(start, now);
-    //         }, 40000);
-    //     }
-    // }, [isInit])
+        }
+    }, [context.navigation, context.valueSets, statisticData, thisWeekStatisticData, thisMonthStatisticData])
 
     React.useEffect(() => {
         if (dateValidFrom && dateValidTo) {
@@ -140,12 +121,9 @@ const Statistics = (props: any) => {
                     <Card.Body id='data-header'>
                         <StatisticHeaderRow />
                         <hr />
-                        <StatisticDataRow statisticData={statisticData} label={t('translation:today')} />
-                        <StatisticDataRow statisticData={thisWeekStatisticData} label={t('translation:thisWeek')} />
-                        <StatisticDataRow statisticData={thisMonthStatisticData} label={t('translation:thisMonth')} />
                         {statisticRows}
-                        <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
-                        <hr />
+                        {/* <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
+                        <hr /> */}
                     </Card.Body>
 
                     {/*

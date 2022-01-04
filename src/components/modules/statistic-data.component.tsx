@@ -33,18 +33,18 @@ const StatisticDataRow = (props: any) => {
     const { t } = useTranslation();
 
     const [label, setLabel] = React.useState<String>('');
-    const [totalTestCount, setTotalTestCount] = React.useState<number>(0);
-    const [positiveTestCount, setPositiveTestCount] = React.useState<number>(0);
-    const [pcrTotalTestCount, setPcrTotalTestCount] = React.useState<number>(0);
+    const [ratTestCount, setRatTestCount] = React.useState<number>(0);
+    const [ratPositiveTestCount, setRatPositiveTestCount] = React.useState<number>(0);
+    const [pcrTestCount, setPcrTestCount] = React.useState<number>(0);
     const [pcrPositiveTestCount, setPcrPositiveTestCount] = React.useState<number>(0);
 
     React.useEffect(() => {
         if (props && props.statisticData) {
             const statisticData: StatisticData = props.statisticData;
 
-            setTotalTestCount(statisticData.totalTestCount);
-            setPositiveTestCount(statisticData.positiveTestCount);
-            setPcrTotalTestCount(statisticData.pcrTotalTestCount);
+            setRatTestCount(statisticData.ratTestCount);
+            setRatPositiveTestCount(statisticData.ratPositiveTestCount);
+            setPcrTestCount(statisticData.pcrTestCount);
             setPcrPositiveTestCount(statisticData.pcrPositiveTestCount);
 
             setLabel(props.label);
@@ -64,18 +64,18 @@ const StatisticDataRow = (props: any) => {
                 <Col md='9'>
                     <Row className='text-center'>
                         <Col xs='6' md='3'>
-                            {totalTestCount}
+                            {ratTestCount}
                         </Col>
                         <Col xs='6' md='3'>
-                            {totalTestCount > 0 ? positiveTestCount +
-                                ' ( ' + (100 * positiveTestCount / totalTestCount).toFixed(2) + "% )" : undefined}
+                            {ratTestCount > 0 ? ratPositiveTestCount +
+                                ' ( ' + (100 * ratPositiveTestCount / ratTestCount).toFixed(2) + "% )" : 0}
                         </Col>
                         <Col xs='6' md='3'>
-                            {pcrTotalTestCount}
+                            {pcrTestCount}
                         </Col>
                         <Col xs='6' md='3'>
-                            {pcrTotalTestCount > 0 ? pcrPositiveTestCount +
-                                ' ( ' + (100 * pcrPositiveTestCount / pcrTotalTestCount).toFixed(2) + "% )" : undefined}
+                            {pcrTestCount > 0 ? pcrPositiveTestCount +
+                                ' ( ' + (100 * pcrPositiveTestCount / pcrTestCount).toFixed(2) + "% )" : 0}
                         </Col>
                     </Row>
                 </Col>
@@ -123,7 +123,7 @@ export const StatisticDateSelectionRow = (props: any) => {
     const handleDateValidFrom = (evt: Date | [Date, Date] | null) => {
         const date = handleDateChange(evt);
         setDateValidFrom(date);
-        if(date === null) {
+        if (date === null) {
             setDateValidTo(undefined);
         }
     }
@@ -190,7 +190,7 @@ export const StatisticDateSelectionRow = (props: any) => {
                 <Button
                     className='my-1 my-md-0 p-0'
                     block
-                    onClick={() => {props.addRow(dateValidFrom, dateValidTo)}}
+                    onClick={() => { props.addRow(dateValidFrom, dateValidTo) }}
                     disabled={!dateValidFrom}
                 >
                     {t('translation:addStatisticRow')}

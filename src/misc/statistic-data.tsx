@@ -22,6 +22,8 @@
 export default interface StatisticData {
     totalTestCount: number;
     positiveTestCount: number;
-    pcrTotalTestCount: number;
+    pcrTestCount: number;
     pcrPositiveTestCount: number;
+    ratTestCount: number;
+    ratPositiveTestCount: number;
 }
