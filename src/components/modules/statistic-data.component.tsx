@@ -37,6 +37,7 @@ const StatisticDataRow = (props: any) => {
     const [ratPositiveTestCount, setRatPositiveTestCount] = React.useState<number>(0);
     const [pcrTestCount, setPcrTestCount] = React.useState<number>(0);
     const [pcrPositiveTestCount, setPcrPositiveTestCount] = React.useState<number>(0);
+    const [pcrEnabled, setPcrEnabled] = React.useState(false);
 
     React.useEffect(() => {
         if (props && props.statisticData) {
@@ -48,6 +49,8 @@ const StatisticDataRow = (props: any) => {
             setPcrPositiveTestCount(statisticData.pcrPositiveTestCount);
 
             setLabel(props.label);
+
+            setPcrEnabled(props.pcrEnabled);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -63,20 +66,25 @@ const StatisticDataRow = (props: any) => {
 
                 <Col md='9'>
                     <Row className='text-center'>
-                        <Col xs='6' md='3'>
+                        <Col xs='6' md={pcrEnabled ? '3' : '6'}>
                             {ratTestCount}
                         </Col>
-                        <Col xs='6' md='3'>
+                        <Col xs='6' md={pcrEnabled ? '3' : '6'}>
                             {ratTestCount > 0 ? ratPositiveTestCount +
                                 ' ( ' + (100 * ratPositiveTestCount / ratTestCount).toFixed(2) + "% )" : 0}
                         </Col>
-                        <Col xs='6' md='3'>
-                            {pcrTestCount}
-                        </Col>
-                        <Col xs='6' md='3'>
-                            {pcrTestCount > 0 ? pcrPositiveTestCount +
-                                ' ( ' + (100 * pcrPositiveTestCount / pcrTestCount).toFixed(2) + "% )" : 0}
-                        </Col>
+                        {!pcrEnabled
+                            ? <></>
+                            : <>
+                                <Col xs='6' md='3'>
+                                    {pcrTestCount}
+                                </Col>
+                                <Col xs='6' md='3'>
+                                    {pcrTestCount > 0 ? pcrPositiveTestCount +
+                                        ' ( ' + (100 * pcrPositiveTestCount / pcrTestCount).toFixed(2) + "% )" : 0}
+                                </Col>
+                            </>
+                        }
                     </Row>
                 </Col>
             </Row>
@@ -89,6 +97,15 @@ export default StatisticDataRow;
 
 export const StatisticHeaderRow = (props: any) => {
     const { t } = useTranslation();
+    const [pcrEnabled, setPcrEnabled] = React.useState(false);
+
+
+    React.useEffect(() => {
+        if (props) {
+            setPcrEnabled(props.pcrEnabled);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <Row className='text-center'>
@@ -97,18 +114,23 @@ export const StatisticHeaderRow = (props: any) => {
             </Col>
             <Col md='9'>
                 <Row className='text-center'>
-                    <Col xs='6' md='3'>
+                    <Col xs='6' md={pcrEnabled ? '3' : '6'}>
                         {t('translation:totalTestCount')}
                     </Col>
-                    <Col xs='6' md='3'>
+                    <Col xs='6' md={pcrEnabled ? '3' : '6'}>
                         {t('translation:positiveTestCount')}
                     </Col>
-                    <Col xs='6' md='3'>
-                        {t('translation:pcrTotalTestCount')}
-                    </Col>
-                    <Col xs='6' md='3'>
-                        {t('translation:pcrPositiveTestCount')}
-                    </Col>
+                    {!pcrEnabled
+                        ? <></>
+                        : <>
+                            <Col xs='6' md='3'>
+                                {t('translation:pcrTotalTestCount')}
+                            </Col>
+                            <Col xs='6' md='3'>
+                                {t('translation:pcrPositiveTestCount')}
+                            </Col>
+                        </>
+                    }
                 </Row>
             </Col>
         </Row>)

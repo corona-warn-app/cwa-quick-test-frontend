@@ -24,6 +24,7 @@ import { Button, Card, Col, Fade, Form, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
+import { useKeycloak } from '@react-keycloak/web';
 
 import CwaSpinner from './spinner/spinner.component';
 import { useGetStatisticsFromTo, useStatistics } from '../api';
@@ -38,6 +39,10 @@ const Statistics = (props: any) => {
 
     const context = React.useContext(AppContext);
     const { t } = useTranslation();
+    const { keycloak } = useKeycloak();
+    
+
+    
 
     const handleError = (error: any) => {
         let msg = '';
@@ -52,6 +57,7 @@ const Statistics = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
+    const [pcrEnabled, setPcrEnabled] = React.useState(false);
     const [statisticData,
         thisWeekStatisticData,
         thisMonthStatisticData] = useStatistics(undefined, handleError);
@@ -63,15 +69,20 @@ const Statistics = (props: any) => {
     const [dateValidTo, setDateValidTo] = React.useState<Date>();
 
     React.useEffect(() => {
+
+        if (keycloak.idTokenParsed) {
+            setPcrEnabled(!!(keycloak.idTokenParsed as any).pcr_enabled);
+        }
+
+    }, [keycloak])
+
+    React.useEffect(() => {
         if (context.navigation && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData) {
-            let tmpStatisticRows: JSX.Element[] = [];
-            let row = <StatisticDataRow statisticData={statisticData} label={t('translation:today')} key={tmpStatisticRows.length} />;
-            tmpStatisticRows.push(row);
-            row = <StatisticDataRow statisticData={thisWeekStatisticData} label={t('translation:thisWeek')} key={tmpStatisticRows.length} />;
-            tmpStatisticRows.push(row);
-            row = <StatisticDataRow statisticData={thisMonthStatisticData} label={t('translation:thisMonth')} key={tmpStatisticRows.length} />;
-            tmpStatisticRows.push(row);
-            setStatisticRows(tmpStatisticRows);
+            setStatisticRows([
+                <StatisticDataRow statisticData={statisticData} label={t('translation:today')} key={0} pcrEnabled={pcrEnabled}/>,
+                <StatisticDataRow statisticData={thisWeekStatisticData} label={t('translation:thisWeek')} key={1} pcrEnabled={pcrEnabled}/>,
+                <StatisticDataRow statisticData={thisMonthStatisticData} label={t('translation:thisMonth')} key={2} pcrEnabled={pcrEnabled}/>
+            ])
             setIsInit(true);
         }
     }, [context.navigation, context.valueSets, statisticData, thisWeekStatisticData, thisMonthStatisticData])
@@ -119,7 +130,7 @@ const Statistics = (props: any) => {
     content area with patient inputs and check box
     */}
                     <Card.Body id='data-header'>
-                        <StatisticHeaderRow />
+                        <StatisticHeaderRow pcrEnabled={pcrEnabled}/>
                         <hr />
                         {statisticRows}
                         {/* <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
