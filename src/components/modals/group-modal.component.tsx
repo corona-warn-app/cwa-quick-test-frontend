@@ -298,7 +298,7 @@ const GroupModal = (props: any) => {
                                     updateGroupProp('name', evt.target.value);
                                     props.resetError();
                                 }}
-                                maxLength={50}
+                                maxLength={45}
                                 isInvalid={props.isCreationError}
                                 InvalidText={t('translation:group-conflict-error')}
                             />
