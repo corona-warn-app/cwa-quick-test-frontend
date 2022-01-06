@@ -104,7 +104,7 @@ const Statistics = (props: any) => {
             const newStatisticData: StatisticData = statisticsResult;
 
             let tmpStatisticRows: JSX.Element[] = [...statisticRows];
-            tmpStatisticRows.push(<StatisticDataRow statisticData={newStatisticData} label={newLabel} key={statisticRows.length} />);
+            tmpStatisticRows.push(<StatisticDataRow statisticData={newStatisticData} label={newLabel} key={statisticRows.length} pcrEnabled={pcrEnabled}/>);
             setStatisticRows(tmpStatisticRows);
         }
     }, [statisticsResult])
@@ -133,8 +133,8 @@ const Statistics = (props: any) => {
                         <StatisticHeaderRow pcrEnabled={pcrEnabled}/>
                         <hr />
                         {statisticRows}
-                        {/* <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
-                        <hr /> */}
+                        <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
+                        <hr />
                     </Card.Body>
 
                     {/*

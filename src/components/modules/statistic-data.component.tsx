@@ -28,6 +28,7 @@ import DatePicker from 'react-datepicker';
 
 import StatisticData from "../../misc/statistic-data";
 import utils from "../../misc/utils";
+import imageAdd from '../../assets/images/icon_add.svg'
 
 const StatisticDataRow = (props: any) => {
     const { t } = useTranslation();
@@ -171,10 +172,11 @@ export const StatisticDateSelectionRow = (props: any) => {
     }
 
     return (
-        <Form.Group as={Row} controlId='formDateValidFromToInput' className='pb-3 mb-0'>
-            <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0' column xs='12' sm='3'>{t('translation:timerange')}</Form.Label>
+        <Form.Group as={Row} controlId='formDateValidFromToInput' className='mb-0'>
+            <Form.Label className='input-label d-flex mb-md-0 align-self-center' column xs='12' sm='3'>{t('translation:addStatisticRow')}</Form.Label>
 
-            <Col xs='9' md='6' className='d-flex'>
+            <Col xs='11' md='8' className='d-flex mb-md-0 align-self-center'>
+                <Form.Label className='input-label mb-md-0 mr-2 align-self-center'>{t('translation:timerange')}</Form.Label>
                 <DatePicker
                     selected={dateValidFrom}
                     onChange={handleDateValidFrom}
@@ -208,14 +210,15 @@ export const StatisticDateSelectionRow = (props: any) => {
                     disabled={dateValidFrom === undefined}
                 />
             </Col>
-            <Col xs='3' md='3' className='d-flex'>
+            <Col xs='1' md='1' className='d-flex'>
                 <Button
-                    className='my-1 my-md-0 p-0'
-                    block
+                    className='btn-add align-self-center'
+                    size="sm"
+                    variant="light"
                     onClick={() => { props.addRow(dateValidFrom, dateValidTo) }}
                     disabled={!dateValidFrom}
                 >
-                    {t('translation:addStatisticRow')}
+                    <img className='mr-2' src={imageAdd} alt="Hinzufügen" />
                 </Button>
             </Col>
         </Form.Group>
