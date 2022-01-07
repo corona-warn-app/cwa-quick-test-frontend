@@ -40,9 +40,9 @@ const Statistics = (props: any) => {
     const context = React.useContext(AppContext);
     const { t } = useTranslation();
     const { keycloak } = useKeycloak();
-    
 
-    
+
+
 
     const handleError = (error: any) => {
         let msg = '';
@@ -79,17 +79,34 @@ const Statistics = (props: any) => {
     React.useEffect(() => {
         if (context.navigation && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData) {
             setStatisticRows([
-                <StatisticDataRow statisticData={statisticData} label={t('translation:today')} key={0} pcrEnabled={pcrEnabled}/>,
-                <StatisticDataRow statisticData={thisWeekStatisticData} label={t('translation:thisWeek')} key={1} pcrEnabled={pcrEnabled}/>,
-                <StatisticDataRow statisticData={thisMonthStatisticData} label={t('translation:thisMonth')} key={2} pcrEnabled={pcrEnabled}/>
+                <StatisticDataRow statisticData={statisticData} label={t('translation:today')} key={0} pcrEnabled={pcrEnabled} />,
+                <StatisticDataRow statisticData={thisWeekStatisticData} label={t('translation:thisWeek')} key={1} pcrEnabled={pcrEnabled} />,
+                <StatisticDataRow statisticData={thisMonthStatisticData} label={t('translation:thisMonth')} key={2} pcrEnabled={pcrEnabled} />
             ])
             setIsInit(true);
         }
     }, [context.navigation, context.valueSets, statisticData, thisWeekStatisticData, thisMonthStatisticData])
 
     React.useEffect(() => {
-        if (dateValidFrom && dateValidTo) {
-            getStatisticsFromTo(dateValidFrom, dateValidTo!);
+        if (dateValidFrom || (dateValidFrom && dateValidTo)) {
+
+            let startDate = new Date(dateValidFrom);
+            let endDate : Date;
+
+            startDate.setUTCHours(0, 0, 0, 0);
+
+            if (dateValidTo) {
+                endDate = new Date(dateValidTo);
+                endDate.setUTCHours(0, 0, 0, 0);
+                let day = endDate.getDate() + 1;
+                endDate.setDate(day);
+            } else {
+                let fromDate = new Date(startDate);
+                let day = fromDate.getDate() + 1;
+                endDate = new Date(fromDate.setDate(day));
+            }
+
+            getStatisticsFromTo(startDate, endDate);
         }
     }, [dateValidFrom, dateValidTo])
 
@@ -104,19 +121,14 @@ const Statistics = (props: any) => {
             const newStatisticData: StatisticData = statisticsResult;
 
             let tmpStatisticRows: JSX.Element[] = [...statisticRows];
-            tmpStatisticRows.push(<StatisticDataRow statisticData={newStatisticData} label={newLabel} key={statisticRows.length} pcrEnabled={pcrEnabled}/>);
+            tmpStatisticRows.push(<StatisticDataRow statisticData={newStatisticData} label={newLabel} key={statisticRows.length} pcrEnabled={pcrEnabled} />);
             setStatisticRows(tmpStatisticRows);
         }
     }, [statisticsResult])
 
     const handleNewStatisticRow = (dateValidFrom: Date, dateValidTo: Date) => {
         setDateValidFrom(dateValidFrom);
-
-        if (dateValidTo) {
-            setDateValidTo(dateValidTo);
-        } else {
-            setDateValidTo(dateValidFrom);
-        }
+        setDateValidTo(dateValidTo);
     }
 
     return (
@@ -130,11 +142,13 @@ const Statistics = (props: any) => {
     content area with patient inputs and check box
     */}
                     <Card.Body id='data-header'>
-                        <StatisticHeaderRow pcrEnabled={pcrEnabled}/>
-                        <hr />
-                        {statisticRows}
                         <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
                         <hr />
+                        <br />
+                        <br />
+                        <StatisticHeaderRow pcrEnabled={pcrEnabled} />
+                        <hr />
+                        {statisticRows}
                     </Card.Body>
 
                     {/*
@@ -148,7 +162,7 @@ const Statistics = (props: any) => {
                                     block
                                     onClick={context.navigation!.toLanding}
                                 >
-                                    {t('translation:cancel')}
+                                    {t('translation:back')}
                                 </Button>
                             </Col>
                         </Row>

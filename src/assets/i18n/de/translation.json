@@ -74,6 +74,7 @@
   "timerange": "Testzeitraum",
   "from": "am",
   "to": "bis",
+  "statisticFrom": "Von",
   "filter-none": "alle",
   "filter-record-result": "Testergebnis",
   "search": "Suchen",
