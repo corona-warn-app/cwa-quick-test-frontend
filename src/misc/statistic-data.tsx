@@ -27,3 +27,7 @@ export default interface StatisticData {
     ratTestCount: number;
     ratPositiveTestCount: number;
 }
+
+export interface DisplayStatisticData extends StatisticData {
+    label: string;
+}

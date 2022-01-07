@@ -30,7 +30,7 @@ import CwaSpinner from './spinner/spinner.component';
 import { useGetStatisticsFromTo, useStatistics } from '../api';
 import CardHeader from './modules/card-header.component';
 import AppContext from '../misc/appContext';
-import StatisticDataRow, { StatisticDateSelectionRow, StatisticHeaderRow } from './modules/statistic-data.component';
+import StatisticDataRow, { StatisticDateSelectionRow } from './modules/statistic-data.component';
 import StatisticData from '../misc/statistic-data';
 import utils from '../misc/utils';
 import { format } from "date-fns";
@@ -79,9 +79,9 @@ const Statistics = (props: any) => {
     React.useEffect(() => {
         if (context.navigation && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData) {
             setStatisticRows([
-                <StatisticDataRow statisticData={statisticData} label={t('translation:today')} key={0} pcrEnabled={pcrEnabled} />,
-                <StatisticDataRow statisticData={thisWeekStatisticData} label={t('translation:thisWeek')} key={1} pcrEnabled={pcrEnabled} />,
-                <StatisticDataRow statisticData={thisMonthStatisticData} label={t('translation:thisMonth')} key={2} pcrEnabled={pcrEnabled} />
+                {...statisticData, label:t('translation:today')},
+                {...thisWeekStatisticData, label:t('translation:thisWeek')},
+                {...thisMonthStatisticData, label:t('translation:thisMonth')}
             ])
             setIsInit(true);
         }
@@ -118,11 +118,7 @@ const Statistics = (props: any) => {
                 newLabel += ' - ' + format(dateValidTo, utils.pickerDateFormat);
             }
 
-            const newStatisticData: StatisticData = statisticsResult;
-
-            let tmpStatisticRows: JSX.Element[] = [...statisticRows];
-            tmpStatisticRows.push(<StatisticDataRow statisticData={newStatisticData} label={newLabel} key={statisticRows.length} pcrEnabled={pcrEnabled} />);
-            setStatisticRows(tmpStatisticRows);
+            setStatisticRows([...statisticRows, {...statisticsResult, label:newLabel} ]);
         }
     }, [statisticsResult])
 
@@ -144,11 +140,7 @@ const Statistics = (props: any) => {
                     <Card.Body id='data-header'>
                         <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
                         <hr />
-                        <br />
-                        <br />
-                        <StatisticHeaderRow pcrEnabled={pcrEnabled} />
-                        <hr />
-                        {statisticRows}
+                        <StatisticDataRow statisticData={statisticRows} pcrEnabled={pcrEnabled}/>
                     </Card.Body>
 
                     {/*

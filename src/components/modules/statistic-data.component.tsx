@@ -19,123 +19,76 @@
  * under the License.
  */
 
-import React, { Fragment } from "react";
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import React from "react";
+import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 
-import StatisticData from "../../misc/statistic-data";
+import { DisplayStatisticData } from "../../misc/statistic-data";
 import utils from "../../misc/utils";
 import imageAdd from '../../assets/images/icon_add.svg'
 
 const StatisticDataRow = (props: any) => {
     const { t } = useTranslation();
 
-    const [label, setLabel] = React.useState<String>('');
-    const [ratTestCount, setRatTestCount] = React.useState<number>(0);
-    const [ratPositiveTestCount, setRatPositiveTestCount] = React.useState<number>(0);
-    const [pcrTestCount, setPcrTestCount] = React.useState<number>(0);
-    const [pcrPositiveTestCount, setPcrPositiveTestCount] = React.useState<number>(0);
     const [pcrEnabled, setPcrEnabled] = React.useState(false);
+    const [statisticRows, setStatisticRows] = React.useState<DisplayStatisticData[]>([]);
 
     React.useEffect(() => {
         if (props && props.statisticData) {
-            const statisticData: StatisticData = props.statisticData;
-
-            setRatTestCount(statisticData.ratTestCount);
-            setRatPositiveTestCount(statisticData.ratPositiveTestCount);
-            setPcrTestCount(statisticData.pcrTestCount);
-            setPcrPositiveTestCount(statisticData.pcrPositiveTestCount);
-
-            setLabel(props.label);
+            const statisticData: DisplayStatisticData[] = props.statisticData;
 
             setPcrEnabled(props.pcrEnabled);
+            setStatisticRows(statisticData);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-
+    }, [props.statisticData])
 
     return (
-        <Fragment>
-            <Row>
-                <Col xs='12' md='3'>
-                    <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0'>{label}</Form.Label>
-                </Col>
-
-                <Col md='9'>
-                    <Row className='text-center'>
-                        <Col xs='6' md={pcrEnabled ? '3' : '6'}>
-                            {ratTestCount}
-                        </Col>
-                        <Col xs='6' md={pcrEnabled ? '3' : '6'}>
-                            {ratTestCount > 0 ? ratPositiveTestCount +
-                                ' ( ' + (100 * ratPositiveTestCount / ratTestCount).toFixed(2) + "% )" : 0}
-                        </Col>
-                        {!pcrEnabled
-                            ? <></>
-                            : <>
-                                <Col xs='6' md='3'>
-                                    {pcrTestCount}
-                                </Col>
-                                <Col xs='6' md='3'>
-                                    {pcrTestCount > 0 ? pcrPositiveTestCount +
-                                        ' ( ' + (100 * pcrPositiveTestCount / pcrTestCount).toFixed(2) + "% )" : 0}
-                                </Col>
-                            </>
-                        }
-                    </Row>
-                </Col>
-            </Row>
-            <hr />
-        </Fragment>
+        <Table bordered hover>
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th><strong>{t('translation:totalTestCount')}</strong></th>
+                    <th><strong>{t('translation:positiveTestCount')}</strong></th>
+                    {!pcrEnabled
+                        ? <></>
+                        : <>
+                            <th><strong>{t('translation:pcrTotalTestCount')}</strong></th>
+                            <th><strong>{t('translation:pcrPositiveTestCount')}</strong></th>
+                        </>
+                    }
+                </tr>
+            </thead>
+            <tbody>
+            {statisticRows.map((statiscData: DisplayStatisticData, i: number) =>
+                <tr key={i}>
+                    <td><strong>{statiscData.label}</strong></td>
+                    <td>{statiscData.ratTestCount}</td>
+                    <td>
+                        {statiscData.ratTestCount > 0 ? statiscData.ratPositiveTestCount +
+                            ' ( ' + (100 * statiscData.ratPositiveTestCount / statiscData.ratTestCount).toFixed(2) + "% )" : 0}
+                    </td>
+                    {!pcrEnabled
+                        ? <></>
+                        : <>
+                            <td>{statiscData.pcrTestCount}</td>
+                            <td>
+                                {statiscData.pcrTestCount > 0 ? statiscData.pcrPositiveTestCount +
+                                    ' ( ' + (100 * statiscData.pcrPositiveTestCount / statiscData.pcrTestCount).toFixed(2) + "% )" : 0}
+                            </td>
+                        </>
+                    }
+                </tr>
+                )}
+            </tbody>
+        </Table>
     )
 }
 
 export default StatisticDataRow;
-
-export const StatisticHeaderRow = (props: any) => {
-    const { t } = useTranslation();
-    const [pcrEnabled, setPcrEnabled] = React.useState(false);
-
-
-    React.useEffect(() => {
-        if (props) {
-            setPcrEnabled(props.pcrEnabled);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    return (
-        <Row className='text-center'>
-            <Col xs='12' md='3'>
-                &nbsp;
-            </Col>
-            <Col md='9'>
-                <Row className='text-center'>
-                    <Col xs='6' md={pcrEnabled ? '3' : '6'}>
-                        <strong>{t('translation:totalTestCount')}</strong>
-                    </Col>
-                    <Col xs='6' md={pcrEnabled ? '3' : '6'}>
-                        <strong>{t('translation:positiveTestCount')}</strong>
-                    </Col>
-                    {!pcrEnabled
-                        ? <></>
-                        : <>
-                            <Col xs='6' md='3'>
-                                <strong>{t('translation:pcrTotalTestCount')}</strong>
-                            </Col>
-                            <Col xs='6' md='3'>
-                                <strong>{t('translation:pcrPositiveTestCount')}</strong>
-                            </Col>
-                        </>
-                    }
-                </Row>
-            </Col>
-        </Row>)
-}
 
 export const StatisticDateSelectionRow = (props: any) => {
     const { t } = useTranslation();
