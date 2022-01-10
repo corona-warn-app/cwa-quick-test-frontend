@@ -516,6 +516,28 @@ td {
     width: 1%;
 }
 
-.width-thousend {
+.width-eight-houndred {
     min-width: 800px;
+}
+
+.add-statistic {
+    width: 100%;
+    display: flex;
+    direction: row;
+    align-items: center;
+    box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.15);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 0.25px;
+    padding-right: 0.25rem;
+    margin: 0px;
+    background-color: white;
+}
+
+.btn-add-statistic {
+    padding: 0px !important;
+    margin:0.25rem; 
+    display: flex;
+    vertical-align: middle;
+    background-color: white !important;
 }

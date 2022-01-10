@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { Button, Col, Form, Row, Table } from 'react-bootstrap';
+import { Button, Col, Form, Row, Table, Container } from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -131,62 +131,58 @@ export const StatisticDateSelectionRow = (props: any) => {
     }
 
     return (
-        <Form.Group as={Row} controlId='formDateValidFromToInput' className='mb-0'>
-            <Form.Label className='input-label d-flex mb-md-0 align-self-center' column xs='12' sm='3'>
+        <Container className="add-statistic">
+            <Form.Label className='input-label mr-3 pl-1' >
                 <strong>
                     {t('translation:addStatisticRow')}
                 </strong>
             </Form.Label>
 
-            <Col xs='11' md='8' className='d-flex mb-md-0 align-self-center'>
-                <Form.Label className='input-label mb-md-0 mr-2 align-self-center'>
-                    {t('translation:timerange')}
-                </Form.Label>
-                <DatePicker
-                    selected={dateValidFrom}
-                    onChange={handleDateValidFrom}
-                    dateFormat={utils.pickerDateFormat}
-                    isClearable
-                    placeholderText={t('translation:statisticFrom')}
-                    className='qt-input form-control'
-                    wrapperClassName='align-self-center'
-                    showMonthDropdown
-                    showYearDropdown
-                    dropdownMode="select"
-                    maxDate={new Date()}
-                    minDate={new Date(2020, 0, 1, 12)}
-                    openToDate={dateValidFrom ? dateValidFrom : new Date()}
-                />
-                <span className='space-five'>{'-'}</span>
-                <DatePicker
-                    selected={dateValidTo}
-                    onChange={handleDateValidTo}
-                    dateFormat={utils.pickerDateFormat}
-                    isClearable
-                    placeholderText={t('translation:to')}
-                    className='qt-input form-control'
-                    wrapperClassName='align-self-center'
-                    showMonthDropdown
-                    showYearDropdown
-                    dropdownMode="select"
-                    maxDate={new Date()}
-                    minDate={dateValidFrom}
-                    openToDate={dateValidTo ? dateValidTo : new Date()}
-                    disabled={dateValidFrom === undefined}
-                />
-            </Col>
-            <Col xs='1' md='1' className='d-flex'>
-                <Button
-                    className='btn-add align-self-center p-0'
-                    size="sm"
-                    variant="light"
-                    onClick={() => { props.addRow(dateValidFrom, dateValidTo) }}
-                    disabled={!dateValidFrom}
-                >
-                    <img src={imageAdd} alt="Hinzufügen" />
-                </Button>
-            </Col>
-        </Form.Group>
+            <Form.Label className='input-label mr-2'>
+                {t('translation:timerange')}
+            </Form.Label>
+            <DatePicker
+                selected={dateValidFrom}
+                onChange={handleDateValidFrom}
+                dateFormat={utils.pickerDateFormat}
+                isClearable
+                placeholderText={t('translation:statisticFrom')}
+                className='qt-input form-control'
+                wrapperClassName='align-self-center'
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                maxDate={new Date()}
+                minDate={new Date(2020, 0, 1, 12)}
+                openToDate={dateValidFrom ? dateValidFrom : new Date()}
+            />
+            <span className='space-five'>{'-'}</span>
+            <DatePicker
+                selected={dateValidTo}
+                onChange={handleDateValidTo}
+                dateFormat={utils.pickerDateFormat}
+                isClearable
+                placeholderText={t('translation:to')}
+                className='qt-input form-control'
+                wrapperClassName='align-self-center'
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                maxDate={new Date()}
+                minDate={dateValidFrom}
+                openToDate={dateValidTo ? dateValidTo : new Date()}
+                disabled={dateValidFrom === undefined}
+            />
+            <Button
+                className='btn-add-statistic ml-auto'
+                size="sm"
+                variant="light"
+                onClick={() => { props.addRow(dateValidFrom, dateValidTo) }}
+                disabled={!dateValidFrom}
+            >
+                <img src={imageAdd} alt="Hinzufügen" />
+            </Button>
+        </Container>
     )
 }
 
