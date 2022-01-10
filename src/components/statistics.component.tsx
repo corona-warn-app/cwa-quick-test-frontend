@@ -79,9 +79,9 @@ const Statistics = (props: any) => {
     React.useEffect(() => {
         if (context.navigation && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData) {
             setStatisticRows([
-                {...statisticData, label:t('translation:today')},
-                {...thisWeekStatisticData, label:t('translation:thisWeek')},
-                {...thisMonthStatisticData, label:t('translation:thisMonth')}
+                { ...statisticData, label: t('translation:today'), key: Math.random() },
+                { ...thisWeekStatisticData, label: t('translation:thisWeek'), key: Math.random() },
+                { ...thisMonthStatisticData, label: t('translation:thisMonth'), key: Math.random() }
             ])
             setIsInit(true);
         }
@@ -91,7 +91,7 @@ const Statistics = (props: any) => {
         if (dateValidFrom || (dateValidFrom && dateValidTo)) {
 
             let startDate = new Date(dateValidFrom);
-            let endDate : Date;
+            let endDate: Date;
 
             startDate.setUTCHours(0, 0, 0, 0);
 
@@ -118,13 +118,21 @@ const Statistics = (props: any) => {
                 newLabel += ' - ' + format(dateValidTo, utils.pickerDateFormat);
             }
 
-            setStatisticRows([...statisticRows, {...statisticsResult, label:newLabel} ]);
+            setStatisticRows([...statisticRows, { ...statisticsResult, label: newLabel, key: Math.random() }]);
         }
     }, [statisticsResult])
 
     const handleNewStatisticRow = (dateValidFrom: Date, dateValidTo: Date) => {
         setDateValidFrom(dateValidFrom);
         setDateValidTo(dateValidTo);
+    }
+
+    const handleDeleteStatisticRow = (key: number) => {
+        setStatisticRows((prevStatisticRows) => {
+            return prevStatisticRows.filter((row) => {
+                return row.key !== key
+            });
+        })
     }
 
     return (
@@ -140,7 +148,7 @@ const Statistics = (props: any) => {
                     <Card.Body id='data-header'>
                         <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
                         <hr />
-                        <StatisticDataRow statisticData={statisticRows} pcrEnabled={pcrEnabled}/>
+                        <StatisticDataRow statisticData={statisticRows} pcrEnabled={pcrEnabled} deleteRow={handleDeleteStatisticRow} />
                     </Card.Body>
 
                     {/*

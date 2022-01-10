@@ -47,7 +47,7 @@ const StatisticDataRow = (props: any) => {
     }, [props.statisticData])
 
     return (
-        <Table bordered hover>
+        <Table bordered hover responsive className="width-eight-houndred">
             <thead>
                 <tr>
                     <th>&nbsp;</th>
@@ -60,28 +60,34 @@ const StatisticDataRow = (props: any) => {
                             <th><strong>{t('translation:pcrPositiveTestCount')}</strong></th>
                         </>
                     }
+                    <th>&nbsp;</th>
                 </tr>
             </thead>
             <tbody>
-            {statisticRows.map((statiscData: DisplayStatisticData, i: number) =>
-                <tr key={i}>
-                    <td><strong>{statiscData.label}</strong></td>
-                    <td>{statiscData.ratTestCount}</td>
-                    <td>
-                        {statiscData.ratTestCount > 0 ? statiscData.ratPositiveTestCount +
-                            ' ( ' + (100 * statiscData.ratPositiveTestCount / statiscData.ratTestCount).toFixed(2) + "% )" : 0}
-                    </td>
-                    {!pcrEnabled
-                        ? <></>
-                        : <>
-                            <td>{statiscData.pcrTestCount}</td>
-                            <td>
-                                {statiscData.pcrTestCount > 0 ? statiscData.pcrPositiveTestCount +
-                                    ' ( ' + (100 * statiscData.pcrPositiveTestCount / statiscData.pcrTestCount).toFixed(2) + "% )" : 0}
-                            </td>
-                        </>
-                    }
-                </tr>
+                {statisticRows.map((statiscData: DisplayStatisticData, i: number) =>
+                    <tr key={statiscData.key}>
+                        <td><strong>{statiscData.label}</strong></td>
+                        <td>{statiscData.ratTestCount}</td>
+                        <td>
+                            {statiscData.ratTestCount > 0 ? statiscData.ratPositiveTestCount +
+                                ' ( ' + (100 * statiscData.ratPositiveTestCount / statiscData.ratTestCount).toFixed(2) + "% )" : 0}
+                        </td>
+                        {!pcrEnabled
+                            ? <></>
+                            : <>
+                                <td>{statiscData.pcrTestCount}</td>
+                                <td>
+                                    {statiscData.pcrTestCount > 0 ? statiscData.pcrPositiveTestCount +
+                                        ' ( ' + (100 * statiscData.pcrPositiveTestCount / statiscData.pcrTestCount).toFixed(2) + "% )" : 0}
+                                </td>
+                            </>
+                        }
+                        <td className="width-one">
+                            <Button className="btn-icon delete-icon mx-1"
+                                onClick={() => { props.deleteRow(statiscData.key) }}
+                            />
+                        </td>
+                    </tr>
                 )}
             </tbody>
         </Table>
@@ -171,13 +177,13 @@ export const StatisticDateSelectionRow = (props: any) => {
             </Col>
             <Col xs='1' md='1' className='d-flex'>
                 <Button
-                    className='btn-add align-self-center'
+                    className='btn-add align-self-center p-0'
                     size="sm"
                     variant="light"
                     onClick={() => { props.addRow(dateValidFrom, dateValidTo) }}
                     disabled={!dateValidFrom}
                 >
-                    <img className='mr-2' src={imageAdd} alt="Hinzufügen" />
+                    <img src={imageAdd} alt="Hinzufügen" />
                 </Button>
             </Col>
         </Form.Group>

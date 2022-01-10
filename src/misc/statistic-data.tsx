@@ -30,4 +30,5 @@ export default interface StatisticData {
 
 export interface DisplayStatisticData extends StatisticData {
     label: string;
+    key: number;
 }
