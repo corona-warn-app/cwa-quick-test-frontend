@@ -528,16 +528,25 @@ td {
     box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.15);
     padding-top: 10px;
     padding-bottom: 10px;
-    padding-left: 0.25px;
-    padding-right: 0.25rem;
+    padding-left: 0px;
+    padding-right: 0px;
     margin: 0px;
     background-color: white;
+    flex-wrap: wrap;
 }
 
-.btn-add-statistic {
-    padding: 0px !important;
-    margin:0.25rem; 
+.add-statistic-item {
     display: flex;
-    vertical-align: middle;
-    background-color: white !important;
+    direction: row;
+    width: 100%;
+}
+
+.btn-add-statistic-icon {
+    padding: 0px;
+    border: 0px;
+    background: transparent;
+    &:disabled, &:hover, &:focus{
+        outline: none !important;
+        background-color: transparent !important;
+    }
 }
