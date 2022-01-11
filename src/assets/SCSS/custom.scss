@@ -544,9 +544,6 @@ td {
 .btn-add-statistic-icon {
     padding: 0px;
     border: 0px;
-    background: transparent;
-    &:disabled, &:hover, &:focus{
-        outline: none !important;
-        background-color: transparent !important;
-    }
+    width:24px;
+    height:24px;  
 }

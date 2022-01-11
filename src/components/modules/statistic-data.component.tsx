@@ -181,7 +181,7 @@ export const StatisticDateSelectionRow = (props: any) => {
                             disabled={dateValidFrom === undefined}
                         />
                         <Button
-                            className='btn-add-statistic-icon ml-auto mr-0'
+                            className='btn-add-statistic-icon ml-auto mr-0 align-self-center'
                             size="sm"
                             variant="light"
                             onClick={() => { props.addRow(dateValidFrom, dateValidTo) }}
