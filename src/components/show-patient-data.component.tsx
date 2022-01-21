@@ -71,10 +71,10 @@ const ShowPatientData = (props: any) => {
 
             if (quickTest.includePersData) {
 
-                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.dccConsent, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth));
+                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.dccConsent, quickTest.testType, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth));
             }
             if (quickTest.processingConsens) {
-                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.dccConsent));
+                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.dccConsent, quickTest.testType));
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,6 +90,7 @@ const ShowPatientData = (props: any) => {
 
     React.useEffect(() => {
         if (qrCodeValue && qrCodeValue.length > 1) {
+            console.log(qrCodeValue);
             quickTest!.testResultHash = qrCodeValue[1];
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
