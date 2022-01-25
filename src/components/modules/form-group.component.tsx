@@ -89,6 +89,8 @@ export const FormGroupTextarea = (props: any) => {
                     type={props.type ? props.type : 'text'}
                     required={props.required}
                     maxLength={props.maxLength}
+                    rows={props.rows}
+                    ref={props.ref}
                     as='textarea'
                 />
             </Col>

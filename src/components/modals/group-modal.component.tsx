@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse, Dropdown } from 'react-bootstrap'
+import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse, Dropdown, FormControl } from 'react-bootstrap'
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +29,7 @@ import { IGroupDetails, IGroupNode, IGroup } from '../../misc/user';
 import { useGetGroupDetails } from '../../api';
 import CwaSpinner from '../spinner/spinner.component';
 import utils from '../../misc/utils';
+import { useRef } from 'react';
 
 const emptyGroup: IGroupDetails = {
     id: '',
@@ -58,6 +59,8 @@ const GroupModal = (props: any) => {
     const [dropdownList] = React.useState<string[]>(['https://', 'http://']);
     const [selectedDropdownValue, setSelectedDropdownValue] = React.useState<string>(dropdownList[0]);
     const [websiteValue, setWebsiteValue] = React.useState('');
+    const [openingHours, setOpeningHours] = React.useState<string[]>();
+    const openingHoursRef = useRef();
 
     const groupReloaded = (group: IGroupDetails) => {
         if (group) {
@@ -193,6 +196,28 @@ const GroupModal = (props: any) => {
     const updateGroupProp = (name: string, value: any) => {
         const ngroup = { ...group, [name]: value };
         setGroup({ ...ngroup });
+    }
+
+    const changeOpeningHoursHandler = (name: string, value: string) => {
+
+        const openingHours = value.split('\n');
+        console.log("openingHours: " + openingHours);
+        console.log(utils.pattern.eMail);
+        const error = openingHours.find(element => {
+            console.log("element: " + element);
+            console.log("element.match.openingHours " + utils.isOpeningHoursValid(element));
+            return !utils.isOpeningHoursValid(element);
+        });
+
+        console.log(value);
+        //let error = utils.isOpeningHoursValid(value);
+
+        console.log("error: " + error);
+        if(error == undefined) {
+            const ngroup = { ...group, [name]: value };
+            setGroup({ ...ngroup });
+        }
+        
     }
 
     const updateSearchPortalConsent = (name: string, value: any) => {
@@ -359,14 +384,29 @@ const GroupModal = (props: any) => {
                                         pattern={utils.pattern.url}
                                     />
 
-                                    < FormGroupInput controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
+                                    {/* < FormGroupInput controlId='formPocOpeningHoursOld' title={t('translation:searchPortalOpeningHours')}
                                         value={group?.openingHours ? group.openingHours : ''}
                                         onChange={(evt: any) => {
                                             updateGroupProp('openingHours', evt.target.value);
                                             props.resetError();
                                         }}
                                         maxLength={100}
+                                    /> */}
+
+                                    < FormGroupTextarea controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')} placeholder={t('translation:address-testcenter-placeholder')}
+                                        value={group?.openingHours ? group.openingHours : ''}
+                                        onChange={(evt: any) => {
+                                            changeOpeningHoursHandler('openingHours', evt.target.value);
+                                            props.resetError();
+                                        }}
+                                        type='textarea'
+                                        rows={7}
+                                        pattern={utils.pattern.email}
+                                        ref={openingHoursRef}
                                     />
+                                    <FormControl.Feedback>
+                                        <div>Es ist ein Fehler aufgetreten</div>
+                                    </FormControl.Feedback>
 
                                     <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
                                         onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}

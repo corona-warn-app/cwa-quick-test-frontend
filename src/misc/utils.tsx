@@ -29,6 +29,7 @@ export interface IUtils {
     isEMailValid: (value: string) => boolean,
     isStandardisedNameValid: (value: string) => boolean,
     isUrlValid: (value: string) => boolean,
+    isOpeningHoursValid: (value: string) => boolean,
     getIndent: (level: number) => JSX.Element[],
     pickerDateFormat: string,
     pickerDateTimeFormat: string,
@@ -46,7 +47,9 @@ const pattern = {
     eMail: '^[\\w\\d\\.-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
     standardisedName: '^[A-Z<]*$',
     url: '^(www\\.|http:\\/\\/|https:\\/\\/){0,1}?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,10}(:[0-9]{1,5})?(\\/.*)?$',
-    BSNR:'^[1-9]{1}\\d{8}$'
+    BSNR:'^[1-9]{1}\\d{8}$',
+    //openingHours:'^[\\w-\\d\\s]{0,64}$/gm'
+    openingHours:'^[\\w-\\d\\s]{0,64}$'
 }
 
 const processNoRegExp = new RegExp(pattern.processNo);
@@ -55,6 +58,7 @@ const telRegExp = new RegExp(pattern.tel);
 const eMailRegExp = new RegExp(pattern.eMail);
 const standardisedNameRegExp = new RegExp(pattern.standardisedName);
 const urlRegExp = new RegExp(pattern.url);
+const openingHoursExp = new RegExp(pattern.openingHours);
 
 const getIndent = (level: number): JSX.Element[] => {
     const indent: JSX.Element[] = [];
@@ -76,6 +80,7 @@ const utils: IUtils = {
     isEMailValid: (eMail: string) => eMailRegExp.test(eMail),
     isStandardisedNameValid: (value: string) => standardisedNameRegExp.test(value),
     isUrlValid: (url: string) => urlRegExp.test(url),
+    isOpeningHoursValid: (value: string) => openingHoursExp.test(value),
     getIndent: getIndent,
     pickerDateFormat: 'dd.MM.yyyy',
     pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',
