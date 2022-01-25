@@ -78,23 +78,29 @@ export const FormGroupTextarea = (props: any) => {
             <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
 
             <Col xs='7' sm='9' className='d-flex'>
-                <Form.Control
-                    className='qt-input qt-input-area'
-                    value={props.value}
-                    readOnly={props.readOnly}
-                    disabled={props.disabled}
-                    onClick={props.onClick}
-                    onChange={props.onChange}
-                    placeholder={props.placeholder ? props.placeholder : props.title}
-                    type={props.type ? props.type : 'text'}
-                    required={props.required}
-                    maxLength={props.maxLength}
-                    rows={props.rows}
-                    ref={props.ref}
-                    as='textarea'
-                />
+                <InputGroup>
+                    <Form.Control
+                        className='qt-input qt-input-area'
+                        value={props.value}
+                        readOnly={props.readOnly}
+                        disabled={props.disabled}
+                        onClick={props.onClick}
+                        onChange={props.onChange}
+                        placeholder={props.placeholder ? props.placeholder : props.title}
+                        type={props.type ? props.type : 'text'}
+                        required={props.required}
+                        maxLength={props.maxLength}
+                        rows={props.rows}
+                        ref={props.ref}
+                        isInvalid={props.isInvalid}
+                        as='textarea'
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {props.invalidText}
+                    </Form.Control.Feedback>
+                </InputGroup>
             </Col>
-        </Form.Group>
+        </Form.Group >
     )
 }
 

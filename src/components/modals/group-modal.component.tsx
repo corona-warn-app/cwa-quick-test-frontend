@@ -55,6 +55,7 @@ const GroupModal = (props: any) => {
     const [isReady, setIsReady] = React.useState(false);
     const [isNew, setIsNew] = React.useState(true);
     const [options, setOptions] = React.useState<JSX.Element[]>();
+    const [errorOpeningHour, setErrorOpeningHour] = React.useState<string | undefined>(undefined);
     const [dropdownItems, setDropdownItems] = React.useState<JSX.Element[]>();
     const [dropdownList] = React.useState<string[]>(['https://', 'http://']);
     const [selectedDropdownValue, setSelectedDropdownValue] = React.useState<string>(dropdownList[0]);
@@ -119,6 +120,7 @@ const GroupModal = (props: any) => {
     }, [props.isCreationError]);
 
     const handleCancel = () => {
+        setErrorOpeningHour(undefined);
         props.onCancel();
     }
 
@@ -200,24 +202,25 @@ const GroupModal = (props: any) => {
 
     const changeOpeningHoursHandler = (name: string, value: string) => {
 
+        let error = undefined;
+
         const openingHours = value.split('\n');
-        console.log("openingHours: " + openingHours);
-        console.log(utils.pattern.eMail);
-        const error = openingHours.find(element => {
-            console.log("element: " + element);
-            console.log("element.match.openingHours " + utils.isOpeningHoursValid(element));
+        if (openingHours.length > 7) {
+            setErrorOpeningHour('opening-hours-to-much-lines-error');
+            return;
+        }
+
+        error = openingHours.find(element => {
             return !utils.isOpeningHoursValid(element);
         });
 
-        console.log(value);
-        //let error = utils.isOpeningHoursValid(value);
-
-        console.log("error: " + error);
-        if(error == undefined) {
+        if (error === undefined) {
+            setErrorOpeningHour(undefined);
             const ngroup = { ...group, [name]: value };
             setGroup({ ...ngroup });
+        } else {
+            setErrorOpeningHour('openening-hours-to-long-error');
         }
-        
     }
 
     const updateSearchPortalConsent = (name: string, value: any) => {
@@ -403,11 +406,9 @@ const GroupModal = (props: any) => {
                                         rows={7}
                                         pattern={utils.pattern.email}
                                         ref={openingHoursRef}
+                                        isInvalid={(errorOpeningHour !== undefined)}
+                                        invalidText={t('translation:' + errorOpeningHour)}
                                     />
-                                    <FormControl.Feedback>
-                                        <div>Es ist ein Fehler aufgetreten</div>
-                                    </FormControl.Feedback>
-
                                     <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
                                         onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
                                         type='checkbox'
