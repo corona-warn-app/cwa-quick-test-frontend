@@ -42,7 +42,7 @@ const emptyGroup: IGroupDetails = {
     website: '',
     email: '',
     appointmentRequired: false,
-    openingHours: ''
+    openingHours: []
 }
 
 const GroupModal = (props: any) => {
@@ -55,13 +55,12 @@ const GroupModal = (props: any) => {
     const [isReady, setIsReady] = React.useState(false);
     const [isNew, setIsNew] = React.useState(true);
     const [options, setOptions] = React.useState<JSX.Element[]>();
-    const [errorOpeningHour, setErrorOpeningHour] = React.useState<string | undefined>(undefined);
     const [dropdownItems, setDropdownItems] = React.useState<JSX.Element[]>();
     const [dropdownList] = React.useState<string[]>(['https://', 'http://']);
     const [selectedDropdownValue, setSelectedDropdownValue] = React.useState<string>(dropdownList[0]);
     const [websiteValue, setWebsiteValue] = React.useState('');
-    const [openingHours, setOpeningHours] = React.useState<string[]>();
-    const openingHoursRef = useRef();
+    const [displayOpeningHours, setDisplayOpeningHours] = React.useState('');
+    const [errorOpeningHour, setErrorOpeningHour] = React.useState<string | undefined>(undefined);
 
     const groupReloaded = (group: IGroupDetails) => {
         if (group) {
@@ -101,6 +100,10 @@ const GroupModal = (props: any) => {
             setIsReady(true);
             const options = getOptions();
             setOptions(options);
+            setDisplayOpeningHours(
+                group.openingHours?.map(
+                    (element: string) => element)
+                    .join('\n'));
         }
 
         setIsNew(!(group && group.id));
@@ -201,7 +204,6 @@ const GroupModal = (props: any) => {
     }
 
     const changeOpeningHoursHandler = (name: string, value: string) => {
-
         let error = undefined;
 
         const openingHours = value.split('\n');
@@ -216,9 +218,10 @@ const GroupModal = (props: any) => {
 
         if (error === undefined) {
             setErrorOpeningHour(undefined);
-            const ngroup = { ...group, [name]: value };
-            setGroup({ ...ngroup });
+            setDisplayOpeningHours('');
+            updateGroupProp("openingHours", openingHours);
         } else {
+            setDisplayOpeningHours(value);
             setErrorOpeningHour('openening-hours-to-long-error');
         }
     }
@@ -229,7 +232,7 @@ const GroupModal = (props: any) => {
         if (value === false) {
             ngroup.email = '';
             ngroup.website = '';
-            ngroup.openingHours = '';
+            ngroup.openingHours = [];
             ngroup.appointmentRequired = false;
         }
         setGroup(ngroup);
@@ -387,25 +390,20 @@ const GroupModal = (props: any) => {
                                         pattern={utils.pattern.url}
                                     />
 
-                                    {/* < FormGroupInput controlId='formPocOpeningHoursOld' title={t('translation:searchPortalOpeningHours')}
-                                        value={group?.openingHours ? group.openingHours : ''}
+                                    < FormGroupTextarea controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')} placeholder={t('translation:address-testcenter-placeholder')}
+                                        value={displayOpeningHours}
                                         onChange={(evt: any) => {
-                                            updateGroupProp('openingHours', evt.target.value);
+                                            changeOpeningHoursHandler('openingHours', evt.target.value);
                                             props.resetError();
                                         }}
-                                        maxLength={100}
-                                    /> */}
-
-                                    < FormGroupTextarea controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')} placeholder={t('translation:address-testcenter-placeholder')}
-                                        value={group?.openingHours ? group.openingHours : ''}
-                                        onChange={(evt: any) => {
+                                        onBlur={(evt: any) => {
+                                            evt.preventDefault();
                                             changeOpeningHoursHandler('openingHours', evt.target.value);
                                             props.resetError();
                                         }}
                                         type='textarea'
                                         rows={7}
                                         pattern={utils.pattern.email}
-                                        ref={openingHoursRef}
                                         isInvalid={(errorOpeningHour !== undefined)}
                                         invalidText={t('translation:' + errorOpeningHour)}
                                     />

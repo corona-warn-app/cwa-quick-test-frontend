@@ -59,7 +59,7 @@ export interface IGroupDetails {
     searchPortalConsent: boolean,
     website?: string,
     email?: string,
-    openingHours?: string,
+    openingHours?: string[],
     appointmentRequired?: boolean,
     parentGroup?: string,
 }

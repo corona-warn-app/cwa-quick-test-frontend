@@ -86,6 +86,7 @@ export const FormGroupTextarea = (props: any) => {
                         disabled={props.disabled}
                         onClick={props.onClick}
                         onChange={props.onChange}
+                        onBlur={props.onBlur}
                         placeholder={props.placeholder ? props.placeholder : props.title}
                         type={props.type ? props.type : 'text'}
                         required={props.required}
