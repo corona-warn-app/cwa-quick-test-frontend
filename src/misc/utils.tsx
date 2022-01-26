@@ -49,7 +49,7 @@ const pattern = {
     url: '^(www\\.|http:\\/\\/|https:\\/\\/){0,1}?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,10}(:[0-9]{1,5})?(\\/.*)?$',
     BSNR:'^[1-9]{1}\\d{8}$',
     //openingHours:'^[\\w-\\d\\s]{0,64}$/gm'
-    openingHours:'^[a-zA-ZäöüÄÖÜß-\\d\\s]{0,64}$'
+    openingHours:'^[a-zA-ZäöüÄÖÜß-\\d\\s\.\!\:\(\)]{0,64}$'
 }
 
 const processNoRegExp = new RegExp(pattern.processNo);
