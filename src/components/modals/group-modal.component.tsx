@@ -29,7 +29,6 @@ import { IGroupDetails, IGroupNode, IGroup } from '../../misc/user';
 import { useGetGroupDetails } from '../../api';
 import CwaSpinner from '../spinner/spinner.component';
 import utils from '../../misc/utils';
-import { useRef } from 'react';
 
 const emptyGroup: IGroupDetails = {
     id: '',
@@ -60,7 +59,7 @@ const GroupModal = (props: any) => {
     const [selectedDropdownValue, setSelectedDropdownValue] = React.useState<string>(dropdownList[0]);
     const [websiteValue, setWebsiteValue] = React.useState('');
     const [displayOpeningHours, setDisplayOpeningHours] = React.useState('');
-    const [errorOpeningHour, setErrorOpeningHour] = React.useState<string | undefined>(undefined);
+    const [errorOpeningHour, setErrorOpeningHour] = React.useState<string>('');
 
     const groupReloaded = (group: IGroupDetails) => {
         if (group) {
@@ -123,7 +122,7 @@ const GroupModal = (props: any) => {
     }, [props.isCreationError]);
 
     const handleCancel = () => {
-        setErrorOpeningHour(undefined);
+        setErrorOpeningHour('');
         props.onCancel();
     }
 
@@ -193,6 +192,11 @@ const GroupModal = (props: any) => {
         event.preventDefault();
         event.stopPropagation();
 
+        if (errorOpeningHour) {
+            document.getElementById('formPocOpeningHours')?.focus();
+            return;
+        }
+
         if (form.checkValidity()) {
             handleOk();
         }
@@ -204,8 +208,10 @@ const GroupModal = (props: any) => {
     }
 
     const changeOpeningHoursHandler = (name: string, value: string) => {
-        let error = undefined;
 
+        setDisplayOpeningHours(value);
+
+        let error = undefined;
         const openingHours = value.split('\n');
         if (openingHours.length > 7) {
             setErrorOpeningHour('opening-hours-to-much-lines-error');
@@ -216,13 +222,11 @@ const GroupModal = (props: any) => {
             return !utils.isOpeningHoursValid(element);
         });
 
-        if (error === undefined) {
-            setErrorOpeningHour(undefined);
-            setDisplayOpeningHours('');
-            updateGroupProp("openingHours", openingHours);
-        } else {
-            setDisplayOpeningHours(value);
+        if (error) {
             setErrorOpeningHour('openening-hours-to-long-error');
+        } else {
+            setErrorOpeningHour('');
+            updateGroupProp("openingHours", openingHours);
         }
     }
 
@@ -396,16 +400,11 @@ const GroupModal = (props: any) => {
                                             changeOpeningHoursHandler('openingHours', evt.target.value);
                                             props.resetError();
                                         }}
-                                        onBlur={(evt: any) => {
-                                            evt.preventDefault();
-                                            changeOpeningHoursHandler('openingHours', evt.target.value);
-                                            props.resetError();
-                                        }}
                                         type='textarea'
                                         rows={7}
                                         pattern={utils.pattern.email}
-                                        isInvalid={(errorOpeningHour !== undefined)}
-                                        invalidText={t('translation:' + errorOpeningHour)}
+                                        isInvalid={errorOpeningHour}
+                                        invalidText={errorOpeningHour && t('translation:' + errorOpeningHour)}
                                     />
                                     <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
                                         onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
