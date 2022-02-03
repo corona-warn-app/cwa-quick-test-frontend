@@ -22,6 +22,7 @@
 import IQuickTest from './quick-test';
 import CryptoJS from 'crypto-js';
 import vCardParser from './vCard-parser';
+import utils from "./utils";
 
 export interface IQRCodeValue {
     fn?: string,
@@ -138,8 +139,8 @@ export const getPersonDataFromScan = (data: string | null) => {
                     personData: {
                         familyName: s.name.surname.trim(),
                         givenName: s.name.name.trim(),
-                        standardisedGivenName: '',
-                        standardisedFamilyName: '',
+                        standardisedGivenName: utils.convertToICAO(s.name.name.trim()),
+                        standardisedFamilyName: utils.convertToICAO(s.name.surname.trim()),
                         dateOfBirth: s.birthday ? new Date(s.birthday) : undefined,
                         sex: undefined
                     },

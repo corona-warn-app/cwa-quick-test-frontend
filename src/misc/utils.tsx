@@ -28,6 +28,7 @@ export interface IUtils {
     isTelValid: (value: string) => boolean,
     isEMailValid: (value: string) => boolean,
     isStandardisedNameValid: (value: string) => boolean,
+    convertToICAO: (value: string) => string, 
     isUrlValid: (value: string) => boolean,
     getIndent: (level: number) => JSX.Element[],
     pickerDateFormat: string,
@@ -66,6 +67,106 @@ const getIndent = (level: number): JSX.Element[] => {
     return indent;
 }
 
+const convertToICAO = (input: string): string => {
+    // implementation as defined by reference pseudo code:
+    // https://github.com/corona-warn-app/cwa-quicktest-onboarding/wiki/Anbindung-an-CWA-mit-Verwendung-von-DCCs#icao-conversion
+    var result = '';
+
+    // 0. First name and last name are handled separately (the following steps are done for first name and last name individually)
+    // 
+    // call this method only with the name part!
+
+    // 1. Make sure that the name is in String. Latin format (Latin chars in Unicode) via Regex ^[\u0020-\u0233\u1E02-\u1EF9]+$ (cf. [2], p. 5ff.) -- the charset is actually smaller, but step 7 takes care of that
+    result = input.replace(/[^\u0020-\u0233\u1E02-\u1EF9]/g, '');
+
+    // 2. Convert the string to UPPERCASE (cf. [1], p. 18)
+    result = result.toUpperCase();
+
+    // 3. Replace commas (\u002C), spaces (\u0020), and hyphens (\u002D = -) by '<' (cf. [1], p. 19f.)
+    result = result.replace(/[\u002C\u0020\u002D]/g, '<');
+    // 4. Replace multiple occurrences of '<' by a single '<' (e.g., 'HANS<<PETER' --> 'HANS<PETER') (cf. [1], p. 18)
+    result = result.replace(/<{1,}/g, '<');
+    // 5. Replace diacritical characters: (cf. [1], p. 30ff.; [2], p. 5ff.)
+    //      \u00C0-\u00C3, \u0100-\u0104, \u01CD, \u01DE, \u01FA, \u1EA0-\u1EB6 --> A
+    result = result.replace(/[\u00C0-\u00C3\u0100-\u0104\u01CD\u01DE\u01FA\u1EA0-\u1EB6]/g, 'A');
+    //      \u00C4, \u00C6, \u01FC     --> AE
+    result = result.replace(/[\u00C4\u00C6\u01FC]/g, 'AE');
+    //      \u00C5                     --> AA
+    result = result.replace(/[\u00C5]/g, 'AA');
+    //      \u1E02                     --> B
+    result = result.replace(/[\u1E02]/g, 'B');
+    //      \u00C7, \u0106-\u010C      --> C
+    result = result.replace(/[\u00C7\u0106-\u010C]/g, 'B');
+    //      \u00D0, \u010E, \u0110, \u1E0A, \u1E10 --> D
+    result = result.replace(/[\u00D0\u010E\u0110\u1E0A\u1E10]/g, 'D');
+    //      \u00C8-\u00CB, \u0112-\u011A, \u018F, \u1EB8-\u1EC6 --> E 
+    result = result.replace(/[\u00C8-\u00CB\u0112-\u011A\u018F\u1EB8-\u1EC6]/g, 'E');  
+    //      \u1E1E                    --> F
+    result = result.replace(/[\u1E1E]/g, 'F');
+    //      \u011C-\u0122, \u01E4, \u01E6, \u01F4, \u1E20 --> G
+    result = result.replace(/[\u011C-\u0122\u01E4\u01E6\u01F4\u1E20]/g, 'G');
+    //      \u0124, \u0126, \u021E, \u1E24, \u1E26 --> H
+    result = result.replace(/[\u0124\u0126\u021E\u1E24\u1E26]/g, 'H');
+    //      \u00CC-\u00CF, \u0128-\u0131, \u01CF, \u1EC8, \u1ECA --> I
+    result = result.replace(/[\u00CC-\u00CF\u0128-\u0131\u01CF\u1EC8\u1ECA]/g, 'I');
+    //      \u0134                     --> J
+    result = result.replace(/[\u0134]/g, 'J');
+    //      \u0132                    --> IJ
+    result = result.replace(/[\u0132]/g, 'IJ');
+    //      \u0136, \u01E8, \u1E30     --> K
+    result = result.replace(/[\u0136\u01E8\u1E30]/g, 'K');
+    //      \u0139-\u0141              --> L
+    result = result.replace(/[\u0139-\u0141]/g, 'L');
+    //      \u1E40                     --> M
+    result = result.replace(/[\u1E40]/g, 'M');
+    //      \u00D1, \u0143-\u014A, \u1E44 --> N
+    result = result.replace(/[\u00D1\u0143-\u014A\u1E44]/g, 'N');
+    //      \u00D2-\u00D5, \u014C-\u0150, \u01A0, \u01D1, \u01EA, \u01EC, \u022A-\u0230, \u1ECC-\u1EDC --> O
+    result = result.replace(/[\u00D2-\u00D5\u014C-\u0150\u01A0\u01D1\u01EA\u01EC\u022A-\u0230\u1ECC-\u1EDC]/g, 'O');
+    //      \u00D6, \u00D8, \u0152, \u01FE --> OE
+    result = result.replace(/[\u00D6\u00D8\u0152\u01FE]/g, 'OE');
+    //      \u1E56                     --> P
+    result = result.replace(/[\u1E56]/g, 'P');
+    //      \u0154-\u0158              --> R
+    result = result.replace(/[\u0154-\u0158]/g, 'R');
+    //      \u015A-\u0160, \u0218, \u1E60, \u1E62 --> S
+    result = result.replace(/[\u015A-\u0160\u0218\u1E60\u1E62]/g, 'S');
+    //      \u00DF, \u1E9E        --> SS
+    result = result.replace(/[\u00DF\u1E9E]/g, 'SS');
+    //      \u0162-\u0166, \u021A, \u1E6A --> T
+    result = result.replace(/[\u0162-\u0166\u021A\u1E6A]/g, 'T');
+    //      \u00DE                     --> TH
+    result = result.replace(/[\u00DE]/g, 'TH');
+    //      \u00D9-\u00DB, \u0168-\u0172, \u01AF, \u01D3, \u1EE4-\u1EF0 --> U
+    result = result.replace(/[\u00D9-\u00DB\u0168-\u0172\u01AF\u01D3\u1EE4-\u1EF0]/g, 'U');
+    //      \u00DC                     --> UE
+    result = result.replace(/[\u00DC]/g, 'UE');
+    //      \u0174, \u1E80-\u1E84      --> W
+    result = result.replace(/[\u0174\u1E80-\u1E84]/g, 'W');
+    //      \u1E8C                     --> X
+    result = result.replace(/[\u1E8C]/g, 'X');
+    //      \u00DD, \u0176, \u0178, \u0232, \u1E8E, \u1EF2-\u1EF8 --> Y
+    result = result.replace(/[\u00DD\u0176\u0178\u0232\u1E8E\u1EF2-\u1EF8]/g, 'Y');
+    //      \u0179-\u017D, \u01B7, \u01EE, \u1E90, \u1E92 --> Z
+    result = result.replace(/[\u0179-\u017D\u01B7\u01EE\u1E90\u1E92]/g, 'Z');
+
+    // 6. Replace arabic numerals 1-9 with roman numerals I-IV if present. Arabic zero is not valid input.
+    result = result.replace(/[1]/g, 'I');
+    result = result.replace(/[2]/g, 'II');
+    result = result.replace(/[3]/g, 'III');
+    result = result.replace(/[4]/g, 'IV');
+    result = result.replace(/[5]/g, 'V');
+    result = result.replace(/[6]/g, 'VI');
+    result = result.replace(/[7]/g, 'VII');
+    result = result.replace(/[8]/g, 'VIII');
+    result = result.replace(/[9]/g, 'IX');
+
+    // 7. Remove all remaining characters that are not A-Z or '<' (cf. [1], p. 20)
+    result = result.replace(/[^A-Z<]/g, '<');
+
+    return result
+}
+
 const utils: IUtils = {
     shortHashLen: shortHashLen,
     pattern: pattern,
@@ -75,6 +176,7 @@ const utils: IUtils = {
     isTelValid: (tel: string) => telRegExp.test(tel),
     isEMailValid: (eMail: string) => eMailRegExp.test(eMail),
     isStandardisedNameValid: (value: string) => standardisedNameRegExp.test(value),
+    convertToICAO: convertToICAO,
     isUrlValid: (url: string) => urlRegExp.test(url),
     getIndent: getIndent,
     pickerDateFormat: 'dd.MM.yyyy',

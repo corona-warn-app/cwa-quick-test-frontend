@@ -70,6 +70,13 @@ const PersonInputs = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [givenName, familyName, standardisedGivenName, standardisedFamilyName, dateOfBirth, sex, props.dccConsent])
 
+    const handleNameChanged = (changedValue: string, setName: (value: string) => void, setStandardisedName: (value: string) => void) => {
+        // forward the input to the normal setter
+        setName(changedValue);
+
+        // convert to ICAO and set the std field
+        setStandardisedName(utils.convertToICAO(changedValue));
+    }
 
     const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {
         const upperCaseChangedValue = changedValue.toUpperCase();
@@ -104,7 +111,7 @@ const PersonInputs = (props: any) => {
             {/* first name input */}
             < FormGroupInput controlId='formGivenNameInput' title={t('translation:first-name')}
                 value={givenName}
-                onChange={(evt: any) => setGivenName(evt.target.value)}
+                onChange={(evt: any) => handleNameChanged(evt.target.value, setGivenName, setStandardisedGivenName)}
                 required
                 maxLength={50}
             />
@@ -112,7 +119,7 @@ const PersonInputs = (props: any) => {
             {/* name input */}
             < FormGroupInput controlId='formNameInput' title={t('translation:name')}
                 value={familyName}
-                onChange={(evt: any) => setFamilyName(evt.target.value)}
+                onChange={(evt: any) => handleNameChanged(evt.target.value, setFamilyName, setStandardisedFamilyName)}
                 required
                 maxLength={50}
             />
