@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Fade, Form, Row } from 'react-bootstrap'
+import { Card, Col, Fade, Form, Row } from 'react-bootstrap'
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -33,6 +33,7 @@ import { useGetPDF, useGetPositiveForTimeRange } from '../api';
 import { TestResult } from '../misc/enum';
 import CardHeader from './modules/card-header.component';
 import AppContext from '../misc/appContext';
+import CardFooter from './modules/card-footer.component';
 
 
 const Reports = (props: any) => {
@@ -46,8 +47,9 @@ const Reports = (props: any) => {
     const [endDate, setEndDate] = React.useState<Date | undefined>(new Date());
     const [selectedHash, setSelectedHash] = React.useState<string>();
     const [filterTestResult, setFilterTestResult] = React.useState<TestResult>();
+    const [printBtnDisabled, setPrintBtnDisabled] = React.useState(true);
 
-    const parentRef = React.useRef<HTMLDivElement>(null);
+    const pdfRef = React.useRef<HTMLIFrameElement>(null);
 
     React.useEffect(() => {
         if (context.navigation && context.valueSets)
@@ -66,7 +68,7 @@ const Reports = (props: any) => {
         }
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
-    
+
     const qtArchive = useGetPositiveForTimeRange(filterTestResult, startDate, endDate, undefined, handleError);
     const pdf = useGetPDF(selectedHash);
 
@@ -111,6 +113,15 @@ const Reports = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filterTestResult])
 
+    const printPDF = () => {
+        if (pdfRef.current?.contentWindow) {
+            pdfRef.current.contentWindow.print();
+        }
+    }
+
+    const handleLoad = () => {
+        setPrintBtnDisabled(!!!pdfRef.current?.contentWindow?.document.body.childElementCount)
+    }
 
     return (
         !(isInit && context && context.valueSets)
@@ -222,9 +233,18 @@ const Reports = (props: any) => {
                                     <Col md='3'>
                                         <PagedList data={qtArchive} onSelected={setSelectedHash} />
                                     </Col>
-                                    <Col md='9' ref={parentRef}>
-                                        {!pdf ? <></> : <>
-                                            <iframe title='qt-IFrame' src={pdf} className='qt-IFrame' /></>
+                                    <Col md='9'>
+                                        {!pdf
+                                            ? <></>
+                                            : <>
+                                                <iframe
+                                                    ref={pdfRef}
+                                                    title='qt-IFrame'
+                                                    src={pdf}
+                                                    className='qt-IFrame'
+                                                    onLoad={handleLoad}
+                                                />
+                                            </>
                                         }
                                     </Col>
                                 </Row>
@@ -234,19 +254,12 @@ const Reports = (props: any) => {
                     {/*
     footer
     */}
-                    <Card.Footer id='data-footer'>
-                        <Row>
-                            <Col sm='6' md='3' className='pr-md-0'>
-                                <Button
-                                    className='my-1 my-md-0 p-0'
-                                    block
-                                    onClick={context.navigation!.toLanding}
-                                >
-                                    {t('translation:cancel')}
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Card.Footer>
+                    <CardFooter
+                        okText={t('translation:print')}
+                        disabled={printBtnDisabled}
+                        handleOk={printPDF}
+                        handleCancel={context.navigation!.toLanding}
+                    />
                 </Card>
             </Fade>
     )
