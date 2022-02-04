@@ -150,6 +150,96 @@ const convertToICAO = (input: string): string => {
     //      \u0179-\u017D, \u01B7, \u01EE, \u1E90, \u1E92 --> Z
     result = result.replace(/[\u0179-\u017D\u01B7\u01EE\u1E90\u1E92]/g, 'Z');
 
+    // Transliteration of Cyrillic Characters
+    // \u0410 -> A
+    result = result.replace(/[\u0410]/g, 'A');
+    // \u0411 -> B
+    result = result.replace(/[\u0411]/g, 'B');
+    // \u0401 -> E 
+    result = result.replace(/[\u0401]/g, 'E');
+    // \u0402 -> D
+    result = result.replace(/[\u0402]/g, 'D');
+    // \u0404 -> IE
+    result = result.replace(/[\u0404]/g, 'IE');
+    // \u0405 -> DZ
+    result = result.replace(/[\u0405]/g, 'DZ');
+    // \u0406,\u0407 -> I
+    result = result.replace(/[\u0406\u0407]/g, 'I');
+    // \u0408 -> J
+    result = result.replace(/[\u0408]/g, 'J');
+    // \u0409 -> LJ
+    result = result.replace(/[\u0409]/g, 'LJ');
+    // \u040A -> NJ
+    result = result.replace(/[\u040A]/g, 'NJ');
+    // \u040C -> K
+    result = result.replace(/[\u040C]/g, 'K');
+    // \u040E -> U
+    result = result.replace(/[\u040E]/g, 'U');
+    // \u040F -> DZ 
+    result = result.replace(/[\u040F]/g, 'DZ');
+    // \u0412 -> V
+    result = result.replace(/[\u0412]/g, 'V');
+    // \u0413 -> G
+    result = result.replace(/[\u0413]/g, 'G');
+    // \u0414 -> D
+    result = result.replace(/[\u0414]/g, 'D');
+    // \u0415 -> E
+    result = result.replace(/[\u0415]/g, 'E');
+    // \u0416 -> ZH
+    result = result.replace(/[\u0416]/g, 'ZH');
+    // \u0417 -> Z
+    result = result.replace(/[\u0417]/g, 'Z');
+    // \u0418,\u0419 -> I
+    result = result.replace(/[\u0418\u0419]/g, 'I');
+    // \u041A -> K
+    result = result.replace(/[\u041A]/g, 'K');
+    // \u041B -> L
+    result = result.replace(/[\u041B]/g, 'L');
+    // \u041C -> M
+    result = result.replace(/[\u041C]/g, ';');
+    // \u041D -> N
+    result = result.replace(/[\u041D]/g, 'N');
+    // \u041E -> O
+    result = result.replace(/[\u041E]/g, 'O');
+    // \u041F -> P
+    result = result.replace(/[\u041F]/g, 'P');
+    // \u0420 -> R
+    result = result.replace(/[\u0420]/g, 'R');
+    // \u0421 -> S
+    result = result.replace(/[\u0421]/g, 'S');
+    // \u0422 -> T
+    result = result.replace(/[\u0422]/g, 'T');
+    // \u0423 -> U
+    result = result.replace(/[\u0423]/g, 'U');
+    // \u0424 -> F
+    result = result.replace(/[\u0424]/g, 'F');
+    // \u0425 -> KH 
+    result = result.replace(/[\u0425]/g, 'KH');
+    // \u0426 -> TS 
+    result = result.replace(/[\u0426]/g, 'TS');
+    // \u0427 -> CH 
+    result = result.replace(/[\u0427]/g, 'CH');
+    // \u0428 -> SH
+    result = result.replace(/[\u0428]/g, 'SH');
+    // \u0429 -> SHCH
+    result = result.replace(/[\u0429]/g, 'SHCH');
+    // \u042A -> IE
+    result = result.replace(/[\u042A]/g, 'IE');
+    // \u042B -> Y
+    result = result.replace(/[\u042B]/g, 'Y');
+    // \u042D -> E
+    result = result.replace(/[\u042D]/g, 'E');
+    // \u042E -> IU 
+    result = result.replace(/[\u042E]/g, 'IU');
+    // \u042F -> IA
+    result = result.replace(/[\u042F]/g, 'IA');
+    // \u046A -> U
+    result = result.replace(/[\u046A]/g, 'U');
+    // \u0474 -> Y
+    result = result.replace(/[\u0474]/g, 'Y');
+    // \u0490,\u0492 -> G
+    result = result.replace(/[\u0490\u0492]/g, 'F');
+
     // 6. Replace arabic numerals 1-9 with roman numerals I-IV if present. Arabic zero is not valid input.
     result = result.replace(/[1]/g, 'I');
     result = result.replace(/[2]/g, 'II');
