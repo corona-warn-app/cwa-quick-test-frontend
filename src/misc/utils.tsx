@@ -240,6 +240,147 @@ const convertToICAO = (input: string): string => {
     // \u0490,\u0492 -> G
     result = result.replace(/[\u0490\u0492]/g, 'F');
 
+    // Transliteration of Arabic Script
+    //
+    // \u0651 this is a special case, double the unicode before
+    //  AّBC (A\u0651BC) -> AABC
+    result = result.replace(/(.{1})\u0651/, "$1$1")
+
+    // \u0640,\u064B-\u064F,\u0650,\u0652,\u0670,\u069C,\u06A2,\u06A7,\u06A8 -> (Not encoded)
+    result = result.replace(/\u0640\u064B-\u064F\u0650\u0652\u0670\u069C\u06A2\u06A7\u06A8/,'')
+    // \u0621 -> XE
+    result = result.replace(/\u0621/,'XE')
+    // \u0622 -> XAA
+    result = result.replace(/\u0622/,'XAA')
+    // \u0623 -> XAE
+    result = result.replace(/\u0623/,'XAE')
+    // \u0624 -> U
+    result = result.replace(/\u0624/,'U')
+    // \u0625 -> I
+    result = result.replace(/\u0625/,'I')
+    // \u0626 -> XI
+    result = result.replace(/\u0626/,'XI')
+    // \u0627 -> A
+    result = result.replace(/\u0627/,'A')
+    // \u0628 -> B
+    result = result.replace(/\u0628/,'B')
+    // \u0629 -> XTA
+    result = result.replace(/\u0629/,'XTA')
+    // \u062A -> T
+    result = result.replace(/\u062A/,'T')
+    // \u062B -> XTH
+    result = result.replace(/\u062B/,'XTH')
+    // \u062C -> J
+    result = result.replace(/\u062C/,'J')
+    // \u062D -> XH
+    result = result.replace(/\u062D/,'XH')
+    // \u062E -> XKH
+    result = result.replace(/\u062E/,'XKH')
+    // \u062F -> D
+    result = result.replace(/\u062F/,'D')
+    // \u0630 -> XDH
+    result = result.replace(/\u0630/,'XDH')
+    // \u0631 -> R
+    result = result.replace(/\u0631/,'R')
+    // \u0632 -> Z
+    result = result.replace(/\u0632/,'Z')
+    // \u0633 -> S
+    result = result.replace(/\u0633/,'S')
+    // \u0634 -> XSH
+    result = result.replace(/\u0634/,'XSH')
+    // \u0635 -> XSS
+    result = result.replace(/\u0635/,'XSS')
+    // \u0636 -> XDZ
+    result = result.replace(/\u0636/,'XDZ')
+    // \u0637 -> XTT
+    result = result.replace(/\u0637/,'XTT')
+    // \u0638 -> XZZ
+    result = result.replace(/\u0638/,'XZZ')
+    // \u0639 -> E
+    result = result.replace(/\u0639/,'E')
+    // \u063A -> G
+    result = result.replace(/\u063A/,'G')
+    // \u0641 -> F
+    result = result.replace(/\u0641/,'F')
+    // \u0642 -> Q
+    result = result.replace(/\u0642/,'Q')
+    // \u0643 -> K
+    result = result.replace(/\u0643/,'K')
+    // \u0644 -> L
+    result = result.replace(/\u0644/,'L')
+    // \u0645 -> M
+    result = result.replace(/\u0645/,'M')
+    // \u0646 -> N
+    result = result.replace(/\u0646/,'N')
+    // \u0647 -> H
+    result = result.replace(/\u0647/,'H')
+    // \u0648 -> W
+    result = result.replace(/\u0648/,'W')
+    // \u0649 -> XAY
+    result = result.replace(/\u0649/,'XAY')
+    // \u064A -> Y
+    result = result.replace(/\u064A/,'Y')
+    // \u0671 -> XXA
+    result = result.replace(/\u0671/,'XXA')
+    // \u0679 -> XXT
+    result = result.replace(/\u0679/,'XXT')
+    // \u067C -> XRT
+    result = result.replace(/\u067C/,'XRT')
+    // \u067E -> P
+    result = result.replace(/\u067E/,'P')
+    // \u0681 -> XKE
+    result = result.replace(/\u0681/,'XKE')
+    // \u0685 -> XXH
+    result = result.replace(/\u0685/,'XXH')
+    // \u0686 -> XC
+    result = result.replace(/\u0686/,'XC')
+    // \u0688 -> XXD
+    result = result.replace(/\u0688/,'XXD')
+    // \u0689 -> XDR
+    result = result.replace(/\u0689/,'XDR')
+    // \u0691 -> XXR
+    result = result.replace(/\u0691/,'XXR')
+    // \u0693 -> XRR
+    result = result.replace(/\u0693/,'XRR')
+    // \u0696 -> XRX
+    result = result.replace(/\u0696/,'XRX')
+    // \u0698 -> XJ
+    result = result.replace(/\u0698/,'XJ')
+    // \u069A -> XXS
+    result = result.replace(/\u069A/,'XXS')
+    // \u06A9 -> XKK
+    result = result.replace(/\u06A9/,'XKK')
+    // \u06AB -> XXK
+    result = result.replace(/\u06AB/,'XXK')
+    // \u06AD -> XNG
+    result = result.replace(/\u06AD/,'XNG')
+    // \u06AF -> XGG
+    result = result.replace(/\u06AF/,'XGG')
+    // \u06BA -> XNN
+    result = result.replace(/\u06BA/,'XNN')
+    // \u06BC -> XXN
+    result = result.replace(/\u06BC/,'XXN')
+    // \u06BE -> XDO
+    result = result.replace(/\u06BE/,'XDO')
+    // \u06C0 -> XYH
+    result = result.replace(/\u06C0/,'XYH')
+    // \u06C1 -> XXG
+    result = result.replace(/\u06C1/,'XXG')
+    // \u06C2 -> XGE
+    result = result.replace(/\u06C2/,'XGE')
+    // \u06C3 -> XTG
+    result = result.replace(/\u06C3/,'XTG')
+    // \u06CC -> XYA
+    result = result.replace(/\u06CC/,'XYA')
+    // \u06CD -> XXY
+    result = result.replace(/\u06CD/,'XXY')
+    // \u06D0 -> Y
+    result = result.replace(/\u06D0/,'Y')
+    // \u06D2 -> XYB
+    result = result.replace(/\u06D2/,'XYB')
+    // \u06D3 -> XBE
+    result = result.replace(/\u06D3/,'XBE')
+
     // 6. Replace arabic numerals 1-9 with roman numerals I-IV if present. Arabic zero is not valid input.
     result = result.replace(/[1]/g, 'I');
     result = result.replace(/[2]/g, 'II');
