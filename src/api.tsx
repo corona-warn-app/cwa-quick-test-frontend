@@ -164,6 +164,11 @@ export const usePostTestResult = (testResult: ITestResult | undefined, processId
 
         if (testResult && processId) {
 
+            // shorten the manufactorer name for display purposes (PDF)
+            if (testResult.dccTestManufacturerDescription && testResult.dccTestManufacturerDescription.length > 100) {
+                testResult.dccTestManufacturerDescription = testResult.dccTestManufacturerDescription.substring(0, 100);
+            }
+
             const uri = '/api/quicktest/' + processId + '/testResult';
             const body = JSON.stringify(testResult);
 
@@ -309,7 +314,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
     }, [uuidHash]);
 
     const deleteQuicktest = (processId: string) => {
-        
+
         if (processId) {
             const uri = '/api/quicktest/' + processId;
             const header = {
