@@ -396,7 +396,7 @@ const GroupModal = (props: any) => {
                                         pattern={utils.pattern.url}
                                     />
 
-                                    < FormGroupTextarea controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')} placeholder={t('translation:address-testcenter-placeholder')}
+                                    < FormGroupTextarea controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
                                         value={displayOpeningHours}
                                         onChange={(evt: any) => {
                                             changeOpeningHoursHandler('openingHours', evt.target.value);
