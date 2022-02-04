@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse, Dropdown, FormControl } from 'react-bootstrap'
+import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse, Dropdown } from 'react-bootstrap'
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -59,7 +59,7 @@ const GroupModal = (props: any) => {
     const [selectedDropdownValue, setSelectedDropdownValue] = React.useState<string>(dropdownList[0]);
     const [websiteValue, setWebsiteValue] = React.useState('');
     const [displayOpeningHours, setDisplayOpeningHours] = React.useState('');
-    const [errorOpeningHour, setErrorOpeningHour] = React.useState<string>('');
+    const [errorOpeningHour, setErrorOpeningHour] = React.useState('');
 
     const groupReloaded = (group: IGroupDetails) => {
         if (group) {
@@ -96,13 +96,15 @@ const GroupModal = (props: any) => {
 
     React.useEffect(() => {
         if (group) {
-            setIsReady(true);
-            const options = getOptions();
-            setOptions(options);
+
+            setOptions(getOptions());
             setDisplayOpeningHours(
                 group.openingHours?.map(
                     (element: string) => element)
-                    .join('\n'));
+                    .join('\n')
+            );
+
+            setIsReady(true);
         }
 
         setIsNew(!(group && group.id));
