@@ -200,7 +200,7 @@ export const FormGroupInlineRadio = (props: any) => {
                     onChange={props.onChange}
                     required={props.required}
                 />
-                <Form.Label className='rdb-label mb-0'>{props.title}</Form.Label>
+                <Form.Label className='rdb-label mb-0 txt-no-wrap'>{props.title}</Form.Label>
             </Form.Check>
         </Form.Group>
     )
