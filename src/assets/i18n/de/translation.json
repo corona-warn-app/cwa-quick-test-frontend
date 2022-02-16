@@ -133,6 +133,8 @@
   "searchPortalWebsitePlaceholder": "www.example.de",
   "searchPortalWebsiteTooltip": "Bitte wählen Sie zwischen 'https://' oder 'http://' und tragen sie anschließend hier ihre Website ein. Z. B.: www.example.de",
   "searchPortalOpeningHours": "Öffnungszeiten",
+  "openening-hours-to-long-error": "Entweder ist der angegebene Text zu lang oder er enthält falsche Zeichen. Es sind 64 Zeichen pro Zeile erlaubt.",
+  "opening-hours-to-much-lines-error": "Es können nur sieben Zeilen eingegeben werden.",
   "searchPortalAppointmentRequired": "Terminvereinbarung notwendig",
   "RAT-list-info": "Die in der DCC-Auswahl gelisteten Tests beruhen auf einer auf EU-Ebene abgestimmten Liste und beinhalten auch Tests, die in Deutschland nicht erstattungsfähig sind. Die Erstattungsfähigkeit muss vom Betreiber selbst geprüft werden. Abgleich mit ",
   "RAT-list-info-link": "https://antigentest.bfarm.de/ords/f?p=110:100:12807215185840:::::&tz=2:00",

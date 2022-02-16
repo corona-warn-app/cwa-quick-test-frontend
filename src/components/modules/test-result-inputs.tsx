@@ -80,10 +80,13 @@ const TestResultInputs = (props: any) => {
         const value = evt.currentTarget.value;
 
         if (tests && value) {
-            const id = (value as string).slice(0, 8);
-            const name = (value as string).slice(11);
+            const strVal: string = value;
+            const splitIndex = strVal.indexOf('-');
 
-            const find = tests.find((item) => (value.length <= 15 || item.testBrandName === name) && item.testBrandId === id);
+            const id = strVal.slice(0, splitIndex - 1);
+            const name = strVal.slice(splitIndex + 2);
+
+            const find = tests.find((item) => (strVal.length <= 15 || item.testBrandName === name) && item.testBrandId === id);
             if (find) {
                 setTestId(find.testBrandId);
                 setTestName(find.testBrandName);
@@ -102,6 +105,31 @@ const TestResultInputs = (props: any) => {
     }
     const handleTestNameChange = (evt: any) => {
         handleTestChange(evt, setTestName);
+    }
+
+    const byId = (a: ITests, b: ITests): number => {
+        if (a.testBrandId < b.testBrandId) {
+            return -1;
+        }
+        if (a.testBrandId > b.testBrandId) {
+            return 1;
+        }
+
+        // names must be equal
+        return 0;
+    }
+    const byName = (a: ITests, b: ITests): number => {
+        const nameA = a.testBrandName.toUpperCase(); // ignore upper and lowercase
+        const nameB = b.testBrandName.toUpperCase(); // ignore upper and lowercase
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+
+        // names must be equal
+        return 0;
     }
 
 
