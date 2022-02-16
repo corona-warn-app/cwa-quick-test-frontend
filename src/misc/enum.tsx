@@ -21,9 +21,9 @@
 
 
 export enum TestResult {
-    PCR_NEGATIVE = 1,
-    PCR_POSITIVE = 2,
-    PCR_INVALID = 3,
+    PCR_NEGATIVE = 11,
+    PCR_POSITIVE = 12,
+    PCR_INVALID = 13,
     NEGATIVE = 6,
     POSITIVE = 7,
     INVALID = 8,
