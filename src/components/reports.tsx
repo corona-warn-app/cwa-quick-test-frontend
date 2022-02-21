@@ -33,6 +33,7 @@ import { useGetPDF, useGetPositiveForTimeRange } from '../api';
 import { TestResult } from '../misc/enum';
 import CardHeader from './modules/card-header.component';
 import AppContext from '../misc/appContext';
+import { FormGroupInlineRadio } from './modules/form-group.component';
 
 
 const Reports = (props: any) => {
@@ -66,7 +67,7 @@ const Reports = (props: any) => {
         }
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
-    
+
     const qtArchive = useGetPositiveForTimeRange(filterTestResult, startDate, endDate, undefined, handleError);
     const pdf = useGetPDF(selectedHash);
 
@@ -156,58 +157,26 @@ const Reports = (props: any) => {
 
                             <Col xs='7' sm='9' className='d-flex'>
                                 <Row>
-                                    <Form.Group as={Col} xs='12' sm='6' md='3' className='d-flex mb-0' controlId='filterTestResult-radio1'>
-                                        <Form.Check className='d-flex align-self-center'>
-                                            <Form.Check.Input
-                                                className='rdb-input'
-                                                type='radio'
-                                                name="filterTestResult-radios"
-                                                id="filterTestResult-radio1"
-                                                checked={filterTestResult === undefined}
-                                                onChange={() => setFilterTestResult(undefined)}
-                                            />
-                                            <Form.Label className='rdb-label mb-0'>{t('translation:filter-none')}</Form.Label>
-                                        </Form.Check>
-                                    </Form.Group>
-                                    <Form.Group as={Col} xs='12' sm='6' md='3' className='d-flex mb-0' controlId='filterTestResult-radio2'>
-                                        <Form.Check className='d-flex align-self-center'>
-                                            <Form.Check.Input required
-                                                className='rdb-input'
-                                                type='radio'
-                                                name="filterTestResult-radios"
-                                                id="filterTestResult-radio2"
-                                                checked={filterTestResult === TestResult.POSITIVE}
-                                                onChange={() => setFilterTestResult(TestResult.POSITIVE)}
-                                            />
-                                            <Form.Label className='rdb-label mb-0'>{t('translation:result-positive')}</Form.Label>
-                                        </Form.Check>
-                                    </Form.Group>
-                                    <Form.Group as={Col} xs='12' sm='6' md='3' className='d-flex mb-0' controlId='filterTestResult-radio3'>
-                                        <Form.Check className='d-flex align-self-center'>
-                                            <Form.Check.Input
-                                                className='rdb-input'
-                                                type='radio'
-                                                name="filterTestResult-radios"
-                                                id="filterTestResult-radio3"
-                                                checked={filterTestResult === TestResult.NEGATIVE}
-                                                onChange={() => setFilterTestResult(TestResult.NEGATIVE)}
-                                            />
-                                            <Form.Label className='rdb-label mb-0'>{t('translation:result-negative')}</Form.Label>
-                                        </Form.Check>
-                                    </Form.Group>
-                                    <Form.Group as={Col} xs='12' sm='6' md='3' className='d-flex mb-0' controlId='filterTestResult-radio4'>
-                                        <Form.Check className='d-flex align-self-center'>
-                                            <Form.Check.Input
-                                                className='rdb-input'
-                                                type='radio'
-                                                name="filterTestResult-radios"
-                                                id="filterTestResult-radio4"
-                                                checked={filterTestResult === TestResult.INVALID}
-                                                onChange={() => setFilterTestResult(TestResult.INVALID)}
-                                            />
-                                            <Form.Label className='rdb-label mb-0'>{t('translation:result-failed')}</Form.Label>
-                                        </Form.Check>
-                                    </Form.Group>
+                                    <FormGroupInlineRadio controlId='filterTestResult-radio1' name="filterTestResult-radios" sm='6' md='3'
+                                        title={t('translation:filter-none')}
+                                        checked={filterTestResult === undefined}
+                                        onChange={() => setFilterTestResult(undefined)}
+                                    />
+                                    <FormGroupInlineRadio controlId='filterTestResult-radio2' name="filterTestResult-radios" sm='6' md='3'
+                                        title={t('translation:result-positive')}
+                                        checked={filterTestResult === TestResult.POSITIVE}
+                                        onChange={() => setFilterTestResult(TestResult.POSITIVE)}
+                                    />
+                                    <FormGroupInlineRadio controlId='filterTestResult-radio3' name="filterTestResult-radios" sm='6' md='3'
+                                        title={t('translation:result-negative')}
+                                        checked={filterTestResult === TestResult.NEGATIVE}
+                                        onChange={() => setFilterTestResult(TestResult.NEGATIVE)}
+                                    />
+                                    <FormGroupInlineRadio controlId='filterTestResult-radio4' name="filterTestResult-radios" sm='6' md='3'
+                                        title={t('translation:result-failed')}
+                                        checked={filterTestResult === TestResult.INVALID}
+                                        onChange={() => setFilterTestResult(TestResult.INVALID)}
+                                    />
                                 </Row>
                             </Col>
                         </Row>

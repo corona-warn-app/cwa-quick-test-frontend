@@ -22,4 +22,13 @@
 export default interface StatisticData {
     totalTestCount: number;
     positiveTestCount: number;
+    pcrTestCount: number;
+    pcrPositiveTestCount: number;
+    ratTestCount: number;
+    ratPositiveTestCount: number;
+}
+
+export interface DisplayStatisticData extends StatisticData {
+    label: string;
+    key: number;
 }

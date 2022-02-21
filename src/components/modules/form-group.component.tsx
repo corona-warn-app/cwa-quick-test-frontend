@@ -186,10 +186,17 @@ export const FormGroupPermissionCkb = (props: any) => {
     )
 }
 
-export const FormGroupSexRadio = (props: any) => {
+export const FormGroupInlineRadio = (props: any) => {
 
     return (!props ? <></> :
-        <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId={props.controlId}>
+        <Form.Group
+            as={Col}
+            controlId={props.controlId}
+            className='d-flex mb-0'
+            xs='12'
+            sm={props.sm ? props.sm : '4'}
+            md={props.md}
+        >
             <Form.Check className='d-flex align-self-center'>
                 <Form.Check.Input
                     className='rdb-input'
@@ -200,7 +207,7 @@ export const FormGroupSexRadio = (props: any) => {
                     onChange={props.onChange}
                     required={props.required}
                 />
-                <Form.Label className='rdb-label mb-0'>{props.title}</Form.Label>
+                <Form.Label className='rdb-label mb-0 txt-no-wrap'>{props.title}</Form.Label>
             </Form.Check>
         </Form.Group>
     )

@@ -358,6 +358,7 @@ hr {
     position: inherit;
     width: 20px;
     height: 20px;
+    margin-top: 0.1rem;;
 }
 .rdb-label {
     height: 20px;
@@ -501,4 +502,48 @@ td {
     display: flex;
     align-self: baseline;
     margin-left: 0.1rem;
+}
+
+.row-height-half {
+    height: 50%;
+}
+
+.space-five {
+    padding: 5px;
+}
+
+.width-one {
+    width: 1%;
+}
+
+.width-eight-houndred {
+    min-width: 800px;
+}
+
+.add-statistic {
+    width: 100%;
+    display: flex;
+    direction: row;
+    align-items: center;
+    box-shadow: 4px 2px 8px rgba(0, 0, 0, 0.15);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin: 0px;
+    background-color: white;
+    flex-wrap: wrap;
+}
+
+.add-statistic-item {
+    display: flex;
+    direction: row;
+    width: 100%;
+}
+
+.btn-add-statistic-icon {
+    padding: 0px;
+    border: 0px;
+    width:24px;
+    height:24px;  
 }
