@@ -20,20 +20,29 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Fade, Form, Row } from 'react-bootstrap'
+import { Button, Card, Col, Fade, Form, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
+import { useKeycloak } from '@react-keycloak/web';
 
 import CwaSpinner from './spinner/spinner.component';
-import { useStatistics } from '../api';
+import { useGetStatisticsFromTo, useStatistics } from '../api';
 import CardHeader from './modules/card-header.component';
 import AppContext from '../misc/appContext';
+import StatisticDataRow, { StatisticDateSelectionRow } from './modules/statistic-data.component';
+import StatisticData from '../misc/statistic-data';
+import utils from '../misc/utils';
+import { format } from "date-fns";
 
 const Statistics = (props: any) => {
 
     const context = React.useContext(AppContext);
     const { t } = useTranslation();
+    const { keycloak } = useKeycloak();
+
+
+
 
     const handleError = (error: any) => {
         let msg = '';
@@ -48,15 +57,83 @@ const Statistics = (props: any) => {
         props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
     }
 
+    const [pcrEnabled, setPcrEnabled] = React.useState(false);
     const [statisticData,
         thisWeekStatisticData,
         thisMonthStatisticData] = useStatistics(undefined, handleError);
-    const [isInit, setIsInit] = React.useState(false)
+    const [statisticsResult,
+        getStatisticsFromTo] = useGetStatisticsFromTo(undefined, handleError);
+    const [isInit, setIsInit] = React.useState(false);
+    const [statisticRows, setStatisticRows] = React.useState<any[]>([]);
+    const [dateValidFrom, setDateValidFrom] = React.useState<Date>();
+    const [dateValidTo, setDateValidTo] = React.useState<Date>();
 
     React.useEffect(() => {
-        if (context.navigation && context.valueSets && statisticData)
+
+        if (keycloak.idTokenParsed) {
+            setPcrEnabled(!!(keycloak.idTokenParsed as any).pcr_enabled);
+        }
+
+    }, [keycloak])
+
+    React.useEffect(() => {
+        if (context.navigation && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData) {
+            setStatisticRows([
+                { ...statisticData, label: t('translation:today'), key: Math.random() },
+                { ...thisWeekStatisticData, label: t('translation:thisWeek'), key: Math.random() },
+                { ...thisMonthStatisticData, label: t('translation:thisMonth'), key: Math.random() }
+            ])
             setIsInit(true);
-    }, [context.navigation, context.valueSets, statisticData])
+        }
+    }, [context.navigation, context.valueSets, statisticData, thisWeekStatisticData, thisMonthStatisticData])
+
+    React.useEffect(() => {
+        if (dateValidFrom || (dateValidFrom && dateValidTo)) {
+
+            let startDate = new Date(dateValidFrom);
+            let endDate: Date;
+
+            startDate.setUTCHours(0, 0, 0, 0);
+
+            if (dateValidTo) {
+                endDate = new Date(dateValidTo);
+                endDate.setUTCHours(0, 0, 0, 0);
+                let day = endDate.getDate() + 1;
+                endDate.setDate(day);
+            } else {
+                let fromDate = new Date(startDate);
+                let day = fromDate.getDate() + 1;
+                endDate = new Date(fromDate.setDate(day));
+            }
+
+            getStatisticsFromTo(startDate, endDate);
+        }
+    }, [dateValidFrom, dateValidTo])
+
+    React.useEffect(() => {
+        if (statisticsResult) {
+
+            let newLabel: string | undefined = dateValidFrom ? format(dateValidFrom, utils.pickerDateFormat) : undefined;
+            if (newLabel && dateValidTo) {
+                newLabel += ' - ' + format(dateValidTo, utils.pickerDateFormat);
+            }
+
+            setStatisticRows([...statisticRows, { ...statisticsResult, label: newLabel, key: Math.random() }]);
+        }
+    }, [statisticsResult])
+
+    const handleNewStatisticRow = (dateValidFrom: Date, dateValidTo: Date) => {
+        setDateValidFrom(dateValidFrom);
+        setDateValidTo(dateValidTo);
+    }
+
+    const handleDeleteStatisticRow = (key: number) => {
+        setStatisticRows((prevStatisticRows) => {
+            return prevStatisticRows.filter((row) => {
+                return row.key !== key
+            });
+        })
+    }
 
     return (
         !(isInit && context && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData)
@@ -69,78 +146,9 @@ const Statistics = (props: any) => {
     content area with patient inputs and check box
     */}
                     <Card.Body id='data-header'>
-                        <Row>
-                            <Col xs='12' md='3'>
-                                <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0'>{t('translation:today')}</Form.Label>
-                            </Col>
-                            <Col md='9'>
-                                <Row className='text-center'>
-                                    <Col >
-                                        {t('translation:totalTestCount')}
-                                    </Col>
-                                    <Col>
-                                        {t('translation:positiveTestCount')}
-                                    </Col>
-                                </Row>
-                                <Row className='text-center'>
-                                    <Col>
-                                        {statisticData!.totalTestCount}
-                                    </Col>
-                                    <Col>
-                                        {statisticData!.totalTestCount > 0 ? statisticData!.positiveTestCount + ' ( ' + (100 * statisticData!.positiveTestCount / statisticData!.totalTestCount).toFixed(2) + "% )" : undefined}
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
+                        <StatisticDateSelectionRow addRow={handleNewStatisticRow} />
                         <hr />
-                        <Row>
-                            <Col xs='12' md='3'>
-                                <Form.Label className='input-label jcc-xs-jcfs-md mb-md-0'>{t('translation:thisWeek')}</Form.Label>
-                            </Col>
-                            <Col md='9'>
-                                <Row className='text-center'>
-                                    <Col >
-                                        {t('translation:totalTestCount')}
-                                    </Col>
-                                    <Col>
-                                        {t('translation:positiveTestCount')}
-                                    </Col>
-                                </Row>
-                                <Row className='text-center'>
-                                    <Col>
-                                        {thisWeekStatisticData!.totalTestCount}
-                                    </Col>
-                                    <Col>
-                                        {thisWeekStatisticData!.totalTestCount > 0 ? thisWeekStatisticData!.positiveTestCount + ' ( ' + (100 * thisWeekStatisticData!.positiveTestCount / thisWeekStatisticData!.totalTestCount).toFixed(2) + "% )" : undefined}
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                        <hr />
-                        <Row>
-                            <Col xs='12' md='3'>
-                                <Card.Text className='input-label jcc-xs-jcfs-md mb-2 mb-md-0' >{t('translation:thisMonth')}</Card.Text>
-                            </Col>
-                            <Col md='9'>
-                                <Row className='text-center'>
-                                    <Col >
-                                        {t('translation:totalTestCount')}
-                                    </Col>
-                                    <Col>
-                                        {t('translation:positiveTestCount')}
-                                    </Col>
-                                </Row>
-                                <Row className='text-center'>
-                                    <Col>
-                                        {thisMonthStatisticData!.totalTestCount}
-                                    </Col>
-                                    <Col>
-                                        {thisMonthStatisticData!.totalTestCount > 0 ? thisMonthStatisticData!.positiveTestCount + ' ( ' + (100 * thisMonthStatisticData!.positiveTestCount / thisMonthStatisticData!.totalTestCount).toFixed(2) + "% )" : undefined}
-                                    </Col>
-                                </Row>
-                            </Col>
-                        </Row>
-                        <hr />
+                        <StatisticDataRow statisticData={statisticRows} pcrEnabled={pcrEnabled} deleteRow={handleDeleteStatisticRow} />
                     </Card.Body>
 
                     {/*
@@ -154,7 +162,7 @@ const Statistics = (props: any) => {
                                     block
                                     onClick={context.navigation!.toLanding}
                                 >
-                                    {t('translation:cancel')}
+                                    {t('translation:back')}
                                 </Button>
                             </Col>
                         </Row>

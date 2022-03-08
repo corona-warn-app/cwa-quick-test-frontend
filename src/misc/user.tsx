@@ -32,7 +32,7 @@ export interface IUser {
     password?: string,
 }
 
-export interface IDisplayUser extends IUser{
+export interface IDisplayUser extends IUser {
     displayGroup?: string | null
     displayRole?: string | null
 }
@@ -41,10 +41,10 @@ export interface IGroup {
     name: string,
     id: string,
     path: string,
-    children: IGroup[], 
+    children: IGroup[],
 }
 
-export interface IGroupNode { 
+export interface IGroupNode {
     group: IGroup,
     parentGroup?: string,
     level: number,
@@ -55,11 +55,12 @@ export interface IGroupDetails {
     // bsnr?: string,
     name: string,
     pocDetails: string,
+    enablePcr: boolean,
     pocId: string,
     searchPortalConsent: boolean,
     website?: string,
     email?: string,
-    openingHours?: string,
+    openingHours?: string[],
     appointmentRequired?: boolean,
     parentGroup?: string,
 }

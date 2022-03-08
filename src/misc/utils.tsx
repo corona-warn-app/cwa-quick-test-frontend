@@ -30,6 +30,7 @@ export interface IUtils {
     isStandardisedNameValid: (value: string) => boolean,
     convertToICAO: (value: string) => string, 
     isUrlValid: (value: string) => boolean,
+    isOpeningHoursValid: (value: string) => boolean,
     getIndent: (level: number) => JSX.Element[],
     pickerDateFormat: string,
     pickerDateTimeFormat: string,
@@ -44,10 +45,12 @@ const pattern = {
     zip: '^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$',
     houseNo: '^([1-9]{1}[0-9a-zA-Z-\\s/]{0,14})$',
     tel: '^([+]{1}[1-9]{1,2}|[0]{1}[1-9]{1})[0-9]{5,}$',
-    eMail: '^[\\w\\d\\.-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
+    eMail: '^[\\w\\d\\.!#$%&’*+/=?^_`{|}~-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
     standardisedName: '^[A-Z<]*$',
     url: '^(www\\.|http:\\/\\/|https:\\/\\/){0,1}?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,10}(:[0-9]{1,5})?(\\/.*)?$',
-    BSNR:'^[1-9]{1}\\d{8}$'
+    BSNR:'^[1-9]{1}\\d{8}$',
+    //openingHours:'^[\\w-\\d\\s]{0,64}$/gm'
+    openingHours:'^(.|\n){0,64}$'
 }
 
 const processNoRegExp = new RegExp(pattern.processNo);
@@ -56,6 +59,7 @@ const telRegExp = new RegExp(pattern.tel);
 const eMailRegExp = new RegExp(pattern.eMail);
 const standardisedNameRegExp = new RegExp(pattern.standardisedName);
 const urlRegExp = new RegExp(pattern.url);
+const openingHoursExp = new RegExp(pattern.openingHours);
 
 const getIndent = (level: number): JSX.Element[] => {
     const indent: JSX.Element[] = [];
@@ -409,6 +413,7 @@ const utils: IUtils = {
     isStandardisedNameValid: (value: string) => standardisedNameRegExp.test(value),
     convertToICAO: convertToICAO,
     isUrlValid: (url: string) => urlRegExp.test(url),
+    isOpeningHoursValid: (value: string) => openingHoursExp.test(value),
     getIndent: getIndent,
     pickerDateFormat: 'dd.MM.yyyy',
     pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',

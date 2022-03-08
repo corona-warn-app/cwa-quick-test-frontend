@@ -78,21 +78,28 @@ export const FormGroupTextarea = (props: any) => {
             <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
 
             <Col xs='7' sm='9' className='d-flex'>
-                <Form.Control
-                    className='qt-input qt-input-area'
-                    value={props.value}
-                    readOnly={props.readOnly}
-                    disabled={props.disabled}
-                    onClick={props.onClick}
-                    onChange={props.onChange}
-                    placeholder={props.placeholder ? props.placeholder : props.title}
-                    type={props.type ? props.type : 'text'}
-                    required={props.required}
-                    maxLength={props.maxLength}
-                    as='textarea'
-                />
+                <InputGroup>
+                    <Form.Control
+                        className='qt-input qt-input-area'
+                        value={props.value}
+                        readOnly={props.readOnly}
+                        disabled={props.disabled}
+                        onClick={props.onClick}
+                        onChange={props.onChange}
+                        placeholder={props.placeholder ? props.placeholder : props.title}
+                        type={props.type ? props.type : 'text'}
+                        required={props.required}
+                        maxLength={props.maxLength}
+                        rows={props.rows}
+                        isInvalid={props.isInvalid}
+                        as='textarea'
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {props.invalidText}
+                    </Form.Control.Feedback>
+                </InputGroup>
             </Col>
-        </Form.Group>
+        </Form.Group >
     )
 }
 
@@ -179,10 +186,17 @@ export const FormGroupPermissionCkb = (props: any) => {
     )
 }
 
-export const FormGroupSexRadio = (props: any) => {
+export const FormGroupInlineRadio = (props: any) => {
 
     return (!props ? <></> :
-        <Form.Group as={Col} xs='12' sm='4' className='d-flex mb-0' controlId={props.controlId}>
+        <Form.Group
+            as={Col}
+            controlId={props.controlId}
+            className='d-flex mb-0'
+            xs='12'
+            sm={props.sm ? props.sm : '4'}
+            md={props.md}
+        >
             <Form.Check className='d-flex align-self-center'>
                 <Form.Check.Input
                     className='rdb-input'
@@ -193,7 +207,7 @@ export const FormGroupSexRadio = (props: any) => {
                     onChange={props.onChange}
                     required={props.required}
                 />
-                <Form.Label className='rdb-label mb-0'>{props.title}</Form.Label>
+                <Form.Label className='rdb-label mb-0 txt-no-wrap'>{props.title}</Form.Label>
             </Form.Check>
         </Form.Group>
     )

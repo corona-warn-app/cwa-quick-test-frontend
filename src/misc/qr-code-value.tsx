@@ -23,6 +23,7 @@ import IQuickTest from './quick-test';
 import CryptoJS from 'crypto-js';
 import vCardParser from './vCard-parser';
 import utils from "./utils";
+import { TestType } from './enum';
 
 export interface IQRCodeValue {
     fn?: string,
@@ -35,9 +36,10 @@ export interface IQRCodeValue {
     hash?: string // SHA256 Hash
 }
 
-const baseUrl = 'https://s.coronawarn.app?v=1#';
+const sBaseUrl = 'https://s.coronawarn.app?v=1#';
+const pBaseUrl = 'https://p.coronawarn.app?v=1#';
 
-export const getQrCodeValueString = (guid: string, dccConsent?: boolean, fn?: string, ln?: string, dob?: Date) => {
+export const getQrCodeValueString = (guid: string, dccConsent?: boolean, testType?: string, fn?: string, ln?: string, dob?: Date) => {
     let encodedJson = '';
 
     const value: IQRCodeValue = {
@@ -57,6 +59,9 @@ export const getQrCodeValueString = (guid: string, dccConsent?: boolean, fn?: st
     const buffer = Buffer.from(json);
 
     encodedJson = buffer.toString('base64');
+
+    const baseUrl = TestType.PCR === testType ? pBaseUrl : sBaseUrl;
+
 
     return [(baseUrl + encodedJson), value.hash];
 }

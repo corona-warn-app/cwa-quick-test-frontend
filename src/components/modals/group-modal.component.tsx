@@ -36,12 +36,13 @@ const emptyGroup: IGroupDetails = {
     pocId: '',
     name: '',
     pocDetails: '',
+    enablePcr: false,
     searchPortalConsent: true,
     parentGroup: '',
     website: '',
     email: '',
     appointmentRequired: false,
-    openingHours: ''
+    openingHours: []
 }
 
 const GroupModal = (props: any) => {
@@ -58,6 +59,8 @@ const GroupModal = (props: any) => {
     const [dropdownList] = React.useState<string[]>(['https://', 'http://']);
     const [selectedDropdownValue, setSelectedDropdownValue] = React.useState<string>(dropdownList[0]);
     const [websiteValue, setWebsiteValue] = React.useState('');
+    const [displayOpeningHours, setDisplayOpeningHours] = React.useState('');
+    const [errorOpeningHour, setErrorOpeningHour] = React.useState('');
 
     const groupReloaded = (group: IGroupDetails) => {
         if (group) {
@@ -94,9 +97,15 @@ const GroupModal = (props: any) => {
 
     React.useEffect(() => {
         if (group) {
+
+            setOptions(getOptions());
+            setDisplayOpeningHours(
+                group.openingHours?.map(
+                    (element: string) => element)
+                    .join('\n')
+            );
+
             setIsReady(true);
-            const options = getOptions();
-            setOptions(options);
         }
 
         setIsNew(!(group && group.id));
@@ -116,6 +125,7 @@ const GroupModal = (props: any) => {
     }, [props.isCreationError]);
 
     const handleCancel = () => {
+        setErrorOpeningHour('');
         props.onCancel();
     }
 
@@ -185,6 +195,11 @@ const GroupModal = (props: any) => {
         event.preventDefault();
         event.stopPropagation();
 
+        if (errorOpeningHour) {
+            document.getElementById('formPocOpeningHours')?.focus();
+            return;
+        }
+
         if (form.checkValidity()) {
             handleOk();
         }
@@ -195,13 +210,36 @@ const GroupModal = (props: any) => {
         setGroup({ ...ngroup });
     }
 
+    const changeOpeningHoursHandler = (name: string, value: string) => {
+
+        setDisplayOpeningHours(value);
+
+        let error = undefined;
+        const openingHours = value.split('\n');
+        if (openingHours.length > 7) {
+            setErrorOpeningHour('opening-hours-to-much-lines-error');
+            return;
+        }
+
+        error = openingHours.find(element => {
+            return !utils.isOpeningHoursValid(element);
+        });
+
+        if (error) {
+            setErrorOpeningHour('openening-hours-to-long-error');
+        } else {
+            setErrorOpeningHour('');
+            updateGroupProp("openingHours", openingHours);
+        }
+    }
+
     const updateSearchPortalConsent = (name: string, value: any) => {
         const ngroup: IGroupDetails = { ...group, [name]: value };
 
         if (value === false) {
             ngroup.email = '';
             ngroup.website = '';
-            ngroup.openingHours = '';
+            ngroup.openingHours = [];
             ngroup.appointmentRequired = false;
         }
         setGroup(ngroup);
@@ -313,6 +351,15 @@ const GroupModal = (props: any) => {
                                 maxLength={300}
                             />
 
+                            <FormGroupPermissionCkb controlId='formenablePcr' title={t('translation:enablePcr')}
+                                //label={t('translation:for-counter')}
+                                onChange={(evt: any) => updateSearchPortalConsent('enablePcr', evt.currentTarget.checked)}
+                                type='checkbox'
+                                checked={group.enablePcr}
+                            />
+
+                            <hr />
+
                             {/* < FormGroupInput controlId='formBSNRInput' title={t('translation:bsnr')} placeholder={t('translation:bsnr-placeholder')}
                                 value={group ? group.bsnr : ''}
                                 onChange={(evt: any) => {
@@ -325,7 +372,7 @@ const GroupModal = (props: any) => {
                                 pattern={utils.pattern.BSNR}
                             /> */}
 
-                            <FormGroupPermissionCkb controlId='formRoleCounter' title={t('translation:searchPortalConsent')}
+                            <FormGroupPermissionCkb controlId='formsearchPortalConsent' title={t('translation:searchPortalConsent')}
                                 //label={t('translation:for-counter')}
                                 onChange={(evt: any) => updateSearchPortalConsent('searchPortalConsent', evt.currentTarget.checked)}
                                 type='checkbox'
@@ -359,15 +406,18 @@ const GroupModal = (props: any) => {
                                         pattern={utils.pattern.url}
                                     />
 
-                                    < FormGroupInput controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
-                                        value={group?.openingHours ? group.openingHours : ''}
+                                    < FormGroupTextarea controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
+                                        value={displayOpeningHours}
                                         onChange={(evt: any) => {
-                                            updateGroupProp('openingHours', evt.target.value);
+                                            changeOpeningHoursHandler('openingHours', evt.target.value);
                                             props.resetError();
                                         }}
-                                        maxLength={100}
+                                        type='textarea'
+                                        rows={7}
+                                        pattern={utils.pattern.email}
+                                        isInvalid={errorOpeningHour}
+                                        invalidText={errorOpeningHour && t('translation:' + errorOpeningHour)}
                                     />
-
                                     <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
                                         onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
                                         type='checkbox'

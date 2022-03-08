@@ -28,7 +28,7 @@ import IQuickTest from './misc/quick-test';
 import StatisticData from './misc/statistic-data';
 import ITestResult from './misc/test-result';
 import IQTArchiv from './misc/qt-archiv';
-import { Sex, TestResult } from './misc/enum';
+import { Sex, TestResult, TestType } from './misc/enum';
 import { IUser, IGroupDetails } from './misc/user';
 
 export const api = axios.create({
@@ -61,7 +61,8 @@ export interface IShortHashedGuid {
 
 export interface IQuickTestDccAPIResponseModel {
     dccConsent: boolean,
-    testResult: number
+    testResult: number,
+    testType: TestType
 }
 
 export interface IQuickTestAPIModel {
@@ -164,6 +165,11 @@ export const usePostTestResult = (testResult: ITestResult | undefined, processId
 
         if (testResult && processId) {
 
+            // shorten the manufactorer name for display purposes (PDF)
+            if (testResult.dccTestManufacturerDescription && testResult.dccTestManufacturerDescription.length > 100) {
+                testResult.dccTestManufacturerDescription = testResult.dccTestManufacturerDescription.substring(0, 100);
+            }
+
             const uri = '/api/quicktest/' + processId + '/testResult';
             const body = JSON.stringify(testResult);
 
@@ -218,7 +224,7 @@ export const usePostQuickTest = (quickTest: IQuickTest | undefined, processId: s
                 testResultServerHash: quickTest.testResultHash ? quickTest.testResultHash : '0000000000000000000000000000000000000000000000000000000000000000',
 
                 diseaseAgentTargeted: '840539006',
-                testType: "LP217198-3",
+                testType: quickTest.testType,
 
                 dccConsent: quickTest.dccConsent,
 
@@ -309,7 +315,7 @@ export const useGetUuid = (currentUuid: string, onSuccess?: (status: number) => 
     }, [uuidHash]);
 
     const deleteQuicktest = (processId: string) => {
-        
+
         if (processId) {
             const uri = '/api/quicktest/' + processId;
             const header = {
@@ -437,6 +443,47 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
         thisMonthStatisticData
     ] as const;
 
+}
+
+export const useGetStatisticsFromTo = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+
+    const { keycloak, initialized } = useKeycloak();
+    const [result, setResult] = React.useState<StatisticData>();
+
+    let balseUri = '/api/quickteststatistics';
+
+    const header = {
+        "Authorization": initialized ? `Bearer ${keycloak.token}` : "",
+        'Content-Type': 'application/json'
+    };
+
+
+    const getStatisticsFromTo = (dateFrom: Date, dateTo: Date) => {
+
+        if(!dateFrom) {
+            return;
+        }
+
+        let requestUri = balseUri + '?dateFrom=' + dateFrom.toISOString() + '&dateTo=' + dateTo.toISOString();
+
+        api.get(requestUri, { headers: header })
+            .then(response => {
+                setResult(response.data);
+                if (onSuccess) {
+                    onSuccess(response?.status);
+                }
+            })
+            .catch(error => {
+                if (onError) {
+                    onError(error);
+                }
+            });
+    }
+
+    return [
+        result,
+        getStatisticsFromTo
+    ] as const;
 }
 
 export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
