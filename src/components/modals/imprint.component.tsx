@@ -104,8 +104,7 @@ const ImprintPage = (props: any) => {
                         <p>
                             <strong>Verantwortlich:</strong><br />
                             T-Systems International GmbH<br />
-                            Katharyn White<br />
-                            Senior Vice President und CMO<br />
+                            Christian R. Andersen<br />
                             Friedrich-Ebert-Allee-140<br />
                             D – 53113 Bonn
                         </p>
