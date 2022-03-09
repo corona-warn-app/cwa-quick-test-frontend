@@ -351,12 +351,12 @@ const GroupModal = (props: any) => {
                                 maxLength={300}
                             />
 
-                            <FormGroupPermissionCkb controlId='formenablePcr' title={t('translation:enablePcr')}
+                            {/* <FormGroupPermissionCkb controlId='formenablePcr' title={t('translation:enablePcr')}
                                 //label={t('translation:for-counter')}
                                 onChange={(evt: any) => updateSearchPortalConsent('enablePcr', evt.currentTarget.checked)}
                                 type='checkbox'
                                 checked={group.enablePcr}
-                            />
+                            /> */}
 
                             <hr />
 
