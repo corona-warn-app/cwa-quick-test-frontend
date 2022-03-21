@@ -107,30 +107,30 @@ const TestResultInputs = (props: any) => {
         handleTestChange(evt, setTestName);
     }
 
-    const byId = (a: ITests, b: ITests): number => {
-        if (a.testBrandId < b.testBrandId) {
-            return -1;
-        }
-        if (a.testBrandId > b.testBrandId) {
-            return 1;
-        }
+    // const byId = (a: ITests, b: ITests): number => {
+    //     if (a.testBrandId < b.testBrandId) {
+    //         return -1;
+    //     }
+    //     if (a.testBrandId > b.testBrandId) {
+    //         return 1;
+    //     }
 
-        // names must be equal
-        return 0;
-    }
-    const byName = (a: ITests, b: ITests): number => {
-        const nameA = a.testBrandName.toUpperCase(); // ignore upper and lowercase
-        const nameB = b.testBrandName.toUpperCase(); // ignore upper and lowercase
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
+    //     // names must be equal
+    //     return 0;
+    // }
+    // const byName = (a: ITests, b: ITests): number => {
+    //     const nameA = a.testBrandName.toUpperCase(); // ignore upper and lowercase
+    //     const nameB = b.testBrandName.toUpperCase(); // ignore upper and lowercase
+    //     if (nameA < nameB) {
+    //         return -1;
+    //     }
+    //     if (nameA > nameB) {
+    //         return 1;
+    //     }
 
-        // names must be equal
-        return 0;
-    }
+    //     // names must be equal
+    //     return 0;
+    // }
 
 
     return (
