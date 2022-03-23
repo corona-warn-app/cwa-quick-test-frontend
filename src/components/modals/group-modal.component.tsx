@@ -29,6 +29,7 @@ import { IGroupDetails, IGroupNode, IGroup } from '../../misc/user';
 import { useGetGroupDetails } from '../../api';
 import CwaSpinner from '../spinner/spinner.component';
 import utils from '../../misc/utils';
+import { useKeycloak } from '@react-keycloak/web';
 
 const emptyGroup: IGroupDetails = {
     id: '',
@@ -49,6 +50,7 @@ const GroupModal = (props: any) => {
 
     const [btnOkDisabled, setBtnOkDisabled] = React.useState(true);
     const { t } = useTranslation();
+    const { keycloak } = useKeycloak();
 
     const [data, setData] = React.useState('');
     const [validated, setValidated] = React.useState(false);
@@ -351,12 +353,16 @@ const GroupModal = (props: any) => {
                                 maxLength={300}
                             />
 
-                            {/* <FormGroupPermissionCkb controlId='formenablePcr' title={t('translation:enablePcr')}
-                                //label={t('translation:for-counter')}
-                                onChange={(evt: any) => updateSearchPortalConsent('enablePcr', evt.currentTarget.checked)}
-                                type='checkbox'
-                                checked={group.enablePcr}
-                            /> */}
+                            {utils.hasRole(keycloak, 'c19_quick_test_counter')
+                                ?
+                                <FormGroupPermissionCkb controlId='formenablePcr' title={t('translation:enablePcr')}
+                                    //label={t('translation:for-counter')}
+                                    onChange={(evt: any) => updateSearchPortalConsent('enablePcr', evt.currentTarget.checked)}
+                                    type='checkbox'
+                                    checked={group.enablePcr}
+                                />
+                                : <></>
+                            }
 
                             <hr />
 

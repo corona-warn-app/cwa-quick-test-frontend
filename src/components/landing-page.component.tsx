@@ -30,6 +30,7 @@ import { useKeycloak } from '@react-keycloak/web';
 import DisclamerButton from './modules/disclamer-btn.component';
 import AppContext from '../misc/appContext';
 import useLocalStorage from '../misc/useLocalStorage';
+import utils from '../misc/utils';
 
 const LandingPage = (props: any) => {
 
@@ -47,15 +48,13 @@ const LandingPage = (props: any) => {
         }
     }, [context])
 
-    const hasRole = (role: string) => keycloak && (keycloak.hasRealmRole(role) || keycloak.hasRealmRole(role));
-
     return (!(isInit && context && context.navigation) ? <CwaSpinner /> :
         <Fade appear={true} in={true} >
             <Container className='center-content'>
 
                 <h1 className='mx-auto mb-5 d-flex'>
                     {t('translation:welcome')}
-                    {hasRole('c19_quick_test_admin')
+                    {utils.hasRole(keycloak, 'c19_quick_test_admin')
                         ? <DisclamerButton
                             firstTimeShow={props.disclaimerShow}
                             checked={!storedLandingDisclaimerShow}
@@ -78,17 +77,25 @@ const LandingPage = (props: any) => {
                     }
                 </h1>
 
-                {hasRole('c19_quick_test_counter') ?
-                    <Button block className='landing-btn' onClick={context.navigation.toRecordPatient}>{t('translation:record-patient-data')}</Button> : null}
-                {hasRole('c19_quick_test_lab') ?
-                    <Button block className='landing-btn' onClick={context.navigation.toRecordTestResult}>{t('translation:record-result')}</Button> : null}
-                {hasRole('c19_quick_test_counter') ?
-                    <Button block className='landing-btn' onClick={context.navigation.toQRScan}>{t('translation:record-qr-scan')}</Button> : null}
-                {hasRole('c19_quick_test_lab') ?
-                    <><Button block className='landing-btn' onClick={context.navigation.toReports}>{t('translation:failed-report')}</Button>
-                        <Button block className='landing-btn' onClick={context.navigation.toStatistics}>{t('translation:statistics-menu-item')}</Button></> : null}
-                {hasRole('c19_quick_test_admin') ?
-                    <Button block className='landing-btn' onClick={context.navigation.toUserManagement}>{t('translation:user-management')}</Button> : null}
+                {utils.hasRole(keycloak, 'c19_quick_test_counter')
+                    ? <Button block className='landing-btn' onClick={context.navigation.toRecordPatient}>{t('translation:record-patient-data')}</Button>
+                    : <></>
+                }
+                {utils.hasRole(keycloak, 'c19_quick_test_lab')
+                    ? <Button block className='landing-btn' onClick={context.navigation.toRecordTestResult}>{t('translation:record-result')}</Button>
+                    : <></>}
+                {utils.hasRole(keycloak, 'c19_quick_test_counter')
+                    ? <Button block className='landing-btn' onClick={context.navigation.toQRScan}>{t('translation:record-qr-scan')}</Button>
+                    : <></>}
+                {utils.hasRole(keycloak, 'c19_quick_test_lab')
+                    ? <>
+                        <Button block className='landing-btn' onClick={context.navigation.toReports}>{t('translation:failed-report')}</Button>
+                        <Button block className='landing-btn' onClick={context.navigation.toStatistics}>{t('translation:statistics-menu-item')}</Button>
+                    </>
+                    : <></>}
+                {utils.hasRole(keycloak, 'c19_quick_test_admin')
+                    ? <Button block className='landing-btn' onClick={context.navigation.toUserManagement}>{t('translation:user-management')}</Button>
+                    : <></>}
             </Container>
         </Fade >
     )

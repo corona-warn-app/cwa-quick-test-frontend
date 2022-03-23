@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Fade, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Fade, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +31,6 @@ import { useGetStatisticsFromTo, useStatistics } from '../api';
 import CardHeader from './modules/card-header.component';
 import AppContext from '../misc/appContext';
 import StatisticDataRow, { StatisticDateSelectionRow } from './modules/statistic-data.component';
-import StatisticData from '../misc/statistic-data';
 import utils from '../misc/utils';
 import { format } from "date-fns";
 
@@ -40,9 +39,6 @@ const Statistics = (props: any) => {
     const context = React.useContext(AppContext);
     const { t } = useTranslation();
     const { keycloak } = useKeycloak();
-
-
-
 
     const handleError = (error: any) => {
         let msg = '';
@@ -85,6 +81,7 @@ const Statistics = (props: any) => {
             ])
             setIsInit(true);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [context.navigation, context.valueSets, statisticData, thisWeekStatisticData, thisMonthStatisticData])
 
     React.useEffect(() => {
@@ -108,6 +105,7 @@ const Statistics = (props: any) => {
 
             getStatisticsFromTo(startDate, endDate);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dateValidFrom, dateValidTo])
 
     React.useEffect(() => {
@@ -120,6 +118,7 @@ const Statistics = (props: any) => {
 
             setStatisticRows([...statisticRows, { ...statisticsResult, label: newLabel, key: Math.random() }]);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [statisticsResult])
 
     const handleNewStatisticRow = (dateValidFrom: Date, dateValidTo: Date) => {
