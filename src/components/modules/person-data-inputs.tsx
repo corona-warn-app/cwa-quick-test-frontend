@@ -14,12 +14,15 @@ import de from 'date-fns/locale/de';
 import { Sex } from "../../misc/enum";
 import { IPersonData } from "../../misc/quick-test";
 import { FormGroupInput, FormGroupInlineRadio } from "./form-group.component";
+import useTransliterate from "../../misc/icao/icao";
 
 registerLocale('de', de)
 
 const PersonInputs = (props: any) => {
 
     const { t } = useTranslation();
+    const [givenNameTransliteration, givenNameTransliterationUpdate] = useTransliterate();
+    const [familyNameTransliteration, familyNameTransliterationUpdate] = useTransliterate();
 
     const [givenName, setGivenName] = React.useState<string>('');
     const [familyName, setFamilyName] = React.useState<string>('');
@@ -71,13 +74,28 @@ const PersonInputs = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [givenName, familyName, standardisedGivenName, standardisedFamilyName, dateOfBirth, sex, props.dccConsent])
 
-    const handleNameChanged = (changedValue: string, setName: (value: string) => void, setStandardisedName: (value: string) => void) => {
-        // forward the input to the normal setter
-        setName(changedValue);
+    React.useEffect(() => {
+        setStandardisedGivenName(givenNameTransliteration);
+    }, [givenNameTransliteration])
+
+    React.useEffect(() => {
+        setStandardisedFamilyName(familyNameTransliteration);
+    }, [familyNameTransliteration])
+
+    const handleGivenNameChanged = (changedValue: string) => {
+        setGivenName(changedValue);
 
         // convert to ICAO and set the std field
-        let tmpICAOValue: string = icaoTransliteration(changedValue);
-        setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length ));
+        givenNameTransliterationUpdate(changedValue);
+        // setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length));
+    }
+
+    const handleFamilyNameChanged = (changedValue: string) => {
+        setFamilyName(changedValue);
+
+        // convert to ICAO and set the std field
+        familyNameTransliterationUpdate(changedValue);
+        // setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length));
     }
 
     const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {
@@ -113,7 +131,7 @@ const PersonInputs = (props: any) => {
             {/* first name input */}
             < FormGroupInput controlId='formGivenNameInput' title={t('translation:first-name')}
                 value={givenName}
-                onChange={(evt: any) => handleNameChanged(evt.target.value, setGivenName, setStandardisedGivenName)}
+                onChange={(evt: any) => handleGivenNameChanged(evt.target.value)}
                 required
                 maxLength={50}
             />
@@ -121,7 +139,7 @@ const PersonInputs = (props: any) => {
             {/* name input */}
             < FormGroupInput controlId='formNameInput' title={t('translation:name')}
                 value={familyName}
-                onChange={(evt: any) => handleNameChanged(evt.target.value, setFamilyName, setStandardisedFamilyName)}
+                onChange={(evt: any) => handleFamilyNameChanged(evt.target.value)}
                 required
                 maxLength={50}
             />
