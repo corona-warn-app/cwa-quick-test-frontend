@@ -23,7 +23,6 @@
  */
 
 import translitarals from './icao.json';
-import utils from '../../misc/utils';
 import React from 'react';
 import ITransliteration from './ITransliteration';
 

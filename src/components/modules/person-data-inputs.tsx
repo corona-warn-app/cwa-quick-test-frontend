@@ -4,7 +4,6 @@ import { Form, Row, Col, Collapse } from "react-bootstrap";
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
 import utils from "../../misc/utils";
-import icaoTransliteration from "../../misc/icao/icao";
 
 import DatePicker from "react-datepicker";
 import { registerLocale } from "react-datepicker";
