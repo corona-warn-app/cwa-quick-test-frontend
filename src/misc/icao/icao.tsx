@@ -22,51 +22,57 @@
  * https://www.icao.int/publications/Documents/9303_p3_cons_en.pdf
  */
 
-import translitarals from './icao.json';
+import icaoJson from './icao.json';
 import React from 'react';
-import ITransliteration from './ITransliteration';
+import IIcao from './IIcao';
 
-// all characters have to match in 0-9 or uppercase A-Z or < or whitespace
-const mrzRegExPattern = /^[0-9A-Z<\s]*$/g;
-// finds all non-letter, non-number or non-< characters
-const findAllNonLetterNumberRegExPattern = /(?![\p{N}<])(\P{L})/gu;
-// finds all whitespaces like characters
-const findAllSpacesRegExPattern = /[\s\uFEFF\xA0]+/g;
-// finds all whitespaces or - or , in string
-const findAllDevidingRegExPattern = /[\s,-]+/g;
+// // all characters have to match in 0-9 or uppercase A-Z or < or whitespace
+// const mrzRegExPattern = /^[0-9A-Z<\s]*$/g;
+// // finds all non-letter, non-number or non-< characters
+// const findAllNonLetterNumberRegExPattern = /(?![\p{N}<])(\P{L})/gu;
+// // finds all whitespaces like characters
+// const findAllSpacesRegExPattern = /[\s\uFEFF\xA0]+/g;
+// // finds all whitespaces or - or , in string
+// const findAllDevidingRegExPattern = /[\s,-]+/g;
 
 // encapsulate loading tranliterations from json
-const useGetTransliterations = () => {
-    const [result, setResult] = React.useState<ITransliteration[]>();
+const useGetIcao = () => {
+    const [result, setResult] = React.useState<IIcao>();
 
     React.useEffect(() => {
-        setResult([...translitarals.translitarations]);
+        setResult(icaoJson);
     }, [])
 
     return result;
 }
 
 const useTransliterate = (onError?: (msg: string) => void) => {
-    const transliterations = useGetTransliterations();
+    const icao = useGetIcao();
     const [result, setResult] = React.useState('');
 
-    const normalize = (input: string): string => {
+    const parsePattern = (strPattern: string): RegExp => {
+        const split = strPattern.split('/');
+        return new RegExp(split[0], split[1]);
+    }
+
+    const normalize = (input: string, icao: IIcao): string => {
         let output = '';
+        console.log(icao);
 
         output = input
             // remove all leading and tailing whitespaces, new lines, etc.
             .trim()
             // replaces all multiple whitespaces-like characters with single whitespace
-            .replace(findAllSpacesRegExPattern, ' ')
+            .replaceAll(parsePattern(icao.pattern.findAllSpaces), ' ')
             // replace all whitespaces or , or - with < character
-            .replace(findAllDevidingRegExPattern, '<')
+            .replaceAll(parsePattern(icao.pattern.findAllDeviding), '<')
             // removes all non-letter, non-number or non-< characters
-            .replace(findAllNonLetterNumberRegExPattern, '');
+            .replaceAll(parsePattern(icao.pattern.findAllNonLetterNonNumber), '');
 
         return output.toUpperCase();
     }
 
-    const transliterate = (input: string, transliterations: ITransliteration[]) => {
+    const transliterate = (input: string, icao: IIcao) => {
         let output = '';
 
         for (const char of input) {
@@ -74,8 +80,8 @@ const useTransliterate = (onError?: (msg: string) => void) => {
             let transliteratedChar = char;
 
             // transliterating char if necessary
-            if (!mrzRegExPattern.test(char)) {
-                const translitaral = transliterations.find(transliteration => transliteration.utf8 === char);
+            if (!parsePattern(icao.pattern.mrz).test(char)) {
+                const translitaral = icao.transliterations.find(transliteration => transliteration.utf8 === char);
 
                 if (translitaral) transliteratedChar = translitaral.mrz;
             }
@@ -92,18 +98,16 @@ const useTransliterate = (onError?: (msg: string) => void) => {
         try {
             // some validation
             if (!input && input !== '') throw new Error('input string is not valid!');
-            if (!transliterations) throw new Error('transliterations are not valid!');
+            if (!icao) throw new Error('transliterations are not valid!');
 
             // normalize input string for mrz transliteration
-            const normalizedInput = normalize(input);
-
-            console.log(normalizedInput);
+            const normalizedInput = normalize(input, icao);
 
             // transliterate normalized input with transliterations from json
-            output = transliterate(normalizedInput, transliterations);
+            output = transliterate(normalizedInput, icao);
 
             // in the end transliterated output should pass regEx
-            if (!mrzRegExPattern.test(output)) new Error('Could not transliterate some characters: ' + output + '.');
+            if (!parsePattern(icao.pattern.mrz).test(output)) new Error('Could not transliterate some characters: ' + output + '.');
         }
         catch (error: any) {
             if (onError) {
