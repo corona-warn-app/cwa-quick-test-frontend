@@ -20,7 +20,7 @@
  */
 
 import React from "react";
-import { Button, Col, Form, Row, Table, Container } from 'react-bootstrap';
+import { Button, Col, Form, Row, Table } from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';

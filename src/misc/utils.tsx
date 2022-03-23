@@ -19,6 +19,8 @@
  * under the License.
  */
 
+import { KeycloakInstance } from "keycloak-js";
+
 export interface IUtils {
     shortHashLen: number,
     pattern: { [key: string]: string },
@@ -34,7 +36,8 @@ export interface IUtils {
     pickerDateFormat: string,
     pickerDateTimeFormat: string,
     momentDateFormat: string,
-    momentDateTimeFormat: string
+    momentDateTimeFormat: string,
+    hasRole: (keycloak: KeycloakInstance, role: string) => boolean
 }
 
 const shortHashLen = 8;
@@ -47,9 +50,9 @@ const pattern = {
     eMail: '^[\\w\\d\\.!#$%&’*+/=?^_`{|}~-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
     standardisedName: '^[0-9A-Z<\\s]*$',
     url: '^(www\\.|http:\\/\\/|https:\\/\\/){0,1}?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,10}(:[0-9]{1,5})?(\\/.*)?$',
-    BSNR:'^[1-9]{1}\\d{8}$',
+    BSNR: '^[1-9]{1}\\d{8}$',
     //openingHours:'^[\\w-\\d\\s]{0,64}$/gm'
-    openingHours:'^(.|\n){0,64}$'
+    openingHours: '^(.|\n){0,64}$'
 }
 
 const processNoRegExp = new RegExp(pattern.processNo);
@@ -70,6 +73,8 @@ const getIndent = (level: number): JSX.Element[] => {
     return indent;
 }
 
+const hasRole = (keycloak: KeycloakInstance, role: string) => keycloak && (keycloak.hasRealmRole(role) || keycloak.hasRealmRole(role));
+
 const utils: IUtils = {
     shortHashLen: shortHashLen,
     pattern: pattern,
@@ -85,7 +90,8 @@ const utils: IUtils = {
     pickerDateFormat: 'dd.MM.yyyy',
     pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',
     momentDateFormat: 'DD.MM.yyyy',
-    momentDateTimeFormat: 'yyyy-MM-DD / hh:mm A'
+    momentDateTimeFormat: 'yyyy-MM-DD / hh:mm A',
+    hasRole: hasRole
 }
 
 export default utils;
