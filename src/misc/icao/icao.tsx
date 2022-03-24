@@ -30,10 +30,7 @@ export const parsePattern = (strPattern: string): RegExp => {
 }
 
 export const normalize = (input: string, icao: IIcao): string => {
-    let output = '';
-    console.log(icao);
-
-    output = input
+    const output = input
         // remove all leading and tailing whitespaces, new lines, etc.
         .trim()
         // replaces all multiple whitespaces-like characters with single whitespace
@@ -41,7 +38,9 @@ export const normalize = (input: string, icao: IIcao): string => {
         // replace all whitespaces or , or - with < character
         .replaceAll(parsePattern(icao.pattern.findAllDeviding), '<')
         // removes all non-letter, non-number or non-< characters
-        .replaceAll(parsePattern(icao.pattern.findAllNonLetterNonNumber), '');
+        .replaceAll(parsePattern(icao.pattern.findAllNonLetterNonNumber), '')
+        // replace all muliple < characters with <
+        .replaceAll(parsePattern(icao.pattern.findAllLessThan), '<');
 
     return output.toUpperCase();
 }

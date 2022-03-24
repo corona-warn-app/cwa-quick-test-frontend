@@ -178,7 +178,7 @@ const PersonInputs = (props: any) => {
                         onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedGivenName)}
                         required={props.dccConsent}
                         pattern={utils.pattern.standardisedName}
-                        maxLength={50}
+                        maxLength={150}
                         prepend='i'
                         tooltip={t('translation:standardised-first-name-tooltip')}
                     />
@@ -189,7 +189,7 @@ const PersonInputs = (props: any) => {
                         onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedFamilyName)}
                         required={props.dccConsent}
                         pattern={utils.pattern.standardisedName}
-                        maxLength={50}
+                        maxLength={150}
                         prepend='i'
                         tooltip={t('translation:standardised-name-tooltip')}
                     />

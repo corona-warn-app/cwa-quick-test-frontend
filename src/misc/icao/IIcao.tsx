@@ -36,5 +36,6 @@ interface IIcaoPattern {
     mrz: string,
     findAllNonLetterNonNumber: string,
     findAllSpaces: string,
-    findAllDeviding: string
+    findAllDeviding: string,
+    findAllLessThan: string
 }

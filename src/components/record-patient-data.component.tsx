@@ -282,25 +282,21 @@ const RecordPatientData = (props: any) => {
                                 {!pcrEnabled
                                     ? <></>
                                     : <>
-                                        <Row> 
+                                        <Row>
                                             <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>{t('translation:test-type') + '*'}</Form.Label>
 
                                             <Col xs='7' sm='9' className='d-flex'>
                                                 <Row>
-                                                    <Col>
-                                                        <FormGroupInlineRadio controlId='test-type1' name="test-type-radios" title={t(`translation:${TestType.RAT}`)} sm='6'
-                                                            checked={testType === TestType.RAT}
-                                                            onChange={() => setTestType(TestType.RAT)}
-                                                        />
-                                                    </Col>
+                                                    <FormGroupInlineRadio controlId='test-type1' name="test-type-radios" title={t(`translation:${TestType.RAT}`)} sm='6'
+                                                        checked={testType === TestType.RAT}
+                                                        onChange={() => setTestType(TestType.RAT)}
+                                                    />
 
-                                                    <Col>
-                                                        <FormGroupInlineRadio controlId='test-type2' name="test-type-radios" title={t(`translation:${TestType.PCR}`)} sm='6'
-                                                            checked={testType === TestType.PCR}
-                                                            onChange={() => setTestType(TestType.PCR)}
-                                                            required={true}
-                                                        />
-                                                    </Col>
+                                                    <FormGroupInlineRadio controlId='test-type2' name="test-type-radios" title={t(`translation:${TestType.PCR}`)} sm='6'
+                                                        checked={testType === TestType.PCR}
+                                                        onChange={() => setTestType(TestType.PCR)}
+                                                        required={true}
+                                                    />
                                                 </Row>
                                             </Col>
                                         </Row>

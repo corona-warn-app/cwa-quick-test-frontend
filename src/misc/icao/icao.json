@@ -3,7 +3,8 @@
     "mrz": "^[0-9A-Z<\\s]*$/g",
     "findAllNonLetterNonNumber": "(?![\\p{N}<])(\\P{L})/gu",
     "findAllSpaces": "[\\s\uFEFF\\xA0]+/g",
-    "findAllDeviding": "[\\s,-]+/g"
+    "findAllDeviding": "[\\s,-]+/g",
+    "findAllLessThan": "[<]+/g"
   },
   "transliterations": [
     {
