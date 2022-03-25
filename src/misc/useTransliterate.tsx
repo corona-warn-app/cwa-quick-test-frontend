@@ -22,10 +22,9 @@
  * https://www.icao.int/publications/Documents/9303_p3_cons_en.pdf
  */
 
-import icaoJson from './icao/icao.json';
+import icaoJson from '../assets/JSON/icao.json';
 import React from 'react';
-import IIcao from './icao/IIcao';
-import { normalize, parsePattern, transliterate } from './icao/icao';
+import { IIcao, normalize, parsePattern, transliterate } from 'icao-transliteration';
 
 // encapsulate loading tranliterations from json
 const useGetIcao = () => {
