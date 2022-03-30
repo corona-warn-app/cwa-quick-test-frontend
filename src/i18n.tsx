@@ -29,7 +29,7 @@ i18n.use(initReactI18next).init({
   lng: 'de',
   resources: resBundle,
   fallbackLng: 'en',
-  debug: true,
+  debug: false,
   /* can have multiple namespace, in case you want to divide a huge translation into smaller pieces and load them on demand */
   ns: ['translations'],
   defaultNS: 'translations',
