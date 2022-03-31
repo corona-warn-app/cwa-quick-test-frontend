@@ -91,7 +91,7 @@ const Header = (props: any) => {
                             >
                                 {t('translation:environment-info-link')}
                             </a>}
-                            {t('translation:environment-info2')}
+                            {'.'}
                         </Trans>
                     </span>
                 }
