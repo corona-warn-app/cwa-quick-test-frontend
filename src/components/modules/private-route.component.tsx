@@ -20,17 +20,15 @@
  */
 
 import React from 'react';
-import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
 
 import { useKeycloak } from '@react-keycloak/web';
 import useNavigation from '../../misc/useNavigation';
 
 interface PrivateRouteParams extends RouteProps {
-  component:
-  | React.ComponentType<RouteComponentProps<any>>
-  | React.ComponentType<any>,
+  component:any,
   roles?: string[],
-  render?: (props: RouteComponentProps<any>) => React.ReactNode
+  render?: any
 }
 
 export function PrivateRoute({
