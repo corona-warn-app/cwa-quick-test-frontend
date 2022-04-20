@@ -61,8 +61,16 @@ hr {
 
 #qt-header {
     margin: 0;
-    padding: 1rem;
-    height: 84px;
+    padding: 1rem 1rem 0rem 1rem;
+    // height: 84px;
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+}
+
+#qt-environment {
+    margin: 0;
+    padding: 0;
     width: 100%;
     text-align: center;
     justify-content: center;
@@ -211,11 +219,25 @@ hr {
     color: #757575;
 }
 
+#c19-logo {
+    width: 54px;
+    height: 54px;
+}
+
 .header-font {
     font-family: "TeleNeo";
     font-weight: bold;
     font-size: 26px;
     color: black;
+    white-space: pre-line;
+    line-height: 24px;
+}
+.environment-font {
+    font-family: "TeleNeo";
+    font-weight: bold;
+    font-size: 22px;
+    color: red;
+    white-space: pre-line;
 }
 
 // @media screen and (max-device-width: 480px) {
@@ -358,14 +380,14 @@ hr {
     position: inherit;
     width: 20px;
     height: 20px;
-    margin-top: 0.1rem;;
+    margin-top: 0.1rem;
 }
 .rdb-label {
     height: 20px;
     align-self: center;
     padding-left: 0.5rem;
 }
-.toast-container{
+.toast-container {
     display: flex;
     position: absolute;
     justify-content: center;
@@ -388,7 +410,6 @@ hr {
     background: #d4edda;
     padding: 0%;
     color: #155724;
-    
 }
 
 .qt-notification-text {
@@ -493,12 +514,18 @@ td {
     text-decoration: underline !important;
     font-weight: bolder;
 }
-.disclaimer-text{
+.disclaimer-text {
     text-align: justify;
     white-space: pre-line;
     margin: 0%;
 }
-.speech-bubble{
+.environment-info-text {
+    width:100%;
+    text-align: center;
+    white-space: pre-line;
+    margin: 0%;
+}
+.speech-bubble {
     display: flex;
     align-self: baseline;
     margin-left: 0.1rem;
@@ -544,6 +571,6 @@ td {
 .btn-add-statistic-icon {
     padding: 0px;
     border: 0px;
-    width:24px;
-    height:24px;  
+    width: 24px;
+    height: 24px;
 }

@@ -154,5 +154,7 @@
   "enablePcr": "PoC-NAA-Test erlauben",
   "LP217198-3": "Antigen-Schnelltest",
   "LP6464-4": "PoC-NAA-Test",
-  "test-type": "Testtyp"
+  "test-type": "Testtyp",
+  "environment-info1": "<strong>Hinweis</strong>: Dies ist ein <strong>Schulungssystem</strong>.\nFür die Erfassung <strong>echter Patientendaten</strong> darf nur das <strong>Produktivsystem</strong> genutzt werden.\n Das <strong>Produktivsystem</strong> erreichen Sie unter ",
+  "environment-info-link": "https://schnelltestportal.de/qt"
 }
