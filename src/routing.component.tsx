@@ -130,7 +130,7 @@ const Routing = () => {
                         roles={['c19_quick_test_counter']}
                         path={context.navigation.routes.recordPatient}
                         component={RecordPatientData}
-                        render={(props: any) => <RecordPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} />}
+                        render={(props) => <RecordPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} />}
                     />
 
                     {/* Show Patient Data */}
