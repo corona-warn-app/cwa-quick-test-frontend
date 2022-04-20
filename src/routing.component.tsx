@@ -138,7 +138,7 @@ const Routing = () => {
                         roles={['c19_quick_test_counter']}
                         path={context.navigation.routes.showPatientRecord}
                         component={ShowPatientData}
-                        render={(props: any) => <ShowPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} setNotificationShow={setNotificationShow} />}
+                        render={(props) => <ShowPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} setNotificationShow={setNotificationShow} />}
                     />
 
                     {/* Record Test Result */}
@@ -146,7 +146,7 @@ const Routing = () => {
                         roles={['c19_quick_test_lab']}
                         path={context.navigation.routes.recordTestResult}
                         component={RecordTestResult}
-                        render={(props: any) => <RecordTestResult {...props} setError={setError} setNotificationShow={setNotificationShow} />}
+                        render={(props) => <RecordTestResult {...props} setError={setError} setNotificationShow={setNotificationShow} />}
                     />
 
                     {/* QR Scan */}
@@ -155,7 +155,7 @@ const Routing = () => {
                         path={context.navigation.routes.qrScan}
                         roles={['c19_quick_test_counter']}
                         component={QrScan}
-                        render={(props: any) => <QrScan {...props} setQuickTest={setQuickTest} />}
+                        render={(props) => <QrScan {...props} setQuickTest={setQuickTest} />}
                     />
 
                     <PrivateRoute
@@ -163,7 +163,7 @@ const Routing = () => {
                         path={context.navigation.routes.statistics}
                         roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
                         component={Statistics}
-                        render={(props: any) => <Statistics {...props} setError={setError} />}
+                        render={(props) => <Statistics {...props} setError={setError} />}
                     />
 
                     <PrivateRoute
@@ -171,7 +171,7 @@ const Routing = () => {
                         path={context.navigation.routes.reports}
                         roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
                         component={Reports}
-                        render={(props: any) => <Reports {...props} setError={setError} />}
+                        render={(props) => <Reports {...props} setError={setError} />}
                     />
 
                     <PrivateRoute
@@ -179,7 +179,7 @@ const Routing = () => {
                         path={context.navigation.routes.userManagement}
                         roles={['c19_quick_test_admin']}
                         component={UserManagement}
-                        render={(props: any) =>
+                        render={(props) =>
                             <UserManagement
                                 {...props}
                                 setError={setError}
