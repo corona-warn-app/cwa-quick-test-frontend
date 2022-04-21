@@ -353,7 +353,7 @@ const GroupModal = (props: any) => {
                                 maxLength={300}
                             />
 
-                            {utils.hasRole(keycloak, 'c19_quick_test_counter')
+                            {utils.hasRole(keycloak, 'c19_quick_test_poc_nat_admin')
                                 ?
                                 <FormGroupPermissionCkb controlId='formenablePcr' title={t('translation:enablePcr')}
                                     //label={t('translation:for-counter')}
