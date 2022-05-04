@@ -51,6 +51,7 @@ import CwaSpinner from './components/spinner/spinner.component';
 import { useGetValueSets } from './misc/useValueSet';
 import NotificationToast from './components/modals/notification-toast.component';
 import useLocalStorage from './misc/useLocalStorage';
+import DataDownload from './components/data-download.component';
 
 
 const Routing = () => {
@@ -185,6 +186,17 @@ const Routing = () => {
                                 setError={setError}
                                 disclaimerShow={userManagementDisclaimerShow}
                                 setDisclaimerShow={(show: boolean) => { setUserManagementDisclaimerShow(show) }}
+                            />}
+                    />
+                    <PrivateRoute
+                        exact
+                        path={context.navigation.routes.dataDownload}
+                        roles={['c19_quick_test_admin']}
+                        component={DataDownload}
+                        render={(props) =>
+                            <DataDownload
+                                {...props}
+                                setError={setError}
                             />}
                     />
 

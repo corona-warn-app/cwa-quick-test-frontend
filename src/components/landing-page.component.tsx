@@ -96,6 +96,9 @@ const LandingPage = (props: any) => {
                 {utils.hasRole(keycloak, 'c19_quick_test_admin')
                     ? <Button block className='landing-btn' onClick={context.navigation.toUserManagement}>{t('translation:user-management')}</Button>
                     : <></>}
+                {utils.hasRole(keycloak, 'c19_quick_test_admin')
+                    ? <Button block className='landing-btn' onClick={context.navigation.toDataDownload}>{t('translation:record-download')}</Button>
+                    : <></>}
             </Container>
         </Fade >
     )

@@ -38,6 +38,7 @@ export interface INavigation {
     toStatistics: () => void,
     toReports: () => void,
     toUserManagement: () => void,
+    toDataDownload: () => void
 }
 
 export const useRoutes = () => {
@@ -56,7 +57,8 @@ export const useRoutes = () => {
             qrScan: basePath + '/qr/scan',
             statistics: basePath + '/statistics',
             reports: basePath + '/reports',
-            userManagement: basePath + '/usermanagement'
+            userManagement: basePath + '/usermanagement',
+            dataDownload: basePath + '/download'
         });
     }, [])
 
@@ -84,6 +86,7 @@ export const useNavigation = () => {
             c.statistics = routes.statistics.replace(':mandant', mandant as string);
             c.reports = routes.reports.replace(':mandant', mandant as string);
             c.userManagement = routes.userManagement.replace(':mandant', mandant as string);
+            c.dataDownload = routes.dataDownload.replace(':mandant', mandant as string);
 
             setCalculatedRoutes(c);
         }
@@ -104,6 +107,7 @@ export const useNavigation = () => {
                 toStatistics: () => { history.push(calculatedRoutes.statistics); },
                 toReports: () => { history.push(calculatedRoutes.reports); },
                 toUserManagement: () => { history.push(calculatedRoutes.userManagement); },
+                toDataDownload: () => { history.push(calculatedRoutes.dataDownload); },
             });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
