@@ -62,13 +62,13 @@ const PersonInputs = (props: any) => {
             const personData = props.quickTest.personData;
 
             if (personData.givenName) {
-                setGivenName(personData.givenName);
+                handleGivenNameChanged(personData.givenName);
             }
             if (personData.standardisedGivenName) {
                 setStandardisedGivenName(personData.standardisedGivenName);
             }
             if (personData.familyName) {
-                setFamilyName(personData.familyName);
+                handleFamilyNameChanged(personData.familyName);
             }
             setStandardisedFamilyName(personData.standardisedFamilyName);
 
@@ -122,7 +122,7 @@ const PersonInputs = (props: any) => {
         // setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length));
     }
 
-    const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {
+    const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {        
         const upperCaseChangedValue = changedValue.toUpperCase();
 
         if (utils.isStandardisedNameValid(upperCaseChangedValue)) {

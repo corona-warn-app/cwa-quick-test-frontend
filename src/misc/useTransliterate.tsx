@@ -26,19 +26,8 @@ import icaoJson from '../assets/JSON/icao.json';
 import React from 'react';
 import { IIcao, normalize, parsePattern, transliterate } from 'icao-transliteration';
 
-// encapsulate loading tranliterations from json
-const useGetIcao = () => {
-    const [result, setResult] = React.useState<IIcao>();
-
-    React.useEffect(() => {
-        setResult(icaoJson);
-    }, [])
-
-    return result;
-}
-
 const useTransliterate = (onError?: (msg: string) => void) => {
-    const icao = useGetIcao();
+    const icao: IIcao = icaoJson;
     const [result, setResult] = React.useState('');
 
     const update = (input: string) => {

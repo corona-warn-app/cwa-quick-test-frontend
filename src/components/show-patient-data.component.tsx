@@ -90,7 +90,7 @@ const ShowPatientData = (props: any) => {
 
     React.useEffect(() => {
         if (qrCodeValue && qrCodeValue.length > 1) {
-            console.log(qrCodeValue);
+            // console.log(qrCodeValue);
             quickTest!.testResultHash = qrCodeValue[1];
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
