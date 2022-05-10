@@ -668,7 +668,7 @@
       "mrz": "V"
     },
     {
-      "utf8": "\u00413",
+      "utf8": "\u0413",
       "character": "Г",
       "description": "Cyrillic Character G (except Belorussian, Serbian, and Ukrainian = H)",
       "mrz": "G"
@@ -774,6 +774,96 @@
       "character": "Ф",
       "description": "Cyrillic Character Ф",
       "mrz": "F"
+    },
+    {
+      "utf8": "\u0425",
+      "character": "Х",
+      "description": "Cyrillic Character KH (except Serbian and in the language spoken in the former Yugoslav Republic of Macedonia = H)",
+      "mrz": "KH"
+    },
+    {
+      "utf8": "\u0426",
+      "character": "Ц",
+      "description": "Cyrillic Character TS (except Serbian and in the language spoken in the former Yugoslav Republic of Macedonia = H",
+      "mrz": "TS"
+    },
+    {
+      "utf8": "\u0427",
+      "character": "Ч",
+      "description": "Cyrillic Character CH (except Serbian = C)",
+      "mrz": "CH"
+    },
+    {
+      "utf8": "\u0428",
+      "character": "Ш",
+      "description": "Cyrillic Character SH (except Serbian = S)",
+      "mrz": "SH"
+    },
+    {
+      "utf8": "\u0429",
+      "character": "Щ",
+      "description": "Cyrillic Character SHCH (except Bulgarian = SHT)",
+      "mrz": "SHCH"
+    },
+    {
+      "utf8": "\u042A",
+      "character": "Ъ",
+      "description": "Cyrillic Character IE",
+      "mrz": "IE"
+    },
+    {
+      "utf8": "\u042B",
+      "character": "Ы",
+      "description": "Cyrillic Character Y",
+      "mrz": "Y"
+    },
+    {
+      "utf8": "\u042D",
+      "character": "Э",
+      "description": "Cyrillic Character E",
+      "mrz": "E"
+    },
+    {
+      "utf8": "\u042E",
+      "character": "Ю",
+      "description": "Cyrillic Character IU (except if Ukrainian first character, then =YU)",
+      "mrz": "IU"
+    },
+    {
+      "utf8": "\u042F",
+      "character": "Я",
+      "description": "Cyrillic Character IA (except if Ukrainian first character, then =YA)",
+      "mrz": "IA"
+    },
+    {
+      "utf8": "\u046A",
+      "character": "Ѫ",
+      "description": "Cyrillic Character U",
+      "mrz": "U"
+    },
+    {
+      "utf8": "\u0474",
+      "character": "V",
+      "description": "Cyrillic Character Y",
+      "mrz": "Y"
+    },
+    {
+      "utf8": "\u0490",
+      "character": "Ґ",
+      "description": "Cyrillic Character G",
+      "mrz": "G"
+    },
+    {
+      "utf8": "\u0492",
+      "character": "Ғ",
+      "description": "Cyrillic Character G (except in the language spoken in the former Yugoslav Republic of Macedonia = GJ)",
+      "mrz": "G"
+    },
+    {
+      "utf8": "\u04BA",
+      "character": "Һ",
+      "description": "Cyrillic Character C",
+      "mrz": "C"
     },
     {
       "utf8": "\u0621",
