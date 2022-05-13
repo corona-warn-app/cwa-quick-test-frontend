@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2021, T-Systems International GmbH
+ * (C) 2022, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -90,7 +90,7 @@ const ShowPatientData = (props: any) => {
 
     React.useEffect(() => {
         if (qrCodeValue && qrCodeValue.length > 1) {
-            console.log(qrCodeValue);
+            // console.log(qrCodeValue);
             quickTest!.testResultHash = qrCodeValue[1];
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

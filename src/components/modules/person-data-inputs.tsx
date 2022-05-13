@@ -1,3 +1,28 @@
+/*
+ * Corona-Warn-App / cwa-quick-test-frontend
+ *
+ * (C) 2022, T-Systems International GmbH
+ *
+ * Deutsche Telekom AG and all other contributors /
+ * copyright owners license this file to you under the Apache
+ * License, Version 2.0 (the 'License'); you may not use this
+ * file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * 'AS IS' BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ * 
+ * Used character transliteration from 
+ * https://www.icao.int/publications/Documents/9303_p3_cons_en.pdf
+ */
+
+
 import React from "react";
 import { Form, Row, Col, Collapse } from "react-bootstrap";
 
@@ -13,12 +38,15 @@ import de from 'date-fns/locale/de';
 import { Sex } from "../../misc/enum";
 import { IPersonData } from "../../misc/quick-test";
 import { FormGroupInput, FormGroupInlineRadio } from "./form-group.component";
+import useTransliterate from "../../misc/useTransliterate";
 
 registerLocale('de', de)
 
 const PersonInputs = (props: any) => {
 
     const { t } = useTranslation();
+    const [givenNameTransliteration, givenNameTransliterationUpdate] = useTransliterate();
+    const [familyNameTransliteration, familyNameTransliterationUpdate] = useTransliterate();
 
     const [givenName, setGivenName] = React.useState<string>('');
     const [familyName, setFamilyName] = React.useState<string>('');
@@ -34,13 +62,13 @@ const PersonInputs = (props: any) => {
             const personData = props.quickTest.personData;
 
             if (personData.givenName) {
-                setGivenName(personData.givenName);
+                handleGivenNameChanged(personData.givenName);
             }
             if (personData.standardisedGivenName) {
                 setStandardisedGivenName(personData.standardisedGivenName);
             }
             if (personData.familyName) {
-                setFamilyName(personData.familyName);
+                handleFamilyNameChanged(personData.familyName);
             }
             setStandardisedFamilyName(personData.standardisedFamilyName);
 
@@ -70,8 +98,31 @@ const PersonInputs = (props: any) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [givenName, familyName, standardisedGivenName, standardisedFamilyName, dateOfBirth, sex, props.dccConsent])
 
+    React.useEffect(() => {
+        setStandardisedGivenName(givenNameTransliteration);
+    }, [givenNameTransliteration])
 
-    const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {
+    React.useEffect(() => {
+        setStandardisedFamilyName(familyNameTransliteration);
+    }, [familyNameTransliteration])
+
+    const handleGivenNameChanged = (changedValue: string) => {
+        setGivenName(changedValue);
+
+        // convert to ICAO and set the std field
+        givenNameTransliterationUpdate(changedValue);
+        // setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length));
+    }
+
+    const handleFamilyNameChanged = (changedValue: string) => {
+        setFamilyName(changedValue);
+
+        // convert to ICAO and set the std field
+        familyNameTransliterationUpdate(changedValue);
+        // setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length));
+    }
+
+    const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {        
         const upperCaseChangedValue = changedValue.toUpperCase();
 
         if (utils.isStandardisedNameValid(upperCaseChangedValue)) {
@@ -104,7 +155,7 @@ const PersonInputs = (props: any) => {
             {/* first name input */}
             < FormGroupInput controlId='formGivenNameInput' title={t('translation:first-name')}
                 value={givenName}
-                onChange={(evt: any) => setGivenName(evt.target.value)}
+                onChange={(evt: any) => handleGivenNameChanged(evt.target.value)}
                 required
                 maxLength={50}
             />
@@ -112,7 +163,7 @@ const PersonInputs = (props: any) => {
             {/* name input */}
             < FormGroupInput controlId='formNameInput' title={t('translation:name')}
                 value={familyName}
-                onChange={(evt: any) => setFamilyName(evt.target.value)}
+                onChange={(evt: any) => handleFamilyNameChanged(evt.target.value)}
                 required
                 maxLength={50}
             />
@@ -127,7 +178,7 @@ const PersonInputs = (props: any) => {
                         onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedGivenName)}
                         required={props.dccConsent}
                         pattern={utils.pattern.standardisedName}
-                        maxLength={50}
+                        maxLength={150}
                         prepend='i'
                         tooltip={t('translation:standardised-first-name-tooltip')}
                     />
@@ -138,7 +189,7 @@ const PersonInputs = (props: any) => {
                         onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedFamilyName)}
                         required={props.dccConsent}
                         pattern={utils.pattern.standardisedName}
-                        maxLength={50}
+                        maxLength={150}
                         prepend='i'
                         tooltip={t('translation:standardised-name-tooltip')}
                     />

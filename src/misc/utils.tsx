@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2021, T-Systems International GmbH
+ * (C) 2022, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -48,7 +48,7 @@ const pattern = {
     houseNo: '^([1-9]{1}[0-9a-zA-Z-\\s/]{0,14})$',
     tel: '^([+]{1}[1-9]{1,2}|[0]{1}[1-9]{1})[0-9]{5,}$',
     eMail: '^[\\w\\d\\.!#$%&’*+/=?^_`{|}~-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
-    standardisedName: '^[A-Z<]*$',
+    standardisedName: '^[0-9A-Z<]*$',
     url: '^(www\\.|http:\\/\\/|https:\\/\\/){0,1}?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,10}(:[0-9]{1,5})?(\\/.*)?$',
     BSNR: '^[1-9]{1}\\d{8}$',
     //openingHours:'^[\\w-\\d\\s]{0,64}$/gm'
