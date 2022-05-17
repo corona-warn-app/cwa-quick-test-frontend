@@ -278,19 +278,19 @@
       "mrz": "G"
     },
     {
-      "utf8": "\u011C",
+      "utf8": "\u011E",
       "character": "Ğ",
       "description": "G breve",
       "mrz": "G"
     },
     {
-      "utf8": "\u011C",
+      "utf8": "\u0120",
       "character": "Ġ",
-      "description": "G  dot above",
+      "description": "G dot above",
       "mrz": "G"
     },
     {
-      "utf8": "\u011C",
+      "utf8": "\u0122",
       "character": "Ģ",
       "description": "G cedilla",
       "mrz": "G"
@@ -767,7 +767,7 @@
       "utf8": "\u0423",
       "character": "У",
       "description": "Cyrillic Character У",
-      "mrz": "У"
+      "mrz": "U"
     },
     {
       "utf8": "\u0424",
@@ -1221,7 +1221,7 @@
     },
     {
       "utf8": "\u06C2",
-      "character": "ہ",
+      "character": "ۂ",
       "description": "Arabic letter heh goal with hamza above",
       "mrz": "XGE"
     },
@@ -1233,7 +1233,7 @@
     },
     {
       "utf8": "\u06CC",
-      "character": "ى",
+      "character": "ی",
       "description": "Arabic letter farsi yeh",
       "mrz": "XYA"
     },
@@ -1260,6 +1260,12 @@
       "character": "ۓ",
       "description": "Arabic letter yeh barree with hamza above",
       "mrz": "XBE"
+    },
+    {
+      "utf8": "\u0474",
+      "character": "Ѵ",
+      "description": "Cyrillic Capital Letter Izhitsa",
+      "mrz": "Y"
     }
   ]
 }
