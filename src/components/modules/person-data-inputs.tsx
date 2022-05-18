@@ -107,22 +107,26 @@ const PersonInputs = (props: any) => {
     }, [familyNameTransliteration])
 
     const handleGivenNameChanged = (changedValue: string) => {
-        setGivenName(changedValue);
+        if (utils.isNameValid(changedValue)) {
+            setGivenName(changedValue);
+            // convert to ICAO and set the std field
+            givenNameTransliterationUpdate(changedValue);
+        }
 
-        // convert to ICAO and set the std field
-        givenNameTransliterationUpdate(changedValue);
         // setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length));
     }
 
     const handleFamilyNameChanged = (changedValue: string) => {
-        setFamilyName(changedValue);
+        if (utils.isNameValid(changedValue)) {
+            setFamilyName(changedValue);
 
-        // convert to ICAO and set the std field
-        familyNameTransliterationUpdate(changedValue);
+            // convert to ICAO and set the std field
+            familyNameTransliterationUpdate(changedValue);
+        }
         // setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length));
     }
 
-    const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {        
+    const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {
         const upperCaseChangedValue = changedValue.toUpperCase();
 
         if (utils.isStandardisedNameValid(upperCaseChangedValue)) {
@@ -180,7 +184,9 @@ const PersonInputs = (props: any) => {
                         pattern={utils.pattern.standardisedName}
                         maxLength={150}
                         prepend='i'
+                        lableAlign='end'
                         tooltip={t('translation:standardised-first-name-tooltip')}
+                        infoText={<h5><strong>{t('translation:query-id-card')}</strong></h5>}
                     />
 
                     {/*standardised name input */}

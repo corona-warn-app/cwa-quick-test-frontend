@@ -34,63 +34,66 @@ export const FormGroupInput = (props: any) => {
 
     return (!props ? <></> :
         <Form.Group as={Row} controlId={props.controlId} hidden={props.hidden} className='mb-1'>
-            <Form.Label className='input-label' column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
+            <Form.Label className={`'input-label' ${props.lableAlign && 'align-self-'+props.lableAlign}`} column xs='5' sm='3'>{props.title + (props.required ? '*' : '')}</Form.Label>
 
             <Col xs='7' sm='9' className='d-flex'>
-                <InputGroup>
-                    {!props.dropdown
-                        ? <></>
-                        : <DropdownButton
-                            as={InputGroup.Prepend}
-                            variant="outline-secondary"
-                            title={props.dropdownTitle}
-                            id="input-group-dropdown-1"
-                        >
-                            {props.dropdown}
-                        </DropdownButton>
-                    }
-                    <Form.Control
-                        className={!props.prepend ? 'qt-input' : 'qt-input-prepend'}
-                        value={props.value}
-                        readOnly={props.readOnly}
-                        disabled={props.disabled}
-                        onClick={props.onClick}
-                        onChange={props.onChange}
-                        placeholder={props.placeholder ? props.placeholder : props.title}
-                        type={props.type ? props.type : 'text'}
-                        required={props.required}
-                        maxLength={props.maxLength}
-                        minLength={props.minLength}
-                        min={props.min}
-                        max={props.max}
-                        pattern={props.pattern}
-                        list={props.datalistId}
-                        isInvalid={props.isInvalid}
-                    />
-                    {
-                        !(props.datalist && props.datalistId)
+                <Row className='m-0 w-100'>
+                    {props.infoText ? <Form.Label className='text-justify'>{props.infoText}</Form.Label> : <></>}
+                    <InputGroup>
+                        {!props.dropdown
                             ? <></>
-                            : <datalist id={props.datalistId}>
-                                {props.datalist}
-                            </datalist>
-                    }
-                    {
-                        !props.prepend
-                            ? <></>
-                            : <OverlayTrigger
-                                placement='top-end'
-                                overlay={
-                                    <Tooltip id='prepend-tooltip'>
-                                        {props.tooltip}
-                                    </Tooltip>
-                                }
-                            ><InputGroup.Text className='prepend px-3' >{props.prepend}</InputGroup.Text>
-                            </OverlayTrigger>
-                    }
-                    <Form.Control.Feedback type="invalid">
-                        {props.InvalidText}
-                    </Form.Control.Feedback>
-                </InputGroup>
+                            : <DropdownButton
+                                as={InputGroup.Prepend}
+                                variant="outline-secondary"
+                                title={props.dropdownTitle}
+                                id="input-group-dropdown-1"
+                            >
+                                {props.dropdown}
+                            </DropdownButton>
+                        }
+                        <Form.Control
+                            className={!props.prepend ? 'qt-input' : 'qt-input-prepend'}
+                            value={props.value}
+                            readOnly={props.readOnly}
+                            disabled={props.disabled}
+                            onClick={props.onClick}
+                            onChange={props.onChange}
+                            placeholder={props.placeholder ? props.placeholder : props.title}
+                            type={props.type ? props.type : 'text'}
+                            required={props.required}
+                            maxLength={props.maxLength}
+                            minLength={props.minLength}
+                            min={props.min}
+                            max={props.max}
+                            pattern={props.pattern}
+                            list={props.datalistId}
+                            isInvalid={props.isInvalid}
+                        />
+                        {
+                            !(props.datalist && props.datalistId)
+                                ? <></>
+                                : <datalist id={props.datalistId}>
+                                    {props.datalist}
+                                </datalist>
+                        }
+                        {
+                            !props.prepend
+                                ? <></>
+                                : <OverlayTrigger
+                                    placement='top-end'
+                                    overlay={
+                                        <Tooltip id='prepend-tooltip'>
+                                            {props.tooltip}
+                                        </Tooltip>
+                                    }
+                                ><InputGroup.Text className='prepend px-3' >{props.prepend}</InputGroup.Text>
+                                </OverlayTrigger>
+                        }
+                        <Form.Control.Feedback type="invalid">
+                            {props.InvalidText}
+                        </Form.Control.Feedback>
+                    </InputGroup>
+                </Row>
             </Col>
         </Form.Group>
     )
