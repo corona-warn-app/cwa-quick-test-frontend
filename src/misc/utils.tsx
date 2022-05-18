@@ -23,7 +23,7 @@ import { KeycloakInstance } from "keycloak-js";
 
 export interface IUtils {
     shortHashLen: number,
-    pattern: { [key: string]: string },
+    pattern: { [key: string]: string | RegExp },
     shortHash: (value: string) => string,
     isProcessNoValid: (value: string) => boolean,
     isZipValid: (value: string) => boolean,
@@ -32,6 +32,7 @@ export interface IUtils {
     isStandardisedNameValid: (value: string) => boolean,
     isUrlValid: (value: string) => boolean,
     isOpeningHoursValid: (value: string) => boolean,
+    isNameValid: (value: string) => boolean,
     getIndent: (level: number) => JSX.Element[],
     pickerDateFormat: string,
     pickerDateTimeFormat: string,
@@ -52,7 +53,8 @@ const pattern = {
     url: '^(www\\.|http:\\/\\/|https:\\/\\/){0,1}?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,10}(:[0-9]{1,5})?(\\/.*)?$',
     BSNR: '^[1-9]{1}\\d{8}$',
     //openingHours:'^[\\w-\\d\\s]{0,64}$/gm'
-    openingHours: '^(.|\n){0,64}$'
+    openingHours: '^(.|\n){0,64}$',
+    name: /^([\p{L}\s,-])*$/gu
 }
 
 const processNoRegExp = new RegExp(pattern.processNo);
@@ -62,6 +64,7 @@ const eMailRegExp = new RegExp(pattern.eMail);
 const standardisedNameRegExp = new RegExp(pattern.standardisedName);
 const urlRegExp = new RegExp(pattern.url);
 const openingHoursExp = new RegExp(pattern.openingHours);
+const nameExp = new RegExp(pattern.name);
 
 const getIndent = (level: number): JSX.Element[] => {
     const indent: JSX.Element[] = [];
@@ -86,6 +89,7 @@ const utils: IUtils = {
     isStandardisedNameValid: (value: string) => standardisedNameRegExp.test(value),
     isUrlValid: (url: string) => urlRegExp.test(url),
     isOpeningHoursValid: (value: string) => openingHoursExp.test(value),
+    isNameValid: (value: string) => nameExp.test(value),
     getIndent: getIndent,
     pickerDateFormat: 'dd.MM.yyyy',
     pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',

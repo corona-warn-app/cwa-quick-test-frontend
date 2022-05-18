@@ -586,7 +586,13 @@
     {
       "utf8": "\u040B",
       "character": "Ћ",
-      "description": "Cyrillic Character D falsch lt. Windows-Zeichentabelle \u040B",
+      "description": "Cyrillic Capital Letter Tshe",
+      "mrz": "C"
+    },
+    {
+      "utf8": "\u0402",
+      "character": "Ђ",
+      "description": "Cyrillic Capital Letter Dje",
       "mrz": "D"
     },
     {
