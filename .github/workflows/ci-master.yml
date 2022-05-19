@@ -1,5 +1,9 @@
 name: ci-master
 on:
+  release:
+    types:
+      - "created"
+      - "edited"
   workflow_dispatch:
   push:
     branches:
