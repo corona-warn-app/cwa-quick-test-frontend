@@ -19,43 +19,44 @@
  * under the License.
  */
 
-import { KeycloakInstance } from "keycloak-js";
+import { KeycloakInstance } from 'keycloak-js';
 
 export interface IUtils {
-    shortHashLen: number,
-    pattern: { [key: string]: string | RegExp },
-    shortHash: (value: string) => string,
-    isProcessNoValid: (value: string) => boolean,
-    isZipValid: (value: string) => boolean,
-    isTelValid: (value: string) => boolean,
-    isEMailValid: (value: string) => boolean,
-    isStandardisedNameValid: (value: string) => boolean,
-    isUrlValid: (value: string) => boolean,
-    isOpeningHoursValid: (value: string) => boolean,
-    isNameValid: (value: string) => boolean,
-    getIndent: (level: number) => JSX.Element[],
-    pickerDateFormat: string,
-    pickerDateTimeFormat: string,
-    momentDateFormat: string,
-    momentDateTimeFormat: string,
-    hasRole: (keycloak: KeycloakInstance, role: string) => boolean
+  shortHashLen: number;
+  pattern: { [key: string]: string | RegExp };
+  shortHash: (value: string) => string;
+  isProcessNoValid: (value: string) => boolean;
+  isZipValid: (value: string) => boolean;
+  isTelValid: (value: string) => boolean;
+  isEMailValid: (value: string) => boolean;
+  isStandardisedNameValid: (value: string) => boolean;
+  isUrlValid: (value: string) => boolean;
+  isOpeningHoursValid: (value: string) => boolean;
+  isNameValid: (value: string) => boolean;
+  getIndent: (level: number) => JSX.Element[];
+  pickerDateFormat: string;
+  pickerDateTimeFormat: string;
+  momentDateFormat: string;
+  momentDateTimeFormat: string;
+  hasRole: (keycloak: KeycloakInstance, role: string) => boolean;
 }
 
 const shortHashLen = 8;
 
 const pattern = {
-    processNo: '^[A-Fa-f0-9]{' + shortHashLen + '}$',
-    zip: '^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$',
-    houseNo: '^([1-9]{1}[0-9a-zA-Z-\\s/]{0,14})$',
-    tel: '^([+]{1}[1-9]{1,2}|[0]{1}[1-9]{1})[0-9]{5,}$',
-    eMail: '^[\\w\\d\\.!#$%&’*+/=?^_`{|}~-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
-    standardisedName: '^[0-9A-Z<]*$',
-    url: '^(www\\.|http:\\/\\/|https:\\/\\/){0,1}?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,10}(:[0-9]{1,5})?(\\/.*)?$',
-    BSNR: '^[1-9]{1}\\d{8}$',
-    //openingHours:'^[\\w-\\d\\s]{0,64}$/gm'
-    openingHours: '^(.|\n){0,64}$',
-    name: /^([\p{L}\s,-])*$/gu
-}
+  processNo: '^[A-Fa-f0-9]{' + shortHashLen + '}$',
+  zip: '^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$',
+  houseNo: '^([1-9]{1}[0-9a-zA-Z-\\s/]{0,14})$',
+  tel: '^([+]{1}[1-9]{1,2}|[0]{1}[1-9]{1})[0-9]{5,}$',
+  eMail:
+    '^[\\w\\d\\.!#$%&’*+/=?^_`{|}~-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
+  standardisedName: '^[A-Z<]*$',
+  url: '^(www\\.|http:\\/\\/|https:\\/\\/){0,1}?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,10}(:[0-9]{1,5})?(\\/.*)?$',
+  BSNR: '^[1-9]{1}\\d{8}$',
+  //openingHours:'^[\\w-\\d\\s]{0,64}$/gm'
+  openingHours: '^(.|\n){0,64}$',
+  name: /^([\p{L}\s,-])*$/gu,
+};
 
 const processNoRegExp = new RegExp(pattern.processNo);
 const zipRegExp = new RegExp(pattern.zip);
@@ -67,35 +68,37 @@ const openingHoursExp = new RegExp(pattern.openingHours);
 const nameExp = new RegExp(pattern.name);
 
 const getIndent = (level: number): JSX.Element[] => {
-    const indent: JSX.Element[] = [];
+  const indent: JSX.Element[] = [];
 
-    for (let index = 0; index < level; index++) {
-        indent.push(<span key={index} className='intend' />);
-    }
+  for (let index = 0; index < level; index++) {
+    indent.push(<span key={index} className='intend' />);
+  }
 
-    return indent;
-}
+  return indent;
+};
 
-const hasRole = (keycloak: KeycloakInstance, role: string) => keycloak && (keycloak.hasRealmRole(role) || keycloak.hasRealmRole(role));
+const hasRole = (keycloak: KeycloakInstance, role: string) =>
+  keycloak && (keycloak.hasRealmRole(role) || keycloak.hasRealmRole(role));
 
 const utils: IUtils = {
-    shortHashLen: shortHashLen,
-    pattern: pattern,
-    shortHash: (uuIdHash: string) => uuIdHash.substring(0, shortHashLen),
-    isProcessNoValid: (processNo: string) => processNoRegExp.test(processNo),
-    isZipValid: (zip: string) => zipRegExp.test(zip),
-    isTelValid: (tel: string) => telRegExp.test(tel),
-    isEMailValid: (eMail: string) => eMailRegExp.test(eMail),
-    isStandardisedNameValid: (value: string) => standardisedNameRegExp.test(value),
-    isUrlValid: (url: string) => urlRegExp.test(url),
-    isOpeningHoursValid: (value: string) => openingHoursExp.test(value),
-    isNameValid: (value: string) => nameExp.test(value),
-    getIndent: getIndent,
-    pickerDateFormat: 'dd.MM.yyyy',
-    pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',
-    momentDateFormat: 'DD.MM.yyyy',
-    momentDateTimeFormat: 'yyyy-MM-DD / hh:mm A',
-    hasRole: hasRole
-}
+  shortHashLen: shortHashLen,
+  pattern: pattern,
+  shortHash: (uuIdHash: string) => uuIdHash.substring(0, shortHashLen),
+  isProcessNoValid: (processNo: string) => processNoRegExp.test(processNo),
+  isZipValid: (zip: string) => zipRegExp.test(zip),
+  isTelValid: (tel: string) => telRegExp.test(tel),
+  isEMailValid: (eMail: string) => eMailRegExp.test(eMail),
+  isStandardisedNameValid: (value: string) =>
+    standardisedNameRegExp.test(value),
+  isUrlValid: (url: string) => urlRegExp.test(url),
+  isOpeningHoursValid: (value: string) => openingHoursExp.test(value),
+  isNameValid: (value: string) => nameExp.test(value),
+  getIndent: getIndent,
+  pickerDateFormat: 'dd.MM.yyyy',
+  pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',
+  momentDateFormat: 'DD.MM.yyyy',
+  momentDateTimeFormat: 'yyyy-MM-DD / hh:mm A',
+  hasRole: hasRole,
+};
 
 export default utils;
