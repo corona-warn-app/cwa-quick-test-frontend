@@ -1272,6 +1272,12 @@
       "character": "Ѵ",
       "description": "Cyrillic Capital Letter Izhitsa",
       "mrz": "Y"
+    },
+    {
+      "utf8": "\u042C",
+      "character": "Ь",
+      "description": "Cyrillic capital letter soft sign",
+      "mrz": ""
     }
   ]
 }
