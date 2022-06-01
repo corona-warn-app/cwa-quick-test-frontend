@@ -17,53 +17,58 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * Used character transliteration from 
+ *
+ * Used character transliteration from
  * https://www.icao.int/publications/Documents/9303_p3_cons_en.pdf
  */
 
-import icaoJson from '../assets/JSON/icao.json';
+import icaoJson from 'icao-transliteration/lib/json/icao.json';
 import React from 'react';
-import { IIcao, normalize, parsePattern, transliterate } from 'icao-transliteration';
+import {
+  IIcao,
+  normalize,
+  parsePattern,
+  transliterate,
+} from 'icao-transliteration';
 
 const useTransliterate = (onError?: (msg: string) => void) => {
-    const icao: IIcao = icaoJson;
-    const [result, setResult] = React.useState('');
+  const icao: IIcao = icaoJson;
+  const [result, setResult] = React.useState('');
 
-    const update = (input: string) => {
-        let output = '';
+  const update = (input: string) => {
+    let output = '';
 
-        try {
-            // some validation
-            if (!input && input !== '') throw new Error('input string is not valid!');
-            if (!icao) throw new Error('transliterations are not valid!');
+    try {
+      // some validation
+      if (!input && input !== '') throw new Error('input string is not valid!');
+      if (!icao) throw new Error('transliterations are not valid!');
 
-            // normalize input string for mrz transliteration
-            const normalizedInput = normalize(input, icao);
+      // normalize input string for mrz transliteration
+      const normalizedInput = normalize(input, icao);
 
-            // transliterate normalized input with transliterations from json
-            output = transliterate(normalizedInput, icao);
+      // transliterate normalized input with transliterations from json
+      output = transliterate(normalizedInput, icao);
 
-            // in the end transliterated output should pass regEx
-            if (!parsePattern(icao.pattern.mrz).test(output)) new Error('Could not transliterate some characters: ' + output + '.');
-        }
-        catch (error: any) {
-            if (onError) {
-                onError(error.message)
-            }
+      // in the end transliterated output should pass regEx
+      if (!parsePattern(icao.pattern.mrz).test(output))
+        new Error('Could not transliterate some characters: ' + output + '.');
+    } catch (error: any) {
+      if (onError) {
+        onError(error.message);
+      }
 
-            console.log(error.message);
-            output = '';
-        }
-
-        setResult(output);
+      console.log(error.message);
+      output = '';
     }
 
-    const clear = () => {
-        setResult('');
-    }
+    setResult(output);
+  };
 
-    return [result, update, clear] as const;
-}
+  const clear = () => {
+    setResult('');
+  };
+
+  return [result, update, clear] as const;
+};
 
 export default useTransliterate;
