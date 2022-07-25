@@ -31,10 +31,12 @@ jobs:
         --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/cwa-quick-test-frontend:latest \
         --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/cwa-quick-test-frontend:${VERSION} \
         --tag ${TRUSTED_URL}/${TRUSTED_REPOSITORY}/cwa-quick-test-frontend:${VERSION} \
+        --tag ${MTR_REPOSITORY}/cwa-quick-test-frontend:${VERSION} \
         .
       env:
         TRUSTED_URL: ${{ secrets.TRUSTED_URL }}
         TRUSTED_REPOSITORY: ${{ secrets.TRUSTED_REPOSITORY }}
+        MTR_REPOSITORY: ${{ secrets.MTR_REPOSITORY }}
     - name: docker push github
       run: |
         echo ${GITHUB_TOKEN} | docker login docker.pkg.github.com -u ${GITHUB_REPOSITORY_OWNER} --password-stdin
@@ -62,3 +64,15 @@ jobs:
         TRUSTED_REPOSITORY: ${{ secrets.TRUSTED_REPOSITORY }}
         TRUSTED_USER: ${{ secrets.TRUSTED_USER }}
         TRUSTED_TOKEN: ${{ secrets.TRUSTED_TOKEN }}
+    - name: docker push new mtr
+      run: |
+        echo ${MTR_TOKEN} | docker login ${MTR_REPOSITORY} -u ${MTR_USER} --password-stdin
+        docker push ${MTR_REPOSITORY}/cwa-quick-test-frontend:${VERSION}
+        cosign sign --key env://MTR_PRIVATE_KEY ${MTR_REPOSITORY}/cwa-quick-test-frontend:${VERSION}
+      env:
+        MTR_REPOSITORY: ${{ secrets.MTR_REPOSITORY }}
+        MTR_USER: ${{ secrets.MTR_USER }}
+        MTR_TOKEN: ${{ secrets.MTR_TOKEN }}
+        MTR_PRIVATE_KEY: ${{ secrets.MTR_PRIVATE_KEY }}
+        COSIGN_PASSWORD: ${{ secrets.MTR_PRIVATE_KEY_PASSWORD }}
+
