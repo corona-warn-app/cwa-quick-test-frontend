@@ -12,6 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - uses: sigstore/cosign-installer@main
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
