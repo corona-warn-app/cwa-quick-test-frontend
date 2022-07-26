@@ -20,13 +20,12 @@
  */
 
 import React from 'react';
-import { Route } from 'react-router-dom'
-import { Container } from 'react-bootstrap'
+import { Route } from 'react-router-dom';
+import { Container } from 'react-bootstrap';
 
 import './i18n';
 import { useTranslation } from 'react-i18next';
 
-import useNavigation from './misc/useNavigation';
 import IQuickTest from './misc/quick-test';
 
 import Footer from './components/modules/footer.component';
@@ -45,160 +44,170 @@ import IError from './misc/error';
 import ErrorPage from './components/modals/error-page.component';
 import DataprivacyPage from './components/modals/dataprivacy.component';
 import ImprintPage from './components/modals/imprint.component';
-import AppContext, { IAppContext } from './misc/appContext';
-import utils from './misc/utils';
-import CwaSpinner from './components/spinner/spinner.component';
-import { useGetValueSets } from './misc/useValueSet';
+import AppContext from './store/app-context';
 import NotificationToast from './components/modals/notification-toast.component';
 import useLocalStorage from './misc/useLocalStorage';
 
-
 const Routing = () => {
+  const { t } = useTranslation();
+  const context = React.useContext(AppContext);
+  const [quickTest, setQuickTest] = React.useState<IQuickTest>();
+  const [error, setError] = React.useState<IError>();
+  const [errorShow, setErrorShow] = React.useState(false);
+  const [notificationShow, setNotificationShow] = React.useState(false);
+  const [dataPrivacyShow, setDataPrivacyShow] = React.useState(false);
+  const [imprintShow, setImprintShow] = React.useState(false);
+  const [storedLandingDisclaimerShow] = useLocalStorage(
+    'landingDisclaimerShow',
+    true
+  );
+  const [storedUserManagementDisclaimerShow] = useLocalStorage(
+    'userManagementDisclaimerShow',
+    true
+  );
+  const [landingDisclaimerShow, setLandingDisclaimerShow] = React.useState(
+    storedLandingDisclaimerShow
+  );
+  const [userManagementDisclaimerShow, setUserManagementDisclaimerShow] =
+    React.useState(storedUserManagementDisclaimerShow);
 
-    const { t } = useTranslation();
-    const [quickTest, setQuickTest] = React.useState<IQuickTest>();
-    const [error, setError] = React.useState<IError>();
-    const [errorShow, setErrorShow] = React.useState(false);
-    const [notificationShow, setNotificationShow] = React.useState(false);
-    const [dataPrivacyShow, setDataPrivacyShow] = React.useState(false);
-    const [imprintShow, setImprintShow] = React.useState(false);
-    const [isInit, setIsInit] = React.useState(false);
-    const [storedLandingDisclaimerShow] = useLocalStorage('landingDisclaimerShow', true);
-    const [storedUserManagementDisclaimerShow] = useLocalStorage('userManagementDisclaimerShow', true);
-    const [landingDisclaimerShow, setLandingDisclaimerShow] = React.useState(storedLandingDisclaimerShow);
-    const [userManagementDisclaimerShow, setUserManagementDisclaimerShow] = React.useState(storedUserManagementDisclaimerShow);
+  document.title = t('translation:title');
 
-
-    const context: IAppContext = {
-        navigation: useNavigation(),
-        valueSets: useGetValueSets(undefined, (msg) => { setError({ message: msg }) }),
-        utils: utils
+  React.useEffect(() => {
+    if (error) {
+      setErrorShow(true);
     }
+  }, [error]);
 
-    document.title = t('translation:title');
+  const errorOnExit = () => {
+    setError(undefined);
+  };
 
-    React.useEffect(() => {
-        if (error) {
-            setErrorShow(true);
-        }
-    }, [error])
-
-    const errorOnExit = () => {
-        setError(undefined);
-    }
-
-    React.useEffect(() => {
-        if (context.valueSets && Object.entries(context.valueSets).length > 0 && context.navigation)
-            setIsInit(true);
-    }, [context.navigation, context.valueSets])
-
-    return (
-        !(isInit && context.valueSets && context.navigation)
-            ? <CwaSpinner />
-            : <AppContext.Provider value={context}>
-                {/*
+  return (
+    <>
+      {/*
     header, every time shown. fit its children
     */}
-                <Route path={context.navigation.routes.root}>
-                    <Header />
-                    <ErrorPage error={error} show={errorShow} onCancel={error?.onCancel} onHide={() => setErrorShow(false)} onExit={errorOnExit} />
-                    <NotificationToast show={notificationShow} setNotificationShow={setNotificationShow} />
-                    <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
-                    <ImprintPage show={imprintShow} setShow={setImprintShow} />
-                </Route>
+      <Route path={context.navigation!.routes.root}>
+        <Header />
+        <ErrorPage
+          error={error}
+          show={errorShow}
+          onCancel={error?.onCancel}
+          onHide={() => setErrorShow(false)}
+          onExit={errorOnExit}
+        />
+        <NotificationToast
+          show={notificationShow}
+          setNotificationShow={setNotificationShow}
+        />
+        <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
+        <ImprintPage show={imprintShow} setShow={setImprintShow} />
+      </Route>
 
-                {/*
+      {/*
     Content area. fit the rest of screen and children
     */}
-                <Container id='qt-body'>
+      <Container id='qt-body'>
+        {/* Landing */}
+        <Route exact path={context.navigation!.routes.landing}>
+          <LandingPage
+            disclaimerShow={landingDisclaimerShow}
+            setDisclaimerShow={(show: boolean) => {
+              setLandingDisclaimerShow(show);
+            }}
+            setNotificationShow={setNotificationShow}
+          />
+        </Route>
 
-                    {/* Landing */}
-                    <Route
-                        exact
-                        path={context.navigation.routes.landing}
-                    >
-                        <LandingPage
-                            disclaimerShow={landingDisclaimerShow}
-                            setDisclaimerShow={(show: boolean) => { setLandingDisclaimerShow(show) }}
-                            setNotificationShow={setNotificationShow} />
-                    </Route>
+        {/* Record Patient Data */}
+        <PrivateRoute
+          exact
+          roles={['c19_quick_test_counter']}
+          path={context.navigation!.routes.recordPatient}
+        >
+          <RecordPatientData
+            setQuickTest={setQuickTest}
+            quickTest={quickTest}
+            setError={setError}
+          />
+        </PrivateRoute>
 
+        {/* Show Patient Data */}
+        <PrivateRoute
+          roles={['c19_quick_test_counter']}
+          path={context.navigation!.routes.showPatientRecord}
+        >
+          <ShowPatientData
+            setQuickTest={setQuickTest}
+            quickTest={quickTest}
+            setError={setError}
+            setNotificationShow={setNotificationShow}
+          />
+        </PrivateRoute>
 
-                    {/* Record Patient Data */}
-                    <PrivateRoute
-                        exact
-                        roles={['c19_quick_test_counter']}
-                        path={context.navigation.routes.recordPatient}
-                        component={RecordPatientData}
-                        render={(props) => <RecordPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} />}
-                    />
+        {/* Record Test Result */}
+        <PrivateRoute
+          roles={['c19_quick_test_lab']}
+          path={context.navigation!.routes.recordTestResult}
+        >
+          <RecordTestResult
+            setError={setError}
+            setNotificationShow={setNotificationShow}
+          />
+        </PrivateRoute>
 
-                    {/* Show Patient Data */}
-                    <PrivateRoute
-                        roles={['c19_quick_test_counter']}
-                        path={context.navigation.routes.showPatientRecord}
-                        component={ShowPatientData}
-                        render={(props) => <ShowPatientData {...props} setQuickTest={setQuickTest} quickTest={quickTest} setError={setError} setNotificationShow={setNotificationShow} />}
-                    />
+        {/* QR Scan */}
+        <PrivateRoute
+          exact
+          path={context.navigation!.routes.qrScan}
+          roles={['c19_quick_test_counter']}
+        >
+          <QrScan setQuickTest={setQuickTest} />
+        </PrivateRoute>
 
-                    {/* Record Test Result */}
-                    <PrivateRoute
-                        roles={['c19_quick_test_lab']}
-                        path={context.navigation.routes.recordTestResult}
-                        component={RecordTestResult}
-                        render={(props) => <RecordTestResult {...props} setError={setError} setNotificationShow={setNotificationShow} />}
-                    />
+        <PrivateRoute
+          exact
+          path={context.navigation!.routes.statistics}
+          roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
+        >
+          <Statistics setError={setError} />
+        </PrivateRoute>
 
-                    {/* QR Scan */}
-                    <PrivateRoute
-                        exact
-                        path={context.navigation.routes.qrScan}
-                        roles={['c19_quick_test_counter']}
-                        component={QrScan}
-                        render={(props) => <QrScan {...props} setQuickTest={setQuickTest} />}
-                    />
+        <PrivateRoute
+          exact
+          path={context.navigation!.routes.reports}
+          roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
+        >
+          <Reports setError={setError} />
+        </PrivateRoute>
 
-                    <PrivateRoute
-                        exact
-                        path={context.navigation.routes.statistics}
-                        roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
-                        component={Statistics}
-                        render={(props) => <Statistics {...props} setError={setError} />}
-                    />
+        <PrivateRoute
+          exact
+          path={context.navigation!.routes.userManagement}
+          roles={['c19_quick_test_admin']}
+        >
+          <UserManagement
+            setError={setError}
+            disclaimerShow={userManagementDisclaimerShow}
+            setDisclaimerShow={(show: boolean) => {
+              setUserManagementDisclaimerShow(show);
+            }}
+          />
+        </PrivateRoute>
+      </Container>
 
-                    <PrivateRoute
-                        exact
-                        path={context.navigation.routes.reports}
-                        roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
-                        component={Reports}
-                        render={(props) => <Reports {...props} setError={setError} />}
-                    />
-
-                    <PrivateRoute
-                        exact
-                        path={context.navigation.routes.userManagement}
-                        roles={['c19_quick_test_admin']}
-                        component={UserManagement}
-                        render={(props) =>
-                            <UserManagement
-                                {...props}
-                                setError={setError}
-                                disclaimerShow={userManagementDisclaimerShow}
-                                setDisclaimerShow={(show: boolean) => { setUserManagementDisclaimerShow(show) }}
-                            />}
-                    />
-
-                </Container>
-
-                {/*
+      {/*
     footer, every time shown. fit its children
     */}
-                <Route path={context.navigation.routes.root}>
-                    <Footer setDataPrivacyShow={setDataPrivacyShow} setImprintShow={setImprintShow} />
-                </Route>
-
-            </AppContext.Provider>
-    )
-}
+      <Route path={context.navigation!.routes.root}>
+        <Footer
+          setDataPrivacyShow={setDataPrivacyShow}
+          setImprintShow={setImprintShow}
+        />
+      </Route>
+    </>
+  );
+};
 
 export default Routing;

@@ -23,20 +23,20 @@ import React from 'react';
 import { useParams } from 'react-router';
 
 import { ReactKeycloakProvider } from '@react-keycloak/web';
-import Keycloak from 'keycloak-js'
+import Keycloak from 'keycloak-js';
 
 import LoginInterceptor from './login-interceptor.component';
 import Routing from './routing.component';
 
 import useLocalStorage from './misc/useLocalStorage';
 import { useGetContextConfig, useGetKeycloakConfig } from './api';
+import AppContextProvider from './store/AppContextProvider';
 
 interface UrlMandant {
   mandant: string;
 }
 
 const Root = (props: any) => {
-
   const { mandant } = useParams<UrlMandant>();
 
   const keycloakConfig = useGetKeycloakConfig();
@@ -44,15 +44,19 @@ const Root = (props: any) => {
 
   const [storedMandant, setStoredMandant] = useLocalStorage('mandant', '');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [dccRulesService, setDccRulesServices] = useLocalStorage('dccRulesService', '');
+  const [dccRulesService, setDccRulesServices] = useLocalStorage(
+    'dccRulesService',
+    ''
+  );
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [environmentName, setEnvironmentName] = useLocalStorage('environmentName', '');
+  const [environmentName, setEnvironmentName] = useLocalStorage(
+    'environmentName',
+    ''
+  );
 
   const [keycloak, setKeycloak] = React.useState<Keycloak.KeycloakInstance>();
 
-
   React.useEffect(() => {
-
     if (mandant && mandant !== storedMandant && !mandant.includes('&')) {
       setStoredMandant(mandant);
     }
@@ -64,7 +68,6 @@ const Root = (props: any) => {
 
   React.useEffect(() => {
     if (contextConfig) {
-
       if (contextConfig['rules-server-url']) {
         setDccRulesServices(contextConfig['rules-server-url']);
       }
@@ -72,30 +75,27 @@ const Root = (props: any) => {
       setEnvironmentName(contextConfig['environment-name'] ?? '');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contextConfig])
-
+  }, [contextConfig]);
 
   const updateKeycloakConfig = () => {
-
     if (keycloakConfig && storedMandant) {
-
       keycloakConfig.realm = storedMandant;
 
       setKeycloak(Keycloak(keycloakConfig));
-
     }
+  };
 
-  }
-
-  return (!keycloak ? <></> :
-    <ReactKeycloakProvider
-      authClient={keycloak}
-    >
+  return !keycloak ? (
+    <></>
+  ) : (
+    <ReactKeycloakProvider authClient={keycloak}>
       <LoginInterceptor>
-        <Routing />
+        <AppContextProvider>
+          <Routing />
+        </AppContextProvider>
       </LoginInterceptor>
     </ReactKeycloakProvider>
   );
-}
+};
 
 export default Root;

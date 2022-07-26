@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Container, Fade } from 'react-bootstrap'
+import { Button, Container, Fade } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -28,77 +28,110 @@ import { useTranslation } from 'react-i18next';
 import CwaSpinner from './spinner/spinner.component';
 import { useKeycloak } from '@react-keycloak/web';
 import DisclamerButton from './modules/disclamer-btn.component';
-import AppContext from '../misc/appContext';
+import AppContext from '../store/app-context';
 import useLocalStorage from '../misc/useLocalStorage';
-import utils from '../misc/utils';
 
 const LandingPage = (props: any) => {
+  const context = React.useContext(AppContext);
+  const { t } = useTranslation();
 
-    const context = React.useContext(AppContext);
-    const { t } = useTranslation();
+  const { keycloak } = useKeycloak();
 
-    const { keycloak } = useKeycloak();
+  const [isInit, setIsInit] = React.useState(false);
+  const [storedLandingDisclaimerShow, setStoredLandingDisclaimerShow] =
+    useLocalStorage('landingDisclaimerShow', true);
 
-    const [isInit, setIsInit] = React.useState(false)
-    const [storedLandingDisclaimerShow, setStoredLandingDisclaimerShow] = useLocalStorage('landingDisclaimerShow', true);
+  const { navigation, utils } = context;
 
-    React.useEffect(() => {
-        if (context) {
-            setIsInit(true);
-        }
-    }, [context])
+  React.useEffect(() => {
+    if (context) {
+      setIsInit(true);
+    }
+  }, [context]);
 
-    return (!(isInit && context && context.navigation) ? <CwaSpinner /> :
-        <Fade appear={true} in={true} >
-            <Container className='center-content'>
+  return !(isInit && navigation && utils) ? (
+    <CwaSpinner />
+  ) : (
+    <Fade appear={true} in={true}>
+      <Container className='center-content'>
+        <h1 className='mx-auto mb-5 d-flex'>
+          {t('translation:welcome')}
+          {utils.hasRole(keycloak, 'c19_quick_test_admin') && (
+            <DisclamerButton
+              firstTimeShow={props.disclaimerShow}
+              checked={!storedLandingDisclaimerShow}
+              onInit={() => {
+                props.setDisclaimerShow(false);
+              }}
+              onCheckChange={(checked: boolean) => {
+                setStoredLandingDisclaimerShow(!checked);
+              }}
+              disclaimerText={
+                <>
+                  {t('translation:disclaimer-text1-part1')}
+                  <a href={t('translation:disclaimer-link')} target='blank'>
+                    {t('translation:disclaimer-link')}
+                  </a>
+                  {t('translation:disclaimer-text1-part2')}
+                </>
+              }
+            />
+          )}
+        </h1>
 
-                <h1 className='mx-auto mb-5 d-flex'>
-                    {t('translation:welcome')}
-                    {utils.hasRole(keycloak, 'c19_quick_test_admin')
-                        ? <DisclamerButton
-                            firstTimeShow={props.disclaimerShow}
-                            checked={!storedLandingDisclaimerShow}
-                            onInit={() => { props.setDisclaimerShow(false) }}
-                            onCheckChange={(checked: boolean) => { setStoredLandingDisclaimerShow(!checked) }}
-                            disclaimerText={
-                                <>
-                                    {t('translation:disclaimer-text1-part1')}
-                                    <a
-                                        href={t('translation:disclaimer-link')}
-                                        target='blank'
-                                    >
-                                        {t('translation:disclaimer-link')}
-                                    </a>
-                                    {t('translation:disclaimer-text1-part2')}
-                                </>
-                            }
-                        />
-                        : <></>
-                    }
-                </h1>
-
-                {utils.hasRole(keycloak, 'c19_quick_test_counter')
-                    ? <Button block className='landing-btn' onClick={context.navigation.toRecordPatient}>{t('translation:record-patient-data')}</Button>
-                    : <></>
-                }
-                {utils.hasRole(keycloak, 'c19_quick_test_lab')
-                    ? <Button block className='landing-btn' onClick={context.navigation.toRecordTestResult}>{t('translation:record-result')}</Button>
-                    : <></>}
-                {utils.hasRole(keycloak, 'c19_quick_test_counter')
-                    ? <Button block className='landing-btn' onClick={context.navigation.toQRScan}>{t('translation:record-qr-scan')}</Button>
-                    : <></>}
-                {utils.hasRole(keycloak, 'c19_quick_test_lab')
-                    ? <>
-                        <Button block className='landing-btn' onClick={context.navigation.toReports}>{t('translation:failed-report')}</Button>
-                        <Button block className='landing-btn' onClick={context.navigation.toStatistics}>{t('translation:statistics-menu-item')}</Button>
-                    </>
-                    : <></>}
-                {utils.hasRole(keycloak, 'c19_quick_test_admin')
-                    ? <Button block className='landing-btn' onClick={context.navigation.toUserManagement}>{t('translation:user-management')}</Button>
-                    : <></>}
-            </Container>
-        </Fade >
-    )
-}
+        {utils.hasRole(keycloak, 'c19_quick_test_counter') && (
+          <Button
+            block
+            className='landing-btn'
+            onClick={navigation.toRecordPatient}
+          >
+            {t('translation:record-patient-data')}
+          </Button>
+        )}
+        {utils.hasRole(keycloak, 'c19_quick_test_lab') && (
+          <Button
+            block
+            className='landing-btn'
+            onClick={navigation.toRecordTestResult}
+          >
+            {t('translation:record-result')}
+          </Button>
+        )}
+        {utils.hasRole(keycloak, 'c19_quick_test_counter') && (
+          <Button block className='landing-btn' onClick={navigation.toQRScan}>
+            {t('translation:record-qr-scan')}
+          </Button>
+        )}
+        {utils.hasRole(keycloak, 'c19_quick_test_lab') && (
+          <>
+            <Button
+              block
+              className='landing-btn'
+              onClick={navigation.toReports}
+            >
+              {t('translation:failed-report')}
+            </Button>
+            <Button
+              block
+              className='landing-btn'
+              onClick={navigation.toStatistics}
+            >
+              {t('translation:statistics-menu-item')}
+            </Button>
+          </>
+        )}
+        {utils.hasRole(keycloak, 'c19_quick_test_admin') && (
+          <Button
+            block
+            className='landing-btn'
+            onClick={navigation.toUserManagement}
+          >
+            {t('translation:user-management')}
+          </Button>
+        )}
+      </Container>
+    </Fade>
+  );
+};
 
 export default LandingPage;

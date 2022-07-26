@@ -20,97 +20,122 @@
  */
 
 import React from 'react';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 import useLocalStorage from './useLocalStorage';
 
 export interface IRoute {
-    [key: string]: string;
+  [key: string]: string;
 }
 
 export interface INavigation {
-    routes: IRoute,
-    calculatedRoutes: IRoute,
-    toLanding: () => void,
-    toRecordPatient: () => void,
-    toShowRecordPatient: () => void,
-    toRecordTestResult: () => void,
-    toQRScan: () => void,
-    toStatistics: () => void,
-    toReports: () => void,
-    toUserManagement: () => void,
+  routes: IRoute;
+  calculatedRoutes: IRoute;
+  toLanding: () => void;
+  toRecordPatient: () => void;
+  toShowRecordPatient: () => void;
+  toRecordTestResult: () => void;
+  toQRScan: () => void;
+  toStatistics: () => void;
+  toReports: () => void;
+  toUserManagement: () => void;
 }
 
 export const useRoutes = () => {
+  const basePath = '/:mandant';
 
-    const basePath = '/:mandant'
+  const [result, setResult] = React.useState<IRoute>();
 
-    const [result, setResult] = React.useState<IRoute>();
+  React.useEffect(() => {
+    setResult({
+      root: basePath,
+      landing: basePath,
+      recordPatient: basePath + '/record',
+      showPatientRecord: basePath + '/record/show',
+      recordTestResult: basePath + '/record/result',
+      qrScan: basePath + '/qr/scan',
+      statistics: basePath + '/statistics',
+      reports: basePath + '/reports',
+      userManagement: basePath + '/usermanagement',
+    });
+  }, []);
 
-    React.useEffect(() => {
-        setResult({
-            root: basePath,
-            landing: basePath,
-            recordPatient: basePath + '/record',
-            showPatientRecord: basePath + '/record/show',
-            recordTestResult: basePath + '/record/result',
-            qrScan: basePath + '/qr/scan',
-            statistics: basePath + '/statistics',
-            reports: basePath + '/reports',
-            userManagement: basePath + '/usermanagement'
-        });
-    }, [])
-
-    return result;
-}
+  return result;
+};
 
 export const useNavigation = () => {
+  const history = useHistory();
+  const routes = useRoutes();
+  const [mandant] = useLocalStorage('mandant', '');
+  const [calculatedRoutes, setCalculatedRoutes] = React.useState<IRoute>();
+  const [result, setResult] = React.useState<INavigation>();
 
-    const history = useHistory();
-    const routes = useRoutes();
-    const [mandant] = useLocalStorage('mandant', '');
-    const [calculatedRoutes, setCalculatedRoutes] = React.useState<IRoute>();
-    const [result, setResult] = React.useState<INavigation>();
+  React.useEffect(() => {
+    if (routes) {
+      const c = routes;
 
-    React.useEffect(() => {
-        if (routes) {
-            const c = routes;
+      c.root = routes.root.replace(':mandant', mandant as string);
+      c.landing = routes.landing.replace(':mandant', mandant as string);
+      c.recordPatient = routes.recordPatient.replace(
+        ':mandant',
+        mandant as string
+      );
+      c.showPatientRecord = routes.showPatientRecord.replace(
+        ':mandant',
+        mandant as string
+      );
+      c.recordTestResult = routes.recordTestResult.replace(
+        ':mandant',
+        mandant as string
+      );
+      c.qrScan = routes.qrScan.replace(':mandant', mandant as string);
+      c.statistics = routes.statistics.replace(':mandant', mandant as string);
+      c.reports = routes.reports.replace(':mandant', mandant as string);
+      c.userManagement = routes.userManagement.replace(
+        ':mandant',
+        mandant as string
+      );
 
-            c.root = routes.root.replace(':mandant', mandant as string);
-            c.landing = routes.landing.replace(':mandant', mandant as string);
-            c.recordPatient = routes.recordPatient.replace(':mandant', mandant as string);
-            c.showPatientRecord = routes.showPatientRecord.replace(':mandant', mandant as string);
-            c.recordTestResult = routes.recordTestResult.replace(':mandant', mandant as string);
-            c.qrScan = routes.qrScan.replace(':mandant', mandant as string);
-            c.statistics = routes.statistics.replace(':mandant', mandant as string);
-            c.reports = routes.reports.replace(':mandant', mandant as string);
-            c.userManagement = routes.userManagement.replace(':mandant', mandant as string);
+      setCalculatedRoutes(c);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [routes]);
 
-            setCalculatedRoutes(c);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [routes])
+  React.useEffect(() => {
+    if (calculatedRoutes && routes) {
+      setResult({
+        routes: routes,
+        calculatedRoutes: calculatedRoutes,
 
-    React.useEffect(() => {
-        if (calculatedRoutes && routes) {
-            setResult({
-                routes: routes,
-                calculatedRoutes: calculatedRoutes,
+        toLanding: () => {
+          history.push(calculatedRoutes.landing);
+        },
+        toRecordPatient: () => {
+          history.push(calculatedRoutes.recordPatient);
+        },
+        toShowRecordPatient: () => {
+          history.push(calculatedRoutes.showPatientRecord);
+        },
+        toRecordTestResult: () => {
+          history.push(calculatedRoutes.recordTestResult);
+        },
+        toQRScan: () => {
+          history.push(calculatedRoutes.qrScan);
+        },
+        toStatistics: () => {
+          history.push(calculatedRoutes.statistics);
+        },
+        toReports: () => {
+          history.push(calculatedRoutes.reports);
+        },
+        toUserManagement: () => {
+          history.push(calculatedRoutes.userManagement);
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [calculatedRoutes]);
 
-                toLanding: () => { history.push(calculatedRoutes.landing); },
-                toRecordPatient: () => { history.push(calculatedRoutes.recordPatient); },
-                toShowRecordPatient: () => { history.push(calculatedRoutes.showPatientRecord); },
-                toRecordTestResult: () => { history.push(calculatedRoutes.recordTestResult); },
-                toQRScan: () => { history.push(calculatedRoutes.qrScan); },
-                toStatistics: () => { history.push(calculatedRoutes.statistics); },
-                toReports: () => { history.push(calculatedRoutes.reports); },
-                toUserManagement: () => { history.push(calculatedRoutes.userManagement); },
-            });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [calculatedRoutes])
-
-    return result;
-
-}
+  return result;
+};
 
 export default useNavigation;

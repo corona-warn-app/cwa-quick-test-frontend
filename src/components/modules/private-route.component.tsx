@@ -19,68 +19,62 @@
  * under the License.
  */
 
-import React from 'react';
-import { Redirect, Route, RouteComponentProps, RouteProps } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Redirect, Route, RouteProps } from 'react-router-dom';
 
 import { useKeycloak } from '@react-keycloak/web';
-import useNavigation from '../../misc/useNavigation';
 
-interface PrivateRouteParams extends RouteProps {
-  component:
-  | React.ComponentType<RouteComponentProps<any>>
-  | React.ComponentType<any>,
-  roles?: string[],
-  render?: (props: RouteComponentProps<any>) => React.ReactNode
+import AppContext from '../../store/app-context';
+
+interface PrivateRouteProps extends RouteProps {
+  roles?: string[];
 }
 
-export function PrivateRoute({
-  component: Component,
-  roles,
-  render,
-  ...rest }: PrivateRouteParams) {
-
+const PrivateRoute = (props: PrivateRouteProps) => {
   const { keycloak } = useKeycloak();
-  const navigation = useNavigation();
-  const [isInit, setIsInit] = React.useState(false)
-  const [isAuthorized, setIsAuthorized] = React.useState(false)
+  const { navigation } = useContext(AppContext);
+
+  const [isInit, setIsInit] = React.useState(false);
+  const [isAuthorized, setIsAuthorized] = React.useState(false);
+
+  const { roles } = props;
 
   React.useEffect(() => {
-
     if (keycloak) {
-
       if (roles && roles.length > 0) {
-        setIsAuthorized(roles.some(role => {
-          // In keycloak there are two ways of assiging roles to the user 
-          // You can assign roles to realm & client 
-          // In that case you have to use both scenarios with hasRealmRole & hasResourceRole
-          const realm = keycloak.hasRealmRole(role);
-          const resource = keycloak.hasResourceRole(role);
+        setIsAuthorized(
+          roles.some((role) => {
+            // In keycloak there are two ways of assiging roles to the user
+            // You can assign roles to realm & client
+            // In that case you have to use both scenarios with hasRealmRole & hasResourceRole
+            const realm = keycloak.hasRealmRole(role);
+            const resource = keycloak.hasResourceRole(role);
 
-          return realm || resource;
-        }));
-      }
-      else {
+            return realm || resource;
+          })
+        );
+      } else {
         // no roles set --> everybody can access
         setIsAuthorized(true);
       }
 
       setIsInit(true);
     }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [keycloak])
+  }, [keycloak, roles]);
 
   return (
-    <Route
-      {...rest}
-      render={(props) =>
-        !isInit ? <></>
-          : isAuthorized ? render ? render(props)
-            : <Component {...props} />
-            : <Redirect to={navigation!.calculatedRoutes.landing} />
-      }
-    />
-  )
-}
+    <>
+      {isInit && (
+        <Route {...props}>
+          {isAuthorized ? (
+            props.children
+          ) : (
+            <Redirect to={navigation?.calculatedRoutes.landing!} />
+          )}
+        </Route>
+      )}
+    </>
+  );
+};
 
 export default PrivateRoute;

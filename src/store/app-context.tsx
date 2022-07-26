@@ -17,23 +17,25 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * Used character transliteration from 
+ *
+ * Used character transliteration from
  * https://www.icao.int/publications/Documents/9303_p3_cons_en.pdf
  */
 
-
-import React from "react";
-import { INavigation } from "./useNavigation";
-import { IValueSetList } from "./useValueSet";
-import { IUtils } from "./utils";
+import React from 'react';
+import { ICancellationResponse } from '../misc/useCancellation';
+import { INavigation } from '../misc/useNavigation';
+import { IValueSetList } from '../misc/useValueSet';
+import { IUtils } from '../misc/utils';
 
 export interface IAppContext {
-    navigation?: INavigation;
-    valueSets?: IValueSetList;
-    utils?: IUtils;
+  navigation?: INavigation;
+  valueSets?: IValueSetList;
+  utils?: IUtils;
+  cancellation?: ICancellationResponse;
+  initialized: boolean;
 }
 
-const AppContext = React.createContext<IAppContext>({});
+const AppContext = React.createContext<IAppContext>({ initialized: false });
 
 export default AppContext;
