@@ -47,6 +47,7 @@ import ImprintPage from './components/modals/imprint.component';
 import AppContext from './store/app-context';
 import NotificationToast from './components/modals/notification-toast.component';
 import useLocalStorage from './misc/useLocalStorage';
+import DataDownload from './components/data-download.component';
 
 const Routing = () => {
   const { t } = useTranslation();
@@ -194,6 +195,14 @@ const Routing = () => {
               setUserManagementDisclaimerShow(show);
             }}
           />
+        </PrivateRoute>
+
+        <PrivateRoute
+          exact
+          path={context.navigation!.routes.dataDownload}
+          roles={['c19_quick_test_admin']}
+        >
+          <DataDownload setError={setError} />
         </PrivateRoute>
       </Container>
 

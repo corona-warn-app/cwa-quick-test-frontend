@@ -79,7 +79,7 @@ const LandingPage = (props: any) => {
           )}
         </h1>
 
-        {utils.hasRole(keycloak, 'c19_quick_test_counter') && (
+        {utils.hasRole(keycloak, 'c19_quick_test_counter') ? (
           <Button
             block
             className='landing-btn'
@@ -87,8 +87,10 @@ const LandingPage = (props: any) => {
           >
             {t('translation:record-patient-data')}
           </Button>
+        ) : (
+          <></>
         )}
-        {utils.hasRole(keycloak, 'c19_quick_test_lab') && (
+        {utils.hasRole(keycloak, 'c19_quick_test_lab') ? (
           <Button
             block
             className='landing-btn'
@@ -96,13 +98,17 @@ const LandingPage = (props: any) => {
           >
             {t('translation:record-result')}
           </Button>
+        ) : (
+          <></>
         )}
-        {utils.hasRole(keycloak, 'c19_quick_test_counter') && (
+        {utils.hasRole(keycloak, 'c19_quick_test_counter') ? (
           <Button block className='landing-btn' onClick={navigation.toQRScan}>
             {t('translation:record-qr-scan')}
           </Button>
+        ) : (
+          <></>
         )}
-        {utils.hasRole(keycloak, 'c19_quick_test_lab') && (
+        {utils.hasRole(keycloak, 'c19_quick_test_lab') ? (
           <>
             <Button
               block
@@ -119,8 +125,10 @@ const LandingPage = (props: any) => {
               {t('translation:statistics-menu-item')}
             </Button>
           </>
+        ) : (
+          <></>
         )}
-        {utils.hasRole(keycloak, 'c19_quick_test_admin') && (
+        {utils.hasRole(keycloak, 'c19_quick_test_admin') ? (
           <Button
             block
             className='landing-btn'
@@ -128,6 +136,19 @@ const LandingPage = (props: any) => {
           >
             {t('translation:user-management')}
           </Button>
+        ) : (
+          <></>
+        )}
+        {utils.hasRole(keycloak, 'c19_quick_test_admin') ? (
+          <Button
+            block
+            className='landing-btn'
+            onClick={navigation.toDataDownload}
+          >
+            {t('translation:record-download')}
+          </Button>
+        ) : (
+          <></>
         )}
       </Container>
     </Fade>

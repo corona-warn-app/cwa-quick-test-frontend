@@ -38,6 +38,7 @@ export interface INavigation {
   toStatistics: () => void;
   toReports: () => void;
   toUserManagement: () => void;
+  toDataDownload: () => void;
 }
 
 export const useRoutes = () => {
@@ -56,6 +57,7 @@ export const useRoutes = () => {
       statistics: basePath + '/statistics',
       reports: basePath + '/reports',
       userManagement: basePath + '/usermanagement',
+      dataDownload: basePath + '/download',
     });
   }, []);
 
@@ -94,6 +96,10 @@ export const useNavigation = () => {
         ':mandant',
         mandant as string
       );
+      c.dataDownload = routes.dataDownload.replace(
+        ':mandant',
+        mandant as string
+      );
 
       setCalculatedRoutes(c);
     }
@@ -129,6 +135,9 @@ export const useNavigation = () => {
         },
         toUserManagement: () => {
           history.push(calculatedRoutes.userManagement);
+        },
+        toDataDownload: () => {
+          history.push(calculatedRoutes.dataDownload);
         },
       });
     }
