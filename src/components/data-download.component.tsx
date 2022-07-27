@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Card, Fade } from 'react-bootstrap';
+import { Button, Card, Fade } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -28,57 +28,95 @@ import { useTranslation } from 'react-i18next';
 import CwaSpinner from './spinner/spinner.component';
 import CardFooter from './modules/card-footer.component';
 import CardHeader from './modules/card-header.component';
-import AppContext from '../misc/appContext';
+import AppContext from '../store/app-context';
+import useCancallation from '../misc/useCancellation';
 
 const DataDownload = (props: any) => {
+  const context = React.useContext(AppContext);
+  const { t } = useTranslation();
+  const [, , requestDownload, getDownloadLink] = useCancallation();
 
-    const context = React.useContext(AppContext);
-    const { t } = useTranslation();
+  const [isInit, setIsInit] = React.useState(false);
+  const [downloadLink, setDownloadLink] = React.useState('');
 
-    const [isInit, setIsInit] = React.useState(false)
+  React.useEffect(() => {
+    if (context.navigation && context.valueSets) setIsInit(true);
+  }, [context.navigation, context.valueSets]);
 
-    React.useEffect(() => {
-        if (context.navigation && context.valueSets)
-            setIsInit(true);
-    }, [context.navigation, context.valueSets])
+  React.useEffect(() => {
+    downloadLink && window.open(downloadLink, '_blank');
+  }, [downloadLink]);
 
-    const handleCancel = () => {
-        context.navigation?.toLanding();
+  const handleCancel = () => {
+    context.navigation?.toLanding();
+  };
+
+  const handleError = (error: any) => {
+    let msg = '';
+
+    if (error) {
+      msg = error.message;
     }
-
-    const handleError = (error: any) => {
-        let msg = '';
-
-        if (error) {
-            msg = error.message
-        }
-        if (error && error.message && (error.message as string).includes('412')) {
-            msg = t('translation:no-group-error');
-        }
-        props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
+    if (error && error.message && (error.message as string).includes('412')) {
+      msg = t('translation:no-group-error');
     }
+    props.setError({
+      error: error,
+      message: msg,
+      onCancel: context.navigation!.toLanding,
+    });
+  };
 
-    return (<>{
-        !(isInit && context)
-            ? <CwaSpinner />
-            : <Fade appear={true} in={true} >
-                <Card id='data-card'>
+  const handleRequestDownload = () => {
+    requestDownload(context.updateCancellation!);
+  };
 
-                    <CardHeader title={t('translation:record-download')} />
+  const handleDownload = () => {
+    getDownloadLink(setDownloadLink);
+  };
 
-                    <Card.Body id='data-body' className='pt-0'>
+  return (
+    <>
+      {!(isInit && context) ? (
+        <CwaSpinner />
+      ) : (
+        <Fade appear={true} in={true}>
+          <Card id='data-card'>
+            <CardHeader title={t('translation:record-download')} />
 
-                    </Card.Body>
+            <Card.Body id='data-body' className='pt-0'>
+              <p>{context.cancellation?.status}</p>
+              <p>{JSON.stringify(context.cancellation?.cancellation)}</p>
+              <p>{downloadLink}</p>
+              <Button onClick={context.updateCancellation}>
+                update cancellation
+              </Button>
+              <Button
+                disabled={
+                  !!context.cancellation?.cancellation?.downloadRequested
+                }
+                onClick={handleRequestDownload}
+              >
+                request download
+              </Button>
+            </Card.Body>
 
-                    <CardFooter
-                        okText={t('translation:data-download')}
-                        handleCancel={handleCancel}
-                    />
-                </Card>
-            </Fade>
-    }
+            <CardFooter
+              okText={t('translation:data-download')}
+              handleCancel={handleCancel}
+              disabled={
+                !!!(
+                  context.cancellation?.cancellation?.downloadRequested &&
+                  context.cancellation?.cancellation?.csvCreated
+                )
+              }
+              handleOk={handleDownload}
+            />
+          </Card>
+        </Fade>
+      )}
     </>
-    )
-}
+  );
+};
 
 export default DataDownload;

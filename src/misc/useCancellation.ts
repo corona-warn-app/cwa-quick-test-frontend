@@ -60,7 +60,18 @@ const useCancallation = (onError?: (error: any) => void) => {
       .catch(onError);
   };
 
-  return [result, getCancellation, requestDownload] as const;
+  const getDownloadLink = (onSuccess?: (link: string) => void) => {
+    const uri = '/api/cancellation/download';
+
+    api
+      .get(uri, { headers: header })
+      .then((response) => {
+        onSuccess && onSuccess(response.data);
+      })
+      .catch(onError);
+  };
+
+  return [result, getCancellation, requestDownload, getDownloadLink] as const;
 };
 
 export default useCancallation;

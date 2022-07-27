@@ -34,6 +34,7 @@ export interface IAppContext {
   utils?: IUtils;
   cancellation?: ICancellationResponse;
   initialized: boolean;
+  updateCancellation?: () => void;
 }
 
 const AppContext = React.createContext<IAppContext>({ initialized: false });

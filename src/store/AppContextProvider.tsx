@@ -13,11 +13,18 @@ enum AppCtxActions {
   UPDATE_VS,
   UPDATE_UTILS,
   UPDATE_CANCEL,
+  UPDATE_GET_CANCEL,
 }
 
 interface IAppCtxAction {
   type: AppCtxActions;
-  payload: INavigation | ICancellationResponse | IUtils | IValueSetList;
+  payload:
+    | INavigation
+    | ICancellationResponse
+    | IUtils
+    | IValueSetList
+    | (() => void)
+    | ((onSuccess: () => void) => void);
 }
 
 const defaultAppCtx: IAppContext = { initialized: false };
@@ -37,6 +44,10 @@ const appCtxReducer = (state: IAppContext, action: IAppCtxAction) => {
       ctx.cancellation = action.payload as ICancellationResponse;
       break;
 
+    case AppCtxActions.UPDATE_GET_CANCEL:
+      ctx.updateCancellation = action.payload as () => void;
+      break;
+
     case AppCtxActions.UPDATE_UTILS:
       ctx.utils = action.payload as IUtils;
       break;
@@ -49,6 +60,7 @@ const appCtxReducer = (state: IAppContext, action: IAppCtxAction) => {
   ctx.initialized = !!(
     ctx.navigation &&
     ctx.cancellation &&
+    ctx.updateCancellation &&
     ctx.utils &&
     ctx.valueSets
   );
@@ -66,7 +78,14 @@ const AppContextProvider = (props: any) => {
   const _utils = utils;
   const [cancellation, getCancellation] = useCancallation();
 
-  React.useEffect(getCancellation, []);
+  React.useEffect(() => {
+    contextDispatch({
+      type: AppCtxActions.UPDATE_GET_CANCEL,
+      payload: getCancellation,
+    });
+
+    getCancellation();
+  }, []);
 
   React.useEffect(() => {
     navigation &&
