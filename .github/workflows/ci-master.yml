@@ -31,12 +31,9 @@ jobs:
         docker build \
         --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/cwa-quick-test-frontend:latest \
         --tag docker.pkg.github.com/${GITHUB_REPOSITORY}/cwa-quick-test-frontend:${VERSION} \
-        --tag ${TRUSTED_URL}/${TRUSTED_REPOSITORY}/cwa-quick-test-frontend:${VERSION} \
         --tag ${MTR_REPOSITORY}/cwa-quick-test-frontend:${VERSION} \
         .
       env:
-        TRUSTED_URL: ${{ secrets.TRUSTED_URL }}
-        TRUSTED_REPOSITORY: ${{ secrets.TRUSTED_REPOSITORY }}
         MTR_REPOSITORY: ${{ secrets.MTR_REPOSITORY }}
     - name: docker push github
       run: |
