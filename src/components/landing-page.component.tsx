@@ -58,11 +58,8 @@ const LandingPage = (props: any) => {
           {t('translation:welcome')}
           {utils.hasRole(keycloak, 'c19_quick_test_admin') && (
             <DisclamerButton
-              firstTimeShow={props.disclaimerShow}
+              firstTimeShow={storedLandingDisclaimerShow}
               checked={!storedLandingDisclaimerShow}
-              onInit={() => {
-                props.setDisclaimerShow(false);
-              }}
               onCheckChange={(checked: boolean) => {
                 setStoredLandingDisclaimerShow(!checked);
               }}

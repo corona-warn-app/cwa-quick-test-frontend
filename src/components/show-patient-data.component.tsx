@@ -57,10 +57,9 @@ const ShowPatientData = (props: any) => {
       if (props.quickTest) {
         setQuickTest(props.quickTest);
       } else
-        props.setError({
+        context.updateError({
           error: '',
           message: t('translation:error-patient-data-load'),
-          onCancel: context.navigation!.toLanding,
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,10 +127,9 @@ const ShowPatientData = (props: any) => {
     if (error) {
       msg = error.message;
     }
-    props.setError({
+    context.updateError({
       error: error,
       message: msg,
-      onCancel: context.navigation!.toLanding,
     });
   };
 

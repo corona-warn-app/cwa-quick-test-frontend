@@ -29,7 +29,7 @@ import LoginInterceptor from './login-interceptor.component';
 import Routing from './routing.component';
 
 import useLocalStorage from './misc/useLocalStorage';
-import { useGetContextConfig, useGetKeycloakConfig } from './api';
+import { useGetKeycloakConfig } from './api';
 import AppContextProvider from './store/AppContextProvider';
 
 interface UrlMandant {
@@ -40,19 +40,9 @@ const Root = (props: any) => {
   const { mandant } = useParams<UrlMandant>();
 
   const keycloakConfig = useGetKeycloakConfig();
-  const contextConfig = useGetContextConfig();
 
   const [storedMandant, setStoredMandant] = useLocalStorage('mandant', '');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [dccRulesService, setDccRulesServices] = useLocalStorage(
-    'dccRulesService',
-    ''
-  );
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [environmentName, setEnvironmentName] = useLocalStorage(
-    'environmentName',
-    ''
-  );
 
   const [keycloak, setKeycloak] = React.useState<Keycloak.KeycloakInstance>();
 
@@ -65,17 +55,6 @@ const Root = (props: any) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mandant, keycloakConfig]);
-
-  React.useEffect(() => {
-    if (contextConfig) {
-      if (contextConfig['rules-server-url']) {
-        setDccRulesServices(contextConfig['rules-server-url']);
-      }
-
-      setEnvironmentName(contextConfig['environment-name'] ?? '');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contextConfig]);
 
   const updateKeycloakConfig = () => {
     if (keycloakConfig && storedMandant) {

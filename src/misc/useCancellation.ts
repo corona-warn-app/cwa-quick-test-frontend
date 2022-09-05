@@ -25,16 +25,18 @@ const useCancallation = (onError?: (error: any) => void) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<ICancellationResponse>();
 
-  const header = {
-    Authorization: initialized ? `Bearer ${keycloak.token}` : '',
-    'Content-Type': 'application/json',
+  const getHeader = () => {
+    return {
+      Authorization: initialized ? `Bearer ${keycloak.token}` : '',
+      'Content-Type': 'application/json',
+    };
   };
 
   const getCancellation = () => {
     const uri = '/api/cancellation/';
 
     api
-      .get(uri, { headers: header })
+      .get(uri, { headers: getHeader() })
       .then((response) => {
         setResult({
           cancellation: response.data,
@@ -43,7 +45,7 @@ const useCancallation = (onError?: (error: any) => void) => {
       })
       .catch((error) => {
         setResult({ status: error.response.status });
-        if (onError) {
+        if (onError && error.response.status !== 404) {
           onError(error);
         }
       });
@@ -55,7 +57,7 @@ const useCancallation = (onError?: (error: any) => void) => {
     const uri = '/api/cancellation/requestDownload';
 
     api
-      .post(uri, undefined, { headers: header })
+      .post(uri, undefined, { headers: getHeader() })
       .then(onSuccess)
       .catch(onError);
   };
@@ -64,7 +66,7 @@ const useCancallation = (onError?: (error: any) => void) => {
     const uri = '/api/cancellation/download';
 
     api
-      .get(uri, { headers: header })
+      .get(uri, { headers: getHeader() })
       .then((response) => {
         onSuccess && onSuccess(response.data);
       })

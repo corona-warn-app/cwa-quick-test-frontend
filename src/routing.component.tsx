@@ -40,49 +40,18 @@ import Reports from './components/reports';
 import UserManagement from './components/user-management.component';
 
 import PrivateRoute from './components/modules/private-route.component';
-import IError from './misc/error';
 import ErrorPage from './components/modals/error-page.component';
-import DataprivacyPage from './components/modals/dataprivacy.component';
-import ImprintPage from './components/modals/imprint.component';
 import AppContext from './store/app-context';
 import NotificationToast from './components/modals/notification-toast.component';
-import useLocalStorage from './misc/useLocalStorage';
 import DataDownload from './components/data-download.component';
 
 const Routing = () => {
   const { t } = useTranslation();
   const context = React.useContext(AppContext);
   const [quickTest, setQuickTest] = React.useState<IQuickTest>();
-  const [error, setError] = React.useState<IError>();
-  const [errorShow, setErrorShow] = React.useState(false);
   const [notificationShow, setNotificationShow] = React.useState(false);
-  const [dataPrivacyShow, setDataPrivacyShow] = React.useState(false);
-  const [imprintShow, setImprintShow] = React.useState(false);
-  const [storedLandingDisclaimerShow] = useLocalStorage(
-    'landingDisclaimerShow',
-    true
-  );
-  const [storedUserManagementDisclaimerShow] = useLocalStorage(
-    'userManagementDisclaimerShow',
-    true
-  );
-  const [landingDisclaimerShow, setLandingDisclaimerShow] = React.useState(
-    storedLandingDisclaimerShow
-  );
-  const [userManagementDisclaimerShow, setUserManagementDisclaimerShow] =
-    React.useState(storedUserManagementDisclaimerShow);
 
   document.title = t('translation:title');
-
-  React.useEffect(() => {
-    if (error) {
-      setErrorShow(true);
-    }
-  }, [error]);
-
-  const errorOnExit = () => {
-    setError(undefined);
-  };
 
   return (
     <>
@@ -91,19 +60,11 @@ const Routing = () => {
     */}
       <Route path={context.navigation!.routes.root}>
         <Header />
-        <ErrorPage
-          error={error}
-          show={errorShow}
-          onCancel={error?.onCancel}
-          onHide={() => setErrorShow(false)}
-          onExit={errorOnExit}
-        />
+        <ErrorPage />
         <NotificationToast
           show={notificationShow}
           setNotificationShow={setNotificationShow}
         />
-        <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
-        <ImprintPage show={imprintShow} setShow={setImprintShow} />
       </Route>
 
       {/*
@@ -112,13 +73,7 @@ const Routing = () => {
       <Container id='qt-body'>
         {/* Landing */}
         <Route exact path={context.navigation!.routes.landing}>
-          <LandingPage
-            disclaimerShow={landingDisclaimerShow}
-            setDisclaimerShow={(show: boolean) => {
-              setLandingDisclaimerShow(show);
-            }}
-            setNotificationShow={setNotificationShow}
-          />
+          <LandingPage setNotificationShow={setNotificationShow} />
         </Route>
 
         {/* Record Patient Data */}
@@ -130,7 +85,6 @@ const Routing = () => {
           <RecordPatientData
             setQuickTest={setQuickTest}
             quickTest={quickTest}
-            setError={setError}
           />
         </PrivateRoute>
 
@@ -142,7 +96,6 @@ const Routing = () => {
           <ShowPatientData
             setQuickTest={setQuickTest}
             quickTest={quickTest}
-            setError={setError}
             setNotificationShow={setNotificationShow}
           />
         </PrivateRoute>
@@ -152,10 +105,7 @@ const Routing = () => {
           roles={['c19_quick_test_lab']}
           path={context.navigation!.routes.recordTestResult}
         >
-          <RecordTestResult
-            setError={setError}
-            setNotificationShow={setNotificationShow}
-          />
+          <RecordTestResult setNotificationShow={setNotificationShow} />
         </PrivateRoute>
 
         {/* QR Scan */}
@@ -172,7 +122,7 @@ const Routing = () => {
           path={context.navigation!.routes.statistics}
           roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
         >
-          <Statistics setError={setError} />
+          <Statistics />
         </PrivateRoute>
 
         <PrivateRoute
@@ -180,7 +130,7 @@ const Routing = () => {
           path={context.navigation!.routes.reports}
           roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
         >
-          <Reports setError={setError} />
+          <Reports />
         </PrivateRoute>
 
         <PrivateRoute
@@ -188,13 +138,7 @@ const Routing = () => {
           path={context.navigation!.routes.userManagement}
           roles={['c19_quick_test_admin']}
         >
-          <UserManagement
-            setError={setError}
-            disclaimerShow={userManagementDisclaimerShow}
-            setDisclaimerShow={(show: boolean) => {
-              setUserManagementDisclaimerShow(show);
-            }}
-          />
+          <UserManagement />
         </PrivateRoute>
 
         <PrivateRoute
@@ -202,7 +146,7 @@ const Routing = () => {
           path={context.navigation!.routes.dataDownload}
           roles={['c19_quick_test_admin']}
         >
-          <DataDownload setError={setError} />
+          <DataDownload />
         </PrivateRoute>
       </Container>
 
@@ -210,10 +154,7 @@ const Routing = () => {
     footer, every time shown. fit its children
     */}
       <Route path={context.navigation!.routes.root}>
-        <Footer
-          setDataPrivacyShow={setDataPrivacyShow}
-          setImprintShow={setImprintShow}
-        />
+        <Footer />
       </Route>
     </>
   );

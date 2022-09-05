@@ -92,10 +92,9 @@ const RecordTestResult = (props: any) => {
     if (error && error.message && (error.message as string).includes('412')) {
       msg = t('translation:no-group-error');
     }
-    props.setError({
+    context.updateError({
       error: error,
       message: msg,
-      onCancel: context.navigation!.toLanding,
     });
   };
 
@@ -124,10 +123,9 @@ const RecordTestResult = (props: any) => {
     processNo,
     handleProcessIdInputHide,
     (error: any) =>
-      props.setError({
+      context.updateError({
         error: '',
         message: t('translation:error-processId-data-load'),
-        onCancel: context.navigation!.toLanding,
       })
   );
 

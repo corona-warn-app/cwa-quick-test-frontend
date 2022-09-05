@@ -1,19 +1,23 @@
 import React, { useReducer } from 'react';
+import { useGetContextConfig } from '../api';
 import CwaSpinner from '../components/spinner/spinner.component';
+import IError from '../misc/error';
 import useCancallation, {
   ICancellationResponse,
 } from '../misc/useCancellation';
 import useNavigation, { INavigation } from '../misc/useNavigation';
 import { IValueSetList, useGetValueSets } from '../misc/useValueSet';
-import utils, { IUtils } from '../misc/utils';
+import utils from '../misc/utils';
 import AppContext, { IAppContext } from './app-context';
 
 enum AppCtxActions {
   UPDATE_NAV,
   UPDATE_VS,
-  UPDATE_UTILS,
   UPDATE_CANCEL,
+  UPDATE_CTX_CONFIG,
   UPDATE_GET_CANCEL,
+  UPDATE_ERROR,
+  CLEAR_ERROR,
 }
 
 interface IAppCtxAction {
@@ -21,13 +25,11 @@ interface IAppCtxAction {
   payload:
     | INavigation
     | ICancellationResponse
-    | IUtils
     | IValueSetList
     | (() => void)
-    | ((onSuccess: () => void) => void);
+    | IError
+    | any;
 }
-
-const defaultAppCtx: IAppContext = { initialized: false };
 
 const appCtxReducer = (state: IAppContext, action: IAppCtxAction) => {
   console.log('state: ', state);
@@ -44,23 +46,28 @@ const appCtxReducer = (state: IAppContext, action: IAppCtxAction) => {
       ctx.cancellation = action.payload as ICancellationResponse;
       break;
 
-    case AppCtxActions.UPDATE_GET_CANCEL:
-      ctx.updateCancellation = action.payload as () => void;
-      break;
-
-    case AppCtxActions.UPDATE_UTILS:
-      ctx.utils = action.payload as IUtils;
-      break;
-
     case AppCtxActions.UPDATE_VS:
       ctx.valueSets = action.payload as IValueSetList;
+      break;
+
+    case AppCtxActions.UPDATE_CTX_CONFIG:
+      ctx.contextConfig = action.payload;
+      break;
+
+    case AppCtxActions.UPDATE_ERROR:
+      ctx.error = [...ctx.error, action.payload as IError];
+      console.log(ctx.error);
+
+      break;
+
+    case AppCtxActions.CLEAR_ERROR:
+      ctx.error = [];
       break;
   }
 
   ctx.initialized = !!(
     ctx.navigation &&
     ctx.cancellation &&
-    ctx.updateCancellation &&
     ctx.utils &&
     ctx.valueSets
   );
@@ -69,22 +76,38 @@ const appCtxReducer = (state: IAppContext, action: IAppCtxAction) => {
 };
 
 const AppContextProvider = (props: any) => {
-  const [context, contextDispatch] = useReducer(appCtxReducer, defaultAppCtx);
+  const addError = (error: IError) => {
+    contextDispatch({ type: AppCtxActions.UPDATE_ERROR, payload: error });
+  };
+  const clearError = () => {
+    contextDispatch({ type: AppCtxActions.CLEAR_ERROR, payload: {} });
+  };
+
   const navigation = useNavigation();
-  const valueSets = useGetValueSets();
-  //undefined, (msg) => {
-  //   setError({ message: msg });
-  //}
-  const _utils = utils;
-  const [cancellation, getCancellation] = useCancallation();
+  const contextConfig = useGetContextConfig();
+  const valueSets = useGetValueSets(
+    contextConfig ? contextConfig['rules-server-url'] : '',
+    undefined,
+    (msg) => {
+      addError({ message: msg });
+    }
+  );
+  const [cancellation, getCancellation] = useCancallation((error) => {
+    addError({ error: error });
+  });
+
+  const [context, contextDispatch] = useReducer(appCtxReducer, {
+    initialized: false,
+    error: [],
+    utils: utils,
+    updateCancellation: getCancellation,
+    updateError: addError,
+    clearError: clearError,
+  });
 
   React.useEffect(() => {
-    contextDispatch({
-      type: AppCtxActions.UPDATE_GET_CANCEL,
-      payload: getCancellation,
-    });
-
     getCancellation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {
@@ -93,14 +116,17 @@ const AppContextProvider = (props: any) => {
   }, [navigation]);
 
   React.useEffect(() => {
+    contextConfig &&
+      contextDispatch({
+        type: AppCtxActions.UPDATE_CTX_CONFIG,
+        payload: contextConfig,
+      });
+  }, [contextConfig]);
+
+  React.useEffect(() => {
     valueSets &&
       contextDispatch({ type: AppCtxActions.UPDATE_VS, payload: valueSets });
   }, [valueSets]);
-
-  React.useEffect(() => {
-    _utils &&
-      contextDispatch({ type: AppCtxActions.UPDATE_UTILS, payload: _utils });
-  }, [_utils]);
 
   React.useEffect(() => {
     cancellation &&

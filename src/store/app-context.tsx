@@ -23,6 +23,7 @@
  */
 
 import React from 'react';
+import IError from '../misc/error';
 import { ICancellationResponse } from '../misc/useCancellation';
 import { INavigation } from '../misc/useNavigation';
 import { IValueSetList } from '../misc/useValueSet';
@@ -33,10 +34,19 @@ export interface IAppContext {
   valueSets?: IValueSetList;
   utils?: IUtils;
   cancellation?: ICancellationResponse;
+  contextConfig?: any;
   initialized: boolean;
+  error: IError[];
   updateCancellation?: () => void;
+  updateError: (error: IError) => void;
+  clearError: () => void;
 }
 
-const AppContext = React.createContext<IAppContext>({ initialized: false });
+const AppContext = React.createContext<IAppContext>({
+  initialized: false,
+  error: [],
+  updateError: (error) => {},
+  clearError: () => {},
+});
 
 export default AppContext;

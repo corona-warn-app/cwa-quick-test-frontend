@@ -101,10 +101,10 @@ const RecordPatientData = (props: any) => {
     if (error && error.message && (error.message as string).includes('412')) {
       msg = t('translation:no-group-error');
     }
-    props.setError({
+
+    context.updateError({
       error: error,
       message: msg,
-      onCancel: context.navigation!.toLanding,
     });
   };
 

@@ -55,10 +55,9 @@ const UserManagement = (props: any) => {
       msg = message;
     }
 
-    props.setError({
+    context.updateError({
       error: error,
       message: msg,
-      onCancel: onCancel ?? context.navigation!.toLanding,
     });
   };
 
@@ -75,11 +74,8 @@ const UserManagement = (props: any) => {
       <Card id='data-card'>
         <CardHeader
           title={t('translation:user-management')}
-          firstTimeShow={props.disclaimerShow}
+          firstTimeShow={storedUserManagementDisclaimerShow}
           checked={!storedUserManagementDisclaimerShow}
-          onInit={() => {
-            props.setDisclaimerShow(false);
-          }}
           onCheckChange={(checked: boolean) => {
             setStoredUserManagementDisclaimerShow(!checked);
           }}
