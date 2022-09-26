@@ -87,12 +87,8 @@ const QrScan = (props: any) => {
     */}
         <Card.Footer id='data-footer'>
           <Row>
-            <Col sm='6' md='3'>
-              <Button
-                className='my-1 my-md-0 p-0'
-                block
-                onClick={context.navigation!.toLanding}
-              >
+            <Col md='6' lg='3' className='data-footer-col'>
+              <Button className='my-1 my-md-0 p-0' block onClick={context.navigation!.toLanding}>
                 {t('translation:cancel')}
               </Button>
             </Col>

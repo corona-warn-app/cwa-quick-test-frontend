@@ -40,10 +40,10 @@ const UserManagement = (props: any) => {
   const [isInit, setIsInit] = React.useState(true);
   const [groupNodes, setGroupNodes] = React.useState<IGroupNode[]>();
   const [userReload, setUserReload] = React.useState(false);
-  const [
-    storedUserManagementDisclaimerShow,
-    setStoredUserManagementDisclaimerShow,
-  ] = useLocalStorage('userManagementDisclaimerShow', true);
+  const [storedUserManagementDisclaimerShow, setStoredUserManagementDisclaimerShow] = useLocalStorage(
+    'userManagementDisclaimerShow',
+    true
+  );
 
   const handleError = (error: any, message?: string, onCancel?: () => void) => {
     let msg = '';
@@ -114,13 +114,8 @@ const UserManagement = (props: any) => {
 
         <Card.Footer id='data-footer'>
           <Row className='justify-content-end'>
-            <Col sm='6' md='3' className='p-0'>
-              <Button
-                className='my-md-0 p-0'
-                variant='primary'
-                block
-                onClick={() => context.navigation!.toLanding()}
-              >
+            <Col md='6' lg='3' className='data-footer-col'>
+              <Button className='my-md-0 p-0' variant='primary' block onClick={() => context.navigation!.toLanding()}>
                 {t('translation:back')}
               </Button>
             </Col>

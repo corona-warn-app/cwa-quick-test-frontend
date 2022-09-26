@@ -2,9 +2,7 @@ import React, { useReducer } from 'react';
 import { useGetContextConfig } from '../api';
 import CwaSpinner from '../components/spinner/spinner.component';
 import IError from '../misc/error';
-import useCancallation, {
-  ICancellationResponse,
-} from '../misc/useCancellation';
+import useCancallation, { ICancellationResponse } from '../misc/useCancellation';
 import useNavigation, { INavigation } from '../misc/useNavigation';
 import { IValueSetList, useGetValueSets } from '../misc/useValueSet';
 import utils from '../misc/utils';
@@ -22,18 +20,12 @@ enum AppCtxActions {
 
 interface IAppCtxAction {
   type: AppCtxActions;
-  payload:
-    | INavigation
-    | ICancellationResponse
-    | IValueSetList
-    | (() => void)
-    | IError
-    | any;
+  payload: INavigation | ICancellationResponse | IValueSetList | (() => void) | IError | any;
 }
 
 const appCtxReducer = (state: IAppContext, action: IAppCtxAction) => {
-  console.log('state: ', state);
-  console.log('action: ', action);
+  // console.log('state: ', state);
+  // console.log('action: ', action);
 
   let ctx: IAppContext = { ...state };
 
@@ -65,12 +57,7 @@ const appCtxReducer = (state: IAppContext, action: IAppCtxAction) => {
       break;
   }
 
-  ctx.initialized = !!(
-    ctx.navigation &&
-    ctx.cancellation &&
-    ctx.utils &&
-    ctx.valueSets
-  );
+  ctx.initialized = !!(ctx.navigation && ctx.cancellation && ctx.utils && ctx.valueSets);
 
   return ctx;
 };
@@ -85,13 +72,9 @@ const AppContextProvider = (props: any) => {
 
   const navigation = useNavigation();
   const contextConfig = useGetContextConfig();
-  const valueSets = useGetValueSets(
-    contextConfig ? contextConfig['rules-server-url'] : '',
-    undefined,
-    (msg) => {
-      addError({ message: msg });
-    }
-  );
+  const valueSets = useGetValueSets(contextConfig ? contextConfig['rules-server-url'] : '', undefined, (msg) => {
+    addError({ message: msg });
+  });
   const [cancellation, getCancellation] = useCancallation((error) => {
     addError({ error: error });
   });
@@ -111,8 +94,7 @@ const AppContextProvider = (props: any) => {
   }, []);
 
   React.useEffect(() => {
-    navigation &&
-      contextDispatch({ type: AppCtxActions.UPDATE_NAV, payload: navigation });
+    navigation && contextDispatch({ type: AppCtxActions.UPDATE_NAV, payload: navigation });
   }, [navigation]);
 
   React.useEffect(() => {
@@ -124,8 +106,7 @@ const AppContextProvider = (props: any) => {
   }, [contextConfig]);
 
   React.useEffect(() => {
-    valueSets &&
-      contextDispatch({ type: AppCtxActions.UPDATE_VS, payload: valueSets });
+    valueSets && contextDispatch({ type: AppCtxActions.UPDATE_VS, payload: valueSets });
   }, [valueSets]);
 
   React.useEffect(() => {

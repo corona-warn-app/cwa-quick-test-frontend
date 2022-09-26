@@ -20,16 +20,17 @@
  */
 
 import React from 'react';
-import { Button, Card, Fade } from 'react-bootstrap';
+import { Button, Card, Col, Fade, Row } from 'react-bootstrap';
 
-import '../i18n';
 import { useTranslation } from 'react-i18next';
+import '../../i18n';
 
-import CwaSpinner from './spinner/spinner.component';
-import CardFooter from './modules/card-footer.component';
-import CardHeader from './modules/card-header.component';
-import AppContext from '../store/app-context';
-import useCancallation from '../misc/useCancellation';
+import useCancallation from '../../misc/useCancellation';
+import AppContext from '../../store/app-context';
+import CardFooter from '../modules/card-footer.component';
+import CardHeader from '../modules/card-header.component';
+import CwaSpinner from '../spinner/spinner.component';
+import DataDownloadCancellationText from './DataDownloadCancellationText';
 
 const DataDownload = (props: any) => {
   const context = React.useContext(AppContext);
@@ -51,20 +52,20 @@ const DataDownload = (props: any) => {
     context.navigation?.toLanding();
   };
 
-  const handleError = (error: any) => {
-    let msg = '';
+  // const handleError = (error: any) => {
+  //   let msg = '';
 
-    if (error) {
-      msg = error.message;
-    }
-    if (error && error.message && (error.message as string).includes('412')) {
-      msg = t('translation:no-group-error');
-    }
-    context.updateError({
-      error: error,
-      message: msg,
-    });
-  };
+  //   if (error) {
+  //     msg = error.message;
+  //   }
+  //   if (error && error.message && (error.message as string).includes('412')) {
+  //     msg = t('translation:no-group-error');
+  //   }
+  //   context.updateError({
+  //     error: error,
+  //     message: msg,
+  //   });
+  // };
 
   const handleRequestDownload = () => {
     requestDownload(context.updateCancellation!);
@@ -84,20 +85,32 @@ const DataDownload = (props: any) => {
             <CardHeader title={t('translation:record-download')} />
 
             <Card.Body id='data-body' className='pt-0'>
-              <p>{context.cancellation?.status}</p>
+              {/* <p>{context.cancellation?.status}</p>
               <p>{JSON.stringify(context.cancellation?.cancellation)}</p>
               <p>{downloadLink}</p>
-              <Button onClick={context.updateCancellation}>
-                update cancellation
-              </Button>
+              <Button onClick={context.updateCancellation}>update cancellation</Button>
               <Button
-                disabled={
-                  !!context.cancellation?.cancellation?.downloadRequested
-                }
+                disabled={!!context.cancellation?.cancellation?.downloadRequested}
                 onClick={handleRequestDownload}
               >
                 request download
               </Button>
+              <LandingCircleElementRow /> */}
+              <Row className='mt-4'>
+                <Col sm='3'>
+                  <h4>{t('status')}</h4>
+                </Col>
+                <Col className='d-flex flex-column'>
+                  <DataDownloadCancellationText />
+                  <Button
+                    className='my-1 my-md-0 p-0 btn btn-primary btn-block request-btn'
+                    hidden={!!context.cancellation?.cancellation?.downloadRequested}
+                    onClick={handleRequestDownload}
+                  >
+                    {t('download-request-start')}
+                  </Button>
+                </Col>
+              </Row>
             </Card.Body>
 
             <CardFooter

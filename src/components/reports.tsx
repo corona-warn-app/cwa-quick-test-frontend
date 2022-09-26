@@ -68,13 +68,7 @@ const Reports = (props: any) => {
     });
   };
 
-  const qtArchive = useGetPositiveForTimeRange(
-    filterTestResult,
-    startDate,
-    endDate,
-    undefined,
-    handleError
-  );
+  const qtArchive = useGetPositiveForTimeRange(filterTestResult, startDate, endDate, undefined, handleError);
   const pdf = useGetPDF(selectedHash);
 
   const handleDateChange = (
@@ -132,12 +126,7 @@ const Reports = (props: any) => {
         <Card.Body id='data-header' className='qt-frame-card '>
           {/* date of filter input */}
           <Form.Group as={Row} className='mb-1'>
-            <Form.Label
-              className='input-label txt-no-wrap'
-              column
-              xs='5'
-              sm='3'
-            >
+            <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>
               {t('translation:timerange')}
             </Form.Label>
 
@@ -166,12 +155,7 @@ const Reports = (props: any) => {
           </Form.Group>
           <hr />
           <Row>
-            <Form.Label
-              className='input-label txt-no-wrap'
-              column
-              xs='5'
-              sm='3'
-            >
+            <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>
               {t('translation:filter-record-result')}
             </Form.Label>
 
@@ -246,12 +230,8 @@ const Reports = (props: any) => {
     */}
         <Card.Footer id='data-footer'>
           <Row>
-            <Col sm='6' md='3' className='pr-md-0'>
-              <Button
-                className='my-1 my-md-0 p-0'
-                block
-                onClick={context.navigation!.toLanding}
-              >
+            <Col md='6' lg='3' className='data-footer-col'>
+              <Button className='my-1 my-md-0 p-0' block onClick={context.navigation!.toLanding}>
                 {t('translation:cancel')}
               </Button>
             </Col>

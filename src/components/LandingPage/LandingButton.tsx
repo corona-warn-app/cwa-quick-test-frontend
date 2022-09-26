@@ -19,28 +19,19 @@
  * under the License.
  */
 
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import React from 'react';
+import { Button } from 'react-bootstrap';
 
-// eslint-disable-next-line import/no-webpack-loader-syntax
-const resBundle = require('i18next-resource-store-loader!./assets/i18n/index.js');
+const LandingButton = (props: any) => {
+  return (
+    <>
+      {props.hasRole && (
+        <Button block className='landing-btn' onClick={props.onClick} disabled={props.disabled}>
+          {props.title}
+        </Button>
+      )}
+    </>
+  );
+};
 
-i18n.use(initReactI18next).init({
-  lng: 'de',
-  resources: resBundle,
-  fallbackLng: 'en',
-  debug: false,
-  /* can have multiple namespace, in case you want to divide a huge translation into smaller pieces and load them on demand */
-  ns: ['translation'],
-  defaultNS: 'translation',
-  keySeparator: false,
-  interpolation: {
-    escapeValue: false,
-    formatSeparator: ',',
-  },
-  react: {
-    wait: true,
-  },
-});
-
-export default i18n;
+export default LandingButton;

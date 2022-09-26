@@ -30,7 +30,7 @@ import IQuickTest from './misc/quick-test';
 
 import Footer from './components/modules/footer.component';
 import Header from './components/modules/header.component';
-import LandingPage from './components/landing-page.component';
+import LandingPage from './components/LandingPage/landing-page.component';
 import RecordPatientData from './components/record-patient-data.component';
 import ShowPatientData from './components/show-patient-data.component';
 import RecordTestResult from './components/record-test-result.component';
@@ -43,7 +43,7 @@ import PrivateRoute from './components/modules/private-route.component';
 import ErrorPage from './components/modals/error-page.component';
 import AppContext from './store/app-context';
 import NotificationToast from './components/modals/notification-toast.component';
-import DataDownload from './components/data-download.component';
+import DataDownload from './components/DataDownload/data-download.component';
 
 const Routing = () => {
   const { t } = useTranslation();
@@ -61,10 +61,7 @@ const Routing = () => {
       <Route path={context.navigation!.routes.root}>
         <Header />
         <ErrorPage />
-        <NotificationToast
-          show={notificationShow}
-          setNotificationShow={setNotificationShow}
-        />
+        <NotificationToast show={notificationShow} setNotificationShow={setNotificationShow} />
       </Route>
 
       {/*
@@ -77,22 +74,12 @@ const Routing = () => {
         </Route>
 
         {/* Record Patient Data */}
-        <PrivateRoute
-          exact
-          roles={['c19_quick_test_counter']}
-          path={context.navigation!.routes.recordPatient}
-        >
-          <RecordPatientData
-            setQuickTest={setQuickTest}
-            quickTest={quickTest}
-          />
+        <PrivateRoute exact roles={['c19_quick_test_counter']} path={context.navigation!.routes.recordPatient}>
+          <RecordPatientData setQuickTest={setQuickTest} quickTest={quickTest} />
         </PrivateRoute>
 
         {/* Show Patient Data */}
-        <PrivateRoute
-          roles={['c19_quick_test_counter']}
-          path={context.navigation!.routes.showPatientRecord}
-        >
+        <PrivateRoute roles={['c19_quick_test_counter']} path={context.navigation!.routes.showPatientRecord}>
           <ShowPatientData
             setQuickTest={setQuickTest}
             quickTest={quickTest}
@@ -101,19 +88,12 @@ const Routing = () => {
         </PrivateRoute>
 
         {/* Record Test Result */}
-        <PrivateRoute
-          roles={['c19_quick_test_lab']}
-          path={context.navigation!.routes.recordTestResult}
-        >
+        <PrivateRoute roles={['c19_quick_test_lab']} path={context.navigation!.routes.recordTestResult}>
           <RecordTestResult setNotificationShow={setNotificationShow} />
         </PrivateRoute>
 
         {/* QR Scan */}
-        <PrivateRoute
-          exact
-          path={context.navigation!.routes.qrScan}
-          roles={['c19_quick_test_counter']}
-        >
+        <PrivateRoute exact path={context.navigation!.routes.qrScan} roles={['c19_quick_test_counter']}>
           <QrScan setQuickTest={setQuickTest} />
         </PrivateRoute>
 
@@ -133,19 +113,11 @@ const Routing = () => {
           <Reports />
         </PrivateRoute>
 
-        <PrivateRoute
-          exact
-          path={context.navigation!.routes.userManagement}
-          roles={['c19_quick_test_admin']}
-        >
+        <PrivateRoute exact path={context.navigation!.routes.userManagement} roles={['c19_quick_test_admin']}>
           <UserManagement />
         </PrivateRoute>
 
-        <PrivateRoute
-          exact
-          path={context.navigation!.routes.dataDownload}
-          roles={['c19_quick_test_admin']}
-        >
+        <PrivateRoute exact path={context.navigation!.routes.dataDownload} roles={['c19_quick_test_admin']}>
           <DataDownload />
         </PrivateRoute>
       </Container>

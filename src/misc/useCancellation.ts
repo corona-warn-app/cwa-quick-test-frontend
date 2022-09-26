@@ -13,6 +13,7 @@ export interface ICancellation {
   createdAt: Date;
   updatedAt: Date;
   finalDeletion: Date;
+  cancellationDate: Date;
   downloadRequested: Date;
   movedToLongtermArchive: Date;
   csvCreated: Date;
@@ -38,6 +39,13 @@ const useCancallation = (onError?: (error: any) => void) => {
     api
       .get(uri, { headers: getHeader() })
       .then((response) => {
+        // if (response.data.downloadRequested) {
+        //   console.log(response.data.downloadRequested);
+
+        //   response.data.downloadRequested = new Date(
+        //     response.data.downloadRequested.getTime() - 60 * 60 * 24 * 2 * 1000
+        //   );
+        // }
         setResult({
           cancellation: response.data,
           status: response.status,
@@ -51,15 +59,10 @@ const useCancallation = (onError?: (error: any) => void) => {
       });
   };
 
-  const requestDownload = (
-    onSuccess?: (response: AxiosResponse<any>) => void
-  ) => {
+  const requestDownload = (onSuccess?: (response: AxiosResponse<any>) => void) => {
     const uri = '/api/cancellation/requestDownload';
 
-    api
-      .post(uri, undefined, { headers: getHeader() })
-      .then(onSuccess)
-      .catch(onError);
+    api.post(uri, undefined, { headers: getHeader() }).then(onSuccess).catch(onError);
   };
 
   const getDownloadLink = (onSuccess?: (link: string) => void) => {

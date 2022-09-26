@@ -13,14 +13,12 @@
 }
 @font-face {
   font-family: 'TeleNeo';
-  src: url(./fonts/TeleNeoWeb-Regular.eot) format('eot'),
-    url(./fonts/TeleNeoWeb-Regular.woff) format('woff'),
+  src: url(./fonts/TeleNeoWeb-Regular.eot) format('eot'), url(./fonts/TeleNeoWeb-Regular.woff) format('woff'),
     url(./fonts/TeleNeoWeb-Regular.woff2) format('woff2');
 }
 @font-face {
   font-family: 'TeleNeo';
-  src: url(./fonts/TeleNeoWeb-Bold.eot) format('eot'),
-    url(./fonts/TeleNeoWeb-Bold.woff) format('woff'),
+  src: url(./fonts/TeleNeoWeb-Bold.eot) format('eot'), url(./fonts/TeleNeoWeb-Bold.woff) format('woff'),
     url(./fonts/TeleNeoWeb-Bold.woff2) format('woff2');
   font-weight: bold;
 }
@@ -183,6 +181,8 @@ ul {
   .row {
     margin: 0;
     justify-content: center;
+    row-gap: 0.25rem;
+    column-gap: 1rem;
 
     @include media-breakpoint-up(md) {
       justify-content: flex-end;
@@ -529,6 +529,11 @@ td {
   white-space: pre-line;
   margin: 0%;
 }
+.cancellation-text {
+  text-align: justify;
+  white-space: pre-line;
+  font-size: larger;
+}
 .environment-info-text {
   width: 100%;
   text-align: center;
@@ -583,4 +588,19 @@ td {
   border: 0px;
   width: 24px;
   height: 24px;
+}
+
+.request-btn {
+  align-self: flex-end;
+
+  @include media-breakpoint-up(md) {
+    max-width: 300px;
+  }
+}
+
+.data-footer-col {
+  padding: 0%;
+  @include media-breakpoint-up(sm) {
+    flex: 1;
+  }
 }

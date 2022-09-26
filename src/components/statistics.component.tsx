@@ -30,9 +30,7 @@ import CwaSpinner from './spinner/spinner.component';
 import { useGetStatisticsFromTo, useStatistics } from '../api';
 import CardHeader from './modules/card-header.component';
 import AppContext from '../store/app-context';
-import StatisticDataRow, {
-  StatisticDateSelectionRow,
-} from './modules/statistic-data.component';
+import StatisticDataRow, { StatisticDateSelectionRow } from './modules/statistic-data.component';
 import utils from '../misc/utils';
 import { format } from 'date-fns';
 
@@ -58,12 +56,8 @@ const Statistics = (props: any) => {
   };
 
   const [pcrEnabled, setPcrEnabled] = React.useState(false);
-  const [statisticData, thisWeekStatisticData, thisMonthStatisticData] =
-    useStatistics(undefined, handleError);
-  const [statisticsResult, getStatisticsFromTo] = useGetStatisticsFromTo(
-    undefined,
-    handleError
-  );
+  const [statisticData, thisWeekStatisticData, thisMonthStatisticData] = useStatistics(undefined, handleError);
+  const [statisticsResult, getStatisticsFromTo] = useGetStatisticsFromTo(undefined, handleError);
   const [isInit, setIsInit] = React.useState(false);
   const [statisticRows, setStatisticRows] = React.useState<any[]>([]);
   const [dateValidFrom, setDateValidFrom] = React.useState<Date>();
@@ -76,13 +70,7 @@ const Statistics = (props: any) => {
   }, [keycloak]);
 
   React.useEffect(() => {
-    if (
-      context.navigation &&
-      context.valueSets &&
-      statisticData &&
-      thisWeekStatisticData &&
-      thisMonthStatisticData
-    ) {
+    if (context.navigation && context.valueSets && statisticData && thisWeekStatisticData && thisMonthStatisticData) {
       setStatisticRows([
         { ...statisticData, label: t('translation:today'), key: Math.random() },
         {
@@ -99,13 +87,7 @@ const Statistics = (props: any) => {
       setIsInit(true);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    context.navigation,
-    context.valueSets,
-    statisticData,
-    thisWeekStatisticData,
-    thisMonthStatisticData,
-  ]);
+  }, [context.navigation, context.valueSets, statisticData, thisWeekStatisticData, thisMonthStatisticData]);
 
   React.useEffect(() => {
     if (dateValidFrom || (dateValidFrom && dateValidTo)) {
@@ -132,17 +114,12 @@ const Statistics = (props: any) => {
 
   React.useEffect(() => {
     if (statisticsResult) {
-      let newLabel: string | undefined = dateValidFrom
-        ? format(dateValidFrom, utils.pickerDateFormat)
-        : undefined;
+      let newLabel: string | undefined = dateValidFrom ? format(dateValidFrom, utils.pickerDateFormat) : undefined;
       if (newLabel && dateValidTo) {
         newLabel += ' - ' + format(dateValidTo, utils.pickerDateFormat);
       }
 
-      setStatisticRows([
-        ...statisticRows,
-        { ...statisticsResult, label: newLabel, key: Math.random() },
-      ]);
+      setStatisticRows([...statisticRows, { ...statisticsResult, label: newLabel, key: Math.random() }]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [statisticsResult]);
@@ -192,12 +169,8 @@ const Statistics = (props: any) => {
     */}
         <Card.Footer id='data-footer'>
           <Row>
-            <Col sm='6' md='3' className='pr-md-0'>
-              <Button
-                className='my-1 my-md-0 p-0'
-                block
-                onClick={context.navigation!.toLanding}
-              >
+            <Col md='6' lg='3' className='data-footer-col'>
+              <Button className='my-1 my-md-0 p-0' block onClick={context.navigation!.toLanding}>
                 {t('translation:back')}
               </Button>
             </Col>
