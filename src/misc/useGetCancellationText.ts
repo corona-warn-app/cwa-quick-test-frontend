@@ -24,12 +24,11 @@ const useGetCancellationText = (textType: CancellationTextType) => {
     if (cancel && utils && keycloak) {
       let textkey = '';
       let textOptions = {};
+      const isAdmin: boolean = utils.hasRole(keycloak, 'c19_quick_test_admin');
 
-      switch (utils.getCancellationStep(cancel)) {
+      switch (utils.getCancellationStep(cancel, ctx.contextConfig['cancellation-complete-pending-tests'])) {
         case CancellationSteps.CANCELED:
-          textkey = utils.hasRole(keycloak, 'c19_quick_test_admin')
-            ? `cancellation-${textType}-admin-text`
-            : `cancellation-${textType}-tester-text`;
+          textkey = isAdmin ? `cancellation-${textType}-admin-text` : `cancellation-${textType}-tester-text`;
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
@@ -41,24 +40,23 @@ const useGetCancellationText = (textType: CancellationTextType) => {
           break;
 
         case CancellationSteps.DOWNLOAD_REQUESTED:
-          textkey = utils.hasRole(keycloak, 'c19_quick_test_admin')
+          textkey = isAdmin
             ? `download-requested-${textType}-admin-text`
             : `download-requested-${textType}-tester-text`;
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
-            recordTestDate: new Date(cancel.downloadRequested.getTime() + dayInMs * 1).toLocaleDateString(),
+            recordTestDate: new Date(cancel.cancellationDate.getTime() + dayInMs * 1).toLocaleDateString(),
           };
 
           break;
 
         case CancellationSteps.NO_TEST_RECORD:
-          textkey = utils.hasRole(keycloak, 'c19_quick_test_admin')
-            ? `no-tests-${textType}-admin-text`
-            : `no-tests-${textType}-tester-text`;
+          textkey = isAdmin ? `no-tests-${textType}-admin-text` : `no-tests-${textType}-tester-text`;
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
+            downloadDate: new Date(cancel.cancellationDate.getTime() + dayInMs * 2).toLocaleDateString(),
           };
 
           break;
@@ -66,9 +64,7 @@ const useGetCancellationText = (textType: CancellationTextType) => {
         case CancellationSteps.DOWNLOAD_READY:
         case CancellationSteps.DOWNLOADED:
         case CancellationSteps.DATA_DELETED:
-          textkey = utils.hasRole(keycloak, 'c19_quick_test_admin')
-            ? `download-ready-${textType}-admin-text`
-            : `no-tests-${textType}-tester-text`;
+          textkey = isAdmin ? `download-ready-${textType}-admin-text` : `no-tests-${textType}-tester-text`;
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),

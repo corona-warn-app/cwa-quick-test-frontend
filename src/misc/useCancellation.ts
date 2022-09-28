@@ -14,7 +14,6 @@ export interface ICancellation {
   updatedAt: Date;
   finalDeletion: Date;
   cancellationDate: Date;
-  downloadRequested: Date;
   movedToLongtermArchive: Date;
   csvCreated: Date;
   downloadLinkRequested: Date;
@@ -39,13 +38,6 @@ const useCancallation = (onError?: (error: any) => void) => {
     api
       .get(uri, { headers: getHeader() })
       .then((response) => {
-        // if (response.data.downloadRequested) {
-        //   console.log(response.data.downloadRequested);
-
-        //   response.data.downloadRequested = new Date(
-        //     response.data.downloadRequested.getTime() - 60 * 60 * 24 * 2 * 1000
-        //   );
-        // }
         setResult({
           cancellation: response.data,
           status: response.status,

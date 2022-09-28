@@ -40,15 +40,14 @@ api.interceptors.response.use((originalResponse) => {
   return originalResponse;
 });
 
-const isoDateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?$/;
+const isoDateFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d*)?(Z)?$/;
 
 function isIsoDateString(value: any): boolean {
   return value && typeof value === 'string' && isoDateFormat.test(value);
 }
 
 export function handleDates(body: any) {
-  if (body === null || body === undefined || typeof body !== 'object')
-    return body;
+  if (body === null || body === undefined || typeof body !== 'object') return body;
 
   for (const key of Object.keys(body)) {
     const value = body[key];
@@ -114,10 +113,7 @@ export interface IQuickTestAPIModel {
   dccConsent: boolean;
 }
 
-export const useGetPendingProcessIds = (
-  onSuccess?: () => void,
-  onError?: (error: any) => void
-) => {
+export const useGetPendingProcessIds = (onSuccess?: () => void, onError?: (error: any) => void) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<IShortHashedGuid[]>();
 
@@ -149,11 +145,7 @@ export const useGetPendingProcessIds = (
   return result;
 };
 
-export const useGetQuicktest = (
-  processId?: string,
-  onSuccess?: () => void,
-  onError?: (error: any) => void
-) => {
+export const useGetQuicktest = (processId?: string, onSuccess?: () => void, onError?: (error: any) => void) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<IQuickTestDccAPIResponseModel>();
 
@@ -198,12 +190,8 @@ export const usePostTestResult = (
   React.useEffect(() => {
     if (testResult && processId) {
       // shorten the manufactorer name for display purposes (PDF)
-      if (
-        testResult.dccTestManufacturerDescription &&
-        testResult.dccTestManufacturerDescription.length > 100
-      ) {
-        testResult.dccTestManufacturerDescription =
-          testResult.dccTestManufacturerDescription.substring(0, 100);
+      if (testResult.dccTestManufacturerDescription && testResult.dccTestManufacturerDescription.length > 100) {
+        testResult.dccTestManufacturerDescription = testResult.dccTestManufacturerDescription.substring(0, 100);
       }
 
       const uri = '/api/quicktest/' + processId + '/testResult';
@@ -240,21 +228,14 @@ export const usePostQuickTest = (
   const { keycloak, initialized } = useKeycloak();
 
   React.useEffect(() => {
-    if (
-      quickTest &&
-      quickTest.personData &&
-      quickTest.addressData &&
-      processId
-    ) {
+    if (quickTest && quickTest.personData && quickTest.addressData && processId) {
       const uri = '/api/quicktest/' + processId + '/personalData';
       const body = JSON.stringify({
         lastName: quickTest.personData.familyName,
         firstName: quickTest.personData.givenName,
         standardisedFamilyName: quickTest.personData.standardisedFamilyName,
         standardisedGivenName: quickTest.personData.standardisedGivenName,
-        birthday: quickTest.personData.dateOfBirth
-          ? quickTest.personData.dateOfBirth.toISOString().split('T')[0]
-          : '',
+        birthday: quickTest.personData.dateOfBirth ? quickTest.personData.dateOfBirth.toISOString().split('T')[0] : '',
         sex: quickTest.personData.sex,
 
         street: quickTest.addressData.street,
@@ -265,8 +246,7 @@ export const usePostQuickTest = (
         email: quickTest.emailAddress,
         phoneNumber: quickTest.phoneNumber,
 
-        confirmationCwa:
-          quickTest.processingConsens || quickTest.includePersData,
+        confirmationCwa: quickTest.processingConsens || quickTest.includePersData,
         privacyAgreement: quickTest.privacyAgreement,
 
         testResultServerHash: quickTest.testResultHash
@@ -355,12 +335,7 @@ export const useGetUuid = (
       })
       .catch((error) => {
         // if new uuid exists, retry
-        if (
-          error &&
-          error.response &&
-          error.response.status === 409 &&
-          trys < TRYS
-        ) {
+        if (error && error.response && error.response.status === 409 && trys < TRYS) {
           setTrys(trys + 1);
           setUuid(newUuid());
         } else if (onError) {
@@ -411,16 +386,11 @@ export const useGetTests = (onError?: (error: any) => void) => {
   return result;
 };
 
-export const useStatistics = (
-  onSuccess?: (status: number) => void,
-  onError?: (error: any) => void
-) => {
+export const useStatistics = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
   const { keycloak, initialized } = useKeycloak();
   const [statisticData, setStatisticData] = React.useState<StatisticData>();
-  const [thisWeekStatisticData, setThisWeekStaticData] =
-    React.useState<StatisticData>();
-  const [thisMonthStatisticData, setThisMonthStatisticData] =
-    React.useState<StatisticData>();
+  const [thisWeekStatisticData, setThisWeekStaticData] = React.useState<StatisticData>();
+  const [thisMonthStatisticData, setThisMonthStatisticData] = React.useState<StatisticData>();
 
   let uri = '/api/quickteststatistics';
 
@@ -457,12 +427,7 @@ export const useStatistics = (
       let start = new Date(today.setDate(startDay));
       let end = new Date();
 
-      let thisWeekUri =
-        uri +
-        '?dateFrom=' +
-        start.toISOString() +
-        '&dateTo=' +
-        end.toISOString();
+      let thisWeekUri = uri + '?dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
 
       api
         .get(thisWeekUri, { headers: header })
@@ -488,12 +453,7 @@ export const useStatistics = (
       start.setUTCHours(0, 0, 0, 0);
       let end = new Date();
 
-      let thisMonthUri =
-        uri +
-        '?dateFrom=' +
-        start.toISOString() +
-        '&dateTo=' +
-        end.toISOString();
+      let thisMonthUri = uri + '?dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
 
       api
         .get(thisMonthUri, { headers: header })
@@ -512,17 +472,10 @@ export const useStatistics = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return [
-    statisticData,
-    thisWeekStatisticData,
-    thisMonthStatisticData,
-  ] as const;
+  return [statisticData, thisWeekStatisticData, thisMonthStatisticData] as const;
 };
 
-export const useGetStatisticsFromTo = (
-  onSuccess?: (status: number) => void,
-  onError?: (error: any) => void
-) => {
+export const useGetStatisticsFromTo = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<StatisticData>();
 
@@ -538,12 +491,7 @@ export const useGetStatisticsFromTo = (
       return;
     }
 
-    let requestUri =
-      balseUri +
-      '?dateFrom=' +
-      dateFrom.toISOString() +
-      '&dateTo=' +
-      dateTo.toISOString();
+    let requestUri = balseUri + '?dateFrom=' + dateFrom.toISOString() + '&dateTo=' + dateTo.toISOString();
 
     api
       .get(requestUri, { headers: header })
@@ -563,10 +511,7 @@ export const useGetStatisticsFromTo = (
   return [result, getStatisticsFromTo] as const;
 };
 
-export const useGetKeycloakConfig = (
-  onSuccess?: (status: number) => void,
-  onError?: (error: any) => void
-) => {
+export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
   const [result, setResult] = React.useState<Keycloak.KeycloakConfig>();
 
   const header = {
@@ -597,10 +542,7 @@ export const useGetKeycloakConfig = (
   return result;
 };
 
-export const useGetContextConfig = (
-  onSuccess?: (status: number) => void,
-  onError?: (error: any) => void
-) => {
+export const useGetContextConfig = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
   const [result, setResult] = React.useState<any>();
 
   const header = {
@@ -651,13 +593,7 @@ export const useGetPositiveForTimeRange = (
       if (testResult) {
         tp = 'testResult=' + testResult + '&';
       }
-      const uri =
-        '/api/quicktestarchive?' +
-        tp +
-        'dateFrom=' +
-        start.toISOString() +
-        '&dateTo=' +
-        end.toISOString();
+      const uri = '/api/quicktestarchive?' + tp + 'dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
 
       api
         .get(uri, { headers: header })
@@ -720,10 +656,7 @@ export const useGetPDF = (
   return result;
 };
 
-export const useGetUsers = (
-  onSuccess?: () => void,
-  onError?: (error: any) => void
-) => {
+export const useGetUsers = (onSuccess?: () => void, onError?: (error: any) => void) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<IUser[]>();
 
@@ -787,10 +720,7 @@ export const useGetUsers = (
   ] as const;
 };
 
-export const useGetGroups = (
-  onSuccess?: () => void,
-  onError?: (error: any) => void
-) => {
+export const useGetGroups = (onSuccess?: () => void, onError?: (error: any) => void) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<any>();
 
@@ -857,19 +787,10 @@ export const useGetGroups = (
     []
   );
 
-  return [
-    result,
-    refreshGroups,
-    createGroup,
-    updateGroup,
-    deleteGroup,
-  ] as const;
+  return [result, refreshGroups, createGroup, updateGroup, deleteGroup] as const;
 };
 
-export const useGetGroupDetails = (
-  groupReloaded: (group: IGroupDetails) => void,
-  onError?: (error: any) => void
-) => {
+export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void, onError?: (error: any) => void) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<any>();
 
@@ -901,11 +822,7 @@ export const useGetGroupDetails = (
   return [result, updateGroup, setResult] as const;
 };
 
-export const addUserToGroup = (
-  userId: string,
-  groupId: string,
-  token: string
-) => {
+export const addUserToGroup = (userId: string, groupId: string, token: string) => {
   const header = {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
@@ -914,11 +831,7 @@ export const addUserToGroup = (
   return api.post(uri, JSON.stringify({ userId: userId }), { headers: header });
 };
 
-export const addGroupAsChild = (
-  childGroupId: string,
-  parentGroupId: string,
-  token: string
-) => {
+export const addGroupAsChild = (childGroupId: string, parentGroupId: string, token: string) => {
   const header = {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',

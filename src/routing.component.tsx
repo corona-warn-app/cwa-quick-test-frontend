@@ -43,7 +43,6 @@ import PrivateRoute from './components/modules/private-route.component';
 import ErrorPage from './components/modals/error-page.component';
 import AppContext from './store/app-context';
 import NotificationToast from './components/modals/notification-toast.component';
-import DataDownload from './components/DataDownload/data-download.component';
 
 const Routing = () => {
   const { t } = useTranslation();
@@ -115,10 +114,6 @@ const Routing = () => {
 
         <PrivateRoute exact path={context.navigation!.routes.userManagement} roles={['c19_quick_test_admin']}>
           <UserManagement />
-        </PrivateRoute>
-
-        <PrivateRoute exact path={context.navigation!.routes.dataDownload} roles={['c19_quick_test_admin']}>
-          <DataDownload />
         </PrivateRoute>
       </Container>
 

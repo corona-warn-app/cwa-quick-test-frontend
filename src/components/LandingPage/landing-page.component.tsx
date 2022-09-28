@@ -32,6 +32,7 @@ import LandingButton from './LandingButton';
 import LandingDisclaimerButton from './LandingDisclaimerButton';
 import LandingCancellationText from './LandingCancellationText';
 import CancellationSteps from '../../misc/CancellationSteps';
+import useCancallation from '../../misc/useCancellation';
 
 const LandingPage = (props: any) => {
   const context = React.useContext(AppContext);
@@ -39,15 +40,30 @@ const LandingPage = (props: any) => {
 
   const { t } = useTranslation();
   const { keycloak } = useKeycloak();
+  const [, , , getDownloadLink] = useCancallation();
 
   const [cancellationStep, setCancellationStep] = React.useState<CancellationSteps>(CancellationSteps.NO_CANCEL);
+  const [downloadLink, setDownloadLink] = React.useState('');
 
   React.useEffect(() => {
     context.cancellation?.cancellation &&
       utils &&
-      setCancellationStep(utils.getCancellationStep(context.cancellation.cancellation));
+      setCancellationStep(
+        utils.getCancellationStep(
+          context.cancellation.cancellation,
+          context.contextConfig['cancellation-complete-pending-tests']
+        )
+      );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context.cancellation?.cancellation]);
+
+  React.useEffect(() => {
+    downloadLink && window.open(downloadLink, '_blank');
+  }, [downloadLink]);
+
+  const handleDownload = () => {
+    getDownloadLink(setDownloadLink);
+  };
 
   return (
     <>
@@ -105,7 +121,8 @@ const LandingPage = (props: any) => {
                 utils.hasRole(keycloak, 'c19_quick_test_admin') && cancellationStep !== CancellationSteps.NO_CANCEL
               }
               title={t('translation:record-download')}
-              onClick={navigation.toDataDownload}
+              onClick={handleDownload}
+              disabled={cancellationStep < CancellationSteps.DOWNLOAD_READY}
             />
           </Container>
         </Fade>

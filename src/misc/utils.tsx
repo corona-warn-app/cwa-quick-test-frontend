@@ -41,7 +41,7 @@ export interface IUtils {
   momentDateFormat: string;
   momentDateTimeFormat: string;
   hasRole: (keycloak: KeycloakInstance, role: string) => boolean;
-  getCancellationStep: (cancellation: ICancellation) => CancellationSteps;
+  getCancellationStep: (cancellation: ICancellation, cancellationCompletePendingTests: number) => CancellationSteps;
 }
 
 const shortHashLen = 8;
@@ -82,19 +82,21 @@ const getIndent = (level: number): JSX.Element[] => {
 const hasRole = (keycloak: KeycloakInstance, role: string) =>
   keycloak && (keycloak.hasRealmRole(role) || keycloak.hasRealmRole(role));
 
-const getCancellationStep = (cancellation: ICancellation): CancellationSteps => {
+const getCancellationStep = (
+  cancellation: ICancellation,
+  cancellationCompletePendingTests: number
+): CancellationSteps => {
   let result = CancellationSteps.NO_CANCEL;
 
   if (cancellation) {
     result = CancellationSteps.CANCELED;
 
-    cancellation.downloadRequested && (result = CancellationSteps.DOWNLOAD_REQUESTED);
+    cancellation.cancellationDate.getTime() < Date.now() && (result = CancellationSteps.DOWNLOAD_REQUESTED);
 
-    if (cancellation.downloadRequested && cancellation.downloadRequested.getTime() + 60 * 60 * 24 * 1000 < Date.now()) {
-      result = CancellationSteps.NO_TEST_RECORD;
-    }
+    cancellation.cancellationDate.getTime() + 60 * 60 * (cancellationCompletePendingTests || 24) * 1000 < Date.now() &&
+      (result = CancellationSteps.NO_TEST_RECORD);
 
-    cancellation.downloadRequested && cancellation.csvCreated && (result = CancellationSteps.DOWNLOAD_READY);
+    cancellation.csvCreated && (result = CancellationSteps.DOWNLOAD_READY);
 
     cancellation.downloadLinkRequested && (result = CancellationSteps.DOWNLOADED);
 

@@ -38,7 +38,6 @@ export interface INavigation {
   toStatistics: () => void;
   toReports: () => void;
   toUserManagement: () => void;
-  toDataDownload: () => void;
 }
 
 export const useRoutes = () => {
@@ -57,7 +56,6 @@ export const useRoutes = () => {
       statistics: basePath + '/statistics',
       reports: basePath + '/reports',
       userManagement: basePath + '/usermanagement',
-      dataDownload: basePath + '/download',
     });
   }, []);
 
@@ -77,29 +75,13 @@ export const useNavigation = () => {
 
       c.root = routes.root.replace(':mandant', mandant as string);
       c.landing = routes.landing.replace(':mandant', mandant as string);
-      c.recordPatient = routes.recordPatient.replace(
-        ':mandant',
-        mandant as string
-      );
-      c.showPatientRecord = routes.showPatientRecord.replace(
-        ':mandant',
-        mandant as string
-      );
-      c.recordTestResult = routes.recordTestResult.replace(
-        ':mandant',
-        mandant as string
-      );
+      c.recordPatient = routes.recordPatient.replace(':mandant', mandant as string);
+      c.showPatientRecord = routes.showPatientRecord.replace(':mandant', mandant as string);
+      c.recordTestResult = routes.recordTestResult.replace(':mandant', mandant as string);
       c.qrScan = routes.qrScan.replace(':mandant', mandant as string);
       c.statistics = routes.statistics.replace(':mandant', mandant as string);
       c.reports = routes.reports.replace(':mandant', mandant as string);
-      c.userManagement = routes.userManagement.replace(
-        ':mandant',
-        mandant as string
-      );
-      c.dataDownload = routes.dataDownload.replace(
-        ':mandant',
-        mandant as string
-      );
+      c.userManagement = routes.userManagement.replace(':mandant', mandant as string);
 
       setCalculatedRoutes(c);
     }
@@ -135,9 +117,6 @@ export const useNavigation = () => {
         },
         toUserManagement: () => {
           history.push(calculatedRoutes.userManagement);
-        },
-        toDataDownload: () => {
-          history.push(calculatedRoutes.dataDownload);
         },
       });
     }
