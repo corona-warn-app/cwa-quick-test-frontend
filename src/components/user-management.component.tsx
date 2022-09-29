@@ -26,113 +26,104 @@ import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import CwaSpinner from './spinner/spinner.component';
-import AppContext from '../misc/appContext';
+import AppContext from '../store/app-context';
 import CardHeader from './modules/card-header.component';
 import GroupTable from './modules/group-table.component';
 import UserTable from './modules/user-table.component';
 import { IGroupNode } from '../misc/user';
 import useLocalStorage from '../misc/useLocalStorage';
 
-
 const UserManagement = (props: any) => {
-    const context = React.useContext(AppContext);
-    const { t } = useTranslation();
+  const context = React.useContext(AppContext);
+  const { t } = useTranslation();
 
-    const [isInit, setIsInit] = React.useState(true);
-    const [groupNodes, setGroupNodes] = React.useState<IGroupNode[]>();
-    const [userReload, setUserReload] = React.useState(false);
-    const [storedUserManagementDisclaimerShow, setStoredUserManagementDisclaimerShow] = useLocalStorage('userManagementDisclaimerShow', true);
+  const [isInit, setIsInit] = React.useState(true);
+  const [groupNodes, setGroupNodes] = React.useState<IGroupNode[]>();
+  const [userReload, setUserReload] = React.useState(false);
+  const [storedUserManagementDisclaimerShow, setStoredUserManagementDisclaimerShow] = useLocalStorage(
+    'userManagementDisclaimerShow',
+    true
+  );
 
+  const handleError = (error: any, message?: string, onCancel?: () => void) => {
+    let msg = '';
 
-    const handleError = (error: any, message?: string, onCancel?: () => void) => {
-        let msg = '';
-
-        if (error) {
-            msg = error.message;
-        }
-        if (message) {
-            msg = message;
-        }
-
-        props.setError({ error: error, message: msg, onCancel: onCancel ?? context.navigation!.toLanding });
+    if (error) {
+      msg = error.message;
+    }
+    if (message) {
+      msg = message;
     }
 
-    React.useEffect(() => {
-        //setIsInit(!!(bGroups && bUsers));
-        setIsInit(!!(context && context.navigation, context.valueSets));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [context.navigation, context.valueSets]);
+    context.updateError({
+      error: error,
+      message: msg,
+    });
+  };
 
+  React.useEffect(() => {
+    //setIsInit(!!(bGroups && bUsers));
+    setIsInit(!!(context && context.navigation, context.valueSets));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context.navigation, context.valueSets]);
 
-    return (
-        !(isInit && context && context.valueSets)
-            ? <CwaSpinner />
-            : <Fade appear={true} in={true} >
-                <Card id='data-card'>
+  return !(isInit && context && context.valueSets) ? (
+    <CwaSpinner />
+  ) : (
+    <Fade appear={true} in={true}>
+      <Card id='data-card'>
+        <CardHeader
+          title={t('translation:user-management')}
+          firstTimeShow={storedUserManagementDisclaimerShow}
+          checked={!storedUserManagementDisclaimerShow}
+          onCheckChange={(checked: boolean) => {
+            setStoredUserManagementDisclaimerShow(!checked);
+          }}
+          disclaimerText={
+            <>
+              {t('translation:disclaimer-text2-part1')}
+              <a href={t('translation:disclaimer-link')} target='blank'>
+                {t('translation:disclaimer-link')}
+              </a>
+              {t('translation:disclaimer-text2-part2')}
+            </>
+          }
+        />
 
-                    <CardHeader
-                        title={t('translation:user-management')}
-                        firstTimeShow={props.disclaimerShow}
-                        checked={!storedUserManagementDisclaimerShow}
-                        onInit={() => { props.setDisclaimerShow(false) }}
-                        onCheckChange={(checked: boolean) => { setStoredUserManagementDisclaimerShow(!checked) }}
-                        disclaimerText={
-                            <>
-                                {t('translation:disclaimer-text2-part1')}
-                                <a
-                                    href={t('translation:disclaimer-link')}
-                                    target='blank'
-                                >
-                                    {t('translation:disclaimer-link')}
-                                </a>
-                                {t('translation:disclaimer-text2-part2')}
-                            </>
-                        }
-                    />
+        <Card.Body id='data-body' className='pt-0'>
+          <h4>{t('translation:groups')}</h4>
 
-                    <Card.Body id='data-body' className='pt-0' >
+          <GroupTable
+            groupNodes={groupNodes}
+            setGroupNodes={setGroupNodes}
+            setUserReload={setUserReload}
+            handleError={handleError}
+          />
 
-                        <h4>{t('translation:groups')}</h4>
+          <hr />
 
-                        <GroupTable
-                            groupNodes={groupNodes}
-                            setGroupNodes={setGroupNodes}
-                            setUserReload={setUserReload}
-                            handleError={handleError}
-                        />
+          <h4>{t('translation:user')}</h4>
 
-                        <hr />
+          <UserTable
+            groupNodes={groupNodes}
+            handleError={handleError}
+            setUserReload={setUserReload}
+            userReload={userReload}
+          />
+        </Card.Body>
 
-                        <h4>{t('translation:user')}</h4>
-
-                        <UserTable
-                            groupNodes={groupNodes}
-                            handleError={handleError}
-                            setUserReload={setUserReload}
-                            userReload={userReload}
-                        />
-
-                    </Card.Body>
-
-                    <Card.Footer id='data-footer'>
-                        <Row className='justify-content-end'>
-                            <Col sm='6' md='3' className='p-0'>
-                                <Button
-                                    className='my-md-0 p-0'
-                                    variant='primary'
-                                    block
-                                    onClick={() => context.navigation!.toLanding()}
-                                >
-                                    {t('translation:back')}
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Card.Footer>
-
-                </Card>
-            </Fade>
-    );
-
-}
+        <Card.Footer id='data-footer'>
+          <Row className='justify-content-end'>
+            <Col md='6' lg='3' className='data-footer-col'>
+              <Button className='my-md-0 p-0' variant='primary' block onClick={() => context.navigation!.toLanding()}>
+                {t('translation:back')}
+              </Button>
+            </Col>
+          </Row>
+        </Card.Footer>
+      </Card>
+    </Fade>
+  );
+};
 
 export default UserManagement;

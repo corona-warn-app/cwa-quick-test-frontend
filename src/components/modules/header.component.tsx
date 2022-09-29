@@ -20,84 +20,88 @@
  */
 
 import React from 'react';
-import { Row, Image, Container, Navbar, NavDropdown, Nav } from 'react-bootstrap'
+import {
+  Row,
+  Image,
+  Container,
+  Navbar,
+  NavDropdown,
+  Nav,
+} from 'react-bootstrap';
 
 import '../../i18n';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useKeycloak } from '@react-keycloak/web';
 
-import useNavigation from '../../misc/useNavigation';
-import C19Logo from '../../assets/images/c-19_logo.png'
-import useLocalStorage from '../../misc/useLocalStorage';
+import C19Logo from '../../assets/images/c-19_logo.png';
 import { useHistory } from 'react-router-dom';
+import AppContext from '../../store/app-context';
 
 const Header = (props: any) => {
+  const history = useHistory();
+  const { t } = useTranslation();
+  const { keycloak } = useKeycloak();
 
-    const navigation = useNavigation();
-    const history = useHistory();
-    const { t } = useTranslation();
-    const { keycloak } = useKeycloak();
+  const [userName, setUserName] = React.useState('');
 
-    const [userName, setUserName] = React.useState('');
-    const [isInit, setIsInit] = React.useState(false)
+  const { navigation, contextConfig, initialized } =
+    React.useContext(AppContext);
+  const environmentName = contextConfig['environment-name'];
 
-    const [environmentName] = useLocalStorage('environmentName', '');
-
-    React.useEffect(() => {
-        if (navigation)
-            setIsInit(true);
-    }, [navigation])
-
-    // set user name from keycloak
-    React.useEffect(() => {
-
-        if (keycloak.idTokenParsed) {
-            setUserName((keycloak.idTokenParsed as any).name);
-        }
-
-    }, [keycloak])
-
-    const handleLogout = () => {
-        keycloak.logout({ redirectUri: window.location.origin + navigation!.calculatedRoutes.landing });
+  // set user name from keycloak
+  React.useEffect(() => {
+    if (keycloak.idTokenParsed) {
+      setUserName((keycloak.idTokenParsed as any).name);
     }
+  }, [keycloak]);
 
-    const changePasswordUrl = keycloak.authServerUrl + 'realms/' + keycloak.realm + '/account/password';
+  const handleLogout = () => {
+    keycloak.logout({
+      redirectUri:
+        window.location.origin + navigation?.calculatedRoutes.landing,
+    });
+  };
 
-    return (!isInit ? <></> :
+  const changePasswordUrl =
+    keycloak.authServerUrl + 'realms/' + keycloak.realm + '/account/password';
+
+  return (
+    <>
+      {initialized && (
         <Container className='position-relative'>
-            {/* simple header with logo */}
+          {/* simple header with logo */}
 
-            {/* user icon and user name */}
-            <Row id='qt-header'>
-                <Image id='c19-logo' src={C19Logo} />
-                <span className='header-font my-auto mx-1 pt-1'>
-                    {t('translation:title')}
-                    {!environmentName
-                        ? <></>
-                        : <span className='environment-font my-auto mx-1'>
-                            {'\n' + environmentName}
-                        </span>
-                    }
+          {/* user icon and user name */}
+          <Row id='qt-header'>
+            <Image id='c19-logo' src={C19Logo} />
+            <span className='header-font my-auto mx-1 pt-1'>
+              {t('translation:title')}
+              {environmentName && (
+                <span className='environment-font my-auto mx-1'>
+                  {'\n' + environmentName}
                 </span>
-                {!(environmentName && history.location.pathname === navigation?.routes.root)
-                    ? <></>
-                    : < span className='environment-info-text py-3'>
-                        <Trans>
-                            {t('translation:environment-info1')}
-                            {<a
-                                href={t('translation:environment-info-link')}
-                                target='blank'
-                            >
-                                {t('translation:environment-info-link')}
-                            </a>}
-                            {'.'}
-                        </Trans>
-                    </span>
-                }
-
-            </Row>
-            {/* {!environmentName
+              )}
+            </span>
+            {environmentName &&
+              history.location.pathname === navigation?.routes.root && (
+                <span className='environment-info-text py-3'>
+                  <Trans>
+                    {t('translation:environment-info1')}
+                    {
+                      <a
+                        href={t('translation:environment-info-link')}
+                        target='blank'
+                      >
+                        {t('translation:environment-info-link')}
+                      </a>
+                    }
+                    {'.'}
+                  </Trans>
+                </span>
+              )}
+          </Row>
+          {/* {!environmentName
                 ? <></>
                 : <Row id='qt-environment'>
                     <span className='header-font my-auto mx-1'>
@@ -105,26 +109,29 @@ const Header = (props: any) => {
                     </span>
                 </Row>
             } */}
-            <Navbar id='user-container' >
-                <NavDropdown
-                    className="nav-dropdown-title"
-                    title={userName}
-                    id="responsive-navbar-nav"
-                >
-                    <Nav.Link
-                        className='mx-0 dropdown-item'
-                        onClick={handleLogout}
-                    >
-                        {t('translation:logout')}
-                    </Nav.Link>
-                    <NavDropdown.Divider className='m-0' />
-                    <Nav.Link className='mx-0 dropdown-item' href={changePasswordUrl} target='passwordchange'>
-                        {t('translation:change-password')}
-                    </Nav.Link>
-                </NavDropdown>
-            </Navbar>
-        </Container >
-    )
-}
+          <Navbar id='user-container'>
+            <NavDropdown
+              className='nav-dropdown-title'
+              title={userName}
+              id='responsive-navbar-nav'
+            >
+              <Nav.Link className='mx-0 dropdown-item' onClick={handleLogout}>
+                {t('translation:logout')}
+              </Nav.Link>
+              <NavDropdown.Divider className='m-0' />
+              <Nav.Link
+                className='mx-0 dropdown-item'
+                href={changePasswordUrl}
+                target='passwordchange'
+              >
+                {t('translation:change-password')}
+              </Nav.Link>
+            </NavDropdown>
+          </Navbar>
+        </Container>
+      )}
+    </>
+  );
+};
 
 export default Header;

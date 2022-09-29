@@ -20,6 +20,8 @@
  */
 
 import { KeycloakInstance } from 'keycloak-js';
+import CancellationSteps from './CancellationSteps';
+import { ICancellation } from './useCancellation';
 
 export interface IUtils {
   shortHashLen: number;
@@ -39,6 +41,7 @@ export interface IUtils {
   momentDateFormat: string;
   momentDateTimeFormat: string;
   hasRole: (keycloak: KeycloakInstance, role: string) => boolean;
+  getCancellationStep: (cancellation: ICancellation, cancellationCompletePendingTests: number) => CancellationSteps;
 }
 
 const shortHashLen = 8;
@@ -48,8 +51,7 @@ const pattern = {
   zip: '^([0]{1}[1-9]{1}|[1-9]{1}[0-9]{1})[0-9]{3}$',
   houseNo: '^([1-9]{1}[0-9a-zA-Z-\\s/]{0,14})$',
   tel: '^([+]{1}[1-9]{1,2}|[0]{1}[1-9]{1})[0-9]{5,}$',
-  eMail:
-    '^[\\w\\d\\.!#$%&’*+/=?^_`{|}~-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
+  eMail: '^[\\w\\d\\.!#$%&’*+/=?^_`{|}~-]{1,}[@]{1}[\\w\\d\\.-]{1,}[\\.]{1}[\\w]{2,}$',
   standardisedName: '^[A-Z<]*$',
   url: '^(www\\.|http:\\/\\/|https:\\/\\/){0,1}?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,10}(:[0-9]{1,5})?(\\/.*)?$',
   BSNR: '^[1-9]{1}\\d{8}$',
@@ -80,25 +82,49 @@ const getIndent = (level: number): JSX.Element[] => {
 const hasRole = (keycloak: KeycloakInstance, role: string) =>
   keycloak && (keycloak.hasRealmRole(role) || keycloak.hasRealmRole(role));
 
+const getCancellationStep = (
+  cancellation: ICancellation,
+  cancellationCompletePendingTests: number
+): CancellationSteps => {
+  let result = CancellationSteps.NO_CANCEL;
+
+  if (cancellation) {
+    result = CancellationSteps.CANCELED;
+
+    cancellation.cancellationDate.getTime() < Date.now() && (result = CancellationSteps.DOWNLOAD_REQUESTED);
+
+    cancellation.cancellationDate.getTime() + 60 * 60 * (cancellationCompletePendingTests || 24) * 1000 < Date.now() &&
+      (result = CancellationSteps.NO_TEST_RECORD);
+
+    cancellation.csvCreated && (result = CancellationSteps.DOWNLOAD_READY);
+
+    cancellation.downloadLinkRequested && (result = CancellationSteps.DOWNLOADED);
+
+    cancellation.dataDeleted && (result = CancellationSteps.DATA_DELETED);
+  }
+
+  return result;
+};
+
 const utils: IUtils = {
   shortHashLen: shortHashLen,
   pattern: pattern,
   shortHash: (uuIdHash: string) => uuIdHash.substring(0, shortHashLen),
-  isProcessNoValid: (processNo: string) => processNoRegExp.test(processNo),
-  isZipValid: (zip: string) => zipRegExp.test(zip),
-  isTelValid: (tel: string) => telRegExp.test(tel),
-  isEMailValid: (eMail: string) => eMailRegExp.test(eMail),
-  isStandardisedNameValid: (value: string) =>
-    standardisedNameRegExp.test(value),
-  isUrlValid: (url: string) => urlRegExp.test(url),
-  isOpeningHoursValid: (value: string) => openingHoursExp.test(value),
-  isNameValid: (value: string) => nameExp.test(value),
+  isProcessNoValid: processNoRegExp.test,
+  isZipValid: zipRegExp.test,
+  isTelValid: telRegExp.test,
+  isEMailValid: eMailRegExp.test,
+  isStandardisedNameValid: standardisedNameRegExp.test,
+  isUrlValid: urlRegExp.test,
+  isOpeningHoursValid: openingHoursExp.test,
+  isNameValid: nameExp.test,
   getIndent: getIndent,
   pickerDateFormat: 'dd.MM.yyyy',
   pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',
   momentDateFormat: 'DD.MM.yyyy',
   momentDateTimeFormat: 'yyyy-MM-DD / hh:mm A',
   hasRole: hasRole,
+  getCancellationStep: getCancellationStep,
 };
 
 export default utils;

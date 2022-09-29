@@ -31,8 +31,8 @@ i18n.use(initReactI18next).init({
   fallbackLng: 'en',
   debug: false,
   /* can have multiple namespace, in case you want to divide a huge translation into smaller pieces and load them on demand */
-  ns: ['translations'],
-  defaultNS: 'translations',
+  ns: ['translation'],
+  defaultNS: 'translation',
   keySeparator: false,
   interpolation: {
     escapeValue: false,

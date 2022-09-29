@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Card, Col, Container, Fade, Row } from 'react-bootstrap'
+import { Card, Col, Container, Fade, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -37,180 +37,220 @@ import { Sex } from '../misc/enum';
 import { getQrCodeValueString } from '../misc/qr-code-value';
 import { usePostQuickTest } from '../api';
 import CardFooter from './modules/card-footer.component';
-import AppContext from '../misc/appContext';
+import AppContext from '../store/app-context';
 
 const ShowPatientData = (props: any) => {
+  const context = React.useContext(AppContext);
+  const { t } = useTranslation();
 
-    const context = React.useContext(AppContext);
-    const { t } = useTranslation();
+  const [isInit, setIsInit] = React.useState(false);
+  const [quickTest, setQuickTest] = React.useState<IQuickTest>();
+  const [quickTestToPost, setQuickTestToPost] = React.useState<IQuickTest>();
+  const [qrCodeValue, setQrCodeValue] = React.useState<string[]>();
+  const [uuIdHash, setUuIdHash] = React.useState('');
+  const [processId, setProcessId] = React.useState('');
+  const [postInProgress, setPostInProgress] = React.useState(false);
 
-    const [isInit, setIsInit] = React.useState(false)
-    const [quickTest, setQuickTest] = React.useState<IQuickTest>();
-    const [quickTestToPost, setQuickTestToPost] = React.useState<IQuickTest>();
-    const [qrCodeValue, setQrCodeValue] = React.useState<string[]>();
-    const [uuIdHash, setUuIdHash] = React.useState('');
-    const [processId, setProcessId] = React.useState('');
-    const [postInProgress, setPostInProgress] = React.useState(false);
-
-    // set quickTest data on mount and set hash from uuid
-    React.useEffect(() => {
-        if (isInit) {
-            if (props.quickTest) {
-                setQuickTest(props.quickTest)
-            }
-            else
-                props.setError({ error: '', message: t('translation:error-patient-data-load'), onCancel: context.navigation!.toLanding });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isInit])
-
-    React.useEffect(() => {
-        if (quickTest && quickTest.personData && quickTest.uuId) {
-
-            setUuIdHash(sha256(quickTest.uuId).toString());
-
-            if (quickTest.includePersData) {
-
-                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.dccConsent, quickTest.testType, quickTest.personData.givenName, quickTest.personData.familyName, quickTest.personData.dateOfBirth));
-            }
-            if (quickTest.processingConsens) {
-                setQrCodeValue(getQrCodeValueString(quickTest.uuId, quickTest.dccConsent, quickTest.testType));
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [quickTest])
-
-    // set process id from hash
-    React.useEffect(() => {
-        if (uuIdHash) {
-            setProcessId(utils.shortHash(uuIdHash));
-        }
-    }, [uuIdHash]);
-
-
-    React.useEffect(() => {
-        if (qrCodeValue && qrCodeValue.length > 1) {
-            // console.log(qrCodeValue);
-            quickTest!.testResultHash = qrCodeValue[1];
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [qrCodeValue]);
-
-    // set ready state for spinner
-    React.useEffect(() => {
-        if (context.navigation && context.valueSets)
-            setIsInit(true);
-    }, [context.navigation, context.valueSets])
-
-    const finishProcess = () => {
-        props.setQuickTest(undefined);
-        props.setNotificationShow(true);
-        context.navigation!.toLanding();
-        setPostInProgress(false);
+  // set quickTest data on mount and set hash from uuid
+  React.useEffect(() => {
+    if (isInit) {
+      if (props.quickTest) {
+        setQuickTest(props.quickTest);
+      } else
+        context.updateError({
+          error: '',
+          message: t('translation:error-patient-data-load'),
+        });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isInit]);
 
-    const handleError = (error: any) => {
-        let msg = '';
+  React.useEffect(() => {
+    if (quickTest && quickTest.personData && quickTest.uuId) {
+      setUuIdHash(sha256(quickTest.uuId).toString());
 
-        if (error) {
-            msg = error.message
-        }
-        props.setError({ error: error, message: msg, onCancel: context.navigation!.toLanding });
+      if (quickTest.includePersData) {
+        setQrCodeValue(
+          getQrCodeValueString(
+            quickTest.uuId,
+            quickTest.dccConsent,
+            quickTest.testType,
+            quickTest.personData.givenName,
+            quickTest.personData.familyName,
+            quickTest.personData.dateOfBirth
+          )
+        );
+      }
+      if (quickTest.processingConsens) {
+        setQrCodeValue(
+          getQrCodeValueString(
+            quickTest.uuId,
+            quickTest.dccConsent,
+            quickTest.testType
+          )
+        );
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quickTest]);
 
-    usePostQuickTest(quickTestToPost, processId, finishProcess, handleError);
-
-    const handlePost = () => {
-        setPostInProgress(true);
-        setQuickTestToPost(quickTest);
+  // set process id from hash
+  React.useEffect(() => {
+    if (uuIdHash) {
+      setProcessId(utils.shortHash(uuIdHash));
     }
+  }, [uuIdHash]);
 
-    return (
-        !(isInit && context && context.valueSets && quickTest && quickTest.personData && quickTest.addressData)
-            ? <CwaSpinner />
-            : <Fade appear={true} in={true} >
-                <Container className='form-flex p-0 '>
-                    <Row id='process-row'>
-                        <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
-                        <span>{processId}</span>
-                    </Row>
-                    <Card id='data-card'>
+  React.useEffect(() => {
+    if (qrCodeValue && qrCodeValue.length > 1) {
+      // console.log(qrCodeValue);
+      quickTest!.testResultHash = qrCodeValue[1];
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qrCodeValue]);
 
-                        {/*
+  // set ready state for spinner
+  React.useEffect(() => {
+    if (context.navigation && context.valueSets) setIsInit(true);
+  }, [context.navigation, context.valueSets]);
+
+  const finishProcess = () => {
+    props.setQuickTest(undefined);
+    props.setNotificationShow(true);
+    context.navigation!.toLanding();
+    setPostInProgress(false);
+  };
+
+  const handleError = (error: any) => {
+    let msg = '';
+
+    if (error) {
+      msg = error.message;
+    }
+    context.updateError({
+      error: error,
+      message: msg,
+    });
+  };
+
+  usePostQuickTest(quickTestToPost, processId, finishProcess, handleError);
+
+  const handlePost = () => {
+    setPostInProgress(true);
+    setQuickTestToPost(quickTest);
+  };
+
+  return !(
+    isInit &&
+    context &&
+    context.valueSets &&
+    quickTest &&
+    quickTest.personData &&
+    quickTest.addressData
+  ) ? (
+    <CwaSpinner />
+  ) : (
+    <Fade appear={true} in={true}>
+      <Container className='form-flex p-0 '>
+        <Row id='process-row'>
+          <span className='font-weight-bold mr-2'>
+            {t('translation:process')}
+          </span>
+          <span>{processId}</span>
+        </Row>
+        <Card id='data-card'>
+          {/*
     content area with patient inputs and check box
     */}
-                        <Card.Body id='data-header'>
-                            <Row>
-                                <Col sm='5'>
-                                    <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>{t('translation:qr-code')}</Card.Title>
-                                    <hr />
+          <Card.Body id='data-header'>
+            <Row>
+              <Col sm='5'>
+                <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>
+                  {t('translation:qr-code')}
+                </Card.Title>
+                <hr />
 
-                                    <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm' >
-                                        {t('translation:patient-data')}
-                                    </Card.Text>
+                <Card.Text className='input-label font-weight-bold mt-4 jcc-xs-jcfs-sm'>
+                  {t('translation:patient-data')}
+                </Card.Text>
 
-                                    <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >
-                                        {quickTest.personData.givenName + ' ' + quickTest.personData.familyName}
-                                    </Card.Text>
+                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0'>
+                  {quickTest.personData.givenName +
+                    ' ' +
+                    quickTest.personData.familyName}
+                </Card.Text>
 
-                                    <Moment className='input-label mb-3 jcc-xs-jcfs-sm' locale='de' format={utils.momentDateFormat} >
-                                        {quickTest.personData.dateOfBirth as Date}
-                                    </Moment>
+                <Moment
+                  className='input-label mb-3 jcc-xs-jcfs-sm'
+                  locale='de'
+                  format={utils.momentDateFormat}
+                >
+                  {quickTest.personData.dateOfBirth as Date}
+                </Moment>
 
-                                    <Card.Text className='input-label jcc-xs-jcfs-sm' >
-                                        {quickTest.personData.sex === Sex.MALE
-                                            ? t('translation:male')
-                                            : quickTest.personData.sex === Sex.FEMALE
-                                                ? t('translation:female')
-                                                : t('translation:diverse')}
-                                    </Card.Text>
+                <Card.Text className='input-label jcc-xs-jcfs-sm'>
+                  {quickTest.personData.sex === Sex.MALE
+                    ? t('translation:male')
+                    : quickTest.personData.sex === Sex.FEMALE
+                    ? t('translation:female')
+                    : t('translation:diverse')}
+                </Card.Text>
 
-                                    <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >
-                                        {quickTest.addressData.street}
-                                    </Card.Text>
+                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0'>
+                  {quickTest.addressData.street}
+                </Card.Text>
 
-                                    {/* <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest?.addressData.street + ' ' + quickTest?.addressData.houseNumber}</Card.Text> */}
-                                    <Card.Text className='input-label jcc-xs-jcfs-sm' >
-                                        {quickTest.addressData.zip + ' ' + quickTest.addressData.city}
-                                    </Card.Text>
+                {/* <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >{quickTest?.addressData.street + ' ' + quickTest?.addressData.houseNumber}</Card.Text> */}
+                <Card.Text className='input-label jcc-xs-jcfs-sm'>
+                  {quickTest.addressData.zip + ' ' + quickTest.addressData.city}
+                </Card.Text>
 
-                                    <Card.Text className='input-label jcc-xs-jcfs-sm mb-0' >
-                                        {quickTest.phoneNumber}
-                                    </Card.Text>
+                <Card.Text className='input-label jcc-xs-jcfs-sm mb-0'>
+                  {quickTest.phoneNumber}
+                </Card.Text>
 
-                                    <Card.Text className='input-label jcc-xs-jcfs-sm' >
-                                        {quickTest.emailAddress}
-                                    </Card.Text>
+                <Card.Text className='input-label jcc-xs-jcfs-sm'>
+                  {quickTest.emailAddress}
+                </Card.Text>
 
-                                    <Card.Text className='input-label jcc-xs-jcfs-sm' >
-                                        {quickTest.testId}
-                                    </Card.Text>
-                                </Col>
-                                <Col sm='7' className='px-4'>
-                                    <Container id='qr-code-container'>
-                                        {qrCodeValue ? <><QRCode id='qr-code' size={256} renderAs='svg' value={qrCodeValue[0]} />
-                                        </> : <></>}
-                                    </Container>
-                                </Col>
-                            </Row>
-                        </Card.Body>
+                <Card.Text className='input-label jcc-xs-jcfs-sm'>
+                  {quickTest.testId}
+                </Card.Text>
+              </Col>
+              <Col sm='7' className='px-4'>
+                <Container id='qr-code-container'>
+                  {qrCodeValue ? (
+                    <>
+                      <QRCode
+                        id='qr-code'
+                        size={256}
+                        renderAs='svg'
+                        value={qrCodeValue[0]}
+                      />
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </Container>
+              </Col>
+            </Row>
+          </Card.Body>
 
-                        {/*
+          {/*
     footer with correction and finish button
     */}
 
-                        <CardFooter
-                            cancelText={t('translation:patient-data-correction')}
-                            okText={t('translation:process-finish')}
-                            handleCancel={context.navigation!.toRecordPatient}
-                            handleOk={() => handlePost()}
-                            disabled={postInProgress}
-                        />
-
-                    </Card>
-                </Container>
-            </Fade>
-    )
-}
+          <CardFooter
+            cancelText={t('translation:patient-data-correction')}
+            okText={t('translation:process-finish')}
+            handleCancel={context.navigation!.toRecordPatient}
+            handleOk={() => handlePost()}
+            disabled={postInProgress}
+          />
+        </Card>
+      </Container>
+    </Fade>
+  );
+};
 
 export default ShowPatientData;

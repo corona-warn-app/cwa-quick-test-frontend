@@ -1,5 +1,5 @@
-import React from "react";
-import { Card, Row, Col, Button } from "react-bootstrap";
+import React from 'react';
+import { Card, Row, Col, Button } from 'react-bootstrap';
 
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
@@ -20,51 +20,35 @@ import { Card, Row, Col, Button } from "react-bootstrap";
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * Used character transliteration from 
+ *
+ * Used character transliteration from
  * https://www.icao.int/publications/Documents/9303_p3_cons_en.pdf
  */
-
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
 const CardFooter = (props: any) => {
+  const { t } = useTranslation();
 
-    const { t } = useTranslation();
-
-    return (!props ? <></> :
-        <Card.Footer id='data-footer'>
-            <Row>
-                <Col sm='6' md='3' className=''>
-                    <Button
-                        className='my-1 my-md-0 p-0'
-                        variant='outline-primary'
-                        block
-                        onClick={props.handleCancel}
-                    >
-                        {props.cancelText
-                            ? props.cancelText
-                            : t('translation:cancel')}
-                    </Button>
-                </Col>
-                <Col sm='6' md='3' className='pr-md-0'>
-                    <Button
-                        className='my-1 my-md-0 p-0'
-                        block
-                        type='submit'
-                        onClick={props.handleOk}
-                        disabled={props.disabled}
-                    >
-                        {props.okText
-                            ? props.okText
-                            :t('translation:next')}
-                    </Button>
-                </Col>
-            </Row>
-        </Card.Footer>
-    )
-
-}
+  return !props ? (
+    <></>
+  ) : (
+    <Card.Footer id='data-footer'>
+      <Row>
+        <Col md='6' lg='3' className='data-footer-col'>
+          <Button className='my-1 my-md-0 p-0' variant='outline-primary' block onClick={props.handleCancel}>
+            {props.cancelText ? props.cancelText : t('translation:cancel')}
+          </Button>
+        </Col>
+        <Col md='6' lg='3' className='data-footer-col'>
+          <Button className='my-1 my-md-0 p-0' block type='submit' onClick={props.handleOk} disabled={props.disabled}>
+            {props.okText ? props.okText : t('translation:next')}
+          </Button>
+        </Col>
+      </Row>
+    </Card.Footer>
+  );
+};
 
 export default CardFooter;

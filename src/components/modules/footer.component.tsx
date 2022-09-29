@@ -19,48 +19,56 @@
  * under the License.
  */
 
-import { Button, Image, Row } from 'react-bootstrap'
+import { Button, Image, Row } from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
-import DataProtectLogo from '../../assets/images/data_protect.png'
+import DataProtectLogo from '../../assets/images/data_protect.png';
 import React from 'react';
-
+import DataprivacyPage from '../modals/dataprivacy.component';
+import ImprintPage from '../modals/imprint.component';
 
 const Footer = (props: any) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
+  const [dataPrivacyShow, setDataPrivacyShow] = React.useState(false);
+  const [imprintShow, setImprintShow] = React.useState(false);
 
+  const handleDataPrivacyClick = () => {
+    setDataPrivacyShow(true);
+  };
 
-    const handleDataPrivacyClick = () => {
-        props.setDataPrivacyShow(true)
-    }
+  const handleImprintClick = () => {
+    setImprintShow(true);
+  };
 
-    const handleImprintClick = () => {
-        props.setImprintShow(true)
-    }
+  return (
+    // simple footer with imprint and data privacy
+    <>
+      <Row id='qt-footer'>
+        <Button
+          variant='link'
+          className='my-0 p-0 mx-5 footer-font'
+          onClick={handleImprintClick}
+        >
+          {t('translation:imprint')}
+        </Button>
 
-    return (
-        // simple footer with imprint and data privacy --> links tbd
-        <Row id='qt-footer'>
-            <Button
-                variant='link'
-                className="my-0 p-0 mx-5 footer-font"
-                onClick={handleImprintClick}>
-                {t('translation:imprint')}
-            </Button>
+        <Image className='my-auto' src={DataProtectLogo} />
 
-            <Image className="my-auto" src={DataProtectLogo} />
+        <Button
+          variant='link'
+          className='my-0 p-0 mx-2 footer-font'
+          onClick={handleDataPrivacyClick}
+        >
+          {t('translation:data-privacy')}
+        </Button>
+      </Row>
 
-            <Button
-            variant='link'
-                className="my-0 p-0 mx-2 footer-font"
-                onClick={handleDataPrivacyClick}>
-                {t('translation:data-privacy')}
-            </Button>
-        </Row>
-
-    )
-}
+      <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
+      <ImprintPage show={imprintShow} setShow={setImprintShow} />
+    </>
+  );
+};
 
 export default Footer;
