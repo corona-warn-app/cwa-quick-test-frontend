@@ -20,11 +20,16 @@
  */
 
 import React from 'react';
-import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse, Dropdown } from 'react-bootstrap'
+import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse, Dropdown } from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
-import { FormGroupTextarea, FormGroupInput, FormGroupSelect, FormGroupPermissionCkb } from '../modules/form-group.component';
+import {
+  FormGroupTextarea,
+  FormGroupInput,
+  FormGroupSelect,
+  FormGroupPermissionCkb,
+} from '../modules/form-group.component';
 import { IGroupDetails, IGroupNode, IGroup } from '../../misc/user';
 import { useGetGroupDetails } from '../../api';
 import CwaSpinner from '../spinner/spinner.component';
@@ -32,341 +37,330 @@ import utils from '../../misc/utils';
 import { useKeycloak } from '@react-keycloak/web';
 
 const emptyGroup: IGroupDetails = {
-    id: '',
-    // bsnr: '',
-    pocId: '',
-    name: '',
-    pocDetails: '',
-    enablePcr: false,
-    searchPortalConsent: true,
-    parentGroup: '',
-    website: '',
-    email: '',
-    appointmentRequired: false,
-    openingHours: []
-}
+  id: '',
+  // bsnr: '',
+  pocId: '',
+  name: '',
+  pocDetails: '',
+  enablePcr: false,
+  searchPortalConsent: true,
+  parentGroup: '',
+  website: '',
+  email: '',
+  appointmentRequired: false,
+  openingHours: [],
+};
 
 const GroupModal = (props: any) => {
+  const [btnOkDisabled, setBtnOkDisabled] = React.useState(true);
+  const { t } = useTranslation();
+  const { keycloak } = useKeycloak();
 
-    const [btnOkDisabled, setBtnOkDisabled] = React.useState(true);
-    const { t } = useTranslation();
-    const { keycloak } = useKeycloak();
+  const [data, setData] = React.useState('');
+  const [validated, setValidated] = React.useState(false);
+  const [isReady, setIsReady] = React.useState(false);
+  const [isNew, setIsNew] = React.useState(true);
+  const [options, setOptions] = React.useState<JSX.Element[]>();
+  const [dropdownItems, setDropdownItems] = React.useState<JSX.Element[]>();
+  const [dropdownList] = React.useState<string[]>(['https://', 'http://']);
+  const [selectedDropdownValue, setSelectedDropdownValue] = React.useState<string>(dropdownList[0]);
+  const [websiteValue, setWebsiteValue] = React.useState('');
+  const [displayOpeningHours, setDisplayOpeningHours] = React.useState('');
+  const [errorOpeningHour, setErrorOpeningHour] = React.useState('');
 
-    const [data, setData] = React.useState('');
-    const [validated, setValidated] = React.useState(false);
-    const [isReady, setIsReady] = React.useState(false);
-    const [isNew, setIsNew] = React.useState(true);
-    const [options, setOptions] = React.useState<JSX.Element[]>();
-    const [dropdownItems, setDropdownItems] = React.useState<JSX.Element[]>();
-    const [dropdownList] = React.useState<string[]>(['https://', 'http://']);
-    const [selectedDropdownValue, setSelectedDropdownValue] = React.useState<string>(dropdownList[0]);
-    const [websiteValue, setWebsiteValue] = React.useState('');
-    const [displayOpeningHours, setDisplayOpeningHours] = React.useState('');
-    const [errorOpeningHour, setErrorOpeningHour] = React.useState('');
+  const groupReloaded = (group: IGroupDetails) => {
+    if (group) {
+      setData(unpackData(group.pocDetails));
+      group.parentGroup = props.parentGroupId;
 
-    const groupReloaded = (group: IGroupDetails) => {
-        if (group) {
-            setData(unpackData(group.pocDetails))
-            group.parentGroup = props.parentGroupId;
+      if (group.website) {
+        let website = '';
 
-            if (group.website) {
-                let website = '';
-
-                for (const item of dropdownList) {
-                    if (group.website.startsWith(item)) {
-                        website = group.website.slice(item.length, group.website.length);
-                        setSelectedDropdownValue(item);
-                    }
-                }
-
-                setWebsiteValue(website);
-            }
-            else {
-                setWebsiteValue('');
-                setSelectedDropdownValue(dropdownList[0]);
-            }
+        for (const item of dropdownList) {
+          if (group.website.startsWith(item)) {
+            website = group.website.slice(item.length, group.website.length);
+            setSelectedDropdownValue(item);
+          }
         }
-        setBtnOkDisabled(false);
+
+        setWebsiteValue(website);
+      } else {
+        setWebsiteValue('');
+        setSelectedDropdownValue(dropdownList[0]);
+      }
+    }
+    setBtnOkDisabled(false);
+  };
+
+  const [group, updateGroup, setGroup] = useGetGroupDetails(groupReloaded, props.handleError);
+
+  React.useEffect(() => {
+    getDropdownItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
+    if (group) {
+      setOptions(getOptions());
+      setDisplayOpeningHours(group.openingHours?.map((element: string) => element).join('\n'));
+
+      setIsReady(true);
     }
 
-    const [group, updateGroup, setGroup] = useGetGroupDetails(groupReloaded, props.handleError);
+    setIsNew(!(group && group.id));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [group]);
 
+  React.useEffect(() => {
+    setValidated(props.isSuccess);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.isSuccess]);
 
-    React.useEffect(() => {
-        getDropdownItems();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+  React.useEffect(() => {
+    if (props.isCreationError) {
+      setBtnOkDisabled(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.isCreationError]);
 
-    React.useEffect(() => {
-        if (group) {
+  const handleCancel = () => {
+    setErrorOpeningHour('');
+    props.onCancel();
+  };
 
-            setOptions(getOptions());
-            setDisplayOpeningHours(
-                group.openingHours?.map(
-                    (element: string) => element)
-                    .join('\n')
-            );
+  const unpackData = (data: string) => {
+    if (data) {
+      data = data.replaceAll(',', '\n');
+    } else {
+      data = '';
+    }
+    return data;
+  };
 
-            setIsReady(true);
-        }
+  const packData = (data: string) => {
+    if (data) {
+      data = data.replaceAll('\n', ',');
+    }
+    return data;
+  };
 
-        setIsNew(!(group && group.id));
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [group])
+  const handleOk = () => {
+    if (props.handleOk) {
+      setBtnOkDisabled(true);
+      group.pocDetails = packData(data);
+      if (
+        websiteValue &&
+        (websiteValue.startsWith('www.') ||
+          !(websiteValue.startsWith(dropdownList[0]) || websiteValue.startsWith(dropdownList[1])))
+      ) {
+        group.website = selectedDropdownValue + websiteValue;
+      } else {
+        group.website = websiteValue;
+      }
 
-    React.useEffect(() => {
-        setValidated(props.isSuccess)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.isSuccess]);
+      props.handleOk(group);
+    }
+  };
 
-    React.useEffect(() => {
-        if (props.isCreationError) {
-            setBtnOkDisabled(false)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [props.isCreationError]);
-
-    const handleCancel = () => {
-        setErrorOpeningHour('');
-        props.onCancel();
+  const handleEnter = () => {
+    if (props.onEnter) {
+      props.onEnter();
     }
 
-    const unpackData = (data: string) => {
-        if (data) {
-            data = data.replaceAll(',', '\n')
-        } else {
-            data = ''
-        }
-        return data;
+    setBtnOkDisabled(false);
+
+    if (props.groupId) {
+      updateGroup(props.groupId);
+    } else {
+      setGroup({ ...emptyGroup });
+      setSelectedDropdownValue(dropdownList[0]);
+      setData('');
+      setWebsiteValue('');
+    }
+  };
+
+  const handleExited = () => {
+    setIsReady(false);
+    props.onExit();
+  };
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const form = event.currentTarget;
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (errorOpeningHour) {
+      document.getElementById('formPocOpeningHours')?.focus();
+      return;
     }
 
-    const packData = (data: string) => {
-        if (data) {
-            data = data.replaceAll('\n', ',')
-        }
-        return data;
+    if (form.checkValidity()) {
+      handleOk();
+    }
+  };
+
+  const updateGroupProp = (name: string, value: any) => {
+    const ngroup = { ...group, [name]: value };
+    setGroup({ ...ngroup });
+  };
+
+  const changeOpeningHoursHandler = (name: string, value: string) => {
+    setDisplayOpeningHours(value);
+
+    let error = undefined;
+    const openingHours = value.split('\n');
+    if (openingHours.length > 7) {
+      setErrorOpeningHour('opening-hours-to-much-lines-error');
+      return;
     }
 
-    const handleOk = () => {
-        if (props.handleOk) {
-            setBtnOkDisabled(true);
-            group.pocDetails = packData(data);
-            if (websiteValue
-                && (
-                    websiteValue.startsWith('www.')
-                    || !(
-                        websiteValue.startsWith(dropdownList[0])
-                        || websiteValue.startsWith(dropdownList[1])
-                    )
-                )) {
-                group.website = selectedDropdownValue + websiteValue;
-            }
-            else {
-                group.website = websiteValue;
-            }
+    error = openingHours.find((element) => {
+      return !new RegExp(utils.pattern.openingHours).test(element);
+    });
 
-            props.handleOk(group);
-        }
+    if (error) {
+      setErrorOpeningHour('openening-hours-to-long-error');
+    } else {
+      setErrorOpeningHour('');
+      updateGroupProp('openingHours', openingHours);
+    }
+  };
+
+  const updateSearchPortalConsent = (name: string, value: any) => {
+    const ngroup: IGroupDetails = { ...group, [name]: value };
+
+    if (value === false) {
+      ngroup.email = '';
+      ngroup.website = '';
+      ngroup.openingHours = [];
+      ngroup.appointmentRequired = false;
+    }
+    setGroup(ngroup);
+  };
+
+  const collectChildren = (idlist: string[], parentNode: IGroup) => {
+    if (parentNode) {
+      idlist.push(parentNode.id);
+      parentNode.children.forEach((child) => collectChildren(idlist, child as IGroup));
+    }
+  };
+
+  const getOptions = (): JSX.Element[] => {
+    let result: JSX.Element[] = [];
+
+    if (group && group.id) {
+      const node = props.groups.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
+      const selfIdOrChildren: string[] = [];
+
+      if (node) {
+        collectChildren(selfIdOrChildren, node.group);
+      }
+
+      const fList = props.groups.filter((groupNode: IGroupNode) => selfIdOrChildren.indexOf(groupNode.group.id) < 0);
+
+      result = fList.map((groupNode: IGroupNode) => (
+        <option key={groupNode.group.id} value={groupNode.group.id}>
+          {'\u00A0\u00A0\u00A0\u00A0'.repeat(groupNode.level) + groupNode.group.name}
+        </option>
+      ));
+
+      // result.push(<option key="empty" value="empty">{t('translation:no-parentgroup-option')}</option>);
     }
 
-    const handleEnter = () => {
-        if (props.onEnter) {
-            props.onEnter();
-        }
+    return result;
+  };
 
-        setBtnOkDisabled(false);
+  const getDropdownItems = () => {
+    setDropdownItems(
+      dropdownList.map((item: string) => (
+        <Dropdown.Item onSelect={(eventKey: any) => setSelectedDropdownValue(eventKey)} eventKey={item} key={item}>
+          {item}
+        </Dropdown.Item>
+      ))
+    );
+  };
 
-        if (props.groupId) {
-            updateGroup(props.groupId);
-        }
-        else {
-            setGroup({ ...emptyGroup });
-            setSelectedDropdownValue(dropdownList[0]);
-            setData('');
-            setWebsiteValue('');
-        }
-    }
+  return (
+    <Modal
+      contentClassName='data-modal'
+      size='lg'
+      show={props.show}
+      backdrop='static'
+      keyboard={false}
+      centered
+      onEnter={handleEnter}
+      onExited={handleExited}
+    >
+      {!isReady ? (
+        <CwaSpinner background='#eeeeee' />
+      ) : (
+        <Fade appear={true} in={true}>
+          <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
+            <Modal.Header id='data-header' className='pb-0'>
+              <Modal.Title>{isNew ? t('translation:add-group') : t('translation:edit-group')}</Modal.Title>
+            </Modal.Header>
 
-    const handleExited = () => {
-        setIsReady(false);
-        props.onExit();
-    }
+            <Modal.Body className='bg-light'>
+              {isNew ? (
+                <></>
+              ) : (
+                <>
+                  <FormGroupSelect
+                    controlId='formGroupSelect'
+                    title={t('translation:parentgroup')}
+                    placeholder={t('translation:no-parentgroup-option')}
+                    value={group.parentGroup}
+                    onChange={(ent: any) => updateGroupProp('parentGroup', ent.target.value)}
+                    options={options}
+                  />
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        const form = event.currentTarget;
-        event.preventDefault();
-        event.stopPropagation();
+                  <hr />
+                </>
+              )}
 
-        if (errorOpeningHour) {
-            document.getElementById('formPocOpeningHours')?.focus();
-            return;
-        }
+              <FormGroupInput
+                controlId='formFirstName'
+                title={t('translation:name')}
+                value={group ? group.name : ''}
+                required
+                onChange={(evt: any) => {
+                  updateGroupProp('name', evt.target.value);
+                  props.resetError();
+                }}
+                maxLength={45}
+                isInvalid={props.isCreationError}
+                InvalidText={t('translation:group-conflict-error')}
+              />
 
-        if (form.checkValidity()) {
-            handleOk();
-        }
-    }
+              {/* <hr /> */}
 
-    const updateGroupProp = (name: string, value: any) => {
-        const ngroup = { ...group, [name]: value };
-        setGroup({ ...ngroup });
-    }
+              <FormGroupTextarea
+                controlId='formAdressData'
+                title={t('translation:address-testcenter')}
+                placeholder={t('translation:address-testcenter-placeholder')}
+                value={data}
+                required
+                onChange={(evt: any) => setData(evt.target.value)}
+                type='textarea'
+                maxLength={300}
+              />
 
-    const changeOpeningHoursHandler = (name: string, value: string) => {
+              {utils.hasRole(keycloak, 'c19_quick_test_poc_nat_admin') ? (
+                <FormGroupPermissionCkb
+                  controlId='formenablePcr'
+                  title={t('translation:enablePcr')}
+                  //label={t('translation:for-counter')}
+                  onChange={(evt: any) => updateSearchPortalConsent('enablePcr', evt.currentTarget.checked)}
+                  type='checkbox'
+                  checked={group.enablePcr}
+                />
+              ) : (
+                <></>
+              )}
 
-        setDisplayOpeningHours(value);
+              <hr />
 
-        let error = undefined;
-        const openingHours = value.split('\n');
-        if (openingHours.length > 7) {
-            setErrorOpeningHour('opening-hours-to-much-lines-error');
-            return;
-        }
-
-        error = openingHours.find(element => {
-            return !utils.isOpeningHoursValid(element);
-        });
-
-        if (error) {
-            setErrorOpeningHour('openening-hours-to-long-error');
-        } else {
-            setErrorOpeningHour('');
-            updateGroupProp("openingHours", openingHours);
-        }
-    }
-
-    const updateSearchPortalConsent = (name: string, value: any) => {
-        const ngroup: IGroupDetails = { ...group, [name]: value };
-
-        if (value === false) {
-            ngroup.email = '';
-            ngroup.website = '';
-            ngroup.openingHours = [];
-            ngroup.appointmentRequired = false;
-        }
-        setGroup(ngroup);
-    }
-
-    const collectChildren = (idlist: string[], parentNode: IGroup) => {
-        if (parentNode) {
-            idlist.push(parentNode.id);
-            parentNode.children.forEach(child => collectChildren(idlist, child as IGroup));
-        }
-    }
-
-    const getOptions = (): JSX.Element[] => {
-        let result: JSX.Element[] = [];
-
-        if (group && group.id) {
-
-            const node = props.groups.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
-            const selfIdOrChildren: string[] = [];
-
-            if (node) {
-                collectChildren(selfIdOrChildren, node.group);
-            }
-
-            const fList = props.groups.filter((groupNode: IGroupNode) => selfIdOrChildren.indexOf(groupNode.group.id) < 0)
-
-            result = fList.map((groupNode: IGroupNode) =>
-                <option key={groupNode.group.id} value={groupNode.group.id}>{"\u00A0\u00A0\u00A0\u00A0".repeat(groupNode.level) + groupNode.group.name}</option>
-            );
-
-            // result.push(<option key="empty" value="empty">{t('translation:no-parentgroup-option')}</option>);
-        }
-
-
-        return result;
-    }
-
-    const getDropdownItems = () => {
-        setDropdownItems(
-            dropdownList.map(
-                (item: string) =>
-                    <Dropdown.Item
-                        onSelect={(eventKey: any) => setSelectedDropdownValue(eventKey)}
-                        eventKey={item}
-                        key={item}
-                    >
-                        {item}
-                    </Dropdown.Item>));
-    }
-
-    return (
-        <Modal
-            contentClassName='data-modal'
-            size="lg"
-            show={props.show}
-            backdrop="static"
-            keyboard={false}
-            centered
-            onEnter={handleEnter}
-            onExited={handleExited}
-        >
-            {!isReady
-                ? <CwaSpinner background='#eeeeee' />
-                : <Fade appear={true} in={true} >
-                    <Form
-                        className='form-flex'
-                        onSubmit={handleSubmit}
-                        validated={validated}
-                    >
-                        <Modal.Header id='data-header' className='pb-0' >
-                            <Modal.Title>{isNew ? t('translation:add-group') : t('translation:edit-group')}</Modal.Title>
-                        </Modal.Header>
-
-                        <Modal.Body className='bg-light'>
-                            {isNew
-                                ? <></>
-                                : <>
-                                    <FormGroupSelect controlId='formGroupSelect'
-                                        title={t('translation:parentgroup')}
-                                        placeholder={t('translation:no-parentgroup-option')}
-                                        value={group.parentGroup}
-                                        onChange={(ent: any) => updateGroupProp('parentGroup', ent.target.value)}
-                                        options={options}
-                                    />
-
-                                    <hr />
-                                </>
-                            }
-
-                            < FormGroupInput controlId='formFirstName' title={t('translation:name')}
-                                value={group ? group.name : ''}
-                                required
-                                onChange={(evt: any) => {
-                                    updateGroupProp('name', evt.target.value);
-                                    props.resetError();
-                                }}
-                                maxLength={45}
-                                isInvalid={props.isCreationError}
-                                InvalidText={t('translation:group-conflict-error')}
-                            />
-
-                            {/* <hr /> */}
-
-                            < FormGroupTextarea controlId='formAdressData' title={t('translation:address-testcenter')} placeholder={t('translation:address-testcenter-placeholder')}
-                                value={data}
-                                required
-                                onChange={(evt: any) => setData(evt.target.value)}
-                                type='textarea'
-                                maxLength={300}
-                            />
-
-                            {utils.hasRole(keycloak, 'c19_quick_test_poc_nat_admin')
-                                ?
-                                <FormGroupPermissionCkb controlId='formenablePcr' title={t('translation:enablePcr')}
-                                    //label={t('translation:for-counter')}
-                                    onChange={(evt: any) => updateSearchPortalConsent('enablePcr', evt.currentTarget.checked)}
-                                    type='checkbox'
-                                    checked={group.enablePcr}
-                                />
-                                : <></>
-                            }
-
-                            <hr />
-
-                            {/* < FormGroupInput controlId='formBSNRInput' title={t('translation:bsnr')} placeholder={t('translation:bsnr-placeholder')}
+              {/* < FormGroupInput controlId='formBSNRInput' title={t('translation:bsnr')} placeholder={t('translation:bsnr-placeholder')}
                                 value={group ? group.bsnr : ''}
                                 onChange={(evt: any) => {
                                     updateGroupProp('bsnr', evt.target.value);
@@ -378,114 +372,117 @@ const GroupModal = (props: any) => {
                                 pattern={utils.pattern.BSNR}
                             /> */}
 
-                            <FormGroupPermissionCkb controlId='formsearchPortalConsent' title={t('translation:searchPortalConsent')}
-                                //label={t('translation:for-counter')}
-                                onChange={(evt: any) => updateSearchPortalConsent('searchPortalConsent', evt.currentTarget.checked)}
-                                type='checkbox'
-                                checked={group.searchPortalConsent}
-                            />
+              <FormGroupPermissionCkb
+                controlId='formsearchPortalConsent'
+                title={t('translation:searchPortalConsent')}
+                //label={t('translation:for-counter')}
+                onChange={(evt: any) => updateSearchPortalConsent('searchPortalConsent', evt.currentTarget.checked)}
+                type='checkbox'
+                checked={group.searchPortalConsent}
+              />
 
-                            <Collapse in={group.searchPortalConsent}>
-                                <div>
-                                    < FormGroupInput controlId='formEmailInput' title={t('translation:email-address')}
-                                        value={group?.email ? group.email : ''}
-                                        onChange={(evt: any) => {
-                                            updateGroupProp('email', evt.target.value);
-                                            props.resetError();
-                                        }}
-                                        type='email'
-                                        pattern={utils.pattern.eMail}
-                                        minLength={5}
-                                        maxLength={255}
-                                    />
-                                    < FormGroupInput controlId='formPocWebsite' title={t('translation:searchPortalWebsite')} placeholder={t('translation:searchPortalWebsitePlaceholder')}
-                                        value={websiteValue}
-                                        dropdown={dropdownItems}
-                                        dropdownTitle={selectedDropdownValue}
-                                        prepend='i'
-                                        tooltip={t('translation:searchPortalWebsiteTooltip')}
-                                        onChange={(evt: any) => {
-                                            setWebsiteValue(evt.target.value);
-                                            props.resetError();
-                                        }}
-                                        maxLength={100}
-                                        pattern={utils.pattern.url}
-                                    />
+              <Collapse in={group.searchPortalConsent}>
+                <div>
+                  <FormGroupInput
+                    controlId='formEmailInput'
+                    title={t('translation:email-address')}
+                    value={group?.email ? group.email : ''}
+                    onChange={(evt: any) => {
+                      updateGroupProp('email', evt.target.value);
+                      props.resetError();
+                    }}
+                    type='email'
+                    pattern={utils.pattern.eMail}
+                    minLength={5}
+                    maxLength={255}
+                  />
+                  <FormGroupInput
+                    controlId='formPocWebsite'
+                    title={t('translation:searchPortalWebsite')}
+                    placeholder={t('translation:searchPortalWebsitePlaceholder')}
+                    value={websiteValue}
+                    dropdown={dropdownItems}
+                    dropdownTitle={selectedDropdownValue}
+                    prepend='i'
+                    tooltip={t('translation:searchPortalWebsiteTooltip')}
+                    onChange={(evt: any) => {
+                      setWebsiteValue(evt.target.value);
+                      props.resetError();
+                    }}
+                    maxLength={100}
+                    pattern={utils.pattern.url}
+                  />
 
-                                    < FormGroupTextarea controlId='formPocOpeningHours' title={t('translation:searchPortalOpeningHours')}
-                                        value={displayOpeningHours}
-                                        onChange={(evt: any) => {
-                                            changeOpeningHoursHandler('openingHours', evt.target.value);
-                                            props.resetError();
-                                        }}
-                                        type='textarea'
-                                        rows={7}
-                                        pattern={utils.pattern.email}
-                                        isInvalid={errorOpeningHour}
-                                        invalidText={errorOpeningHour && t('translation:' + errorOpeningHour)}
-                                    />
-                                    <FormGroupPermissionCkb controlId='formAppointmentRequired' title={t('translation:searchPortalAppointmentRequired')}
-                                        onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
-                                        type='checkbox'
-                                        checked={group?.appointmentRequired ? group.appointmentRequired : false}
-                                    />
-                                </div>
-                            </Collapse>
+                  <FormGroupTextarea
+                    controlId='formPocOpeningHours'
+                    title={t('translation:searchPortalOpeningHours')}
+                    value={displayOpeningHours}
+                    onChange={(evt: any) => {
+                      changeOpeningHoursHandler('openingHours', evt.target.value);
+                      props.resetError();
+                    }}
+                    type='textarea'
+                    rows={7}
+                    pattern={utils.pattern.email}
+                    isInvalid={errorOpeningHour}
+                    invalidText={errorOpeningHour && t('translation:' + errorOpeningHour)}
+                  />
+                  <FormGroupPermissionCkb
+                    controlId='formAppointmentRequired'
+                    title={t('translation:searchPortalAppointmentRequired')}
+                    onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
+                    type='checkbox'
+                    checked={group?.appointmentRequired ? group.appointmentRequired : false}
+                  />
+                </div>
+              </Collapse>
 
-                            {!(group && group.pocId)
-                                ? <></>
-                                : <>
-                                    <hr />
-                                    < FormGroupInput controlId='formPocId' title={t('translation:poc-id')}
-                                        value={group && group.pocId ? group.pocId : ''}
-                                        readOnly
-                                    />
-                                </>
-                            }
+              {!(group && group.pocId) ? (
+                <></>
+              ) : (
+                <>
+                  <hr />
+                  <FormGroupInput
+                    controlId='formPocId'
+                    title={t('translation:poc-id')}
+                    value={group && group.pocId ? group.pocId : ''}
+                    readOnly
+                  />
+                </>
+              )}
+            </Modal.Body>
 
-                        </Modal.Body>
+            <Modal.Footer id='data-footer'>
+              <Container className='p-0'>
+                <Row>
+                  <Col sm='6' lg='4' className='mb-2 mb-sm-0 p-0 pr-sm-2'>
+                    <Button className='p-0' block variant='outline-primary' onClick={handleCancel}>
+                      {t('translation:cancel')}
+                    </Button>
+                  </Col>
+                  <Col sm='6' lg='4' className='p-0 pl-sm-2'>
+                    <Button className='p-0' block type='submit' disabled={btnOkDisabled}>
+                      {isNew ? t('translation:add') : t('translation:edit')}
 
-                        <Modal.Footer id='data-footer'>
-                            <Container className='p-0'>
-                                <Row>
-                                    <Col sm='6' lg='4' className='mb-2 mb-sm-0 p-0 pr-sm-2'>
-                                        <Button
-                                            className='p-0'
-                                            block
-                                            variant='outline-primary'
-                                            onClick={handleCancel}
-                                        >
-                                            {t('translation:cancel')}
-                                        </Button>
-                                    </Col>
-                                    <Col sm='6' lg='4' className='p-0 pl-sm-2'>
-                                        <Button
-                                            className='p-0'
-                                            block
-                                            type='submit'
-                                            disabled={btnOkDisabled}
-                                        >
-                                            {isNew ? t('translation:add') : t('translation:edit')}
-
-                                            <Spinner
-                                                as="span"
-                                                className='btn-spinner'
-                                                animation="border"
-                                                hidden={!btnOkDisabled}
-                                                size="sm"
-                                                role="status"
-                                                aria-hidden="true"
-                                            />
-                                        </Button>
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </Modal.Footer>
-                    </Form>
-                </Fade>
-            }
-        </Modal>
-    )
-}
+                      <Spinner
+                        as='span'
+                        className='btn-spinner'
+                        animation='border'
+                        hidden={!btnOkDisabled}
+                        size='sm'
+                        role='status'
+                        aria-hidden='true'
+                      />
+                    </Button>
+                  </Col>
+                </Row>
+              </Container>
+            </Modal.Footer>
+          </Form>
+        </Fade>
+      )}
+    </Modal>
+  );
+};
 
 export default GroupModal;
