@@ -27,14 +27,6 @@ export interface IUtils {
   shortHashLen: number;
   pattern: { [key: string]: string | RegExp };
   shortHash: (value: string) => string;
-  isProcessNoValid: (value: string) => boolean;
-  isZipValid: (value: string) => boolean;
-  isTelValid: (value: string) => boolean;
-  isEMailValid: (value: string) => boolean;
-  isStandardisedNameValid: (value: string) => boolean;
-  isUrlValid: (value: string) => boolean;
-  isOpeningHoursValid: (value: string) => boolean;
-  isNameValid: (value: string) => boolean;
   getIndent: (level: number) => JSX.Element[];
   pickerDateFormat: string;
   pickerDateTimeFormat: string;
@@ -59,15 +51,6 @@ const pattern = {
   openingHours: '^(.|\n){0,64}$',
   name: /^([\p{L}\s,-])*$/gu,
 };
-
-const processNoRegExp = new RegExp(pattern.processNo);
-const zipRegExp = new RegExp(pattern.zip);
-const telRegExp = new RegExp(pattern.tel);
-const eMailRegExp = new RegExp(pattern.eMail);
-const standardisedNameRegExp = new RegExp(pattern.standardisedName);
-const urlRegExp = new RegExp(pattern.url);
-const openingHoursExp = new RegExp(pattern.openingHours);
-const nameExp = new RegExp(pattern.name);
 
 const getIndent = (level: number): JSX.Element[] => {
   const indent: JSX.Element[] = [];
@@ -110,14 +93,6 @@ const utils: IUtils = {
   shortHashLen: shortHashLen,
   pattern: pattern,
   shortHash: (uuIdHash: string) => uuIdHash.substring(0, shortHashLen),
-  isProcessNoValid: processNoRegExp.test,
-  isZipValid: zipRegExp.test,
-  isTelValid: telRegExp.test,
-  isEMailValid: eMailRegExp.test,
-  isStandardisedNameValid: standardisedNameRegExp.test,
-  isUrlValid: urlRegExp.test,
-  isOpeningHoursValid: openingHoursExp.test,
-  isNameValid: nameExp.test,
   getIndent: getIndent,
   pickerDateFormat: 'dd.MM.yyyy',
   pickerDateTimeFormat: 'yyyy-MM-dd / hh:mm a',

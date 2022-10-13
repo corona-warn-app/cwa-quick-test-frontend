@@ -43,18 +43,14 @@ registerLocale('de', de);
 
 const PersonInputs = (props: any) => {
   const { t } = useTranslation();
-  const [givenNameTransliteration, givenNameTransliterationUpdate] =
-    useTransliterate();
-  const [familyNameTransliteration, familyNameTransliterationUpdate] =
-    useTransliterate();
+  const [givenNameTransliteration, givenNameTransliterationUpdate] = useTransliterate();
+  const [familyNameTransliteration, familyNameTransliterationUpdate] = useTransliterate();
 
   const [givenName, setGivenName] = React.useState<string>('');
   const [familyName, setFamilyName] = React.useState<string>('');
 
-  const [standardisedGivenName, setStandardisedGivenName] =
-    React.useState<string>('');
-  const [standardisedFamilyName, setStandardisedFamilyName] =
-    React.useState<string>('');
+  const [standardisedGivenName, setStandardisedGivenName] = React.useState<string>('');
+  const [standardisedFamilyName, setStandardisedFamilyName] = React.useState<string>('');
 
   const [dateOfBirth, setDateOfBirth] = React.useState<Date>();
   const [sex, setSex] = React.useState<Sex>();
@@ -89,12 +85,8 @@ const PersonInputs = (props: any) => {
     const result: IPersonData = {
       givenName: givenName,
       familyName: familyName,
-      standardisedGivenName: props.dccConsent
-        ? standardisedGivenName
-        : undefined,
-      standardisedFamilyName: props.dccConsent
-        ? standardisedFamilyName
-        : undefined,
+      standardisedGivenName: props.dccConsent ? standardisedGivenName : undefined,
+      standardisedFamilyName: props.dccConsent ? standardisedFamilyName : undefined,
       dateOfBirth: dateOfBirth,
       sex: sex,
     };
@@ -102,15 +94,7 @@ const PersonInputs = (props: any) => {
     props.onChange(result);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    givenName,
-    familyName,
-    standardisedGivenName,
-    standardisedFamilyName,
-    dateOfBirth,
-    sex,
-    props.dccConsent,
-  ]);
+  }, [givenName, familyName, standardisedGivenName, standardisedFamilyName, dateOfBirth, sex, props.dccConsent]);
 
   React.useEffect(() => {
     setStandardisedGivenName(givenNameTransliteration);
@@ -143,13 +127,10 @@ const PersonInputs = (props: any) => {
     // setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length));
   };
 
-  const handleStandardisedNameChanged = (
-    changedValue: string,
-    setStandardisedName: (value: string) => void
-  ) => {
+  const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {
     const upperCaseChangedValue = changedValue.toUpperCase();
 
-    if (utils.isStandardisedNameValid(upperCaseChangedValue)) {
+    if (new RegExp(utils.pattern.standardisedName).test(upperCaseChangedValue)) {
       setStandardisedName(upperCaseChangedValue);
     }
   };
@@ -203,12 +184,7 @@ const PersonInputs = (props: any) => {
             controlId='formStandadisedGivenNameInput'
             title={t('translation:standardised-first-name')}
             value={standardisedGivenName}
-            onChange={(evt: any) =>
-              handleStandardisedNameChanged(
-                evt.target.value,
-                setStandardisedGivenName
-              )
-            }
+            onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedGivenName)}
             required={props.dccConsent}
             pattern={utils.pattern.standardisedName}
             maxLength={150}
@@ -227,12 +203,7 @@ const PersonInputs = (props: any) => {
             controlId='formStandadisedNameInput'
             title={t('translation:standardised-name')}
             value={standardisedFamilyName}
-            onChange={(evt: any) =>
-              handleStandardisedNameChanged(
-                evt.target.value,
-                setStandardisedFamilyName
-              )
-            }
+            onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedFamilyName)}
             required={props.dccConsent}
             pattern={utils.pattern.standardisedName}
             maxLength={150}
@@ -244,11 +215,7 @@ const PersonInputs = (props: any) => {
       </Collapse>
 
       {/* date of birth input */}
-      <Form.Group
-        as={Row}
-        controlId='formDateOfBirthInput'
-        className='pb-3 mb-0'
-      >
+      <Form.Group as={Row} controlId='formDateOfBirthInput' className='pb-3 mb-0'>
         <Form.Label className='input-label ' column xs='5' sm='3'>
           {t('translation:date-of-birth') + '*'}
         </Form.Label>
