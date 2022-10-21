@@ -48,6 +48,7 @@ const useGetCancellationText = (textType: CancellationTextType) => {
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
+            cancellationDate: cancel.cancellationDate.toLocaleDateString(),
             recordTestDate: new Date(
               cancel.cancellationDate.getTime() + 60 * 60 * (cancellationCompletePendingTests || 24) * 1000
             ).toLocaleDateString(),
@@ -61,6 +62,7 @@ const useGetCancellationText = (textType: CancellationTextType) => {
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
+            cancellationDate: cancel.cancellationDate.toLocaleDateString(),
             downloadDate: new Date(cancel.cancellationDate.getTime() + dayInMs * 2).toLocaleDateString(),
             buttonName: t('translation:record-download'),
           };

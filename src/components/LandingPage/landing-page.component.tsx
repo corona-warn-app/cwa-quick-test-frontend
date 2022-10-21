@@ -96,6 +96,7 @@ const LandingPage = (props: any) => {
               hasRole={utils.hasRole(keycloak, 'c19_quick_test_counter')}
               title={t('translation:record-qr-scan')}
               onClick={navigation.toQRScan}
+              disabled={cancellationStep >= CancellationSteps.DOWNLOAD_REQUESTED}
             />
 
             <LandingButton
