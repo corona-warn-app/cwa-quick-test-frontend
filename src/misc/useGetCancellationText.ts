@@ -16,7 +16,7 @@ const useGetCancellationText = (textType: CancellationTextType) => {
   const ctx = React.useContext(AppContext);
   const { keycloak } = useKeycloak();
   const { cancellation, utils } = ctx;
-  const [result, setCancellationText] = React.useState('');
+  const [result, setCancellationText] = React.useState(['', '']);
 
   React.useEffect(() => {
     const cancel = cancellation?.cancellation;
@@ -24,39 +24,47 @@ const useGetCancellationText = (textType: CancellationTextType) => {
     if (cancel && utils && keycloak) {
       let textkey = '';
       let textOptions = {};
-      const isAdmin: boolean = utils.hasRole(keycloak, 'c19_quick_test_admin');
 
-      switch (utils.getCancellationStep(cancel, ctx.contextConfig['cancellation-complete-pending-tests'])) {
+      const cancellationCompletePendingTests = ctx.contextConfig['cancellation-complete-pending-tests'];
+      const currentStep = utils.getCancellationStep(cancel, cancellationCompletePendingTests);
+
+      switch (currentStep) {
         case CancellationSteps.CANCELED:
-          textkey = isAdmin ? `cancellation-${textType}-admin-text` : `cancellation-${textType}-tester-text`;
+          textkey = `cancellation`;
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
             cancellationDate: cancel.cancellationDate.toLocaleDateString(),
-            recordPatientDate: new Date(cancel.finalDeletion.getTime() - 7 * dayInMs).toLocaleDateString(),
-            recordTestDate: new Date(cancel.finalDeletion.getTime() - dayInMs * 6).toLocaleDateString(),
+            recordTestDate: new Date(
+              cancel.cancellationDate.getTime() + 60 * 60 * (cancellationCompletePendingTests || 24) * 1000
+            ).toLocaleDateString(),
+            buttonName: t('translation:record-download'),
           };
 
           break;
 
         case CancellationSteps.DOWNLOAD_REQUESTED:
-          textkey = isAdmin
-            ? `download-requested-${textType}-admin-text`
-            : `download-requested-${textType}-tester-text`;
+          textkey = `download-requested`;
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
-            recordTestDate: new Date(cancel.cancellationDate.getTime() + dayInMs * 1).toLocaleDateString(),
+            cancellationDate: cancel.cancellationDate.toLocaleDateString(),
+            recordTestDate: new Date(
+              cancel.cancellationDate.getTime() + 60 * 60 * (cancellationCompletePendingTests || 24) * 1000
+            ).toLocaleDateString(),
+            buttonName: t('translation:record-download'),
           };
 
           break;
 
         case CancellationSteps.NO_TEST_RECORD:
-          textkey = isAdmin ? `no-tests-${textType}-admin-text` : `no-tests-${textType}-tester-text`;
+          textkey = `no-tests`;
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
+            cancellationDate: cancel.cancellationDate.toLocaleDateString(),
             downloadDate: new Date(cancel.cancellationDate.getTime() + dayInMs * 2).toLocaleDateString(),
+            buttonName: t('translation:record-download'),
           };
 
           break;
@@ -64,10 +72,11 @@ const useGetCancellationText = (textType: CancellationTextType) => {
         case CancellationSteps.DOWNLOAD_READY:
         case CancellationSteps.DOWNLOADED:
         case CancellationSteps.DATA_DELETED:
-          textkey = isAdmin ? `download-ready-${textType}-admin-text` : `no-tests-${textType}-tester-text`;
+          textkey = `download-ready`;
 
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
+            buttonName: t('translation:record-download'),
           };
 
           break;
@@ -75,7 +84,12 @@ const useGetCancellationText = (textType: CancellationTextType) => {
           break;
       }
 
-      setCancellationText(t(textkey, textOptions));
+      const isAdmin = utils.hasRole(keycloak, 'c19_quick_test_admin');
+      const permissionType = isAdmin ? 'admin' : 'tester';
+      const titleKey = `${textkey}-${textType}-${permissionType}-title`;
+      const descKey = `${textkey}-${textType}-${permissionType}-description`;
+
+      setCancellationText([t(titleKey, textOptions), t(descKey, textOptions)]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cancellation?.cancellation, utils, keycloak]);
