@@ -8,7 +8,7 @@ const LandingCancellationText = (props: any) => {
 
   return (
     <>
-      {cancellationText && (
+      {cancellationText && cancellationText[0] && (
         <Accordion className='mb-5 mx-auto' onSelect={(evt) => setCollapsed(evt !== null)}>
           <AccordionToggle as={Form.Label} className='w-100' eventKey='0'>
             <p
