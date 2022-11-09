@@ -62,7 +62,7 @@
   "proxy": "https://6155b8d7d3c6.schnelltestportal.de",
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts build",
+    "build": "react-scripts --openssl-legacy-provider build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "license": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
