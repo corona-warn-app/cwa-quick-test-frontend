@@ -33,7 +33,7 @@ export interface IUtils {
   momentDateFormat: string;
   momentDateTimeFormat: string;
   hasRole: (keycloak: KeycloakInstance, role: string) => boolean;
-  getCancellationStep: (cancellation: ICancellation, cancellationCompletePendingTests: number) => CancellationSteps;
+  getCancellationStep: (cancellation?: ICancellation, cancellationCompletePendingTests?: number) => CancellationSteps;
 }
 
 const shortHashLen = 8;
@@ -66,8 +66,8 @@ const hasRole = (keycloak: KeycloakInstance, role: string) =>
   keycloak && (keycloak.hasRealmRole(role) || keycloak.hasRealmRole(role));
 
 const getCancellationStep = (
-  cancellation: ICancellation,
-  cancellationCompletePendingTests: number
+  cancellation?: ICancellation,
+  cancellationCompletePendingTests?: number
 ): CancellationSteps => {
   let result = CancellationSteps.NO_CANCEL;
 
