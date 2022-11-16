@@ -366,7 +366,11 @@ const UserTable = (props: any) => {
                     </td>
                     <td className='td-btn'>
                       <Row className='m-0 justify-content-around'>
-                        <Button className='btn-icon edit-icon' onClick={() => startEditUser({ ...u })}></Button>
+                        <Button
+                          className='btn-icon edit-icon'
+                          disabled={step ? step >= CancellationSteps.DOWNLOAD_REQUESTED : false}
+                          onClick={() => startEditUser({ ...u })}
+                        ></Button>
                         <Button
                           className='btn-icon delete-icon'
                           onClick={() => handleDeleteUser(u)}
