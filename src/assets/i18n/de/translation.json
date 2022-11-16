@@ -172,6 +172,9 @@
   "download-ready-landing-admin-title": "Der Download der Testergebnisse zu allen von Ihnen administrierten Teststellen steht bereit.",
   "download-ready-landing-admin-description": "Sie können keine neuen Tests mehr anlegen und keine Testergebnisse mehr erfassen.\n\nBitte laden Sie die bereitgestellten Daten bis spätestens <strong>{{finalDeletionDate}}</strong> herunter, indem Sie auf den Button <strong>{{buttonName}}</strong> klicken. Danach werden Ihre Testergebnisse vollständig aus dem System gelöscht.\n\nBitte informieren Sie rechtzeitig die von Ihnen administrierten Teststellen und Tester.",
 
+  "data-deleted-landing-admin-title": "Die Testergebnisse zu allen von Ihnen administrierten Teststellen wurden vollständig aus dem System gelöscht.",
+  "data-deleted-landing-admin-description": "Sie können keine neuen Tests mehr anlegen und keine Testergebnisse mehr erfassen.\n\nBitte informieren Sie rechtzeitig die von Ihnen administrierten Teststellen und Tester.",
+
   "cancellation-landing-tester-title": "Das Vertragsverhältnis Ihrer Teststelle wird zum <strong>{{cancellationDate}}</strong> beendet.",
   "cancellation-landing-tester-description": "Ab diesem Zeitpunkt können keine neuen Tests mehr angelegt werden. Ergebnisse zu offenen Tests können noch bis zum <strong>{{recordTestDate}}</strong> im System erfasst werden.\n\nFür weitere Informationen wenden Sie sich bitte an Ihren Administrator.",
 
@@ -182,5 +185,8 @@
   "no-tests-landing-tester-description": "Sie können keine neue Tests mehr anlegen und keine Testergebnisse mehr erfassen.\n\nFür weitere Informationen wenden Sie sich bitte an Ihren Administrator.",
 
   "download-ready-landing-tester-title": "Das Vertragsverhältnis Ihrer Teststelle wurde beendet.",
-  "download-ready-landing-tester-description": "Sie können keine neue Tests mehr anlegen und keine Testergebnisse mehr erfassen.\n\nFür weitere Informationen wenden Sie sich bitte an Ihren Administrator."
+  "download-ready-landing-tester-description": "Sie können keine neue Tests mehr anlegen und keine Testergebnisse mehr erfassen.\n\nFür weitere Informationen wenden Sie sich bitte an Ihren Administrator.",
+
+  "data-deleted-landing-tester-title": "Das Vertragsverhältnis Ihrer Teststelle wurde beendet.",
+  "data-deleted-landing-tester-description": "Sie können keine neue Tests mehr anlegen und keine Testergebnisse mehr erfassen.\n\nFür weitere Informationen wenden Sie sich bitte an Ihren Administrator."
 }

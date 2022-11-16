@@ -123,7 +123,10 @@ const LandingPage = (props: any) => {
               }
               title={t('translation:record-download')}
               onClick={handleDownload}
-              disabled={cancellationStep < CancellationSteps.DOWNLOAD_READY}
+              disabled={
+                cancellationStep < CancellationSteps.DOWNLOAD_READY ||
+                cancellationStep >= CancellationSteps.DATA_DELETED
+              }
             />
           </Container>
         </Fade>
