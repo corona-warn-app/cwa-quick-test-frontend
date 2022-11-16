@@ -71,7 +71,6 @@ const useGetCancellationText = (textType: CancellationTextType) => {
 
         case CancellationSteps.DOWNLOAD_READY:
         case CancellationSteps.DOWNLOADED:
-        case CancellationSteps.DATA_DELETED:
           textkey = `download-ready`;
 
           textOptions = {
@@ -80,6 +79,11 @@ const useGetCancellationText = (textType: CancellationTextType) => {
           };
 
           break;
+
+        case CancellationSteps.DATA_DELETED:
+          textkey = `data-deleted`;
+          break;
+
         default:
           break;
       }
