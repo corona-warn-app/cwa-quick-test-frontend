@@ -103,13 +103,14 @@ const LandingPage = (props: any) => {
               hasRole={utils.hasRole(keycloak, 'c19_quick_test_lab')}
               title={t('translation:failed-report')}
               onClick={navigation.toReports}
-              disabled={cancellationStep >= CancellationSteps.DOWNLOAD_REQUESTED}
+              disabled={cancellationStep >= CancellationSteps.NO_TEST_RECORD}
             />
 
             <LandingButton
               hasRole={utils.hasRole(keycloak, 'c19_quick_test_lab')}
               title={t('translation:statistics-menu-item')}
               onClick={navigation.toStatistics}
+              disabled={cancellationStep >= CancellationSteps.DOWNLOAD_REQUESTED}
             />
 
             <LandingButton
