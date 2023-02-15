@@ -21,7 +21,7 @@
 
 import React from 'react';
 import { Button, Card, Col, Fade, Row } from 'react-bootstrap';
-import QrReader from 'react-qr-reader';
+import { QrReader } from 'react-qr-reader';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -62,6 +62,16 @@ const QrScan = (props: any) => {
     }
   };
 
+  const handleScanResult = (result?: any, error?: any) => {
+    if (!!result) {
+      handleScan(result?.text);
+    }
+
+    if (!!error) {
+      handleError(error);
+    }
+  };
+
   var messageHtml = undefined;
   if (message.length > 0) {
     messageHtml = <div className='alert alert-warning'>{message}</div>;
@@ -70,15 +80,25 @@ const QrScan = (props: any) => {
   return !(isInit && context && context.valueSets) ? (
     <CwaSpinner />
   ) : (
-    <Fade appear={true} in={true}>
+    <Fade
+      appear={true}
+      in={true}
+    >
       <Card id='data-card'>
         <CardHeader title={t('translation:qr-scan')} />
 
         {/*
     content area with process number input and radios
     */}
-        <Card.Body id='data-body' className='pt-0'>
-          <QrReader delay={300} onScan={handleScan} onError={handleError} />
+        <Card.Body
+          id='data-body'
+          className='pt-0'
+        >
+          <QrReader
+            constraints={{}}
+            scanDelay={300}
+            onResult={handleScanResult}
+          />
           {messageHtml}
         </Card.Body>
 
@@ -87,8 +107,15 @@ const QrScan = (props: any) => {
     */}
         <Card.Footer id='data-footer'>
           <Row>
-            <Col md='6' lg='3' className='data-footer-col'>
-              <Button className='my-1 my-md-0 p-0' block onClick={context.navigation!.toLanding}>
+            <Col
+              md='6'
+              lg='3'
+              className='data-footer-col'
+            >
+              <Button
+                className='my-1 my-md-0 p-0'
+                onClick={context.navigation!.toLanding}
+              >
                 {t('translation:cancel')}
               </Button>
             </Col>

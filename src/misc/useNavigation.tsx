@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from './useLocalStorage';
 
 export interface IRoute {
@@ -63,7 +63,7 @@ export const useRoutes = () => {
 };
 
 export const useNavigation = () => {
-  const history = useHistory();
+  const nav = useNavigate();
   const routes = useRoutes();
   const [mandant] = useLocalStorage('mandant', '');
   const [calculatedRoutes, setCalculatedRoutes] = React.useState<IRoute>();
@@ -95,28 +95,28 @@ export const useNavigation = () => {
         calculatedRoutes: calculatedRoutes,
 
         toLanding: () => {
-          history.push(calculatedRoutes.landing);
+          nav(calculatedRoutes.landing);
         },
         toRecordPatient: () => {
-          history.push(calculatedRoutes.recordPatient);
+          nav(calculatedRoutes.recordPatient);
         },
         toShowRecordPatient: () => {
-          history.push(calculatedRoutes.showPatientRecord);
+          nav(calculatedRoutes.showPatientRecord);
         },
         toRecordTestResult: () => {
-          history.push(calculatedRoutes.recordTestResult);
+          nav(calculatedRoutes.recordTestResult);
         },
         toQRScan: () => {
-          history.push(calculatedRoutes.qrScan);
+          nav(calculatedRoutes.qrScan);
         },
         toStatistics: () => {
-          history.push(calculatedRoutes.statistics);
+          nav(calculatedRoutes.statistics);
         },
         toReports: () => {
-          history.push(calculatedRoutes.reports);
+          nav(calculatedRoutes.reports);
         },
         toUserManagement: () => {
-          history.push(calculatedRoutes.userManagement);
+          nav(calculatedRoutes.userManagement);
         },
       });
     }

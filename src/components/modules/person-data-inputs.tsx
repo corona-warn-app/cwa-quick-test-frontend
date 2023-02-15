@@ -29,8 +29,7 @@ import '../../i18n';
 import { useTranslation } from 'react-i18next';
 import utils from '../../misc/utils';
 
-import DatePicker from 'react-datepicker';
-import { registerLocale } from 'react-datepicker';
+import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import de from 'date-fns/locale/de';
 
@@ -94,7 +93,15 @@ const PersonInputs = (props: any) => {
     props.onChange(result);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [givenName, familyName, standardisedGivenName, standardisedFamilyName, dateOfBirth, sex, props.dccConsent]);
+  }, [
+    givenName,
+    familyName,
+    standardisedGivenName,
+    standardisedFamilyName,
+    dateOfBirth,
+    sex,
+    props.dccConsent,
+  ]);
 
   React.useEffect(() => {
     setStandardisedGivenName(givenNameTransliteration);
@@ -127,7 +134,10 @@ const PersonInputs = (props: any) => {
     // setStandardisedName(tmpICAOValue.substring(0, tmpICAOValue.length > 50 ? 50 : tmpICAOValue.length));
   };
 
-  const handleStandardisedNameChanged = (changedValue: string, setStandardisedName: (value: string) => void) => {
+  const handleStandardisedNameChanged = (
+    changedValue: string,
+    setStandardisedName: (value: string) => void
+  ) => {
     const upperCaseChangedValue = changedValue.toUpperCase();
 
     if (new RegExp(utils.pattern.standardisedName).test(upperCaseChangedValue)) {
@@ -184,7 +194,9 @@ const PersonInputs = (props: any) => {
             controlId='formStandadisedGivenNameInput'
             title={t('translation:standardised-first-name')}
             value={standardisedGivenName}
-            onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedGivenName)}
+            onChange={(evt: any) =>
+              handleStandardisedNameChanged(evt.target.value, setStandardisedGivenName)
+            }
             required={props.dccConsent}
             pattern={utils.pattern.standardisedName}
             maxLength={150}
@@ -203,7 +215,9 @@ const PersonInputs = (props: any) => {
             controlId='formStandadisedNameInput'
             title={t('translation:standardised-name')}
             value={standardisedFamilyName}
-            onChange={(evt: any) => handleStandardisedNameChanged(evt.target.value, setStandardisedFamilyName)}
+            onChange={(evt: any) =>
+              handleStandardisedNameChanged(evt.target.value, setStandardisedFamilyName)
+            }
             required={props.dccConsent}
             pattern={utils.pattern.standardisedName}
             maxLength={150}
@@ -215,12 +229,25 @@ const PersonInputs = (props: any) => {
       </Collapse>
 
       {/* date of birth input */}
-      <Form.Group as={Row} controlId='formDateOfBirthInput' className='pb-3 mb-0'>
-        <Form.Label className='input-label ' column xs='5' sm='3'>
+      <Form.Group
+        as={Row}
+        controlId='formDateOfBirthInput'
+        className='pb-3 mb-0'
+      >
+        <Form.Label
+          className='input-label '
+          column
+          xs='5'
+          sm='3'
+        >
           {t('translation:date-of-birth') + '*'}
         </Form.Label>
 
-        <Col xs='7' sm='9' className='d-flex'>
+        <Col
+          xs='7'
+          sm='9'
+          className='d-flex'
+        >
           <DatePicker
             selected={dateOfBirth}
             onChange={handleDateOfBirthChange}
@@ -243,11 +270,20 @@ const PersonInputs = (props: any) => {
 
       {/* sex input */}
       <Row>
-        <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>
+        <Form.Label
+          className='input-label txt-no-wrap'
+          column
+          xs='5'
+          sm='3'
+        >
           {t('translation:sex') + '*'}
         </Form.Label>
 
-        <Col xs='7' sm='9' className='d-flex'>
+        <Col
+          xs='7'
+          sm='9'
+          className='d-flex'
+        >
           <Row>
             <FormGroupInlineRadio
               controlId='sex-radio1'

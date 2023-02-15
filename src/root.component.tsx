@@ -20,7 +20,6 @@
  */
 
 import React from 'react';
-import { useParams } from 'react-router';
 
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
@@ -31,13 +30,10 @@ import Routing from './routing.component';
 import useLocalStorage from './misc/useLocalStorage';
 import { useGetKeycloakConfig } from './api';
 import AppContextProvider from './store/AppContextProvider';
-
-interface UrlMandant {
-  mandant: string;
-}
+import { useParams } from 'react-router-dom';
 
 const Root = (props: any) => {
-  const { mandant } = useParams<UrlMandant>();
+  const { mandant } = useParams();
 
   const keycloakConfig = useGetKeycloakConfig();
 
@@ -47,6 +43,8 @@ const Root = (props: any) => {
   const [keycloak, setKeycloak] = React.useState<Keycloak.KeycloakInstance>();
 
   React.useEffect(() => {
+    console.log(mandant, keycloakConfig);
+
     if (mandant && mandant !== storedMandant && !mandant.includes('&')) {
       setStoredMandant(mandant);
     }
@@ -67,7 +65,10 @@ const Root = (props: any) => {
   return !keycloak ? (
     <></>
   ) : (
-    <ReactKeycloakProvider authClient={keycloak}>
+    <ReactKeycloakProvider
+      authClient={keycloak}
+      initOptions={{ onLoad: 'login-required' }}
+    >
       <LoginInterceptor>
         <AppContextProvider>
           <Routing />

@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 
 import './i18n';
@@ -57,72 +57,89 @@ const Routing = () => {
       {/*
     header, every time shown. fit its children
     */}
-      <Route path={context.navigation!.routes.root}>
-        <Header />
-        <ErrorPage />
-        <NotificationToast show={notificationShow} setNotificationShow={setNotificationShow} />
-      </Route>
+      <Header />
+      <ErrorPage />
+      <NotificationToast
+        show={notificationShow}
+        setNotificationShow={setNotificationShow}
+      />
 
       {/*
     Content area. fit the rest of screen and children
     */}
       <Container id='qt-body'>
-        {/* Landing */}
-        <Route exact path={context.navigation!.routes.landing}>
-          <LandingPage setNotificationShow={setNotificationShow} />
-        </Route>
+        <Routes>
+          {/* Landing */}
+          <Route path={context.navigation!.routes.landing}>
+            <LandingPage setNotificationShow={setNotificationShow} />
+          </Route>
 
-        {/* Record Patient Data */}
-        <PrivateRoute exact roles={['c19_quick_test_counter']} path={context.navigation!.routes.recordPatient}>
-          <RecordPatientData setQuickTest={setQuickTest} quickTest={quickTest} />
-        </PrivateRoute>
+          {/* Record Patient Data */}
+          <PrivateRoute
+            roles={['c19_quick_test_counter']}
+            path={context.navigation!.routes.recordPatient}
+          >
+            <RecordPatientData
+              setQuickTest={setQuickTest}
+              quickTest={quickTest}
+            />
+          </PrivateRoute>
 
-        {/* Show Patient Data */}
-        <PrivateRoute roles={['c19_quick_test_counter']} path={context.navigation!.routes.showPatientRecord}>
-          <ShowPatientData
-            setQuickTest={setQuickTest}
-            quickTest={quickTest}
-            setNotificationShow={setNotificationShow}
-          />
-        </PrivateRoute>
+          {/* Show Patient Data */}
+          <PrivateRoute
+            roles={['c19_quick_test_counter']}
+            path={context.navigation!.routes.showPatientRecord}
+          >
+            <ShowPatientData
+              setQuickTest={setQuickTest}
+              quickTest={quickTest}
+              setNotificationShow={setNotificationShow}
+            />
+          </PrivateRoute>
 
-        {/* Record Test Result */}
-        <PrivateRoute roles={['c19_quick_test_lab']} path={context.navigation!.routes.recordTestResult}>
-          <RecordTestResult setNotificationShow={setNotificationShow} />
-        </PrivateRoute>
+          {/* Record Test Result */}
+          <PrivateRoute
+            roles={['c19_quick_test_lab']}
+            path={context.navigation!.routes.recordTestResult}
+          >
+            <RecordTestResult setNotificationShow={setNotificationShow} />
+          </PrivateRoute>
 
-        {/* QR Scan */}
-        <PrivateRoute exact path={context.navigation!.routes.qrScan} roles={['c19_quick_test_counter']}>
-          <QrScan setQuickTest={setQuickTest} />
-        </PrivateRoute>
+          {/* QR Scan */}
+          <PrivateRoute
+            path={context.navigation!.routes.qrScan}
+            roles={['c19_quick_test_counter']}
+          >
+            <QrScan setQuickTest={setQuickTest} />
+          </PrivateRoute>
 
-        <PrivateRoute
-          exact
-          path={context.navigation!.routes.statistics}
-          roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
-        >
-          <Statistics />
-        </PrivateRoute>
+          <PrivateRoute
+            path={context.navigation!.routes.statistics}
+            roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
+          >
+            <Statistics />
+          </PrivateRoute>
 
-        <PrivateRoute
-          exact
-          path={context.navigation!.routes.reports}
-          roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
-        >
-          <Reports />
-        </PrivateRoute>
+          <PrivateRoute
+            path={context.navigation!.routes.reports}
+            roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
+          >
+            <Reports />
+          </PrivateRoute>
 
-        <PrivateRoute exact path={context.navigation!.routes.userManagement} roles={['c19_quick_test_admin']}>
-          <UserManagement />
-        </PrivateRoute>
+          <PrivateRoute
+            path={context.navigation!.routes.userManagement}
+            roles={['c19_quick_test_admin']}
+          >
+            <UserManagement />
+          </PrivateRoute>
+        </Routes>
       </Container>
 
       {/*
     footer, every time shown. fit its children
     */}
-      <Route path={context.navigation!.routes.root}>
-        <Footer />
-      </Route>
+      <Footer />
     </>
   );
 };
