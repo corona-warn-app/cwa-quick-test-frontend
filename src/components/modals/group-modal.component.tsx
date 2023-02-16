@@ -20,7 +20,18 @@
  */
 
 import React from 'react';
-import { Button, Modal, Form, Col, Row, Spinner, Fade, Container, Collapse, Dropdown } from 'react-bootstrap';
+import {
+  Button,
+  Modal,
+  Form,
+  Col,
+  Row,
+  Spinner,
+  Fade,
+  Container,
+  Collapse,
+  Dropdown,
+} from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -33,8 +44,9 @@ import {
 import { IGroupDetails, IGroupNode, IGroup } from '../../misc/user';
 import { useGetGroupDetails } from '../../api';
 import CwaSpinner from '../spinner/spinner.component';
-import utils from '../../misc/utils';
 import { useKeycloak } from '@react-keycloak/web';
+import AppContext from '../../store/app-context';
+import CancellationSteps from '../../misc/CancellationSteps';
 
 const emptyGroup: IGroupDetails = {
   id: '',
@@ -55,6 +67,11 @@ const GroupModal = (props: any) => {
   const [btnOkDisabled, setBtnOkDisabled] = React.useState(true);
   const { t } = useTranslation();
   const { keycloak } = useKeycloak();
+  const { cancellation, utils, contextConfig } = React.useContext(AppContext);
+  const step = utils?.getCancellationStep(
+    cancellation?.cancellation,
+    contextConfig['cancellation-complete-pending-tests']
+  );
 
   const [data, setData] = React.useState('');
   const [validated, setValidated] = React.useState(false);
@@ -215,7 +232,7 @@ const GroupModal = (props: any) => {
     }
 
     error = openingHours.find((element) => {
-      return !new RegExp(utils.pattern.openingHours).test(element);
+      return !new RegExp(utils?.pattern.openingHours!).test(element);
     });
 
     if (error) {
@@ -256,10 +273,15 @@ const GroupModal = (props: any) => {
         collectChildren(selfIdOrChildren, node.group);
       }
 
-      const fList = props.groups.filter((groupNode: IGroupNode) => selfIdOrChildren.indexOf(groupNode.group.id) < 0);
+      const fList = props.groups.filter(
+        (groupNode: IGroupNode) => selfIdOrChildren.indexOf(groupNode.group.id) < 0
+      );
 
       result = fList.map((groupNode: IGroupNode) => (
-        <option key={groupNode.group.id} value={groupNode.group.id}>
+        <option
+          key={groupNode.group.id}
+          value={groupNode.group.id}
+        >
           {'\u00A0\u00A0\u00A0\u00A0'.repeat(groupNode.level) + groupNode.group.name}
         </option>
       ));
@@ -273,7 +295,11 @@ const GroupModal = (props: any) => {
   const getDropdownItems = () => {
     setDropdownItems(
       dropdownList.map((item: string) => (
-        <Dropdown.Item onSelect={(eventKey: any) => setSelectedDropdownValue(eventKey)} eventKey={item} key={item}>
+        <Dropdown.Item
+          onSelect={(eventKey: any) => setSelectedDropdownValue(eventKey)}
+          eventKey={item}
+          key={item}
+        >
           {item}
         </Dropdown.Item>
       ))
@@ -294,10 +320,22 @@ const GroupModal = (props: any) => {
       {!isReady ? (
         <CwaSpinner background='#eeeeee' />
       ) : (
-        <Fade appear={true} in={true}>
-          <Form className='form-flex' onSubmit={handleSubmit} validated={validated}>
-            <Modal.Header id='data-header' className='pb-0'>
-              <Modal.Title>{isNew ? t('translation:add-group') : t('translation:edit-group')}</Modal.Title>
+        <Fade
+          appear={true}
+          in={true}
+        >
+          <Form
+            className='form-flex'
+            onSubmit={handleSubmit}
+            validated={validated}
+          >
+            <Modal.Header
+              id='data-header'
+              className='pb-0'
+            >
+              <Modal.Title>
+                {isNew ? t('translation:add-group') : t('translation:edit-group')}
+              </Modal.Title>
             </Modal.Header>
 
             <Modal.Body className='bg-light'>
@@ -345,12 +383,14 @@ const GroupModal = (props: any) => {
                 maxLength={300}
               />
 
-              {utils.hasRole(keycloak, 'c19_quick_test_poc_nat_admin') ? (
+              {utils?.hasRole(keycloak, 'c19_quick_test_poc_nat_admin') ? (
                 <FormGroupPermissionCkb
                   controlId='formenablePcr'
                   title={t('translation:enablePcr')}
                   //label={t('translation:for-counter')}
-                  onChange={(evt: any) => updateSearchPortalConsent('enablePcr', evt.currentTarget.checked)}
+                  onChange={(evt: any) =>
+                    updateSearchPortalConsent('enablePcr', evt.currentTarget.checked)
+                  }
                   type='checkbox'
                   checked={group.enablePcr}
                 />
@@ -376,7 +416,9 @@ const GroupModal = (props: any) => {
                 controlId='formsearchPortalConsent'
                 title={t('translation:searchPortalConsent')}
                 //label={t('translation:for-counter')}
-                onChange={(evt: any) => updateSearchPortalConsent('searchPortalConsent', evt.currentTarget.checked)}
+                onChange={(evt: any) =>
+                  updateSearchPortalConsent('searchPortalConsent', evt.currentTarget.checked)
+                }
                 type='checkbox'
                 checked={group.searchPortalConsent}
               />
@@ -392,7 +434,7 @@ const GroupModal = (props: any) => {
                       props.resetError();
                     }}
                     type='email'
-                    pattern={utils.pattern.eMail}
+                    pattern={utils?.pattern.eMail}
                     minLength={5}
                     maxLength={255}
                   />
@@ -410,7 +452,7 @@ const GroupModal = (props: any) => {
                       props.resetError();
                     }}
                     maxLength={100}
-                    pattern={utils.pattern.url}
+                    pattern={utils?.pattern.url}
                   />
 
                   <FormGroupTextarea
@@ -423,14 +465,16 @@ const GroupModal = (props: any) => {
                     }}
                     type='textarea'
                     rows={7}
-                    pattern={utils.pattern.email}
+                    pattern={utils?.pattern.email}
                     isInvalid={errorOpeningHour}
                     invalidText={errorOpeningHour && t('translation:' + errorOpeningHour)}
                   />
                   <FormGroupPermissionCkb
                     controlId='formAppointmentRequired'
                     title={t('translation:searchPortalAppointmentRequired')}
-                    onChange={(evt: any) => updateGroupProp('appointmentRequired', evt.currentTarget.checked)}
+                    onChange={(evt: any) =>
+                      updateGroupProp('appointmentRequired', evt.currentTarget.checked)
+                    }
                     type='checkbox'
                     checked={group?.appointmentRequired ? group.appointmentRequired : false}
                   />
@@ -455,13 +499,34 @@ const GroupModal = (props: any) => {
             <Modal.Footer id='data-footer'>
               <Container className='p-0'>
                 <Row>
-                  <Col sm='6' lg='4' className='mb-2 mb-sm-0 p-0 pr-sm-2'>
-                    <Button className='p-0' block variant='outline-primary' onClick={handleCancel}>
+                  <Col
+                    sm='6'
+                    lg='4'
+                    className='mb-2 mb-sm-0 p-0 pr-sm-2'
+                  >
+                    <Button
+                      className='p-0'
+                      block
+                      variant='outline-primary'
+                      onClick={handleCancel}
+                    >
                       {t('translation:cancel')}
                     </Button>
                   </Col>
-                  <Col sm='6' lg='4' className='p-0 pl-sm-2'>
-                    <Button className='p-0' block type='submit' disabled={btnOkDisabled}>
+                  <Col
+                    sm='6'
+                    lg='4'
+                    className='p-0 pl-sm-2'
+                  >
+                    <Button
+                      className='p-0'
+                      block
+                      type='submit'
+                      disabled={
+                        btnOkDisabled ||
+                        (step ? step >= CancellationSteps.DOWNLOAD_REQUESTED : false)
+                      }
+                    >
                       {isNew ? t('translation:add') : t('translation:edit')}
 
                       <Spinner

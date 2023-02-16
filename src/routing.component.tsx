@@ -70,69 +70,69 @@ const Routing = () => {
       <Container id='qt-body'>
         <Routes>
           {/* Landing */}
-          <Route path={context.navigation!.routes.landing}>
-            <LandingPage setNotificationShow={setNotificationShow} />
+          <Route
+            path={context.navigation!.routes.landing}
+            element={<LandingPage setNotificationShow={setNotificationShow} />}
+          />
+          {/* Record Patient Data */}
+          <Route element={<PrivateRoute roles={['c19_quick_test_counter']} />}>
+            <Route
+              path={context.navigation!.routes.recordPatient}
+              element={
+                <RecordPatientData
+                  setQuickTest={setQuickTest}
+                  quickTest={quickTest}
+                />
+              }
+            />
+            <Route
+              path={context.navigation!.routes.showPatientRecord}
+              element={
+                <ShowPatientData
+                  setQuickTest={setQuickTest}
+                  quickTest={quickTest}
+                  setNotificationShow={setNotificationShow}
+                />
+              }
+            />
+            <Route
+              path={context.navigation!.routes.qrScan}
+              element={<QrScan setQuickTest={setQuickTest} />}
+            />
+            <Route
+              path={context.navigation!.routes.statistics}
+              element={<Statistics />}
+            />
+
+            <Route
+              path={context.navigation!.routes.reports}
+              element={<Reports />}
+            />
           </Route>
 
-          {/* Record Patient Data */}
-          <PrivateRoute
-            roles={['c19_quick_test_counter']}
-            path={context.navigation!.routes.recordPatient}
-          >
-            <RecordPatientData
-              setQuickTest={setQuickTest}
-              quickTest={quickTest}
+          <Route element={<PrivateRoute roles={['c19_quick_test_lab']} />}>
+            <Route
+              path={context.navigation!.routes.recordTestResult}
+              element={<RecordTestResult setNotificationShow={setNotificationShow} />}
             />
-          </PrivateRoute>
 
-          {/* Show Patient Data */}
-          <PrivateRoute
-            roles={['c19_quick_test_counter']}
-            path={context.navigation!.routes.showPatientRecord}
-          >
-            <ShowPatientData
-              setQuickTest={setQuickTest}
-              quickTest={quickTest}
-              setNotificationShow={setNotificationShow}
+            <Route
+              path={context.navigation!.routes.statistics}
+              element={<Statistics />}
             />
-          </PrivateRoute>
 
+            <Route
+              path={context.navigation!.routes.reports}
+              element={<Reports />}
+            />
+          </Route>
           {/* Record Test Result */}
-          <PrivateRoute
-            roles={['c19_quick_test_lab']}
-            path={context.navigation!.routes.recordTestResult}
-          >
-            <RecordTestResult setNotificationShow={setNotificationShow} />
-          </PrivateRoute>
-
-          {/* QR Scan */}
-          <PrivateRoute
-            path={context.navigation!.routes.qrScan}
-            roles={['c19_quick_test_counter']}
-          >
-            <QrScan setQuickTest={setQuickTest} />
-          </PrivateRoute>
-
-          <PrivateRoute
-            path={context.navigation!.routes.statistics}
-            roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
-          >
-            <Statistics />
-          </PrivateRoute>
-
-          <PrivateRoute
-            path={context.navigation!.routes.reports}
-            roles={['c19_quick_test_counter', 'c19_quick_test_lab']}
-          >
-            <Reports />
-          </PrivateRoute>
-
-          <PrivateRoute
-            path={context.navigation!.routes.userManagement}
-            roles={['c19_quick_test_admin']}
-          >
-            <UserManagement />
-          </PrivateRoute>
+          <Route element={<PrivateRoute roles={['c19_quick_test_admin']} />}>
+            <Route
+              path={context.navigation!.routes.userManagement}
+              element={<UserManagement />}
+            />
+          </Route>
         </Routes>
       </Container>
 

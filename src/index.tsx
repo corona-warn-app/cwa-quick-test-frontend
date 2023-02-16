@@ -33,16 +33,14 @@ import Root from './root.component';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path='/:mandant'
-          element={<Root />}
-        />
-      </Routes>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <Routes>
+      <Route
+        path='/:mandant/*'
+        element={<Root />}
+      />
+    </Routes>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

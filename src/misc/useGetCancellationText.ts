@@ -25,7 +25,8 @@ const useGetCancellationText = (textType: CancellationTextType) => {
       let textkey = '';
       let textOptions = {};
 
-      const cancellationCompletePendingTests = ctx.contextConfig['cancellation-complete-pending-tests'];
+      const cancellationCompletePendingTests =
+        ctx.contextConfig['cancellation-complete-pending-tests'];
       const currentStep = utils.getCancellationStep(cancel, cancellationCompletePendingTests);
 
       switch (currentStep) {
@@ -36,7 +37,8 @@ const useGetCancellationText = (textType: CancellationTextType) => {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
             cancellationDate: cancel.cancellationDate.toLocaleDateString(),
             recordTestDate: new Date(
-              cancel.cancellationDate.getTime() + 60 * 60 * (cancellationCompletePendingTests || 24) * 1000
+              cancel.cancellationDate.getTime() +
+                60 * 60 * (cancellationCompletePendingTests || 24) * 1000
             ).toLocaleDateString(),
             buttonName: t('translation:record-download'),
           };
@@ -50,7 +52,8 @@ const useGetCancellationText = (textType: CancellationTextType) => {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
             cancellationDate: cancel.cancellationDate.toLocaleDateString(),
             recordTestDate: new Date(
-              cancel.cancellationDate.getTime() + 60 * 60 * (cancellationCompletePendingTests || 24) * 1000
+              cancel.cancellationDate.getTime() +
+                60 * 60 * (cancellationCompletePendingTests || 24) * 1000
             ).toLocaleDateString(),
             buttonName: t('translation:record-download'),
           };
@@ -63,7 +66,9 @@ const useGetCancellationText = (textType: CancellationTextType) => {
           textOptions = {
             finalDeletionDate: cancel.finalDeletion.toLocaleDateString(),
             cancellationDate: cancel.cancellationDate.toLocaleDateString(),
-            downloadDate: new Date(cancel.cancellationDate.getTime() + dayInMs * 2).toLocaleDateString(),
+            downloadDate: new Date(
+              cancel.cancellationDate.getTime() + dayInMs * 2
+            ).toLocaleDateString(),
             buttonName: t('translation:record-download'),
           };
 
@@ -85,7 +90,7 @@ const useGetCancellationText = (textType: CancellationTextType) => {
           break;
 
         default:
-          break;
+          return;
       }
 
       const isAdmin = utils.hasRole(keycloak, 'c19_quick_test_admin');

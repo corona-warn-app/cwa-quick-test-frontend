@@ -40,7 +40,7 @@ i18n
   .init({
     useSuspense: false,
     wait: false,
-    debug: true,
+    debug: false,
     returnNull: false,
     fallbackLng: 'de',
     preload: ['en', 'de'],

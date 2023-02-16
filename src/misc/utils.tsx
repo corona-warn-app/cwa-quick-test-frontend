@@ -33,7 +33,10 @@ export interface IUtils {
   momentDateFormat: string;
   momentDateTimeFormat: string;
   hasRole: (keycloak: KeycloakInstance, role: string) => boolean;
-  getCancellationStep: (cancellation?: ICancellation, cancellationCompletePendingTests?: number) => CancellationSteps;
+  getCancellationStep: (
+    cancellation?: ICancellation,
+    cancellationCompletePendingTests?: number
+  ) => CancellationSteps;
 }
 
 const shortHashLen = 8;
@@ -56,7 +59,12 @@ const getIndent = (level: number): JSX.Element[] => {
   const indent: JSX.Element[] = [];
 
   for (let index = 0; index < level; index++) {
-    indent.push(<span key={index} className='intend' />);
+    indent.push(
+      <span
+        key={index}
+        className='intend'
+      />
+    );
   }
 
   return indent;
@@ -74,10 +82,12 @@ const getCancellationStep = (
   if (cancellation) {
     result = CancellationSteps.CANCELED;
 
-    cancellation.cancellationDate.getTime() < Date.now() && (result = CancellationSteps.DOWNLOAD_REQUESTED);
+    cancellation.cancellationDate.getTime() < Date.now() &&
+      (result = CancellationSteps.DOWNLOAD_REQUESTED);
 
-    cancellation.cancellationDate.getTime() + 60 * 60 * (cancellationCompletePendingTests || 24) * 1000 < Date.now() &&
-      (result = CancellationSteps.NO_TEST_RECORD);
+    cancellation.cancellationDate.getTime() +
+      60 * 60 * (cancellationCompletePendingTests || 24) * 1000 <
+      Date.now() && (result = CancellationSteps.NO_TEST_RECORD);
 
     cancellation.csvCreated && (result = CancellationSteps.DOWNLOAD_READY);
 

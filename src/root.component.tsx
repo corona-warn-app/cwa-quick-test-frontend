@@ -40,11 +40,9 @@ const Root = (props: any) => {
   const [storedMandant, setStoredMandant] = useLocalStorage('mandant', '');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-  const [keycloak, setKeycloak] = React.useState<Keycloak.KeycloakInstance>();
+  const [keycloak, setKeycloak] = React.useState<Keycloak>();
 
   React.useEffect(() => {
-    console.log(mandant, keycloakConfig);
-
     if (mandant && mandant !== storedMandant && !mandant.includes('&')) {
       setStoredMandant(mandant);
     }
@@ -58,7 +56,13 @@ const Root = (props: any) => {
     if (keycloakConfig && storedMandant) {
       keycloakConfig.realm = storedMandant;
 
-      setKeycloak(Keycloak(keycloakConfig));
+      setKeycloak(
+        new Keycloak({
+          clientId: keycloakConfig.clientId,
+          url: keycloakConfig.url,
+          realm: keycloakConfig.realm,
+        })
+      );
     }
   };
 
@@ -67,6 +71,7 @@ const Root = (props: any) => {
   ) : (
     <ReactKeycloakProvider
       authClient={keycloak}
+      // onEvent={(event, error) => console.log(event, error)}
       initOptions={{ onLoad: 'login-required' }}
     >
       <LoginInterceptor>

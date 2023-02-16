@@ -39,49 +39,39 @@ export interface INavigation {
   toReports: () => void;
   toUserManagement: () => void;
 }
-
-export const useRoutes = () => {
-  const basePath = '/:mandant';
-
-  const [result, setResult] = React.useState<IRoute>();
-
-  React.useEffect(() => {
-    setResult({
-      root: basePath,
-      landing: basePath,
-      recordPatient: basePath + '/record',
-      showPatientRecord: basePath + '/record/show',
-      recordTestResult: basePath + '/record/result',
-      qrScan: basePath + '/qr/scan',
-      statistics: basePath + '/statistics',
-      reports: basePath + '/reports',
-      userManagement: basePath + '/usermanagement',
-    });
-  }, []);
-
-  return result;
+const basePath = '/';
+export const routes = {
+  root: basePath,
+  landing: basePath,
+  recordPatient: basePath + 'record',
+  showPatientRecord: basePath + 'record/show',
+  recordTestResult: basePath + 'record/result',
+  qrScan: basePath + 'qr/scan',
+  statistics: basePath + 'statistics',
+  reports: basePath + 'reports',
+  userManagement: basePath + 'usermanagement',
 };
 
 export const useNavigation = () => {
   const nav = useNavigate();
-  const routes = useRoutes();
   const [mandant] = useLocalStorage('mandant', '');
   const [calculatedRoutes, setCalculatedRoutes] = React.useState<IRoute>();
   const [result, setResult] = React.useState<INavigation>();
 
   React.useEffect(() => {
     if (routes) {
-      const c = routes;
+      const c = { ...routes };
+      const pathMandant = '/' + mandant;
 
-      c.root = routes.root.replace(':mandant', mandant as string);
-      c.landing = routes.landing.replace(':mandant', mandant as string);
-      c.recordPatient = routes.recordPatient.replace(':mandant', mandant as string);
-      c.showPatientRecord = routes.showPatientRecord.replace(':mandant', mandant as string);
-      c.recordTestResult = routes.recordTestResult.replace(':mandant', mandant as string);
-      c.qrScan = routes.qrScan.replace(':mandant', mandant as string);
-      c.statistics = routes.statistics.replace(':mandant', mandant as string);
-      c.reports = routes.reports.replace(':mandant', mandant as string);
-      c.userManagement = routes.userManagement.replace(':mandant', mandant as string);
+      c.root = pathMandant + routes.root;
+      c.landing = pathMandant + routes.landing;
+      c.recordPatient = pathMandant + routes.recordPatient;
+      c.showPatientRecord = pathMandant + routes.showPatientRecord;
+      c.recordTestResult = pathMandant + routes.recordTestResult;
+      c.qrScan = pathMandant + routes.qrScan;
+      c.statistics = pathMandant + routes.statistics;
+      c.reports = pathMandant + routes.reports;
+      c.userManagement = pathMandant + routes.userManagement;
 
       setCalculatedRoutes(c);
     }
