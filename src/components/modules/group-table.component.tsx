@@ -85,7 +85,12 @@ const GroupTable = (props: any) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bGroups]);
 
-  const flattenGroups = (groups: IGroup[], groupNodes: IGroupNode[], level: number, parentGroup?: string): void => {
+  const flattenGroups = (
+    groups: IGroup[],
+    groupNodes: IGroupNode[],
+    level: number,
+    parentGroup?: string
+  ): void => {
     groups.forEach((group: IGroup) => {
       const gNode: IGroupNode = {
         group: group,
@@ -109,7 +114,9 @@ const GroupTable = (props: any) => {
 
         updateGroup(uGroup)
           .then(() => {
-            const fgroupNode = props.groupNodes.find((groupNode: IGroupNode) => groupNode.group.id === group.id);
+            const fgroupNode = props.groupNodes.find(
+              (groupNode: IGroupNode) => groupNode.group.id === group.id
+            );
 
             if (
               keycloak.token &&
@@ -199,9 +206,15 @@ const GroupTable = (props: any) => {
       {!(props.groupNodes && groupIsReady) ? (
         <CwaSpinner background='#eeeeee' />
       ) : (
-        <Collapse appear={true} in={true}>
+        <Collapse
+          appear={true}
+          in={true}
+        >
           <Container className='p-0 '>
-            <Table bordered hover>
+            <Table
+              bordered
+              hover
+            >
               <thead>
                 <tr>
                   <th>{t('translation:name')}</th>
@@ -219,9 +232,9 @@ const GroupTable = (props: any) => {
                       <Row className='m-0 justify-content-around'>
                         <Button
                           className='btn-icon edit-icon'
-                          disabled={step ? step >= CancellationSteps.DOWNLOAD_REQUESTED : false}
+                          // disabled={step ? step >= CancellationSteps.DOWNLOAD_REQUESTED : false}
                           onClick={() => startEditGroup(g)}
-                        ></Button>
+                        />
                         <Button
                           className='btn-icon delete-icon'
                           disabled={step ? step >= CancellationSteps.DOWNLOAD_REQUESTED : false}
@@ -244,7 +257,11 @@ const GroupTable = (props: any) => {
                 setIsGroupEdit(true);
               }}
             >
-              <img className='mr-2' src={imageAdd} alt='Hinzufügen' />
+              <img
+                className='mr-2'
+                src={imageAdd}
+                alt='Hinzufügen'
+              />
               {t('translation:add-group')}
             </Button>
           </Container>

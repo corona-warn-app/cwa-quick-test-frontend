@@ -20,14 +20,7 @@
  */
 
 import React from 'react';
-import {
-  Row,
-  Image,
-  Container,
-  Navbar,
-  NavDropdown,
-  Nav,
-} from 'react-bootstrap';
+import { Row, Image, Container, Navbar, NavDropdown, Nav } from 'react-bootstrap';
 
 import '../../i18n';
 import { Trans, useTranslation } from 'react-i18next';
@@ -35,18 +28,17 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useKeycloak } from '@react-keycloak/web';
 
 import C19Logo from '../../assets/images/c-19_logo.png';
-import { useHistory } from 'react-router-dom';
 import AppContext from '../../store/app-context';
+import { useLocation } from 'react-router-dom';
 
-const Header = (props: any) => {
-  const history = useHistory();
+const Header = () => {
+  const location = useLocation();
   const { t } = useTranslation();
   const { keycloak } = useKeycloak();
 
   const [userName, setUserName] = React.useState('');
 
-  const { navigation, contextConfig, initialized } =
-    React.useContext(AppContext);
+  const { navigation, contextConfig, initialized } = React.useContext(AppContext);
   const environmentName = contextConfig['environment-name'];
 
   // set user name from keycloak
@@ -58,8 +50,7 @@ const Header = (props: any) => {
 
   const handleLogout = () => {
     keycloak.logout({
-      redirectUri:
-        window.location.origin + navigation?.calculatedRoutes.landing,
+      redirectUri: window.location.origin + navigation?.calculatedRoutes.landing,
     });
   };
 
@@ -74,32 +65,32 @@ const Header = (props: any) => {
 
           {/* user icon and user name */}
           <Row id='qt-header'>
-            <Image id='c19-logo' src={C19Logo} />
+            <Image
+              id='c19-logo'
+              src={C19Logo}
+            />
             <span className='header-font my-auto mx-1 pt-1'>
               {t('translation:title')}
               {environmentName && (
-                <span className='environment-font my-auto mx-1'>
-                  {'\n' + environmentName}
-                </span>
+                <span className='environment-font my-auto mx-1'>{'\n' + environmentName}</span>
               )}
             </span>
-            {environmentName &&
-              history.location.pathname === navigation?.routes.root && (
-                <span className='environment-info-text py-3'>
-                  <Trans>
-                    {t('translation:environment-info1')}
-                    {
-                      <a
-                        href={t('translation:environment-info-link')}
-                        target='blank'
-                      >
-                        {t('translation:environment-info-link')}
-                      </a>
-                    }
-                    {'.'}
-                  </Trans>
-                </span>
-              )}
+            {environmentName && location.pathname === navigation?.routes.root && (
+              <span className='environment-info-text py-3'>
+                <Trans>
+                  {t('translation:environment-info1')}
+                  {
+                    <a
+                      href={t('translation:environment-info-link')}
+                      target='blank'
+                    >
+                      {t('translation:environment-info-link')}
+                    </a>
+                  }
+                  {'.'}
+                </Trans>
+              </span>
+            )}
           </Row>
           {/* {!environmentName
                 ? <></>
@@ -115,7 +106,10 @@ const Header = (props: any) => {
               title={userName}
               id='responsive-navbar-nav'
             >
-              <Nav.Link className='mx-0 dropdown-item' onClick={handleLogout}>
+              <Nav.Link
+                className='mx-0 dropdown-item'
+                onClick={handleLogout}
+              >
                 {t('translation:logout')}
               </Nav.Link>
               <NavDropdown.Divider className='m-0' />

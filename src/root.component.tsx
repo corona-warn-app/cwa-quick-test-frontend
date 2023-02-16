@@ -20,7 +20,6 @@
  */
 
 import React from 'react';
-import { useParams } from 'react-router';
 
 import { ReactKeycloakProvider } from '@react-keycloak/web';
 import Keycloak from 'keycloak-js';
@@ -31,20 +30,17 @@ import Routing from './routing.component';
 import useLocalStorage from './misc/useLocalStorage';
 import { useGetKeycloakConfig } from './api';
 import AppContextProvider from './store/AppContextProvider';
-
-interface UrlMandant {
-  mandant: string;
-}
+import { useParams } from 'react-router-dom';
 
 const Root = (props: any) => {
-  const { mandant } = useParams<UrlMandant>();
+  const { mandant } = useParams();
 
   const keycloakConfig = useGetKeycloakConfig();
 
   const [storedMandant, setStoredMandant] = useLocalStorage('mandant', '');
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-  const [keycloak, setKeycloak] = React.useState<Keycloak.KeycloakInstance>();
+  const [keycloak, setKeycloak] = React.useState<Keycloak>();
 
   React.useEffect(() => {
     if (mandant && mandant !== storedMandant && !mandant.includes('&')) {
@@ -60,14 +56,24 @@ const Root = (props: any) => {
     if (keycloakConfig && storedMandant) {
       keycloakConfig.realm = storedMandant;
 
-      setKeycloak(Keycloak(keycloakConfig));
+      setKeycloak(
+        new Keycloak({
+          clientId: keycloakConfig.clientId,
+          url: keycloakConfig.url,
+          realm: keycloakConfig.realm,
+        })
+      );
     }
   };
 
   return !keycloak ? (
     <></>
   ) : (
-    <ReactKeycloakProvider authClient={keycloak}>
+    <ReactKeycloakProvider
+      authClient={keycloak}
+      // onEvent={(event, error) => console.log(event, error)}
+      initOptions={{ onLoad: 'login-required' }}
+    >
       <LoginInterceptor>
         <AppContextProvider>
           <Routing />

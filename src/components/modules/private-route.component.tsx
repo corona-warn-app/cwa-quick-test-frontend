@@ -20,13 +20,13 @@
  */
 
 import React, { useContext } from 'react';
-import { Redirect, Route, RouteProps } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 import { useKeycloak } from '@react-keycloak/web';
 
 import AppContext from '../../store/app-context';
 
-interface PrivateRouteProps extends RouteProps {
+interface PrivateRouteProps {
   roles?: string[];
 }
 
@@ -64,15 +64,15 @@ const PrivateRoute = (props: PrivateRouteProps) => {
 
   return (
     <>
-      {isInit && (
-        <Route {...props}>
-          {isAuthorized ? (
-            props.children
-          ) : (
-            <Redirect to={navigation?.calculatedRoutes.landing!} />
-          )}
-        </Route>
-      )}
+      {isInit &&
+        (isAuthorized ? (
+          <Outlet />
+        ) : (
+          <Navigate
+            to={navigation?.calculatedRoutes.landing!}
+            replace
+          />
+        ))}
     </>
   );
 };

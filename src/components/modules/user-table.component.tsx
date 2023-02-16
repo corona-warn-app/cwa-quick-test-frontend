@@ -23,7 +23,16 @@
  */
 
 import React from 'react';
-import { Row, Table, Button, Collapse, Container, Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import {
+  Row,
+  Table,
+  Button,
+  Collapse,
+  Container,
+  Spinner,
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -303,9 +312,16 @@ const UserTable = (props: any) => {
       {!(users && users.length > 0) ? (
         <CwaSpinner background='#eeeeee' />
       ) : (
-        <Collapse appear={true} in={true}>
+        <Collapse
+          appear={true}
+          in={true}
+        >
           <Container className='p-0 '>
-            <Table bordered hover responsive>
+            <Table
+              bordered
+              hover
+              responsive
+            >
               <thead>
                 <tr>
                   <th>{t('translation:user-name')}</th>
@@ -325,7 +341,11 @@ const UserTable = (props: any) => {
                       ) : (
                         <OverlayTrigger
                           placement='top-end'
-                          overlay={<Tooltip id='no-group-tooltip'>{t('translation:no-group-tooltip')}</Tooltip>}
+                          overlay={
+                            <Tooltip id='no-group-tooltip'>
+                              {t('translation:no-group-tooltip')}
+                            </Tooltip>
+                          }
                         >
                           <span className='ff-fa px-1'>&#xf071; </span>
                         </OverlayTrigger>
@@ -393,7 +413,11 @@ const UserTable = (props: any) => {
                 setShowUserModal(true);
               }}
             >
-              <img className='mr-2' src={imageAdd} alt='Hinzufügen' />
+              <img
+                className='mr-2'
+                src={imageAdd}
+                alt='Hinzufügen'
+              />
               {t('translation:add-user')}
             </Button>
           </Container>
