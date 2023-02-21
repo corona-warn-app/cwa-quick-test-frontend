@@ -43,14 +43,14 @@ import ErrorPage from './components/modals/error-page.component';
 import NotificationToast from './components/modals/notification-toast.component';
 import PrivateRoute from './components/modules/private-route.component';
 import AppContext from './store/app-context';
-import useDisabledTenant from './misc/useDisabledTenant';
+import useEnabledTenant from './misc/useEnabledTenant';
 
 const Routing = () => {
   const { t } = useTranslation();
   const context = React.useContext(AppContext);
   const [quickTest, setQuickTest] = React.useState<IQuickTest>();
   const [notificationShow, setNotificationShow] = React.useState(false);
-  const userManagementRouteIsDisabled = useDisabledTenant();
+  const userManagementRouteIsEnabled = useEnabledTenant();
 
   document.title = t('translation:title');
 
@@ -133,7 +133,7 @@ const Routing = () => {
             element={
               <PrivateRoute
                 roles={['c19_quick_test_admin']}
-                disabled={userManagementRouteIsDisabled}
+                enabled={userManagementRouteIsEnabled}
               />
             }
           >
