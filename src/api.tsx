@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -145,7 +145,11 @@ export const useGetPendingProcessIds = (onSuccess?: () => void, onError?: (error
   return result;
 };
 
-export const useGetQuicktest = (processId?: string, onSuccess?: () => void, onError?: (error: any) => void) => {
+export const useGetQuicktest = (
+  processId?: string,
+  onSuccess?: () => void,
+  onError?: (error: any) => void
+) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<IQuickTestDccAPIResponseModel>();
 
@@ -190,8 +194,12 @@ export const usePostTestResult = (
   React.useEffect(() => {
     if (testResult && processId) {
       // shorten the manufactorer name for display purposes (PDF)
-      if (testResult.dccTestManufacturerDescription && testResult.dccTestManufacturerDescription.length > 100) {
-        testResult.dccTestManufacturerDescription = testResult.dccTestManufacturerDescription.substring(0, 100);
+      if (
+        testResult.dccTestManufacturerDescription &&
+        testResult.dccTestManufacturerDescription.length > 100
+      ) {
+        testResult.dccTestManufacturerDescription =
+          testResult.dccTestManufacturerDescription.substring(0, 100);
       }
 
       const uri = '/api/quicktest/' + processId + '/testResult';
@@ -235,7 +243,9 @@ export const usePostQuickTest = (
         firstName: quickTest.personData.givenName,
         standardisedFamilyName: quickTest.personData.standardisedFamilyName,
         standardisedGivenName: quickTest.personData.standardisedGivenName,
-        birthday: quickTest.personData.dateOfBirth ? quickTest.personData.dateOfBirth.toISOString().split('T')[0] : '',
+        birthday: quickTest.personData.dateOfBirth
+          ? quickTest.personData.dateOfBirth.toISOString().split('T')[0]
+          : '',
         sex: quickTest.personData.sex,
 
         street: quickTest.addressData.street,
@@ -386,7 +396,10 @@ export const useGetTests = (onError?: (error: any) => void) => {
   return result;
 };
 
-export const useStatistics = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+export const useStatistics = (
+  onSuccess?: (status: number) => void,
+  onError?: (error: any) => void
+) => {
   const { keycloak, initialized } = useKeycloak();
   const [statisticData, setStatisticData] = React.useState<StatisticData>();
   const [thisWeekStatisticData, setThisWeekStaticData] = React.useState<StatisticData>();
@@ -475,7 +488,10 @@ export const useStatistics = (onSuccess?: (status: number) => void, onError?: (e
   return [statisticData, thisWeekStatisticData, thisMonthStatisticData] as const;
 };
 
-export const useGetStatisticsFromTo = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+export const useGetStatisticsFromTo = (
+  onSuccess?: (status: number) => void,
+  onError?: (error: any) => void
+) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<StatisticData>();
 
@@ -491,7 +507,8 @@ export const useGetStatisticsFromTo = (onSuccess?: (status: number) => void, onE
       return;
     }
 
-    let requestUri = balseUri + '?dateFrom=' + dateFrom.toISOString() + '&dateTo=' + dateTo.toISOString();
+    let requestUri =
+      balseUri + '?dateFrom=' + dateFrom.toISOString() + '&dateTo=' + dateTo.toISOString();
 
     api
       .get(requestUri, { headers: header })
@@ -511,7 +528,10 @@ export const useGetStatisticsFromTo = (onSuccess?: (status: number) => void, onE
   return [result, getStatisticsFromTo] as const;
 };
 
-export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+export const useGetKeycloakConfig = (
+  onSuccess?: (status: number) => void,
+  onError?: (error: any) => void
+) => {
   const [result, setResult] = React.useState<Keycloak.KeycloakConfig>();
 
   const header = {
@@ -542,7 +562,10 @@ export const useGetKeycloakConfig = (onSuccess?: (status: number) => void, onErr
   return result;
 };
 
-export const useGetContextConfig = (onSuccess?: (status: number) => void, onError?: (error: any) => void) => {
+export const useGetContextConfig = (
+  onSuccess?: (status: number) => void,
+  onError?: (error: any) => void
+) => {
   const [result, setResult] = React.useState<any>();
 
   const header = {
@@ -593,7 +616,13 @@ export const useGetPositiveForTimeRange = (
       if (testResult) {
         tp = 'testResult=' + testResult + '&';
       }
-      const uri = '/api/quicktestarchive?' + tp + 'dateFrom=' + start.toISOString() + '&dateTo=' + end.toISOString();
+      const uri =
+        '/api/quicktestarchive?' +
+        tp +
+        'dateFrom=' +
+        start.toISOString() +
+        '&dateTo=' +
+        end.toISOString();
 
       api
         .get(uri, { headers: header })
@@ -790,7 +819,10 @@ export const useGetGroups = (onSuccess?: () => void, onError?: (error: any) => v
   return [result, refreshGroups, createGroup, updateGroup, deleteGroup] as const;
 };
 
-export const useGetGroupDetails = (groupReloaded: (group: IGroupDetails) => void, onError?: (error: any) => void) => {
+export const useGetGroupDetails = (
+  groupReloaded: (group: IGroupDetails) => void,
+  onError?: (error: any) => void
+) => {
   const { keycloak, initialized } = useKeycloak();
   const [result, setResult] = React.useState<any>();
 

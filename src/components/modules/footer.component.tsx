@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -54,7 +54,10 @@ const Footer = (props: any) => {
           {t('translation:imprint')}
         </Button>
 
-        <Image className='my-auto' src={DataProtectLogo} />
+        <Image
+          className='my-auto'
+          src={DataProtectLogo}
+        />
 
         <Button
           variant='link'
@@ -65,8 +68,14 @@ const Footer = (props: any) => {
         </Button>
       </Row>
 
-      <DataprivacyPage show={dataPrivacyShow} setShow={setDataPrivacyShow} />
-      <ImprintPage show={imprintShow} setShow={setImprintShow} />
+      <DataprivacyPage
+        show={dataPrivacyShow}
+        setShow={setDataPrivacyShow}
+      />
+      <ImprintPage
+        show={imprintShow}
+        setShow={setImprintShow}
+      />
     </>
   );
 };

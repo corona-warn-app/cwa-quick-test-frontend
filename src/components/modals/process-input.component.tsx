@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -20,7 +20,7 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Container, Modal, Row, Spinner } from 'react-bootstrap'
+import { Button, Card, Col, Container, Modal, Row, Spinner } from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
@@ -29,107 +29,133 @@ import utils from '../../misc/utils';
 import { IShortHashedGuid, useGetPendingProcessIds } from '../../api';
 
 const ProcessIdInput = (props: any) => {
+  const { t } = useTranslation();
+  const [processNo, setProcessNo] = React.useState('');
+  const [btnOkDisabled, setBtnOkDisabled] = React.useState(false);
+  const processIds = useGetPendingProcessIds(undefined, props.handleError);
 
-    const { t } = useTranslation();
-    const [processNo, setProcessNo] = React.useState('');
-    const [btnOkDisabled, setBtnOkDisabled] = React.useState(false);
-    const processIds = useGetPendingProcessIds(undefined, props.handleError);
+  const handleCancel = () => {
+    props.onCancel();
+    // props.onHide();
+  };
 
-    const handleCancel = () => {
-        props.onCancel();
-        // props.onHide();
-    }
+  const handleOk = () => {
+    setBtnOkDisabled(true);
+    props.onChange(processNo);
+    // props.onHide();
+  };
 
-    const handleOk = () => {
-        setBtnOkDisabled(true);
-        props.onChange(processNo);
-        // props.onHide();
-    }
+  const handleEnter = () => {
+    setBtnOkDisabled(false);
+  };
 
-    const handleEnter = () => {
-        setBtnOkDisabled(false);
-    }
+  return (
+    <>
+      <Modal
+        contentClassName='data-modal'
+        show={props.show}
+        backdrop='static'
+        keyboard={false}
+        centered
+        onEnter={handleEnter}
+      >
+        <Modal.Header
+          id='data-header'
+          className='pb-0'
+        >
+          <Row>
+            <Col>
+              <Card.Title
+                className='m-0 jcc-xs-jcfs-md'
+                as={'h2'}
+              >
+                {t('translation:testId-input-header')}
+              </Card.Title>
+            </Col>
+          </Row>
+        </Modal.Header>
 
-    return (
-        <>
-            <Modal
-                contentClassName='data-modal'
-                show={props.show}
-                backdrop="static"
-                keyboard={false}
-                centered
-                onEnter={handleEnter}
-            >
-                <Modal.Header id='data-header' className='pb-0' >
-                    <Row>
-                        <Col >
-                            <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'} >{t('translation:testId-input-header')}</Card.Title>
-                        </Col>
-                    </Row>
-                </Modal.Header>
-
-                {/*
+        {/*
     content area with process number input and radios
     */}
-                <Modal.Body className='py-0 bg-light'>
-                    <hr />
+        <Modal.Body className='py-0 bg-light'>
+          <hr />
 
-                    < FormGroupInput controlId='formProcessModalInput' title={t('translation:process-number')}
-                        value={processNo}
-                        onChange={(evt: any) => setProcessNo(evt.currentTarget.value)}
-                        required
-                        min={utils.shortHashLen}
-                        maxLength={utils.shortHashLen}
-                        pattern={utils.pattern.processNo}
-                        datalistId='processId-list'
-                        datalist={processIds ? processIds.map((i: IShortHashedGuid) => <option key={i.shortHashedGuid} value={i.shortHashedGuid} />) : undefined}
+          <FormGroupInput
+            controlId='formProcessModalInput'
+            title={t('translation:process-number')}
+            value={processNo}
+            onChange={(evt: any) => setProcessNo(evt.currentTarget.value)}
+            required
+            min={utils.shortHashLen}
+            maxLength={utils.shortHashLen}
+            pattern={utils.pattern.processNo}
+            datalistId='processId-list'
+            datalist={
+              processIds
+                ? processIds.map((i: IShortHashedGuid) => (
+                    <option
+                      key={i.shortHashedGuid}
+                      value={i.shortHashedGuid}
                     />
+                  ))
+                : undefined
+            }
+          />
 
-                    <hr />
-                </Modal.Body>
+          <hr />
+        </Modal.Body>
 
-                {/*
+        {/*
     footer with cancel and submit button
     */}
-                <Modal.Footer id='data-footer'>
-                    <Container className='p-0'>
-                        <Row>
-                            <Col xs='6' md='4' className='pl-0'>
-                                <Button
-                                    className='py-0'
-                                    block
-                                    variant='outline-primary'
-                                    onClick={handleCancel}
-                                >
-                                    {t('translation:cancel')}
-                                </Button>
-                            </Col>
-                            <Col xs='6' md='4' className='pr-0'>
-                                <Button
-                                    className='py-0'
-                                    block
-                                    onClick={handleOk}
-                                    disabled={processNo.length !== utils.shortHashLen || btnOkDisabled}
-                                >
-                                    {t('translation:ok')}
+        <Modal.Footer id='data-footer'>
+          <Container className='p-0'>
+            <Row>
+              <Col
+                xs='6'
+                md='4'
+                className='pl-0'
+              >
+                <Button
+                  className='py-0'
+                  block
+                  variant='outline-primary'
+                  onClick={handleCancel}
+                >
+                  {t('translation:cancel')}
+                </Button>
+              </Col>
+              <Col
+                xs='6'
+                md='4'
+                className='pr-0'
+              >
+                <Button
+                  className='py-0'
+                  block
+                  onClick={handleOk}
+                  disabled={processNo.length !== utils.shortHashLen || btnOkDisabled}
+                >
+                  {t('translation:ok')}
 
-                                    <Spinner
-                                        as="span"
-                                        className='btn-spinner'
-                                        animation="border"
-                                        hidden={!btnOkDisabled}
-                                        size="sm"
-                                        role="status"
-                                        aria-hidden="true"
-                                    />
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Container>
-                </Modal.Footer>
-            </Modal>
-        </>
-    )
-}
+                  <Spinner
+                    as='span'
+                    className='btn-spinner'
+                    animation='border'
+                    hidden={!btnOkDisabled}
+                    size='sm'
+                    role='status'
+                    aria-hidden='true'
+                  />
+                </Button>
+              </Col>
+            </Row>
+          </Container>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+};
 
 export default ProcessIdInput;

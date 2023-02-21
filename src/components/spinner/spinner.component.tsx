@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -23,19 +23,23 @@ import React from 'react';
 import './spinner.component.scss';
 
 const CwaSpinner = (props: any) => {
+  const [bg, setBg] = React.useState('#fff');
 
-    const [bg, setBg] = React.useState('#fff');
+  React.useEffect(() => {
+    if (props.background) {
+      setBg(props.background);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    React.useEffect(() => {
-        if (props.background) {
-            setBg(props.background)
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    return (
-        <div className={'loader'} style={{ background: bg }}>Loading...</div>
-    )
-}
+  return (
+    <div
+      className={'loader'}
+      style={{ background: bg }}
+    >
+      Loading...
+    </div>
+  );
+};
 
 export default CwaSpinner;

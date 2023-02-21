@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -68,7 +68,13 @@ const Reports = (props: any) => {
     });
   };
 
-  const qtArchive = useGetPositiveForTimeRange(filterTestResult, startDate, endDate, undefined, handleError);
+  const qtArchive = useGetPositiveForTimeRange(
+    filterTestResult,
+    startDate,
+    endDate,
+    undefined,
+    handleError
+  );
   const pdf = useGetPDF(selectedHash);
 
   const handleDateChange = (
@@ -116,23 +122,45 @@ const Reports = (props: any) => {
   return !(isInit && context && context.valueSets) ? (
     <CwaSpinner />
   ) : (
-    <Fade appear={true} in={true}>
+    <Fade
+      appear={true}
+      in={true}
+    >
       <Card id='data-card'>
         <CardHeader title={t('translation:failed-report')} />
 
         {/*
     content area
     */}
-        <Card.Body id='data-header' className='qt-frame-card '>
+        <Card.Body
+          id='data-header'
+          className='qt-frame-card '
+        >
           {/* date of filter input */}
-          <Form.Group as={Row} className='mb-1'>
-            <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>
+          <Form.Group
+            as={Row}
+            className='mb-1'
+          >
+            <Form.Label
+              className='input-label txt-no-wrap'
+              column
+              xs='5'
+              sm='3'
+            >
               {t('translation:timerange')}
             </Form.Label>
 
-            <Col xs='7' sm='9' className='d-flex'>
+            <Col
+              xs='7'
+              sm='9'
+              className='d-flex'
+            >
               <Row>
-                <Col xs='12' sm='12' className='d-flex'>
+                <Col
+                  xs='12'
+                  sm='12'
+                  className='d-flex'
+                >
                   <DatePicker
                     selected={startDate}
                     onChange={handleStartDateChange}
@@ -155,11 +183,20 @@ const Reports = (props: any) => {
           </Form.Group>
           <hr />
           <Row>
-            <Form.Label className='input-label txt-no-wrap' column xs='5' sm='3'>
+            <Form.Label
+              className='input-label txt-no-wrap'
+              column
+              xs='5'
+              sm='3'
+            >
               {t('translation:filter-record-result')}
             </Form.Label>
 
-            <Col xs='7' sm='9' className='d-flex'>
+            <Col
+              xs='7'
+              sm='9'
+              className='d-flex'
+            >
               <Row>
                 <FormGroupInlineRadio
                   controlId='filterTestResult-radio1'
@@ -210,14 +247,24 @@ const Reports = (props: any) => {
           ) : (
             <Row className='flex-fill'>
               <Col md='3'>
-                <PagedList data={qtArchive} onSelected={setSelectedHash} />
+                <PagedList
+                  data={qtArchive}
+                  onSelected={setSelectedHash}
+                />
               </Col>
-              <Col md='9' ref={parentRef}>
+              <Col
+                md='9'
+                ref={parentRef}
+              >
                 {!pdf ? (
                   <></>
                 ) : (
                   <>
-                    <iframe title='qt-IFrame' src={pdf} className='qt-IFrame' />
+                    <iframe
+                      title='qt-IFrame'
+                      src={pdf}
+                      className='qt-IFrame'
+                    />
                   </>
                 )}
               </Col>
@@ -230,8 +277,16 @@ const Reports = (props: any) => {
     */}
         <Card.Footer id='data-footer'>
           <Row>
-            <Col md='6' lg='3' className='data-footer-col'>
-              <Button className='my-1 my-md-0 p-0' block onClick={context.navigation!.toLanding}>
+            <Col
+              md='6'
+              lg='3'
+              className='data-footer-col'
+            >
+              <Button
+                className='my-1 my-md-0 p-0'
+                block
+                onClick={context.navigation!.toLanding}
+              >
                 {t('translation:cancel')}
               </Button>
             </Col>

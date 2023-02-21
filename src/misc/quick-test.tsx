@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -21,37 +21,36 @@
 
 import { Sex } from './enum';
 
-
 export interface IPersonData {
-    givenName: string;
-    familyName: string;
-    standardisedGivenName?: string;
-    standardisedFamilyName?: string;
-    dateOfBirth: Date | undefined;
-    sex: Sex | undefined;
+  givenName: string;
+  familyName: string;
+  standardisedGivenName?: string;
+  standardisedFamilyName?: string;
+  dateOfBirth: Date | undefined;
+  sex: Sex | undefined;
 }
 
 export interface IAddressData {
-    zip?: string;
-    city?: string;
-    street?: string;
-    houseNumber?: string;
+  zip?: string;
+  city?: string;
+  street?: string;
+  houseNumber?: string;
 }
 
 export default interface IQuickTest {
-    personData: IPersonData;
+  personData: IPersonData;
 
-    addressData: IAddressData;
+  addressData: IAddressData;
 
-    processingConsens?: boolean;
-    uuId?: string;
-    includePersData?: boolean;
-    privacyAgreement?: boolean;
-    phoneNumber?: string;
-    emailAddress?: string;
-    testId?: string;
-    testResultHash?: string;
-    testType?: string;
-    dccConsent?: boolean;
-    additionalInfo?: string;
+  processingConsens?: boolean;
+  uuId?: string;
+  includePersData?: boolean;
+  privacyAgreement?: boolean;
+  phoneNumber?: string;
+  emailAddress?: string;
+  testId?: string;
+  testResultHash?: string;
+  testType?: string;
+  dccConsent?: boolean;
+  additionalInfo?: string;
 }

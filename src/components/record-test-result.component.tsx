@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -26,11 +26,7 @@ import '../i18n';
 import { useTranslation } from 'react-i18next';
 
 import utils from '../misc/utils';
-import {
-  IQuickTestDccAPIResponseModel,
-  useGetQuicktest,
-  usePostTestResult,
-} from '../api';
+import { IQuickTestDccAPIResponseModel, useGetQuicktest, usePostTestResult } from '../api';
 import ITestResult from '../misc/test-result';
 import CwaSpinner from './spinner/spinner.component';
 import CardFooter from './modules/card-footer.component';
@@ -51,8 +47,7 @@ const RecordTestResult = (props: any) => {
 
   const [validated, setValidated] = React.useState(false);
   const [isInit, setIsInit] = React.useState(false);
-  const [showProcessIdInputModal, setShowProcessIdInputModal] =
-    React.useState(true);
+  const [showProcessIdInputModal, setShowProcessIdInputModal] = React.useState(true);
   const [postInProgress, setPostInProgress] = React.useState(false);
 
   React.useEffect(() => {
@@ -131,16 +126,13 @@ const RecordTestResult = (props: any) => {
 
   return (
     <>
-      {!(
-        isInit &&
-        context &&
-        context.valueSets &&
-        processNo &&
-        !showProcessIdInputModal
-      ) ? (
+      {!(isInit && context && context.valueSets && processNo && !showProcessIdInputModal) ? (
         <CwaSpinner />
       ) : (
-        <Fade appear={true} in={true}>
+        <Fade
+          appear={true}
+          in={true}
+        >
           <Card id='data-card'>
             <Form
               className='form-flex'
@@ -152,7 +144,10 @@ const RecordTestResult = (props: any) => {
               {/*
     content area with process number input and radios
     */}
-              <Card.Body id='data-body' className='pt-0'>
+              <Card.Body
+                id='data-body'
+                className='pt-0'
+              >
                 {/* process number input */}
                 <FormGroupInput
                   controlId='formProcessInput'

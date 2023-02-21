@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -24,12 +24,7 @@
 
 import icaoJson from 'icao-transliteration/lib/json/icao.json';
 import React from 'react';
-import {
-  IIcao,
-  normalize,
-  parsePattern,
-  transliterate,
-} from 'icao-transliteration';
+import { IIcao, normalize, parsePattern, transliterate } from 'icao-transliteration';
 
 const useTransliterate = (onError?: (msg: string) => void) => {
   const icao: IIcao = icaoJson;

@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -23,15 +23,7 @@
  */
 
 import React from 'react';
-import {
-  Button,
-  Card,
-  Col,
-  Modal,
-  Row,
-  Image,
-  Container,
-} from 'react-bootstrap';
+import { Button, Card, Col, Modal, Row, Image, Container } from 'react-bootstrap';
 
 import '../../i18n';
 import { Trans, useTranslation } from 'react-i18next';
@@ -68,10 +60,16 @@ const DisclamerButton = (props: any) => {
         keyboard={false}
         centered
       >
-        <Modal.Header id='data-header' className='pb-0'>
+        <Modal.Header
+          id='data-header'
+          className='pb-0'
+        >
           <Row>
             <Col>
-              <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'}>
+              <Card.Title
+                className='m-0 jcc-xs-jcfs-md'
+                as={'h2'}
+              >
                 {t('translation:disclaimer-title')}
               </Card.Title>
             </Col>
@@ -89,9 +87,7 @@ const DisclamerButton = (props: any) => {
           <FormGroupConsentCkb
             controlId='formDoNotShowCheckbox'
             title={t('translation:disclaimer-do-not-show')}
-            onChange={(evt: any) =>
-              props.onCheckChange(evt.currentTarget.checked)
-            }
+            onChange={(evt: any) => props.onCheckChange(evt.currentTarget.checked)}
             type='checkbox'
             checked={props.checked}
           />
@@ -100,7 +96,10 @@ const DisclamerButton = (props: any) => {
         <Modal.Footer id='data-footer'>
           <Container className='p-0'>
             <Row className='justify-content-end'>
-              <Col xs='6' className='p-0'>
+              <Col
+                xs='6'
+                className='p-0'
+              >
                 <Button
                   className='py-0'
                   block

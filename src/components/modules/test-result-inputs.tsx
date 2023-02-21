@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -28,11 +28,7 @@ import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
 import { TestResult, TestType } from '../../misc/enum';
-import {
-  FormGroupInput,
-  FormGroupRadio,
-  FormGroupValueSetSelect,
-} from './form-group.component';
+import { FormGroupInput, FormGroupRadio, FormGroupValueSetSelect } from './form-group.component';
 import useLocalStorage from '../../misc/useLocalStorage';
 import ITestResult from '../../misc/test-result';
 import { ITests, useGetTests } from '../../api';
@@ -49,12 +45,8 @@ const TestResultInputs = (props: any) => {
   const [testId, setTestId] = useLocalStorage('testId', '');
   const [testName, setTestName] = useLocalStorage('testName', '');
   const [pcrTestName, setPcrTestName] = useLocalStorage('pcrTestName', '');
-  const [testManufacturerId, setTestManufacturerId] = useLocalStorage(
-    'testManufacturers',
-    ''
-  );
-  const [testManufacturerDescription, setTestManufacturerDescription] =
-    React.useState('');
+  const [testManufacturerId, setTestManufacturerId] = useLocalStorage('testManufacturers', '');
+  const [testManufacturerDescription, setTestManufacturerDescription] = React.useState('');
   const [dccConsent, setDccConsent] = React.useState<boolean>();
   const [testType, setTestType] = React.useState<TestType>();
 
@@ -75,9 +67,7 @@ const TestResultInputs = (props: any) => {
           testBrandName: dccConsent ? undefined : testName,
           result: testResult,
           dccTestManufacturerId: dccConsent ? testManufacturerId : undefined,
-          dccTestManufacturerDescription: dccConsent
-            ? testManufacturerDescription
-            : undefined,
+          dccTestManufacturerDescription: dccConsent ? testManufacturerDescription : undefined,
         };
       }
 
@@ -85,14 +75,7 @@ const TestResultInputs = (props: any) => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    testId,
-    testName,
-    testResult,
-    testManufacturerId,
-    testManufacturerDescription,
-    pcrTestName,
-  ]);
+  }, [testId, testName, testResult, testManufacturerId, testManufacturerDescription, pcrTestName]);
 
   React.useEffect(() => {
     if (testManufacturerId) {
@@ -127,9 +110,7 @@ const TestResultInputs = (props: any) => {
       const name = strVal.slice(splitIndex + 2);
 
       const find = tests.find(
-        (item) =>
-          (strVal.length <= 15 || item.testBrandName === name) &&
-          item.testBrandId === id
+        (item) => (strVal.length <= 15 || item.testBrandName === name) && item.testBrandId === id
       );
       if (find) {
         setTestId(find.testBrandId);
@@ -175,7 +156,10 @@ const TestResultInputs = (props: any) => {
   // }
 
   return (
-    <Fade appear={true} in={dccConsent !== undefined}>
+    <Fade
+      appear={true}
+      in={dccConsent !== undefined}
+    >
       <Container className='form-flex p-0 '>
         {testType === TestType.RAT ? (
           <>
@@ -263,10 +247,7 @@ const TestResultInputs = (props: any) => {
         <FormGroupRadio
           controlId='result-radio1'
           title={t('translation:result-positive')}
-          checked={
-            testResult === TestResult.POSITIVE ||
-            testResult === TestResult.PCR_POSITIVE
-          }
+          checked={testResult === TestResult.POSITIVE || testResult === TestResult.PCR_POSITIVE}
           onChange={() => {
             testType === TestType.RAT
               ? setTestResult(TestResult.POSITIVE)
@@ -280,10 +261,7 @@ const TestResultInputs = (props: any) => {
         <FormGroupRadio
           controlId='result-radio2'
           title={t('translation:result-negative')}
-          checked={
-            testResult === TestResult.NEGATIVE ||
-            testResult === TestResult.PCR_NEGATIVE
-          }
+          checked={testResult === TestResult.NEGATIVE || testResult === TestResult.PCR_NEGATIVE}
           onChange={() => {
             testType === TestType.RAT
               ? setTestResult(TestResult.NEGATIVE)
@@ -297,10 +275,7 @@ const TestResultInputs = (props: any) => {
         <FormGroupRadio
           controlId='result-radio3'
           title={t('translation:result-failed')}
-          checked={
-            testResult === TestResult.INVALID ||
-            testResult === TestResult.PCR_INVALID
-          }
+          checked={testResult === TestResult.INVALID || testResult === TestResult.PCR_INVALID}
           onChange={() => {
             testType === TestType.RAT
               ? setTestResult(TestResult.INVALID)

@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -83,11 +83,7 @@ const ShowPatientData = (props: any) => {
       }
       if (quickTest.processingConsens) {
         setQrCodeValue(
-          getQrCodeValueString(
-            quickTest.uuId,
-            quickTest.dccConsent,
-            quickTest.testType
-          )
+          getQrCodeValueString(quickTest.uuId, quickTest.dccConsent, quickTest.testType)
         );
       }
     }
@@ -150,12 +146,13 @@ const ShowPatientData = (props: any) => {
   ) ? (
     <CwaSpinner />
   ) : (
-    <Fade appear={true} in={true}>
+    <Fade
+      appear={true}
+      in={true}
+    >
       <Container className='form-flex p-0 '>
         <Row id='process-row'>
-          <span className='font-weight-bold mr-2'>
-            {t('translation:process')}
-          </span>
+          <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
           <span>{processId}</span>
         </Row>
         <Card id='data-card'>
@@ -165,7 +162,10 @@ const ShowPatientData = (props: any) => {
           <Card.Body id='data-header'>
             <Row>
               <Col sm='5'>
-                <Card.Title className='m-sm-0 jcc-xs-jcfs-sm' as={'h2'}>
+                <Card.Title
+                  className='m-sm-0 jcc-xs-jcfs-sm'
+                  as={'h2'}
+                >
                   {t('translation:qr-code')}
                 </Card.Title>
                 <hr />
@@ -175,9 +175,7 @@ const ShowPatientData = (props: any) => {
                 </Card.Text>
 
                 <Card.Text className='input-label jcc-xs-jcfs-sm mb-0'>
-                  {quickTest.personData.givenName +
-                    ' ' +
-                    quickTest.personData.familyName}
+                  {quickTest.personData.givenName + ' ' + quickTest.personData.familyName}
                 </Card.Text>
 
                 <Moment
@@ -213,11 +211,12 @@ const ShowPatientData = (props: any) => {
                   {quickTest.emailAddress}
                 </Card.Text>
 
-                <Card.Text className='input-label jcc-xs-jcfs-sm'>
-                  {quickTest.testId}
-                </Card.Text>
+                <Card.Text className='input-label jcc-xs-jcfs-sm'>{quickTest.testId}</Card.Text>
               </Col>
-              <Col sm='7' className='px-4'>
+              <Col
+                sm='7'
+                className='px-4'
+              >
                 <Container id='qr-code-container'>
                   {qrCodeValue ? (
                     <>

@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -20,35 +20,37 @@
  */
 
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
+import { Route, Routes } from 'react-router-dom';
 
-import './i18n';
 import { useTranslation } from 'react-i18next';
+import './i18n';
 
 import IQuickTest from './misc/quick-test';
 
+import LandingPage from './components/LandingPage/landing-page.component';
 import Footer from './components/modules/footer.component';
 import Header from './components/modules/header.component';
-import LandingPage from './components/LandingPage/landing-page.component';
-import RecordPatientData from './components/record-patient-data.component';
-import ShowPatientData from './components/show-patient-data.component';
-import RecordTestResult from './components/record-test-result.component';
 import QrScan from './components/qr-scan.component';
-import Statistics from './components/statistics.component';
+import RecordPatientData from './components/record-patient-data.component';
+import RecordTestResult from './components/record-test-result.component';
 import Reports from './components/reports';
+import ShowPatientData from './components/show-patient-data.component';
+import Statistics from './components/statistics.component';
 import UserManagement from './components/user-management.component';
 
-import PrivateRoute from './components/modules/private-route.component';
 import ErrorPage from './components/modals/error-page.component';
-import AppContext from './store/app-context';
 import NotificationToast from './components/modals/notification-toast.component';
+import PrivateRoute from './components/modules/private-route.component';
+import AppContext from './store/app-context';
+import useDisabledTenant from './misc/useDisabledTenant';
 
 const Routing = () => {
   const { t } = useTranslation();
   const context = React.useContext(AppContext);
   const [quickTest, setQuickTest] = React.useState<IQuickTest>();
   const [notificationShow, setNotificationShow] = React.useState(false);
+  const userManagementRouteIsDisabled = useDisabledTenant();
 
   document.title = t('translation:title');
 
@@ -127,7 +129,14 @@ const Routing = () => {
             />
           </Route>
           {/* Record Test Result */}
-          <Route element={<PrivateRoute roles={['c19_quick_test_admin']} />}>
+          <Route
+            element={
+              <PrivateRoute
+                roles={['c19_quick_test_admin']}
+                disabled={userManagementRouteIsDisabled}
+              />
+            }
+          >
             <Route
               path={context.navigation!.routes.userManagement}
               element={<UserManagement />}

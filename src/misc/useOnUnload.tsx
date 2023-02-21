@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -17,33 +17,30 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
- * 
- * Used character transliteration from 
+ *
+ * Used character transliteration from
  * https://www.icao.int/publications/Documents/9303_p3_cons_en.pdf
  */
-
 
 import React from 'react';
 
 const initBeforeUnLoad = (onUnload?: () => void) => {
-
-    window.onbeforeunload = () => {
-        if (onUnload) {
-            onUnload();
-        }
+  window.onbeforeunload = () => {
+    if (onUnload) {
+      onUnload();
     }
-}
+  };
+};
 // Hook
 const useOnUnload = (onUnload: () => void) => {
-    const [handleOnUnload] = React.useState<() => void>(onUnload);
+  const [handleOnUnload] = React.useState<() => void>(onUnload);
 
-    React.useEffect(() => {
-        initBeforeUnLoad(handleOnUnload);
-        return () => initBeforeUnLoad(undefined);
-    }, [handleOnUnload]);
+  React.useEffect(() => {
+    initBeforeUnLoad(handleOnUnload);
+    return () => initBeforeUnLoad(undefined);
+  }, [handleOnUnload]);
 
-    // return [handleOnUnload, setHandleOnUnload] as const;
-}
-
+  // return [handleOnUnload, setHandleOnUnload] as const;
+};
 
 export default useOnUnload;
