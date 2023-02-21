@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -43,12 +43,15 @@ import PrivateRoute from './components/modules/private-route.component';
 import ErrorPage from './components/modals/error-page.component';
 import AppContext from './store/app-context';
 import NotificationToast from './components/modals/notification-toast.component';
+import useLocalStorage from './misc/useLocalStorage';
+import useDisabledMandant from './misc/useDisabledMandant';
 
 const Routing = () => {
   const { t } = useTranslation();
   const context = React.useContext(AppContext);
   const [quickTest, setQuickTest] = React.useState<IQuickTest>();
   const [notificationShow, setNotificationShow] = React.useState(false);
+  const userManagementRouteIsDisabled = useDisabledMandant();
 
   document.title = t('translation:title');
 
@@ -127,7 +130,14 @@ const Routing = () => {
             />
           </Route>
           {/* Record Test Result */}
-          <Route element={<PrivateRoute roles={['c19_quick_test_admin']} />}>
+          <Route
+            element={
+              <PrivateRoute
+                roles={['c19_quick_test_admin']}
+                disabled={userManagementRouteIsDisabled}
+              />
+            }
+          >
             <Route
               path={context.navigation!.routes.userManagement}
               element={<UserManagement />}

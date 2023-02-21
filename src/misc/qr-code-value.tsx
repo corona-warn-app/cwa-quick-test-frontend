@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -25,83 +25,85 @@ import vCardParser from './vCard-parser';
 import { TestType } from './enum';
 
 export interface IQRCodeValue {
-    fn?: string,
-    ln?: string,
-    dob?: string, //"1990-01-01",   - >day of birth
-    dgc?: boolean,
-    testid: string,
-    timestamp: number,
-    salt: string, // 32 Bit random in HEX
-    hash?: string // SHA256 Hash
+  fn?: string;
+  ln?: string;
+  dob?: string; //"1990-01-01",   - >day of birth
+  dgc?: boolean;
+  testid: string;
+  timestamp: number;
+  salt: string; // 32 Bit random in HEX
+  hash?: string; // SHA256 Hash
 }
 
 const sBaseUrl = 'https://s.coronawarn.app?v=1#';
 const pBaseUrl = 'https://p.coronawarn.app?v=1#';
 
-export const getQrCodeValueString = (guid: string, dccConsent?: boolean, testType?: string, fn?: string, ln?: string, dob?: Date) => {
-    let encodedJson = '';
+export const getQrCodeValueString = (
+  guid: string,
+  dccConsent?: boolean,
+  testType?: string,
+  fn?: string,
+  ln?: string,
+  dob?: Date
+) => {
+  let encodedJson = '';
 
-    const value: IQRCodeValue = {
-        fn: fn,
-        ln: ln,
-        dob: dob ? dob.toISOString().split('T')[0] : undefined,
-        dgc: dccConsent ? dccConsent : false,
-        testid: guid,
-        timestamp: Date.now() / 1000 | 0,
-        salt: CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex)
-    }
+  const value: IQRCodeValue = {
+    fn: fn,
+    ln: ln,
+    dob: dob ? dob.toISOString().split('T')[0] : undefined,
+    dgc: dccConsent ? dccConsent : false,
+    testid: guid,
+    timestamp: (Date.now() / 1000) | 0,
+    salt: CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex),
+  };
 
-    const shaEntry = getShaEntry(value);
-    value.hash = CryptoJS.SHA256(shaEntry).toString(CryptoJS.enc.Hex);
+  const shaEntry = getShaEntry(value);
+  value.hash = CryptoJS.SHA256(shaEntry).toString(CryptoJS.enc.Hex);
 
-    const json = JSON.stringify(value);
-    const buffer = Buffer.from(json);
+  const json = JSON.stringify(value);
+  const buffer = Buffer.from(json);
 
-    encodedJson = buffer.toString('base64');
+  encodedJson = buffer.toString('base64');
 
-    const baseUrl = TestType.PCR === testType ? pBaseUrl : sBaseUrl;
+  const baseUrl = TestType.PCR === testType ? pBaseUrl : sBaseUrl;
 
-
-    return [(baseUrl + encodedJson), value.hash];
-}
+  return [baseUrl + encodedJson, value.hash];
+};
 
 const getShaEntry = (value: IQRCodeValue): string => {
-    let result = '';
+  let result = '';
 
-    if (value) {
-
-        if (value.dob && value.fn && value.ln) {
-            result = `${value.dob}#${value.fn}#${value.ln}#${value.timestamp.toString()}#${value.testid}#${value.salt}`;
-        }
-        else {
-            result = `${value.timestamp.toString()}#${value.salt}`;
-        }
-        // console.log(result);
-
+  if (value) {
+    if (value.dob && value.fn && value.ln) {
+      result = `${value.dob}#${value.fn}#${value.ln}#${value.timestamp.toString()}#${
+        value.testid
+      }#${value.salt}`;
+    } else {
+      result = `${value.timestamp.toString()}#${value.salt}`;
     }
+    // console.log(result);
+  }
 
-    return result;
-}
+  return result;
+};
 
 export const getQrCodeValue = (valueString: string) => {
+  if (valueString) {
+    const data = vCardParser(valueString);
 
-    if (valueString) {
+    // console.log(data);
+    // console.log(JSON.stringify(data));
 
-        const data = vCardParser(valueString)
+    // const encodedJson = valueString.split('#')[1];
 
-        // console.log(data);
-        // console.log(JSON.stringify(data));
+    // const json = atob(encodedJson);
 
+    // const value: IQRCodeValue = JSON.parse(json);
 
-        // const encodedJson = valueString.split('#')[1];
-
-        // const json = atob(encodedJson);
-
-        // const value: IQRCodeValue = JSON.parse(json);
-
-        return (data);
-    }
-}
+    return data;
+  }
+};
 
 // export const getPatientFromScan = (data: string | null) => {
 //     let result: Patient | null = null;
@@ -128,42 +130,39 @@ export const getQrCodeValue = (valueString: string) => {
 // }
 
 export const getPersonDataFromScan = (data: string | null) => {
-    let result: IQuickTest | null = null;
+  let result: IQuickTest | null = null;
 
-    if (data) {
-        try {
-            const scanData = getQrCodeValue(data);
+  if (data) {
+    try {
+      const scanData = getQrCodeValue(data);
 
-            if (scanData && scanData.length > 0) {
-
-                const s = scanData[0];
-                const ph = s.telephone.find((num) => num.value !== '');
-                const em = s.email.find((ema) => ema.value !== '');
-                result = {
-                    personData: {
-                        familyName: s.name.surname.trim(),
-                        givenName: s.name.name.trim(),
-                        standardisedGivenName: '',
-                        standardisedFamilyName: '',
-                        dateOfBirth: s.birthday ? new Date(s.birthday) : undefined,
-                        sex: undefined
-                    },
-                    addressData: {
-                        zip: s.address[0].value.postalCode.trim(),
-                        city: s.address[0].value.city.trim(),
-                        street: s.address[0].value.street.trim(),
-                        houseNumber: s.address[0].value.number.trim()
-                    },
-                    phoneNumber: ph ? ph.value.replace(/\s/g, '') : undefined,
-                    emailAddress: em ? em.value.trim() : undefined,
-                }
-            }
-        } catch (e) {
-
-            result = null;
-        }
+      if (scanData && scanData.length > 0) {
+        const s = scanData[0];
+        const ph = s.telephone.find((num) => num.value !== '');
+        const em = s.email.find((ema) => ema.value !== '');
+        result = {
+          personData: {
+            familyName: s.name.surname.trim(),
+            givenName: s.name.name.trim(),
+            standardisedGivenName: '',
+            standardisedFamilyName: '',
+            dateOfBirth: s.birthday ? new Date(s.birthday) : undefined,
+            sex: undefined,
+          },
+          addressData: {
+            zip: s.address[0].value.postalCode.trim(),
+            city: s.address[0].value.city.trim(),
+            street: s.address[0].value.street.trim(),
+            houseNumber: s.address[0].value.number.trim(),
+          },
+          phoneNumber: ph ? ph.value.replace(/\s/g, '') : undefined,
+          emailAddress: em ? em.value.trim() : undefined,
+        };
+      }
+    } catch (e) {
+      result = null;
     }
+  }
 
-    return result;
-}
-
+  return result;
+};

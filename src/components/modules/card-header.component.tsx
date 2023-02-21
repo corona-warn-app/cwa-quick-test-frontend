@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -35,10 +35,19 @@ const CardHeader = (props: any) => {
   return !props ? (
     <></>
   ) : (
-    <Card.Header id='data-header' className='px-3 pt-3 pb-0'>
+    <Card.Header
+      id='data-header'
+      className='px-3 pt-3 pb-0'
+    >
       <Row>
-        <Col md='6' className='px-3'>
-          <Card.Title className='m-md-0 tac-xs-tal-md jcc-xs-jcfs-md' as={'h2'}>
+        <Col
+          md='6'
+          className='px-3'
+        >
+          <Card.Title
+            className='m-md-0 tac-xs-tal-md jcc-xs-jcfs-md'
+            as={'h2'}
+          >
             {props.title}
             {props.disclaimerText ? (
               <DisclamerButton
@@ -55,10 +64,11 @@ const CardHeader = (props: any) => {
         {!props.idCard ? (
           <></>
         ) : (
-          <Col md='6' className='d-flex pl-md-0 jcc-xs-jcfe-md'>
-            <Card.Text id='id-query-text'>
-              {t('translation:query-id-card')}
-            </Card.Text>
+          <Col
+            md='6'
+            className='d-flex pl-md-0 jcc-xs-jcfe-md'
+          >
+            <Card.Text id='id-query-text'>{t('translation:query-id-card')}</Card.Text>
           </Col>
         )}
       </Row>

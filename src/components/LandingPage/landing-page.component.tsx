@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -33,6 +33,8 @@ import LandingDisclaimerButton from './LandingDisclaimerButton';
 import LandingCancellationText from './LandingCancellationText';
 import CancellationSteps from '../../misc/CancellationSteps';
 import useCancallation from '../../misc/useCancellation';
+import useLocalStorage from '../../misc/useLocalStorage';
+import useDisabledMandant from '../../misc/useDisabledMandant';
 
 const LandingPage = (props: any) => {
   const context = React.useContext(AppContext);
@@ -41,8 +43,11 @@ const LandingPage = (props: any) => {
   const { t } = useTranslation();
   const { keycloak } = useKeycloak();
   const [, , , getDownloadLink] = useCancallation();
+  const disabledUserManagement = useDisabledMandant();
 
-  const [cancellationStep, setCancellationStep] = React.useState<CancellationSteps>(CancellationSteps.NO_CANCEL);
+  const [cancellationStep, setCancellationStep] = React.useState<CancellationSteps>(
+    CancellationSteps.NO_CANCEL
+  );
   const [downloadLink, setDownloadLink] = React.useState('');
 
   React.useEffect(() => {
@@ -70,7 +75,10 @@ const LandingPage = (props: any) => {
       {!context && <CwaSpinner />}
 
       {context && utils && navigation && (
-        <Fade appear={true} in={true}>
+        <Fade
+          appear={true}
+          in={true}
+        >
           <Container className='center-content'>
             <h1 className='mx-auto mb-5 d-flex'>
               {t('translation:welcome')}
@@ -114,14 +122,15 @@ const LandingPage = (props: any) => {
             />
 
             <LandingButton
-              hasRole={utils.hasRole(keycloak, 'c19_quick_test_admin')}
+              hasRole={utils.hasRole(keycloak, 'c19_quick_test_admin') && !disabledUserManagement}
               title={t('translation:user-management')}
               onClick={navigation.toUserManagement}
             />
 
             <LandingButton
               hasRole={
-                utils.hasRole(keycloak, 'c19_quick_test_admin') && cancellationStep !== CancellationSteps.NO_CANCEL
+                utils.hasRole(keycloak, 'c19_quick_test_admin') &&
+                cancellationStep !== CancellationSteps.NO_CANCEL
               }
               title={t('translation:record-download')}
               onClick={handleDownload}

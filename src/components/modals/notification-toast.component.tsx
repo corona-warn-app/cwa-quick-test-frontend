@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -20,35 +20,40 @@
  */
 
 import React from 'react';
-import { Image, Toast, ToastHeader } from 'react-bootstrap'
+import { Image, Toast, ToastHeader } from 'react-bootstrap';
 
 import '../../i18n';
 import { useTranslation } from 'react-i18next';
 
 import successIcon from '../../assets/images/icon_success.svg';
 
-
 const NotificationToast = (props: any) => {
+  const { t } = useTranslation();
 
-    const { t } = useTranslation();
-
-    return (
-        <div className='toast-container'>
-            <Toast className='qt-notification'
-                show={props.show}
-                delay={3000}
-                autohide
-                onClose={() => props.setNotificationShow(false)}
-            >
-                <ToastHeader closeButton={false} className='qt-notification-header'>
-                    <Image src={successIcon} className='mr-3 my-3' />
-                    <p className='qt-notification-text my-auto mx-1'>
-                        {t('translation:successfull-transferred')}
-                    </p>
-                </ToastHeader>
-            </Toast>
-        </div>
-    )
-}
+  return (
+    <div className='toast-container'>
+      <Toast
+        className='qt-notification'
+        show={props.show}
+        delay={3000}
+        autohide
+        onClose={() => props.setNotificationShow(false)}
+      >
+        <ToastHeader
+          closeButton={false}
+          className='qt-notification-header'
+        >
+          <Image
+            src={successIcon}
+            className='mr-3 my-3'
+          />
+          <p className='qt-notification-text my-auto mx-1'>
+            {t('translation:successfull-transferred')}
+          </p>
+        </ToastHeader>
+      </Toast>
+    </div>
+  );
+};
 
 export default NotificationToast;

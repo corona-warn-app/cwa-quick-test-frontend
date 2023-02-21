@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -19,19 +19,19 @@
  * under the License.
  */
 
-import { Sex } from './enum'
+import { Sex } from './enum';
 
 export default interface IQTArchiv {
-  hashedGuid: string,
-  lastName: string,
-  firstName: string,
-  email: string,
-  phoneNumber: string,
-  sex: Sex,
-  street: string,
-  houseNumber: string,
-  zipCode: string,
-  city: string,
-  birthday: string,
-  updatedAt: Date
+  hashedGuid: string;
+  lastName: string;
+  firstName: string;
+  email: string;
+  phoneNumber: string;
+  sex: Sex;
+  street: string;
+  houseNumber: string;
+  zipCode: string;
+  city: string;
+  birthday: string;
+  updatedAt: Date;
 }

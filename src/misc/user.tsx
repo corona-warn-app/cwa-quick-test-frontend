@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -19,49 +19,48 @@
  * under the License.
  */
 
-import InputGroupWithExtras from "react-bootstrap/esm/InputGroup"
+import InputGroupWithExtras from 'react-bootstrap/esm/InputGroup';
 
 export interface IUser {
-    id: string,
-    username: string,
-    firstName: string,
-    lastName: string,
-    roleCounter: boolean,
-    roleLab: boolean,
-    subGroup: string | null,
-    password?: string,
+  id: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  roleCounter: boolean;
+  roleLab: boolean;
+  subGroup: string | null;
+  password?: string;
 }
 
 export interface IDisplayUser extends IUser {
-    displayGroup?: string | null
-    displayRole?: string | null
+  displayGroup?: string | null;
+  displayRole?: string | null;
 }
 
 export interface IGroup {
-    name: string,
-    id: string,
-    path: string,
-    children: IGroup[],
+  name: string;
+  id: string;
+  path: string;
+  children: IGroup[];
 }
 
 export interface IGroupNode {
-    group: IGroup,
-    parentGroup?: string,
-    level: number,
+  group: IGroup;
+  parentGroup?: string;
+  level: number;
 }
 
 export interface IGroupDetails {
-    id?: string,
-    // bsnr?: string,
-    name: string,
-    pocDetails: string,
-    enablePcr: boolean,
-    pocId: string,
-    searchPortalConsent: boolean,
-    website?: string,
-    email?: string,
-    openingHours?: string[],
-    appointmentRequired?: boolean,
-    parentGroup?: string,
+  id?: string;
+  // bsnr?: string,
+  name: string;
+  pocDetails: string;
+  enablePcr: boolean;
+  pocId: string;
+  searchPortalConsent: boolean;
+  website?: string;
+  email?: string;
+  openingHours?: string[];
+  appointmentRequired?: boolean;
+  parentGroup?: string;
 }
-

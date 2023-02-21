@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -28,6 +28,7 @@ import AppContext from '../../store/app-context';
 
 interface PrivateRouteProps {
   roles?: string[];
+  disabled?: boolean;
 }
 
 const PrivateRoute = (props: PrivateRouteProps) => {
@@ -37,7 +38,7 @@ const PrivateRoute = (props: PrivateRouteProps) => {
   const [isInit, setIsInit] = React.useState(false);
   const [isAuthorized, setIsAuthorized] = React.useState(false);
 
-  const { roles } = props;
+  const { roles, disabled } = props;
 
   React.useEffect(() => {
     if (keycloak) {
@@ -65,7 +66,7 @@ const PrivateRoute = (props: PrivateRouteProps) => {
   return (
     <>
       {isInit &&
-        (isAuthorized ? (
+        (isAuthorized && !disabled ? (
           <Outlet />
         ) : (
           <Navigate

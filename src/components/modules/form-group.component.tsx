@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -23,7 +23,16 @@
  */
 
 import React from 'react';
-import { Form, Row, Col, Accordion, InputGroup, OverlayTrigger, Tooltip, DropdownButton } from 'react-bootstrap';
+import {
+  Form,
+  Row,
+  Col,
+  Accordion,
+  InputGroup,
+  OverlayTrigger,
+  Tooltip,
+  DropdownButton,
+} from 'react-bootstrap';
 
 import { IValueSet } from '../../api';
 
@@ -33,7 +42,12 @@ export const FormGroupInput = (props: any) => {
   return !props ? (
     <></>
   ) : (
-    <Form.Group as={Row} controlId={props.controlId} hidden={props.hidden} className='mb-1'>
+    <Form.Group
+      as={Row}
+      controlId={props.controlId}
+      hidden={props.hidden}
+      className='mb-1'
+    >
       <Form.Label
         className={`'input-label' ${props.lableAlign && 'align-self-' + props.lableAlign}`}
         column
@@ -43,9 +57,17 @@ export const FormGroupInput = (props: any) => {
         {props.title + (props.required ? '*' : '')}
       </Form.Label>
 
-      <Col xs='7' sm='9' className='d-flex'>
+      <Col
+        xs='7'
+        sm='9'
+        className='d-flex'
+      >
         <Row className='m-0 w-100'>
-          {props.infoText ? <Form.Label className='text-justify'>{props.infoText}</Form.Label> : <></>}
+          {props.infoText ? (
+            <Form.Label className='text-justify'>{props.infoText}</Form.Label>
+          ) : (
+            <></>
+          )}
           <InputGroup>
             {!props.dropdown ? (
               <></>
@@ -85,7 +107,10 @@ export const FormGroupInput = (props: any) => {
             {!props.prepend ? (
               <></>
             ) : (
-              <OverlayTrigger placement='top-end' overlay={<Tooltip id='prepend-tooltip'>{props.tooltip}</Tooltip>}>
+              <OverlayTrigger
+                placement='top-end'
+                overlay={<Tooltip id='prepend-tooltip'>{props.tooltip}</Tooltip>}
+              >
                 <InputGroup.Text className='prepend px-3'>{props.prepend}</InputGroup.Text>
               </OverlayTrigger>
             )}
@@ -101,12 +126,26 @@ export const FormGroupTextarea = (props: any) => {
   return !props ? (
     <></>
   ) : (
-    <Form.Group as={Row} controlId={props.controlId} hidden={props.hidden} className='mb-1'>
-      <Form.Label className='input-label' column xs='5' sm='3'>
+    <Form.Group
+      as={Row}
+      controlId={props.controlId}
+      hidden={props.hidden}
+      className='mb-1'
+    >
+      <Form.Label
+        className='input-label'
+        column
+        xs='5'
+        sm='3'
+      >
         {props.title + (props.required ? '*' : '')}
       </Form.Label>
 
-      <Col xs='7' sm='9' className='d-flex'>
+      <Col
+        xs='7'
+        sm='9'
+        className='d-flex'
+      >
         <InputGroup>
           <Form.Control
             className='qt-input qt-input-area'
@@ -134,7 +173,12 @@ export const FormGroupAddressInput = (props: any) => {
   return !props ? (
     <></>
   ) : (
-    <Form.Group as={Col} sm={props.sm} controlId={props.controlId} className={props.className}>
+    <Form.Group
+      as={Col}
+      sm={props.sm}
+      controlId={props.controlId}
+      className={props.className}
+    >
       <Form.Control
         className='qt-input'
         value={props.value}
@@ -158,10 +202,20 @@ export const FormGroupConsentCkb = (props: any) => {
   return !props ? (
     <></>
   ) : (
-    <Form.Group as={Row} controlId='props.controlId'>
+    <Form.Group
+      as={Row}
+      controlId='props.controlId'
+    >
       <Col sm='10'>
-        <Accordion ref={accordionRef} onSelect={(evt) => setCollapsed(evt !== null)}>
-          <Accordion.Toggle as={Form.Label} className='input-label' eventKey='0'>
+        <Accordion
+          ref={accordionRef}
+          onSelect={(evt) => setCollapsed(evt !== null)}
+        >
+          <Accordion.Toggle
+            as={Form.Label}
+            className='input-label'
+            eventKey='0'
+          >
             <strong>
               {props.title}
               {props.required ? '*' : ''}
@@ -169,12 +223,18 @@ export const FormGroupConsentCkb = (props: any) => {
             {!collapsed && props.accordion ? ' (...)' : ''}
           </Accordion.Toggle>
 
-          <Accordion.Collapse className='px-3' eventKey='0'>
+          <Accordion.Collapse
+            className='px-3'
+            eventKey='0'
+          >
             <span className='d-flex input-label text-justify'>{props.accordion}</span>
           </Accordion.Collapse>
         </Accordion>
       </Col>
-      <Col sm='2' className='jcc-xs-jcfs-md'>
+      <Col
+        sm='2'
+        className='jcc-xs-jcfs-md'
+      >
         <Form.Check>
           <Form.Check.Input
             className={props.type === 'radio' ? 'rdb-input' : 'ckb-input'}
@@ -197,11 +257,25 @@ export const FormGroupPermissionCkb = (props: any) => {
   return !props ? (
     <></>
   ) : (
-    <Form.Group as={Row} controlId={props.controlId} className='mb-1' hidden={props.hidden ? props.hidden : false}>
-      <Form.Label className='input-label' column xs='5' sm='3'>
+    <Form.Group
+      as={Row}
+      controlId={props.controlId}
+      className='mb-1'
+      hidden={props.hidden ? props.hidden : false}
+    >
+      <Form.Label
+        className='input-label'
+        column
+        xs='5'
+        sm='3'
+      >
         {props.title + (props.required ? '*' : '')}
       </Form.Label>
-      <Col xs='7' sm='9' className='jcc-xs-jcfs-md '>
+      <Col
+        xs='7'
+        sm='9'
+        className='jcc-xs-jcfs-md '
+      >
         <Form.Check className='d-flex align-self-center'>
           <Form.Check.Input
             className={(props.type === 'radio' ? 'rdb-input' : 'ckb-input') + ' mt-0'}
@@ -253,7 +327,15 @@ export const FormGroupDccConsentRadio = (props: any) => {
   return !props ? (
     <></>
   ) : (
-    <Form.Group as={Col} xs='5' sm='3' md='2' lg='1' className='d-flex mb-0 mr-2 ml-0 pl-0' controlId={props.controlId}>
+    <Form.Group
+      as={Col}
+      xs='5'
+      sm='3'
+      md='2'
+      lg='1'
+      className='d-flex mb-0 mr-2 ml-0 pl-0'
+      controlId={props.controlId}
+    >
       <Form.Check className='d-flex align-self-center'>
         <Form.Check.Input
           className='rdb-input'
@@ -276,12 +358,25 @@ export const FormGroupRadio = (props: any) => {
   return !props ? (
     <></>
   ) : (
-    <Form.Group as={Row} controlId={props.controlId} className='mb-1'>
-      <Form.Label className='input-label' column xs='5' sm='3'>
+    <Form.Group
+      as={Row}
+      controlId={props.controlId}
+      className='mb-1'
+    >
+      <Form.Label
+        className='input-label'
+        column
+        xs='5'
+        sm='3'
+      >
         {props.title + (props.required ? '*' : '')}
       </Form.Label>
 
-      <Col xs='7' sm='9' className='d-flex'>
+      <Col
+        xs='7'
+        sm='9'
+        className='d-flex'
+      >
         <Form.Check className='align-self-center'>
           <Form.Check.Input
             className='rdb-input'
@@ -302,14 +397,32 @@ export const FormGroupSelect = (props: any) => {
   return !(props && props.options) ? (
     <></>
   ) : (
-    <Form.Group as={Row} hidden={props.hidden} controlId={props.controlId} className='mb-1'>
-      <Form.Label className='input-label' column xs='5' sm='3'>
+    <Form.Group
+      as={Row}
+      hidden={props.hidden}
+      controlId={props.controlId}
+      className='mb-1'
+    >
+      <Form.Label
+        className='input-label'
+        column
+        xs='5'
+        sm='3'
+      >
         {props.title + (props.required ? '*' : '')}
       </Form.Label>
 
-      <Col xs='7' sm='9' className='d-flex'>
+      <Col
+        xs='7'
+        sm='9'
+        className='d-flex'
+      >
         <Row className='m-0'>
-          {props.infoText ? <Form.Label className='text-justify'>{props.infoText}</Form.Label> : <></>}
+          {props.infoText ? (
+            <Form.Label className='text-justify'>{props.infoText}</Form.Label>
+          ) : (
+            <></>
+          )}
           <Form.Control
             as='select'
             className={!props.value ? 'selection-placeholder qt-input' : 'qt-input'}
@@ -318,7 +431,11 @@ export const FormGroupSelect = (props: any) => {
             placeholder={props.placeholder ? props.placeholder : props.title}
             required={props.required}
           >
-            <option disabled={props.required} key={0} value=''>
+            <option
+              disabled={props.required}
+              key={0}
+              value=''
+            >
               {props.placeholder ? props.placeholder : props.title}
             </option>
             {props.options}
@@ -345,11 +462,17 @@ export const FormGroupValueSetSelect = (props: any) => {
     for (const key of Object.keys(valueSet)) {
       result.push(
         valueSet[key].active === false ? (
-          <option key={key} value={key}>
+          <option
+            key={key}
+            value={key}
+          >
             &#xf071; {valueSet[key].display}
           </option>
         ) : (
-          <option key={key} value={key}>
+          <option
+            key={key}
+            value={key}
+          >
             {valueSet[key].display}
           </option>
         )

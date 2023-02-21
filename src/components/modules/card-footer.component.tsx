@@ -4,7 +4,7 @@ import { Card, Row, Col, Button } from 'react-bootstrap';
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -36,13 +36,32 @@ const CardFooter = (props: any) => {
   ) : (
     <Card.Footer id='data-footer'>
       <Row>
-        <Col md='6' lg='3' className='data-footer-col'>
-          <Button className='my-1 my-md-0 p-0' variant='outline-primary' block onClick={props.handleCancel}>
+        <Col
+          md='6'
+          lg='3'
+          className='data-footer-col'
+        >
+          <Button
+            className='my-1 my-md-0 p-0'
+            variant='outline-primary'
+            block
+            onClick={props.handleCancel}
+          >
             {props.cancelText ? props.cancelText : t('translation:cancel')}
           </Button>
         </Col>
-        <Col md='6' lg='3' className='data-footer-col'>
-          <Button className='my-1 my-md-0 p-0' block type='submit' onClick={props.handleOk} disabled={props.disabled}>
+        <Col
+          md='6'
+          lg='3'
+          className='data-footer-col'
+        >
+          <Button
+            className='my-1 my-md-0 p-0'
+            block
+            type='submit'
+            onClick={props.handleOk}
+            disabled={props.disabled}
+          >
             {props.okText ? props.okText : t('translation:next')}
           </Button>
         </Col>

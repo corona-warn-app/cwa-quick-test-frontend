@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -65,8 +65,7 @@ export const useGetValueSets = (
   onInit?: (isInit: boolean) => void,
   onError?: (msg: string) => void
 ) => {
-  const [valueSetHashList, setValueSetHashList] =
-    React.useState<IValueSetHashListItem[]>();
+  const [valueSetHashList, setValueSetHashList] = React.useState<IValueSetHashListItem[]>();
 
   const [valueSetList] = React.useState<IValueSetList>({});
   const [result, setResult] = React.useState<IValueSetList>();
@@ -132,10 +131,7 @@ export const useGetValueSets = (
         })
         .finally(() => {
           // if all keys added to list --> init = true
-          if (
-            valueSetHashList &&
-            valueSetHashList.length === Object.keys(valueSetList).length
-          ) {
+          if (valueSetHashList && valueSetHashList.length === Object.keys(valueSetList).length) {
             setIsInit(true);
           }
         });

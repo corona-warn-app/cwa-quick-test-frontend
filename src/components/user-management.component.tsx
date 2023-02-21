@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -40,10 +40,8 @@ const UserManagement = (props: any) => {
   const [isInit, setIsInit] = React.useState(true);
   const [groupNodes, setGroupNodes] = React.useState<IGroupNode[]>();
   const [userReload, setUserReload] = React.useState(false);
-  const [storedUserManagementDisclaimerShow, setStoredUserManagementDisclaimerShow] = useLocalStorage(
-    'userManagementDisclaimerShow',
-    true
-  );
+  const [storedUserManagementDisclaimerShow, setStoredUserManagementDisclaimerShow] =
+    useLocalStorage('userManagementDisclaimerShow', true);
 
   const handleError = (error: any, message?: string, onCancel?: () => void) => {
     let msg = '';
@@ -70,7 +68,10 @@ const UserManagement = (props: any) => {
   return !(isInit && context && context.valueSets) ? (
     <CwaSpinner />
   ) : (
-    <Fade appear={true} in={true}>
+    <Fade
+      appear={true}
+      in={true}
+    >
       <Card id='data-card'>
         <CardHeader
           title={t('translation:user-management')}
@@ -82,7 +83,10 @@ const UserManagement = (props: any) => {
           disclaimerText={
             <>
               {t('translation:disclaimer-text2-part1')}
-              <a href={t('translation:disclaimer-link')} target='blank'>
+              <a
+                href={t('translation:disclaimer-link')}
+                target='blank'
+              >
                 {t('translation:disclaimer-link')}
               </a>
               {t('translation:disclaimer-text2-part2')}
@@ -90,7 +94,10 @@ const UserManagement = (props: any) => {
           }
         />
 
-        <Card.Body id='data-body' className='pt-0'>
+        <Card.Body
+          id='data-body'
+          className='pt-0'
+        >
           <h4>{t('translation:groups')}</h4>
 
           <GroupTable
@@ -114,8 +121,17 @@ const UserManagement = (props: any) => {
 
         <Card.Footer id='data-footer'>
           <Row className='justify-content-end'>
-            <Col md='6' lg='3' className='data-footer-col'>
-              <Button className='my-md-0 p-0' variant='primary' block onClick={() => context.navigation!.toLanding()}>
+            <Col
+              md='6'
+              lg='3'
+              className='data-footer-col'
+            >
+              <Button
+                className='my-md-0 p-0'
+                variant='primary'
+                block
+                onClick={() => context.navigation!.toLanding()}
+              >
                 {t('translation:back')}
               </Button>
             </Col>

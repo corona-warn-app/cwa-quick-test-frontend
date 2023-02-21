@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -20,16 +20,7 @@
  */
 
 import React from 'react';
-import {
-  Card,
-  Col,
-  Collapse,
-  Container,
-  Fade,
-  Form,
-  Image,
-  Row,
-} from 'react-bootstrap';
+import { Card, Col, Collapse, Container, Fade, Form, Image, Row } from 'react-bootstrap';
 
 import '../i18n';
 import { useTranslation } from 'react-i18next';
@@ -111,11 +102,7 @@ const RecordPatientData = (props: any) => {
   const handleDelete = () => {
     deleteQuicktest(processIdRef.current);
   };
-  const [uuid, deleteQuicktest] = useGetUuid(
-    props?.quickTest?.uuId,
-    undefined,
-    handleError
-  );
+  const [uuid, deleteQuicktest] = useGetUuid(props?.quickTest?.uuId, undefined, handleError);
   useOnUnload(() => handleDelete);
 
   React.useEffect(() => {
@@ -230,12 +217,13 @@ const RecordPatientData = (props: any) => {
   return !(isInit && context && context.valueSets) ? (
     <CwaSpinner />
   ) : (
-    <Fade appear={true} in={true}>
+    <Fade
+      appear={true}
+      in={true}
+    >
       <Container className='form-flex p-0 '>
         <Row id='process-row'>
-          <span className='font-weight-bold mr-2'>
-            {t('translation:process')}
-          </span>
+          <span className='font-weight-bold mr-2'>{t('translation:process')}</span>
           <span>{processId}</span>
         </Row>
         <Card id='data-card'>
@@ -247,27 +235,46 @@ const RecordPatientData = (props: any) => {
             {/*
                             header with title and id card query
                             */}
-            <CardHeader idCard={true} title={t('translation:record-result2')} />
+            <CardHeader
+              idCard={true}
+              title={t('translation:record-result2')}
+            />
 
             {/*
                             content area with patient inputs and check box
                             */}
-            <Card.Body id='data-body' className='pt-0'>
+            <Card.Body
+              id='data-body'
+              className='pt-0'
+            >
               {/* dccConsent */}
               <Row className='yellow'>
-                <Col className='p-0' xs='5' sm='3'>
+                <Col
+                  className='p-0'
+                  xs='5'
+                  sm='3'
+                >
                   <Row className='m-0 mb-2'>
-                    <Col className='p-0' xs='auto'>
+                    <Col
+                      className='p-0'
+                      xs='auto'
+                    >
                       <Form.Label className='input-label pl-1'>
                         {t('translation:testZertifikat')}*
                       </Form.Label>
                     </Col>
                     <Col className='p-0 jcc-xs-jcfs-lg ml-lg-2 d-flex'>
-                      <Image className='eu-flag' src={eu_logo} />
+                      <Image
+                        className='eu-flag'
+                        src={eu_logo}
+                      />
                     </Col>
                   </Row>
                 </Col>
-                <Col xs='7' sm='9'>
+                <Col
+                  xs='7'
+                  sm='9'
+                >
                   <Row className='m-0'>
                     <Form.Label className='input-label m-0'>
                       {t('translation:dccConsent')}
@@ -276,9 +283,7 @@ const RecordPatientData = (props: any) => {
                   <Collapse in={dccConsent}>
                     <Row className='m-0 my-1'>
                       <Form.Label className='input-label text-justify m-0'>
-                        <Form.Label className='input-label mb-0 mr-2'>
-                          &#xf071;
-                        </Form.Label>
+                        <Form.Label className='input-label mb-0 mr-2'>&#xf071;</Form.Label>
                         {t('translation:dccConsent-cwa-only')}
                       </Form.Label>
                     </Row>
@@ -320,7 +325,11 @@ const RecordPatientData = (props: any) => {
                       {t('translation:test-type') + '*'}
                     </Form.Label>
 
-                    <Col xs='7' sm='9' className='d-flex'>
+                    <Col
+                      xs='7'
+                      sm='9'
+                      className='d-flex'
+                    >
                       <Row>
                         <FormGroupInlineRadio
                           controlId='test-type1'
@@ -427,9 +436,7 @@ const RecordPatientData = (props: any) => {
               <FormGroupConsentCkb
                 controlId='formDataPrivacyCheckbox'
                 title={t('translation:data-privacy-approve')}
-                onChange={(evt: any) =>
-                  setPrivacyAgreement(evt.currentTarget.checked)
-                }
+                onChange={(evt: any) => setPrivacyAgreement(evt.currentTarget.checked)}
                 type='checkbox'
                 checked={privacyAgreement}
                 required

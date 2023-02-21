@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -55,10 +55,16 @@ const ErrorPage = (props: any) => {
         onExited={handleExited}
         centered
       >
-        <Modal.Header id='data-header' className='pb-0'>
+        <Modal.Header
+          id='data-header'
+          className='pb-0'
+        >
           <Row>
             <Col>
-              <Card.Title className='m-0 jcc-xs-jcfs-md' as={'h2'}>
+              <Card.Title
+                className='m-0 jcc-xs-jcfs-md'
+                as={'h2'}
+              >
                 {t('translation:error-message')}
               </Card.Title>
             </Col>
@@ -71,13 +77,14 @@ const ErrorPage = (props: any) => {
         <Modal.Body className='py-0 bg-light'>
           <hr />
           <p className='text-center'>
-            <span className='font-weight-bold'>
-              {t('translation:serverError')}
-            </span>
+            <span className='font-weight-bold'>{t('translation:serverError')}</span>
           </p>
           <ul>
             {ctx.error.map((error, index) => (
-              <li className='text-center' key={index}>
+              <li
+                className='text-center'
+                key={index}
+              >
                 {error.message ? error.message : error.error.message}
               </li>
             ))}
@@ -90,7 +97,10 @@ const ErrorPage = (props: any) => {
     footer with cancel and submit button
     */}
         <Modal.Footer id='data-footer'>
-          <Button className='py-0' onClick={handleHide}>
+          <Button
+            className='py-0'
+            onClick={handleHide}
+          >
             {t('translation:cancel')}
           </Button>
         </Modal.Footer>

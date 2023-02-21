@@ -1,7 +1,7 @@
 /*
  * Corona-Warn-App / cwa-quick-test-frontend
  *
- * (C) 2022, T-Systems International GmbH
+ * (C) 2023, T-Systems International GmbH
  *
  * Deutsche Telekom AG and all other contributors /
  * copyright owners license this file to you under the Apache
@@ -25,8 +25,10 @@ import DisclamerButton from '../modules/disclamer-btn.component';
 
 const LandingDisclaimerButton = (props: any) => {
   const { t } = useTranslation();
-  const [storedLandingDisclaimerShow, setStoredLandingDisclaimerShow] =
-    useLocalStorage('landingDisclaimerShow', true);
+  const [storedLandingDisclaimerShow, setStoredLandingDisclaimerShow] = useLocalStorage(
+    'landingDisclaimerShow',
+    true
+  );
 
   return (
     <>
@@ -40,7 +42,10 @@ const LandingDisclaimerButton = (props: any) => {
           disclaimerText={
             <>
               {t('translation:disclaimer-text1-part1')}
-              <a href={t('translation:disclaimer-link')} target='blank'>
+              <a
+                href={t('translation:disclaimer-link')}
+                target='blank'
+              >
                 {t('translation:disclaimer-link')}
               </a>
               {t('translation:disclaimer-text1-part2')}
