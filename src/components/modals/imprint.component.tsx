@@ -107,13 +107,13 @@ const ImprintPage = (props: any) => {
             <p>
               <strong>Aufsichtsrat:</strong>
               <br />
-              Dr. Christian P. Illek (Vorsitzender)
+              Claudia Nemat (Vorsitzende)
             </p>
 
             <p>
               <strong>Vertretungsberechtigt:</strong>
               <br />
-              Adel Al-Saleh (Vorsitzender), Christoph Ahrendt, François Fleutiaux, Georg Pepping
+              Adel Al-Saleh (Vorsitzender), Christoph Ahrendt, Urs M. Krämer, Georg Pepping
             </p>
 
             <p>
@@ -121,10 +121,11 @@ const ImprintPage = (props: any) => {
               <br />
               T-Systems International GmbH
               <br />
-              Christian R. Andersen
+              Björn Radde
               <br />
-              Friedrich-Ebert-Allee-140
-              <br />D – 53113 Bonn
+              Hahnstraße 43d
+              <br />
+              D-60528 Frankfurt am Main
             </p>
 
             <p>

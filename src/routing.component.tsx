@@ -42,15 +42,15 @@ import UserManagement from './components/user-management.component';
 import ErrorPage from './components/modals/error-page.component';
 import NotificationToast from './components/modals/notification-toast.component';
 import PrivateRoute from './components/modules/private-route.component';
-import useDisabledMandant from './misc/useDisabledMandant';
 import AppContext from './store/app-context';
+import useDisabledTenant from './misc/useDisabledTenant';
 
 const Routing = () => {
   const { t } = useTranslation();
   const context = React.useContext(AppContext);
   const [quickTest, setQuickTest] = React.useState<IQuickTest>();
   const [notificationShow, setNotificationShow] = React.useState(false);
-  const userManagementRouteIsDisabled = useDisabledMandant();
+  const userManagementRouteIsDisabled = useDisabledTenant();
 
   document.title = t('translation:title');
 

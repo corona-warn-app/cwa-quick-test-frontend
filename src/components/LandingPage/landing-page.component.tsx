@@ -28,12 +28,12 @@ import '../../i18n';
 import { useKeycloak } from '@react-keycloak/web';
 import CancellationSteps from '../../misc/CancellationSteps';
 import useCancallation from '../../misc/useCancellation';
-import useDisabledMandant from '../../misc/useDisabledMandant';
 import AppContext from '../../store/app-context';
 import CwaSpinner from '../spinner/spinner.component';
 import LandingButton from './LandingButton';
 import LandingCancellationText from './LandingCancellationText';
 import LandingDisclaimerButton from './LandingDisclaimerButton';
+import useDisabledTenant from '../../misc/useDisabledTenant';
 
 const LandingPage = (props: any) => {
   const context = React.useContext(AppContext);
@@ -42,7 +42,7 @@ const LandingPage = (props: any) => {
   const { t } = useTranslation();
   const { keycloak } = useKeycloak();
   const [, , , getDownloadLink] = useCancallation();
-  const disabledUserManagement = useDisabledMandant();
+  const disabledUserManagement = useDisabledTenant();
 
   const [cancellationStep, setCancellationStep] = React.useState<CancellationSteps>(
     CancellationSteps.NO_CANCEL
