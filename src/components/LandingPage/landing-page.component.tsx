@@ -26,15 +26,14 @@ import { useTranslation } from 'react-i18next';
 import '../../i18n';
 
 import { useKeycloak } from '@react-keycloak/web';
+import CancellationSteps from '../../misc/CancellationSteps';
+import useCancallation from '../../misc/useCancellation';
+import useDisabledMandant from '../../misc/useDisabledMandant';
 import AppContext from '../../store/app-context';
 import CwaSpinner from '../spinner/spinner.component';
 import LandingButton from './LandingButton';
-import LandingDisclaimerButton from './LandingDisclaimerButton';
 import LandingCancellationText from './LandingCancellationText';
-import CancellationSteps from '../../misc/CancellationSteps';
-import useCancallation from '../../misc/useCancellation';
-import useLocalStorage from '../../misc/useLocalStorage';
-import useDisabledMandant from '../../misc/useDisabledMandant';
+import LandingDisclaimerButton from './LandingDisclaimerButton';
 
 const LandingPage = (props: any) => {
   const context = React.useContext(AppContext);
