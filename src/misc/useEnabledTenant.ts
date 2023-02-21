@@ -23,23 +23,23 @@ import React, { useEffect } from 'react';
 import AppContext from '../store/app-context';
 import useLocalStorage from './useLocalStorage';
 
-const useDisabledTenant = () => {
+const useEnabledTenant = () => {
   const { contextConfig } = React.useContext(AppContext);
-  const [isDisbled, setIsDisabled] = React.useState(false);
-  const [disabledList, setDisabledList] = React.useState(['']);
+  const [isEnbled, setIsEnabled] = React.useState(false);
+  const [enabledFlag, setEnabledFlag] = React.useState('');
   const [storedTenant] = useLocalStorage('mandant', '');
 
   // get disabled list from context config
   useEffect(() => {
-    contextConfig && setDisabledList(contextConfig['disable-user-management']);
+    contextConfig && setEnabledFlag(contextConfig['enable-user-management']);
   }, [contextConfig]);
 
   // set disabled state if current tenant is in disabled-list
   React.useEffect(() => {
-    setIsDisabled(!!(storedTenant && disabledList && disabledList.includes(storedTenant)));
-  }, [storedTenant, disabledList]);
+    setIsEnabled(!!(storedTenant && enabledFlag && enabledFlag === storedTenant));
+  }, [storedTenant, enabledFlag]);
 
-  return isDisbled;
+  return isEnbled;
 };
 
-export default useDisabledTenant;
+export default useEnabledTenant;

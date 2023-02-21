@@ -33,7 +33,7 @@ import CwaSpinner from '../spinner/spinner.component';
 import LandingButton from './LandingButton';
 import LandingCancellationText from './LandingCancellationText';
 import LandingDisclaimerButton from './LandingDisclaimerButton';
-import useDisabledTenant from '../../misc/useDisabledTenant';
+import useEnabledTenant from '../../misc/useEnabledTenant';
 
 const LandingPage = (props: any) => {
   const context = React.useContext(AppContext);
@@ -42,7 +42,7 @@ const LandingPage = (props: any) => {
   const { t } = useTranslation();
   const { keycloak } = useKeycloak();
   const [, , , getDownloadLink] = useCancallation();
-  const disabledUserManagement = useDisabledTenant();
+  const enabledUserManagement = useEnabledTenant();
 
   const [cancellationStep, setCancellationStep] = React.useState<CancellationSteps>(
     CancellationSteps.NO_CANCEL
@@ -121,7 +121,7 @@ const LandingPage = (props: any) => {
             />
 
             <LandingButton
-              hasRole={utils.hasRole(keycloak, 'c19_quick_test_admin') && !disabledUserManagement}
+              hasRole={utils.hasRole(keycloak, 'c19_quick_test_admin') && enabledUserManagement}
               title={t('translation:user-management')}
               onClick={navigation.toUserManagement}
             />
