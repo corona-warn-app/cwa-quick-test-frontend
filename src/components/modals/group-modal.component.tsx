@@ -365,7 +365,7 @@ const GroupModal = (props: any) => {
                   updateGroupProp('name', evt.target.value);
                   props.resetError();
                 }}
-                pattern={'^[A-Za-z0-9\\säöüÄÜÖß]*$'}
+                pattern={'^[A-Za-z0-9\\säöüÄÜÖß-_]*$'}
                 maxLength={45}
                 isInvalid={props.isCreationError}
                 InvalidText={t('translation:group-conflict-error')}
