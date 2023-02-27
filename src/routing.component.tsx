@@ -133,7 +133,7 @@ const Routing = () => {
             element={
               <PrivateRoute
                 roles={['c19_quick_test_admin']}
-                enabled={userManagementRouteIsEnabled}
+                disabled={!userManagementRouteIsEnabled}
               />
             }
           >
