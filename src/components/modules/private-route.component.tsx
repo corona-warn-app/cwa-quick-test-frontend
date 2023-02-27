@@ -28,7 +28,7 @@ import AppContext from '../../store/app-context';
 
 interface PrivateRouteProps {
   roles?: string[];
-  enabled?: boolean;
+  disabled?: boolean;
 }
 
 const PrivateRoute = (props: PrivateRouteProps) => {
@@ -38,7 +38,7 @@ const PrivateRoute = (props: PrivateRouteProps) => {
   const [isInit, setIsInit] = React.useState(false);
   const [isAuthorized, setIsAuthorized] = React.useState(false);
 
-  const { roles, enabled } = props;
+  const { roles, disabled } = props;
 
   React.useEffect(() => {
     if (keycloak) {
@@ -66,7 +66,7 @@ const PrivateRoute = (props: PrivateRouteProps) => {
   return (
     <>
       {isInit &&
-        (isAuthorized && enabled ? (
+        (isAuthorized && !disabled ? (
           <Outlet />
         ) : (
           <Navigate
