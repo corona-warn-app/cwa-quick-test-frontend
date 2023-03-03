@@ -95,7 +95,7 @@ const QrScan = (props: any) => {
           className='pt-0'
         >
           <QrReader
-            constraints={{}}
+            constraints={{ facingMode: 'environment' }}
             scanDelay={300}
             onResult={handleScanResult}
           />
