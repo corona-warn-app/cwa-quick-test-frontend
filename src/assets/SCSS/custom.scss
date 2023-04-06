@@ -13,12 +13,14 @@
 }
 @font-face {
   font-family: 'TeleNeo';
-  src: url(./fonts/TeleNeoWeb-Regular.eot) format('eot'), url(./fonts/TeleNeoWeb-Regular.woff) format('woff'),
+  src: url(./fonts/TeleNeoWeb-Regular.eot) format('eot'),
+    url(./fonts/TeleNeoWeb-Regular.woff) format('woff'),
     url(./fonts/TeleNeoWeb-Regular.woff2) format('woff2');
 }
 @font-face {
   font-family: 'TeleNeo';
-  src: url(./fonts/TeleNeoWeb-Bold.eot) format('eot'), url(./fonts/TeleNeoWeb-Bold.woff) format('woff'),
+  src: url(./fonts/TeleNeoWeb-Bold.eot) format('eot'),
+    url(./fonts/TeleNeoWeb-Bold.woff) format('woff'),
     url(./fonts/TeleNeoWeb-Bold.woff2) format('woff2');
   font-weight: bold;
 }
@@ -604,4 +606,8 @@ td {
   @include media-breakpoint-up(sm) {
     flex: 1;
   }
+}
+
+#data-body .alert {
+  display: none;
 }
